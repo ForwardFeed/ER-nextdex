@@ -5,6 +5,8 @@ function updatePanelSpecies(id){
     $('#specie-name').text(specie.name)
     updateBaseStats(specie.stats.base)
     setSprite(specie.NAME)
+    addAbilities(specie.stats.abis)
+    addInnates(specie.stats.inns)
 }
 
 
@@ -47,6 +49,31 @@ function changeBaseStat(node, value, statID){
     node.find('.stat-bar').css('background', `linear-gradient(to right, ${color} ${totalBar}%, white 0%)`)
 }
 
-function changeStatBar(node, value){
 
+function addAbilities(abilities){
+    const node = $('#species-abilities')
+    node.empty()
+    const fragment = document.createDocumentFragment()
+    for (const i in abilities){
+        const abi = gameData.abilities[abilities[i]]
+        const name = document.createElement('div')
+        name.className = "species-abilities"
+        name.innerText = abi.name
+        fragment.append(name)
+    }
+    node.append(fragment)
+}
+
+function addInnates(innates){
+    const node = $('#species-innates')
+    node.empty()
+    const fragment = document.createDocumentFragment()
+    for (const i in innates){
+        const inn = gameData.abilities[innates[i]]
+        const name = document.createElement('div')
+        name.className = "species-innate"
+        name.innerText = inn.name
+        fragment.append(name)
+    }
+    node.append(fragment)
 }
