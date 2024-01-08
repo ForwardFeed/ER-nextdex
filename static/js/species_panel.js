@@ -4,12 +4,15 @@ function feedPanelSpecies(id){
     $('#species-name').text(specie.name)
     updateBaseStats(specie.stats.base)
     setSprite(specie.NAME)
-    addAbilities(specie.stats.abis)
-    addInnates(specie.stats.inns)
-    addTypes(specie.stats.types)
+    setAbilities(specie.stats.abis)
+    setInnates(specie.stats.inns)
+    setTypes(specie.stats.types)
+    setMoves($('#learnset'), specie.levelUpMoves)
+    setMoves($('#tmhm'), specie.TMHMMoves)
+    setMoves($('#eggmoves'), specie.eggMoves)
 }
 
-function addTypes(types){
+function setTypes(types){
     const core = $('#species-types')
     const type1 = gameData.typeT[types[0]]
     const nodeType1 = core.children().eq(0)
@@ -26,6 +29,33 @@ function addTypes(types){
     nodeType2.text(type2)
 }
 
+function setMoves(core, moves){
+    const frag = document.createDocumentFragment()
+    for (const moveID of moves){
+        if (typeof moveID === "object"){
+            const move = gameData.moves[moveID.id]
+            if (!move) {
+                console.warn(`unable to find move with ID ${moveID.id}`)
+                continue
+            }
+            const node = document.createElement('div')
+            node.innerText = move.name
+            frag.append(node)
+        } else {
+            const move = gameData.moves[moveID]
+            if (!move) {
+                console.warn(`unable to find move with ID ${moveID}`)
+                continue
+            }
+            const node = document.createElement('div')
+            node.innerText = move.name
+            frag.append(node)
+        }
+        
+    }
+    core.append(frag)
+}
+
 function updateBaseStats(stats){
     const baseStatsTable = [
         '#BHP',
@@ -34,6 +64,7 @@ function updateBaseStats(stats){
         '#BSA',
         '#BSD',
         '#BSP',
+        '#BST',
     ]
     for (const i in baseStatsTable){
         changeBaseStat($(baseStatsTable[i]), stats[i], i)
@@ -49,7 +80,6 @@ function changeBaseStat(node, value, statID){
     node.find('.stat-num').text(value)
     //const offsetColor = minMax[1] - minMax[0] // this is to make the most powerfull stats as 100% and min a 100%
     //value = value - minMax[0]
-
     const average = +gameData.minMaxBaseStats[statID][2]
     const color = [
         [0, "gray"],
@@ -61,12 +91,13 @@ function changeBaseStat(node, value, statID){
         [240, "#00ff99"],
         [280, "#0033cc"],
     ].filter((x)=> x[0] >= ((value / average) * 100).toPrecision(2))[0][1]
-    const percent = ((value / 255) * 100).toFixed()
+    const maxValue = statID < 6? 255: gameData.minMaxBaseStats[statID][1]
+    const percent = ((value / maxValue ) * 100).toFixed()
     node.find('.stat-bar').css('background', `linear-gradient(to right, ${color} ${percent}%, white 0%)`)
 }
 
 
-function addAbilities(abilities){
+function setAbilities(abilities){
     const node = $('#species-abilities')
     node.empty()
     const fragment = document.createDocumentFragment()
@@ -81,7 +112,7 @@ function addAbilities(abilities){
     node.append(fragment)
 }
 
-function addInnates(innates){
+function setInnates(innates){
     const node = $('#species-innates')
     node.empty()
     const fragment = document.createDocumentFragment()

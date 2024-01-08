@@ -13,7 +13,8 @@ export interface LevelUpMove {
 interface Context {
     current: LevelUpMove[],
     currKey: string,
-    evolutions: Map<string, LevelUpMove[]>,
+    levelUpLearnsetPtr: Map<string, LevelUpMove[]>,
+    levelUpLearnset: Map<string, LevelUpMove[]>,
     execFlag: string,
     stopRead: boolean,
 }
@@ -22,7 +23,8 @@ function initContext(): Context{
     return {
         current: [],
         currKey: "",
-        evolutions: new Map(),
+        levelUpLearnsetPtr: new Map(),
+        levelUpLearnset: new Map(),
         execFlag: "main",
         stopRead: false,
     }
@@ -34,7 +36,7 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
         if (!line) return
         if (line.match('LevelUpMove')){
             if (context.currKey){
-                context.evolutions.set(context.currKey, context.current)
+                context.levelUpLearnsetPtr.set(context.currKey, context.current)
                 context.current = []
             }
             context.currKey = regexGrabStr(line, /(?<=LevelUpMove)\w+/)
@@ -46,7 +48,7 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
             context.current.push(levelUpMove)
         }
         if (line.match('gLevelUpLearnsets')){
-            context.evolutions.set(context.currKey, context.current)
+            context.levelUpLearnsetPtr.set(context.currKey, context.current)
             context.execFlag = "pointers"
         }
     },
@@ -55,10 +57,9 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
         if (line.match(/^\[SPECIES/)){
             const species = regexGrabStr(line, /(?<=\[)SPECIES\w+/)
             const ptr = regexGrabStr(line, /(?<==)\w+/)
-            if (!context.evolutions.has(ptr)) return
-            const learnset = context.evolutions.get(ptr)
-            context.evolutions.set(species, learnset)
-            context.evolutions.delete(ptr)
+            if (!context.levelUpLearnsetPtr.has(ptr)) return
+            const learnset = context.levelUpLearnsetPtr.get(ptr)
+            context.levelUpLearnset.set(species, learnset)
         }
         if (line.match('};')){
             context.stopRead = true
@@ -74,8 +75,9 @@ export function parse(lines: string[], fileIterator: number): Result{
         executionMap[context.execFlag](line, context)
         if (context.stopRead) break
     }
+    console.log(context.levelUpLearnset)
     return {
         fileIterator: fileIterator,
-        levelLearnsets: context.evolutions
+        levelLearnsets: context.levelUpLearnset
     }
 }

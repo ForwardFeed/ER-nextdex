@@ -101,8 +101,6 @@
 
 .species-top{
     display: flex;
-    min-height: 64px;
-    height: 10vw;
     width: 100%;
     background-color: var(--colorB);
 }
@@ -119,8 +117,11 @@
     text-align: center;
 }
 .abi-inn-info{
-    background-color: var(--colorD);
     width: 100%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border: 2px solid rgb(0, 0, 0);
 }
 #species-innates, #species-abilities{
     font-size: 1.5vmax;
@@ -145,7 +146,7 @@
     margin-left: 2%;
 }
 .stat-name{
-    
+    width: 1.5em;
 }
 .stat-num{
     width: 2vw;
@@ -169,6 +170,7 @@
     flex-direction: column;
     flex-grow: 1;
     background-color: var(--colorD);
+    overflow-y: scroll
 }
 
 .species-info-bar{
@@ -205,6 +207,7 @@
 }
 .species-move-list{
     flex-grow: 1;
+    overflow-y: scroll;
 }
 #learnset{
     background-color: var(--colorD);

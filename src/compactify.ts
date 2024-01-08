@@ -194,8 +194,12 @@ export function compactify(gameData: GameData): CompactGameData{
                 }
             }),
             TMHMMoves: val.TMHMMoves.map((x) => {
-                if (!compacted.eggT.includes(x)) compacted.eggT.push(x)
-                return compacted.eggT.indexOf(x)
+                x = x.replace(/((TM)|(HM))[^_]+/, 'MOVE')
+                if (x === "MOVE_SOLARBEAM") x = "MOVE_SOLAR_BEAM"
+                if (!movesT.includes(x)) {
+                    console.warn(`couldn't figure out ${x} TMHM move`)
+                }
+                return movesT.indexOf(x)
             }),
             forms: val.forms,
         })

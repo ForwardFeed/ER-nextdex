@@ -39,7 +39,9 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
             context.currKey = regexGrabStr(line, /(?<=^\[)\w+/)
         } 
         if (line.match('TMHM')){
-            context.current.push(regexGrabStr(line, /\w+(?=\))/))
+            const tmhm = regexGrabStr(line, /\w+(?=\))/)
+            if (tmhm === "0") return
+            context.current.push(tmhm)
         } else if (line.match('};')){
             context.tmhmLearnsets.set(context.currKey, context.current)
             context.stopRead = true

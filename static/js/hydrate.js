@@ -6,6 +6,7 @@ function hydrate(){
         add some reconstitution data for ease of use here
     */
     gameData.minMaxBaseStats = new Array(6) 
+    gameData.BST = []
     /*
         hydrate the UI with the data
     */
@@ -89,9 +90,11 @@ function hydrateSpecies(){
     for (const i in species){
         if (i == 0) continue //because of NONE species
         const spec = species[i]
+        spec.stats.base[6] = 0
         for (const statID in spec.stats.base){
             const value = spec.stats.base[statID]
             feedMinMaxBaseStats(statID, value)
+            if (statID < 6)spec.stats.base[6] += + value
         }
         const core = document.createElement('div')
         core.className = "species-row color" + (i % 2 ? "A" : "B")
