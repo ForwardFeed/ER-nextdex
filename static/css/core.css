@@ -32,7 +32,7 @@ body{
 }
 .main-title{
     text-align: justify;
-    font-size: 3vw;
+    font-size: 3vmax;
     padding-left: 1vw;
     display: inline-block;
     vertical-align: middle;
@@ -57,7 +57,7 @@ aside{
 }
 
 .side-btn{
-    font-size: 3vw;
+    font-size: 3vmax;
     align-items: center;
     text-align: center;
     display: flex;

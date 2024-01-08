@@ -23,9 +23,18 @@ function feedMinMaxBaseStats(statID, value){
         if (row[1] < value){
             gameData.minMaxBaseStats[statID][1] = value
         }
+        gameData.minMaxBaseStats[statID][2] += value
     } else {
-        gameData.minMaxBaseStats[statID] = [value, value]
+        gameData.minMaxBaseStats[statID] = [value, value, value]
     }
+}
+
+function setMeanBaseStats(){
+    for (let statID = 0; statID < 6; statID++){
+        // - 2 because of the first none specie
+        gameData.minMaxBaseStats[statID][2] = (gameData.minMaxBaseStats[statID][2] / (gameData.species.length - 2)).toFixed()
+    }
+    
 }
 
 function hydrateAbilities(){
@@ -96,6 +105,7 @@ function hydrateSpecies(){
         });
         fragment.append(core)
     }
+    setMeanBaseStats()
     const panel = $("#species-list");
     panel.append(fragment);
     updatePanelSpecies(1)

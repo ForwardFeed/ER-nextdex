@@ -32,21 +32,22 @@ function setSprite(NAME){
 
 function changeBaseStat(node, value, statID){
     node.find('.stat-num').text(value)
-    const minMax = gameData.minMaxBaseStats[statID]
-    const offsetColor = minMax[1] - minMax[0] // this is to make the most powerfull stats as 100% and min a 100%
-    value = value - minMax[0]
-    const totalBar = ((value / offsetColor) * 100).toFixed()
+    //const offsetColor = minMax[1] - minMax[0] // this is to make the most powerfull stats as 100% and min a 100%
+    //value = value - minMax[0]
+
+    const average = +gameData.minMaxBaseStats[statID][2]
     const color = [
         [0, "gray"],
-        [15, "#ff3300"],
-        [30, "#cc6600"],
-        [45, "#cccc00"],
-        [60, "#99cc00"],
-        [75, "#33cc33"],
-        [90, "#00ff99"],
-        [100, "#0033cc"],
-    ].filter((x)=> x[0] >= totalBar)[0][1]
-    node.find('.stat-bar').css('background', `linear-gradient(to right, ${color} ${totalBar}%, white 0%)`)
+        [40, "#ff3300"],
+        [80, "#cc6600"],
+        [120, "#cccc00"],
+        [160, "#99cc00"],
+        [200, "#33cc33"],
+        [240, "#00ff99"],
+        [280, "#0033cc"],
+    ].filter((x)=> x[0] >= ((value / average) * 100).toPrecision(2))[0][1]
+    const percent = ((value / 255) * 100).toFixed()
+    node.find('.stat-bar').css('background', `linear-gradient(to right, ${color} ${percent}%, white 0%)`)
 }
 
 
@@ -55,6 +56,7 @@ function addAbilities(abilities){
     node.empty()
     const fragment = document.createDocumentFragment()
     for (const i in abilities){
+        if (abilities[i] == abilities[i -1]) continue
         const abi = gameData.abilities[abilities[i]]
         const name = document.createElement('div')
         name.className = "species-abilities"

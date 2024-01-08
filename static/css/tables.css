@@ -16,7 +16,7 @@
 .abi-row{
     display: inline-flex;
     width: 100%;
-    font-size: 2vw;
+    font-size: 2vmax;
 }
 .abi-desc{
     width: 70%;
@@ -34,7 +34,7 @@
     display: flex;
     width: 100%;
     height: 100%;
-    font-size: 2vw;
+    font-size: 2vmax;
 }
 #species-list{
     text-align: center;
@@ -85,7 +85,7 @@
     width: 100%;
 }
 #species-innates, #species-abilities{
-    font-size: 1.5vw;
+    font-size: 1.5vmax;
     display: grid;
     padding: 1%;
     flex-grow: 1;
@@ -100,7 +100,7 @@
 }
 .stat-row{
     display: flex;
-    font-size: 1.5vw;
+    font-size: 1.4vmax;
     align-items: center;
 }
 .stat-row > * {
