@@ -1,4 +1,23 @@
 /* GENERAL */
+.normal{background-color: #aa9;}
+.fire{background-color: #f42;}
+.water{background-color: #39f;}
+.electric{background-color: #fc3;}
+.grass{background-color: #7c5;}
+.ice{  background-color: #6cf;}
+.fighting{background-color: #b54;}
+.poison{background-color: #a59;}
+.ground{background-color: #db5;}
+.flying{background-color: #89f}
+.psychic{background-color: #f59;}
+.bug{background-color: #ab2;}
+.rock{background-color: #ba6;}
+.ghost{background-color: #66b;}
+.dragon{background-color: #76e;}
+.dark{background-color: #754;}
+.steel{background-color: #aab;}
+.fairy{background-color: #e9e;}
+
 .colorA{
     background-color: var(--colorA);
 }
@@ -153,13 +172,23 @@
 }
 
 .species-info-bar{
-
+    display: flex;
+    flex-direction: row;
 }
 
 #specie-name{
     padding-left: 2%;
 }
-
+#species-types{
+    display: flex;
+    
+}
+.species-type{
+    padding-left: 2%;
+    padding-right: 2%;
+    margin-left: 2%;
+    border-radius: 5px;
+}
 .species-moves{
     background-color: var(--colorC);
     display: grid;

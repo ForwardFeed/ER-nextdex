@@ -1,13 +1,30 @@
 function feedPanelSpecies(id){
     const specie = gameData.species[id]
 
-    $('#specie-name').text(specie.name)
+    $('#species-name').text(specie.name)
     updateBaseStats(specie.stats.base)
     setSprite(specie.NAME)
     addAbilities(specie.stats.abis)
     addInnates(specie.stats.inns)
+    addTypes(specie.stats.types)
 }
 
+function addTypes(types){
+    const core = $('#species-types')
+    const type1 = gameData.typeT[types[0]]
+    const nodeType1 = core.children().eq(0)
+    nodeType1.attr("class", "species-type " + type1.toLowerCase())
+    nodeType1.text(type1)
+    let type2
+    if (!types[1] || types[1] == types[0] ) {
+        type2 = ""
+    } else {
+        type2 = gameData.typeT[types[1]]
+    }
+    const nodeType2 = core.children().eq(1)
+    nodeType2.attr("class", "species-type " + type2.toLowerCase())
+    nodeType2.text(type2)
+}
 
 function updateBaseStats(stats){
     const baseStatsTable = [
