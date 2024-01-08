@@ -1,3 +1,5 @@
 $('#main-search').on('keyup', function(ev){
-    console.log($(this).val())
+    fastdom.mutate(() => {
+        updateAbilities($(this).val().toLowerCase())
+    });
 })

@@ -20,7 +20,7 @@ function setupPanels(){
         })
         $(btnPanel[1]).toggle()
     }
-    const defaultShow = 1
+    const defaultShow = 0
     const defaultPanel = $(panelTable[defaultShow][1])
     defaultPanel.addClass('active-panel')
     defaultPanel.toggle()

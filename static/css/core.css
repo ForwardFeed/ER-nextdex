@@ -99,3 +99,7 @@ footer{
     background-color: rgb(15, 14, 14);
     color: white
 }
+
+input[type="text"] {
+    font-size: 2vmax;
+}

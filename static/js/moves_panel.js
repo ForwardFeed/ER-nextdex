@@ -1,4 +1,4 @@
-function updatePanelMoves(moveID){
+function feedPanelMoves(moveID){
     const move = gameData.moves[moveID]
     $('#moves-name').text(move.name)
     $('#moves-pwr').text('PWR: ' + move.pwr)
@@ -11,4 +11,8 @@ function updatePanelMoves(moveID){
     $('#moves-types').text('' + move.types.map((x)=>gameData.typeT[x]).join(' '))
     $('#moves-desc').text('' + move.lDesc)
     $('#moves-flags').text('' + move.flags.map((x)=>gameData.flagsT[x]).join(' '))
+}
+
+function updateMoves(search){
+    
 }

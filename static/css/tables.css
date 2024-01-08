@@ -18,16 +18,23 @@
     font-size: 2vmax;
 }
 /* ABILITIES */
+#abis-list{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
 .abi-row{
-    display: inline-flex;
+    display: flex;
     width: 100%;
     font-size: 2vmax;
 }
 .abi-desc{
-    width: 70%;
+    padding-left: 1%;
+    flex-grow: 1;
+    flex-direction: column;
 }
 .abi-name{
-    width: 30%;
+    width: 9em;
     text-align: center;
 }
 

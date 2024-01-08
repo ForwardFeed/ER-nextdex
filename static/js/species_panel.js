@@ -1,4 +1,4 @@
-function updatePanelSpecies(id){
+function feedPanelSpecies(id){
     const specie = gameData.species[id]
 
     $('#specie-name').text(specie.name)
@@ -76,4 +76,10 @@ function addInnates(innates){
         fragment.append(name)
     }
     node.append(fragment)
+}
+
+
+
+function updateSpecies(search){
+
 }

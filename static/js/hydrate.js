@@ -72,13 +72,15 @@ function hydrateMoves(){
         core.append(name)
         core.dataset.id = i
         $(core).on('click', function(){
-            updatePanelMoves($(this).attr('data-id'))
+            fastdom.mutate(() => {
+                feedPanelMoves($(this).attr('data-id'))
+            });
         });
         fragment.append(core)
     }
     const panel = $("#moves-list");
     panel.append(fragment);
-    updatePanelMoves(1)
+    feedPanelMoves(1)
 }
 
 function hydrateSpecies(){
@@ -99,7 +101,7 @@ function hydrateSpecies(){
         core.dataset.id = i
         $(core).on('click', function(){
             fastdom.mutate(() => {
-                updatePanelSpecies($(this).attr('data-id'))
+                feedPanelSpecies($(this).attr('data-id'))
             });
             
         });
@@ -108,5 +110,5 @@ function hydrateSpecies(){
     setMeanBaseStats()
     const panel = $("#species-list");
     panel.append(fragment);
-    updatePanelSpecies(1)
+    feedPanelSpecies(1)
 }
