@@ -6,6 +6,12 @@ function setupPanels(){
     ]
     for (const btnPanel of panelTable){
         $(btnPanel[0]).on('click', ()=>{
+            const curBtn = $('.btn-active')
+            curBtn.addClass('btn-n-active')
+            curBtn.removeClass('btn-active')
+            $(btnPanel[0]).removeClass('btn-n-active')
+            $(btnPanel[0]).addClass('btn-active')
+
             const curPan = $('.active-panel')
             curPan.removeClass('active-panel')
             curPan.toggle()

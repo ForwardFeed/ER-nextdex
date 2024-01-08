@@ -32,6 +32,7 @@ function hydrateAbilities(){
     const fragment = document.createDocumentFragment();
     const abilities = gameData.abilities
     for (const i in abilities){
+        if (i == 0) continue
         const abi = abilities[i]
         const core = document.createElement('div')
         core.className = "abi-row"
