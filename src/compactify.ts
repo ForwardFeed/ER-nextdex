@@ -112,10 +112,10 @@ export function compactify(gameData: GameData): CompactGameData{
             split: ((x) => {
                 if (!compacted.splitT.includes(x)) compacted.splitT.push(x)
                 return compacted.splitT.indexOf(x)
-            })(move.target),
+            })(move.split),
             flags: move.flags.map((x) => {
-                if (!compacted.colT.includes(x)) compacted.colT.push(x)
-                return compacted.colT.indexOf(x)
+                if (!compacted.flagsT.includes(x)) compacted.flagsT.push(x)
+                return compacted.flagsT.indexOf(x)
             }),
             arg: move.argument,
             desc: move.desc,

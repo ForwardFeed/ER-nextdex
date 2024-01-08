@@ -21,7 +21,6 @@ function updateBaseStats(stats){
     for (const i in baseStatsTable){
         changeBaseStat($(baseStatsTable[i]), stats[i], i)
     }
-    
 }
 
 function setSprite(NAME){

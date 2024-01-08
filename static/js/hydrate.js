@@ -55,7 +55,7 @@ function hydrateAbilities(){
         core.append(desc)
         fragment.append(core)
     }
-    const panel = $("#panel-abis");
+    const panel = $("#abis-list");
     panel.append(fragment);
 }
 
@@ -72,13 +72,13 @@ function hydrateMoves(){
         core.append(name)
         core.dataset.id = i
         $(core).on('click', function(){
-            console.log($(this).attr('data-id'))
+            updatePanelMoves($(this).attr('data-id'))
         });
         fragment.append(core)
     }
     const panel = $("#moves-list");
     panel.append(fragment);
-
+    updatePanelMoves(1)
 }
 
 function hydrateSpecies(){
