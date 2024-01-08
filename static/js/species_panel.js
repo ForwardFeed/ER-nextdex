@@ -1,4 +1,4 @@
-function updatePanel(id){
+function updatePanelSpecies(id){
     const specie = gameData.species[id]
 
     console.log(specie)

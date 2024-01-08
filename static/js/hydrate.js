@@ -50,14 +50,32 @@ function hydrateAbilities(){
 }
 
 function hydrateMoves(){
+    const fragment = document.createDocumentFragment();
     const moves = gameData.moves
+    for (const i in moves){
+        if (i == 0) continue
+        const mv = moves[i]
+        const core = document.createElement('div')
+        core.className = "species-row color" + (i % 2 ? "A" : "B")
+        const name = document.createElement('span')
+        name.innerText = mv.name || "Unknown"
+        core.append(name)
+        core.dataset.id = i
+        $(core).on('click', function(){
+            console.log($(this).attr('data-id'))
+        });
+        fragment.append(core)
+    }
+    const panel = $("#moves-list");
+    panel.append(fragment);
+
 }
 
 function hydrateSpecies(){
     const fragment = document.createDocumentFragment();
     const species = gameData.species
     for (const i in species){
-        if (i == 0) continue //because of cringe ????? NONE species
+        if (i == 0) continue //because of NONE species
         const spec = species[i]
         for (const statID in spec.stats.base){
             const value = spec.stats.base[statID]
@@ -70,11 +88,11 @@ function hydrateSpecies(){
         core.append(name)
         core.dataset.id = i
         $(core).on('click', function(){
-            updatePanel($(this).attr('data-id'))
+            updatePanelSpecies($(this).attr('data-id'))
         });
         fragment.append(core)
     }
     const panel = $("#species-list");
     panel.append(fragment);
-    updatePanel(1)
+    updatePanelSpecies(1)
 }
