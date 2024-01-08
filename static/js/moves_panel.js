@@ -14,5 +14,20 @@ function feedPanelMoves(moveID){
 }
 
 function updateMoves(search){
-    
+    const moves = gameData.moves
+    const nodeList = $('#moves-list').children()
+    let validID;
+    for (const i in moves){
+        if (i == 0 ) continue
+        const move = moves[i]
+        const node = nodeList.eq(i - 1)
+        if (move.name.toLowerCase().indexOf(search) >= 0 ? true : false)
+        {
+                if (!validID) validID = i
+                node.show()
+        } else {
+                node.hide()
+        }
+    }
+    feedPanelMoves(validID || 1) //1 ??
 }
