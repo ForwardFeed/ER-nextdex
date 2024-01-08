@@ -41,7 +41,7 @@
 /* MOVES */
 #moves-list{
     text-align: center;
-    width: 6em;
+    width: 9em;
     height: 100%;
     background-color: var(--colorA);
     overflow-y: scroll;
@@ -57,7 +57,7 @@
 }
 #species-list{
     text-align: center;
-    width: 6em;
+    width: 9em;
     height: 100%;
     background-color: var(--colorA);
     overflow-y: scroll;

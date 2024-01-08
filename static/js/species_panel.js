@@ -81,5 +81,20 @@ function addInnates(innates){
 
 
 function updateSpecies(search){
-
+    const species = gameData.species
+    const nodeList = $('#species-list').children()
+    let validID;
+    for (const i in species){
+        if (i == 0 ) continue
+        const specie = species[i]
+        const node = nodeList.eq(i - 1)
+        if (specie.name.toLowerCase().indexOf(search) >= 0 ? true : false)
+        {
+                if (!validID) validID = i
+                node.show()
+        } else {
+                node.hide()
+        }
+    }
+    feedPanelSpecies(validID || 1) //1 ??
 }
