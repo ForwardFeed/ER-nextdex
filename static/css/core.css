@@ -16,7 +16,13 @@ html{
     background-color: rgb(160, 76, 65);
     font-family: Inconsolata;
     font-size: larger;
+    overflow-y: scroll;
 }
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 0px;
+}
+
 
 body{
     margin: 0;
