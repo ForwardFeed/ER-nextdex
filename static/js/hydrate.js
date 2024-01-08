@@ -89,7 +89,10 @@ function hydrateSpecies(){
         core.append(name)
         core.dataset.id = i
         $(core).on('click', function(){
-            updatePanelSpecies($(this).attr('data-id'))
+            fastdom.mutate(() => {
+                updatePanelSpecies($(this).attr('data-id'))
+            });
+            
         });
         fragment.append(core)
     }
