@@ -3,10 +3,9 @@
     src: url(../font/Inconsolata-VariableFont_wdth\,wght.ttf) format("truetype");
   }
 :root{
-    --btnActive: rgb(52, 248, 248);
-    --btnAHover: rgb(30, 216, 154);
-    --buttonNActive: rgb(112, 151, 151);
-    --btnNAHover:rgb(35, 82, 72);
+    --btnActive: rgb(179, 27, 27);
+    --btnHover: rgb(116, 32, 32);
+    --buttonNActive:  rgb(211, 82, 82);
     --colorA: rgb(240, 224, 79);
     --colorB: rgb(240, 189, 79);
     --colorC: rgb(194, 166, 74);
@@ -49,7 +48,6 @@ body{
 }
 aside{
     float: right;
-    background-color: rgb(60, 157, 187);
     height: 90vh;
     width: 15vw;
     display: grid;
@@ -69,13 +67,13 @@ aside{
     background-color: var(--buttonNActive);
 }
 .btn-n-active:hover{
-    background-color: var(--btnNAHover);
+    background-color: var(--btnHover);
 }
 .btn-active{
     background-color: var(--btnActive);
 }
 .btn-active:hover{
-    background-color: var(--btnAHover);
+    background-color: var(--btnHover);
 }
 
 main{

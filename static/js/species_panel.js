@@ -1,7 +1,6 @@
 function updatePanelSpecies(id){
     const specie = gameData.species[id]
 
-    console.log(specie)
     $('#specie-name').text(specie.name)
     updateBaseStats(specie.stats.base)
     setSprite(specie.NAME)
