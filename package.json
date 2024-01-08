@@ -1,0 +1,21 @@
+{
+  "name": "nextdex",
+  "version": "0.0.1",
+  "description": "a pokemon documentation support for games made with pokeemerald decompilation project from pret",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "run": "node ./target/main.js",
+    "dist": "node ./target/main.js v1",
+    "sprites": "node ./target/main.js sprites"
+  },
+  "keywords": [
+    "pokemon"
+  ],
+  "author": "ForwardFeed",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.10.5"
+  }
+}

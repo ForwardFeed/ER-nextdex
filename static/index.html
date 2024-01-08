@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ER NextDex</title>
+    <link rel="stylesheet" href="./css/core.css">
+</head>
+<body>
+    <div id="main-header" class="header-gradient-ER">
+        <span class="main-title">
+            Elite Redux Nextdex
+        </span>
+        <input type="text" name="" id="main-search">
+        <span class="warning"> 🛑 👷 IN 🏗️ CONSTRUCTION 🚧 🛑</span>
+    </div>
+    <aside>
+        <div class="side-btn btn-active" id="btn-abis">
+            <span>
+                Abilities
+            </span>      
+        </div>
+        <div class="side-btn btn-n-active" id="btn-moves">
+            <span>Moves</span>
+        </div>
+        <div class="side-btn btn-n-active" id="btn-species">
+            <span>Species</span>
+        </div>
+    </aside>
+    <main>
+        <div id="panel-abis" class="panel">
+            <!-- hidden pannel for abilities-->
+            
+        </div>
+        <div id="panel-moves" class="panel">
+            <!-- hidden pannel for moves-->
+            
+        </div>
+        <div id="panel-species" class="panel">
+            <!-- hidden pannel for species-->
+            <div id="species-list">
+            </div>
+            <div id="species-data">
+                <div class="species-top">
+                    <img id="species-front">
+                    <div id="species-basestats">
+                        <div id="BHP" class="stat-row">
+                            <span class="stat-name">HP</span>
+                            <span class="stat-num">100</span>
+                            <div id="BHPBar" class="stat-bar"></div>
+                        </div>
+                        <div id="BAT" class="stat-row">
+                            <span class="stat-name">AT</span>
+                            <span class="stat-num">100</span>
+                            <div id="BATBar" class="stat-bar"></div>
+                        </div>
+                        <div id="BDF" class="stat-row">
+                            <span class="stat-name">DF</span>
+                            <span class="stat-num">100</span>
+                            <div id="BDFBar" class="stat-bar"></div>
+                        </div>
+                        <div id="BSA" class="stat-row">
+                            <span class="stat-name">SA</span>
+                            <span class="stat-num">100</span>
+                            <div id="BSABar" class="stat-bar"></div>
+                        </div>
+                        <div id="BSD" class="stat-row">
+                            <span class="stat-name">SD</span>
+                            <span class="stat-num">100</span>
+                            <div id="BSDBar" class="stat-bar"></div>
+                        </div>
+                        <div id="BSP" class="stat-row">
+                            <span class="stat-name">SP</span>
+                            <span class="stat-num">100</span>
+                            <div id="BSPBar" class="stat-bar"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="species-bot">
+                    <div class="species-info-bar">
+                        <div id="specie-name"></div>
+                    </div>
+                    <div class="species-moves">
+                        <div class="species-bot-row">
+                            <div class="species-moves-title">
+                                Learn Sets
+                            </div>
+                            <div class="species-move-list" id="learnset">
+
+                            </div>
+                        </div>
+                        <div class="species-bot-row">
+                            <div class="species-moves-title">
+                                TM/HM
+                            </div>
+                            <div class="species-move-list" id="tmhm">
+
+                            </div>
+                        </div>
+                        <div class="species-bot-row">
+                            <div class="species-moves-title">
+                                Egg Moves
+                            </div>
+                            <div class="species-move-list" id="eggmoves">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </main>
+    <script src="./vendor/fastdom.js"></script>
+    <script src="./vendor/jquery3.7.1.min.js"></script>
+    <link rel="stylesheet" href="./css/tables.css">
+    <!-- load the main js code here or additionnal heavy stuff-->
+    <script src="./js/sidebar.js"></script>
+    <script src="./js/species_panel.js"></script>
+    <script src="./js/hydrate.js"></script>
+    <script src="./js/index.js"></script>
+    <script src="./gameData.js"></script>
+</body>
+</html>

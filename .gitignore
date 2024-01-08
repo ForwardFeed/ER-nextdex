@@ -1,0 +1,9 @@
+# project related
+dist/
+target/
+debug.txt
+test.txt
+
+# nodejs related
+node_modules/
+package-lock.json

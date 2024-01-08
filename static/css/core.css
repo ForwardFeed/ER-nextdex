@@ -1,0 +1,97 @@
+@font-face {
+    font-family: "Inconsolata";
+    src: url(../font/Inconsolata-VariableFont_wdth\,wght.ttf) format("truetype");
+  }
+:root{
+    --btnActive: rgb(52, 248, 248);
+    --btnAHover: rgb(30, 216, 154);
+    --buttonNActive: rgb(112, 151, 151);
+    --btnNAHover:rgb(35, 82, 72);
+    --colorA: rgb(240, 224, 79);
+    --colorB: rgb(240, 189, 79);
+    --colorC: rgb(194, 166, 74);
+    --colorD: rgb(194, 142, 74);
+}
+
+html{
+    background-color: rgb(160, 76, 65);
+    font-family: Inconsolata;
+    font-size: larger;
+}
+
+body{
+    margin: 0;
+}
+
+#main-header{
+    position: relative;
+    top: 0;
+    height: 10vh;
+    display: flex;
+    align-items: center;
+}
+.main-title{
+    text-align: justify;
+    font-size: 3vw;
+    padding-left: 1vw;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}
+.header-gradient-ER{
+    background: rgb(172,171,155);
+    background: linear-gradient(0deg, rgba(216,84,84,1)30%, rgba(172,171,155,1)  100%); 
+}
+#main-search{
+    margin-left: 5vw;
+    width: 35vw;
+    height: 80%;
+}
+aside{
+    float: right;
+    background-color: rgb(60, 157, 187);
+    height: 90vh;
+    width: 15vw;
+    display: grid;
+    flex-direction: column;
+}
+
+.side-btn{
+    font-size: 3vw;
+    align-items: center;
+    text-align: center;
+    display: flex;
+}
+.side-btn > span{
+    flex-grow: 2;
+}
+.btn-n-active{
+    background-color: var(--buttonNActive);
+}
+.btn-n-active:hover{
+    background-color: var(--btnNAHover);
+}
+.btn-active{
+    background-color: var(--btnActive);
+}
+.btn-active:hover{
+    background-color: var(--btnAHover);
+}
+
+main{
+    height: 90vh;
+    width: 85vw;
+    background-color: blueviolet;
+    overflow-y: scroll;
+}
+
+.panel{
+
+}
+
+footer{
+    height: 8vh;
+    width: 85vw;
+    background-color: rgb(15, 14, 14);
+    color: white
+}
