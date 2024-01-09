@@ -77,6 +77,7 @@
     overflow-y: scroll;
     display: flex;
     flex-direction: column;
+    min-width: 9em;
 }
 
 #moves-data{
@@ -143,7 +144,7 @@
     flex-direction: column;
     flex-grow: 1;
     background-color: var(--colorD);
-    overflow-y: scroll
+    overflow-y: scroll;
 }
 .moves-bot-info{
     display: flex;
@@ -152,6 +153,10 @@
 .moves-bot-info > *{
     margin-left: 2%;
 }
+#moves-desc{
+    
+}
+
 /* SPECIES */
 #panel-species{
     

@@ -16,7 +16,7 @@ function feedPanelMoves(moveID){
         const type2 = gameData.typeT[move.types[1]]
         $('#moves-types2').text(type2).attr("class", type2.toLowerCase())
     }
-    $('#moves-desc').text('' + move.lDesc)
+    $('#moves-desc').text(move.lDesc) //TODO fix the width of this
     listMoveFlags(move.flags.map((x)=>gameData.flagsT[x]))
 
     $('#moves-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
