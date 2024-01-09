@@ -5,7 +5,10 @@
 :root{
     --btnActive: rgb(179, 27, 27);
     --btnHover: rgb(116, 32, 32);
-    --buttonNActive:  rgb(216,84,84);
+    --btnNActive:  rgb(216,84,84);
+    --selActive: rgb(228, 81, 23);
+    --selHover: rgb(138, 47, 11);
+    --selNActive:  rgb(214, 109, 68);
     --colorA: rgb(240, 224, 79);
     --colorB: rgb(240, 189, 79);
     --colorC: rgb(194, 166, 74);
@@ -70,7 +73,7 @@ aside{
     flex-grow: 2;
 }
 .btn-n-active{
-    background-color: var(--buttonNActive);
+    background-color: var(--btnNActive);
 }
 .btn-n-active:hover{
     background-color: var(--btnHover);

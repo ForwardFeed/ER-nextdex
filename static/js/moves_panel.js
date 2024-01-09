@@ -11,6 +11,9 @@ function feedPanelMoves(moveID){
     $('#moves-types').text('' + move.types.map((x)=>gameData.typeT[x]).join(' '))
     $('#moves-desc').text('' + move.lDesc)
     $('#moves-flags').text('' + move.flags.map((x)=>gameData.flagsT[x]).join(' '))
+
+    $('#moves-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
+    $('#moves-list').children().eq(moveID - 1).addClass("sel-active").removeClass("sel-n-active")
 }
 
 function updateMoves(search){

@@ -31,9 +31,9 @@ function feedMinMaxBaseStats(statID, value){
 }
 
 function setMeanBaseStats(){
-    for (let statID = 0; statID < 6; statID++){
-        // - 2 because of the first none specie
-        gameData.minMaxBaseStats[statID][2] = (gameData.minMaxBaseStats[statID][2] / (gameData.species.length - 2)).toFixed()
+    for (let statID = 0; statID < 7; statID++){
+        // - 1 because of the first none specie
+        gameData.minMaxBaseStats[statID][2] = (gameData.minMaxBaseStats[statID][2] / (gameData.species.length - 1)).toFixed()
     }
     
 }
@@ -67,7 +67,7 @@ function hydrateMoves(){
         if (i == 0) continue
         const mv = moves[i]
         const core = document.createElement('div')
-        core.className = "species-row color" + (i % 2 ? "A" : "B")
+        core.className = "moves-row sel-n-active"
         const name = document.createElement('span')
         name.innerText = mv.name || "Unknown"
         core.append(name)
@@ -97,7 +97,7 @@ function hydrateSpecies(){
             if (statID < 6)spec.stats.base[6] += + value
         }
         const core = document.createElement('div')
-        core.className = "species-row color" + (i % 2 ? "A" : "B")
+        core.className = "species-row sel-n-active"
         const name = document.createElement('span')
         name.innerText = spec.name || "unknown"
         core.append(name)

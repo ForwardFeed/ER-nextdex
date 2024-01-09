@@ -10,6 +10,9 @@ function feedPanelSpecies(id){
     setMoves($('#learnset'), specie.levelUpMoves)
     setMoves($('#tmhm'), specie.TMHMMoves)
     setMoves($('#eggmoves'), specie.eggMoves)
+
+    $('#species-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
+    $('#species-list').children().eq(id - 1).addClass("sel-active").removeClass("sel-n-active")
 }
 
 function setTypes(types){
