@@ -59,10 +59,11 @@ function listMoveFlags(flags){
         "TARGET_ABILITY_IGNORED" :"Target Ability is ignored",
     }
     const NoFlagMap = {
-        "PROTECT_AFFECTED": "isn't affected by protect",
-        "MIRROR_MOVE_AFFECTED": "cannot be mirrored",
+        "PROTECT_AFFECTED": "Isn't affected by protect",
+        "MIRROR_MOVE_AFFECTED": "Cannot be mirrored",
     }
     const core = $('#moves-flags')
+    core.empty()
     const frag = document.createDocumentFragment()
     for (const flag of flags){
         const descFlag = flagMap[flag]

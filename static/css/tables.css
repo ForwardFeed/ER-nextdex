@@ -128,7 +128,13 @@
     background-color: var(--colorD);
     overflow-y: scroll
 }
-
+.moves-bot-info{
+    display: flex;
+    flex-direction: row;
+}
+.moves-bot-info > *{
+    margin-left: 2%;
+}
 /* SPECIES */
 #panel-species{
     
