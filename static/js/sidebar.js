@@ -1,8 +1,8 @@
 function setupPanels(){
     const panelTable = [
+        ["#btn-species", "#panel-species"],
         ["#btn-abis", "#panel-abis"],
         ["#btn-moves", "#panel-moves"],
-        ["#btn-species", "#panel-species"],
     ]
     for (const btnPanel of panelTable){
         $(btnPanel[0]).on('click', ()=>{
