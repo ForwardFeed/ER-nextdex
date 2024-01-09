@@ -1,8 +1,10 @@
 [ ] Add explanations
     [ ] base stats colors are based on the average, not the total
+    [ ] How the project works in the readme
 [ ] Add tutor moves
 [x] Invert Abilities with species in the side bar
 [ ] Add versionning changes
+    [ ] Dynamic js file loading and remove the hydrate() call in it to be handled by the async loading function
 [ ] Make a beta version that will autofetch OR having Automated tool that will update the github daily about latest beta changes.
 [ ] Change the layout for phone or lateral screen
 [ ] Add a panel to have the global stats, the number of species, abilities and stuff like that
@@ -12,4 +14,5 @@
 [ ] Stop with button alternating color
 [ ] Comment more the code
 [ ] Refractor the UI hydration and pannel filling as well as the CSS
-[ ] Add explanation on the Readme how it works
+[ ] add additionnal sub pannel controls in bot Info bar for species and probably in moves
+[ ]
