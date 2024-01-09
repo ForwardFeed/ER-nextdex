@@ -1,11 +1,11 @@
 function feedPanelMoves(moveID){
     const move = gameData.moves[moveID]
     $('#moves-name').text(move.name)
-    $('#moves-pwr').text('PWR: ' + move.pwr)
-    $('#moves-acc').text('ACC: ' + move.acc)
+    $('#moves-pwr').text(move.pwr || "--")
+    $('#moves-acc').text(move.acc)
     $('#moves-chance').text('CHANCE: ' + move.chance)
-    $('#moves-pp').text('PP: ' + move.pp)
-    $('#moves-prio').text('PRIO: ' + move.prio)
+    $('#moves-pp').text(move.pp)
+    $('#moves-prio').text(move.prio)
     $('#moves-target').text('' + gameData.targetT[move.target])
     $('#moves-split').text('' + gameData.splitT[move.split])
     $('#moves-types').text('' + move.types.map((x)=>gameData.typeT[x]).join(' '))

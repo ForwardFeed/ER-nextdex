@@ -97,6 +97,7 @@ function changeBaseStat(node, value, statID){
     ].filter((x)=> x[0] >= ((value / average) * 100).toPrecision(2))[0][1]
     const maxValue = statID < 6? 255: gameData.minMaxBaseStats[statID][1]
     const percent = ((value / maxValue ) * 100).toFixed()
+    node.find('.stat-num').css('background-color', color)
     node.find('.stat-bar').css('background', `linear-gradient(to right, ${color} ${percent}%, white 0%)`)
 }
 

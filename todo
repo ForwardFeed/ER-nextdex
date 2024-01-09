@@ -10,4 +10,6 @@
 [ ] Proper up the move pannel
 [ ] Craft moves animation from the gamefile into a gif or webp (is this possible?)
 [ ] Stop with button alternating color
-[ ]
+[ ] Comment more the code
+[ ] Refractor the UI hydration and pannel filling as well as the CSS
+[ ] Add explanation on the Readme how it works

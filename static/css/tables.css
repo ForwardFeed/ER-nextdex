@@ -75,8 +75,10 @@
     width: 9em;
     height: 100%;
     overflow-y: scroll;
-    display: grid;
+    display: flex;
+    flex-direction: column;
 }
+
 #moves-data{
     height: 100%;
     flex-grow: 1;
@@ -84,6 +86,42 @@
     display: flex;
     flex-direction: column;
 }
+.moves-top{
+    display: flex;
+    width: 100%;
+    background-color: var(--colorB);
+    height: 10vw;
+    text-align: center;
+}
+.moves-large{
+    height: 100%;
+    width: 12vw;
+}
+#moves-pwr{
+    font-size: 3.5em;
+}
+.moves-xlarge{
+    height: 100%;
+    width: 30vw;
+    display: flex;
+    flex-direction: column;
+}
+.xlarge-row{
+    display: flex;
+    flex-direction: row;
+}
+.xlarge-row > span{
+    padding-right: 0.5em;
+}
+
+.moves-bot{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    background-color: var(--colorD);
+    overflow-y: scroll
+}
+
 /* SPECIES */
 #panel-species{
     
@@ -93,15 +131,16 @@
     width: 9em;
     height: 100%;
     overflow-y: scroll;
-    display: grid;
+    display: flex;
+    flex-direction: column;
 }
 
 .species-row, .moves-row{
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    height: 2em;
+    min-height: 2em;
     box-shadow: inset 0 0 1vmax rgb(44, 8, 2);
 }
 
@@ -123,6 +162,7 @@
     height: 10vw;
     min-width: 64px;
     min-height: 64px;
+    margin: auto;
 }
 .species-abi-inn{
     display: flex;
@@ -156,14 +196,14 @@
     font-size: 1.4vmax;
     align-items: center;
 }
-.stat-row > * {
-    margin-left: 2%;
-}
 .stat-name{
     width: 1.5em;
+    padding-left: 2%;
 }
 .stat-num{
-    width: 2vw;
+    width: 1.5em;
+    margin-left: 2%;
+    border-radius: 2px;
 }
 .stat-bar{
     background-color: green;
