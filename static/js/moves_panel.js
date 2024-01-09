@@ -6,7 +6,8 @@ function feedPanelMoves(moveID){
     $('#moves-chance').text(move.chance)
     $('#moves-pp').text(move.pp)
     $('#moves-prio').text(move.prio)
-    $('#moves-target').text('TARGET :' + gameData.targetT[move.target])
+    //$('#moves-target').text('TARGET :' + gameData.targetT[move.target])
+    setTarget(move.target)
     $('#moves-split').attr("src",`./icons/${gameData.splitT[move.split]}.png`);
     $('#moves-types').text('' + move.types.map((x)=>gameData.typeT[x]).join(' '))
     const type1 = gameData.typeT[move.types[0]]
@@ -81,6 +82,28 @@ function listMoveFlags(flags){
         frag.append(node)
     }
     core.append(frag)
+}
+
+function setTarget(targetID){
+    const target = gameData.targetT[targetID]
+    const targetMap =  ["foe1", "foe2", "foe3", "ally1", "allySelf", "ally2"]
+    const colorMap = {
+        "SELECTED": [0,1,0, 0,0,0],
+        "BOTH": [0,1,0, 0,1,0],
+        "USER": [0,0,0, 0,1,0],
+        "RANDOM": [2,2,2, 2,0,2], // how do i communicate the randomly?
+        "FOES_AND_ALLY": [1,1,1, 1,0,1],
+        "DEPENDS": [2,2,2, 0,0,0], //
+        "ALL_BATTLERS": [1,1,1, 1,1,1],
+        "OPPONENTS_FIELD": [1,1,1, 0,0,0],
+        "ALLY": [0,0,0,1,0,1],
+    }[target]
+    const colorCode = ["unset","#f4072a","#c74fef" ]
+    for (const i in targetMap){
+        const nodeTarget = $("#" + targetMap[i])
+        const colorID = colorMap[i]
+        nodeTarget.css('background-color', colorCode[colorID])
+    }
 }
 
 function updateMoves(search){
