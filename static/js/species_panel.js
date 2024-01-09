@@ -30,6 +30,7 @@ function setTypes(types){
 }
 
 function setMoves(core, moves){
+    core.empty()
     const frag = document.createDocumentFragment()
     for (const moveID of moves){
         if (typeof moveID === "object"){
@@ -102,7 +103,9 @@ function setAbilities(abilities){
     node.empty()
     const fragment = document.createDocumentFragment()
     for (const i in abilities){
-        if (abilities[i] == abilities[i -1]) continue
+        if (abilities[i] == abilities[i -1]) {    
+            continue
+        }
         const abi = gameData.abilities[abilities[i]]
         const name = document.createElement('div')
         name.className = "species-abilities"
