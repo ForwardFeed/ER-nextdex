@@ -87,7 +87,7 @@ function getSpecies(optionsGlobal_h: FileDataOptions){
                                                 'src/data/pokemon/level_up_learnsets.h', // order with pointers is important
                                                 'src/data/pokemon/level_up_learnset_pointers.h',
                                                 'src/data/pokemon/tmhm_learnsets.h',
-                                                //'src/data/pokemon/tutor_learnsets.h', //pain in the ass to do
+                                                'src/data/pokemon/tutor_learnsets.h',
                                                 'src/data/pokemon/form_species_tables.h',
                                                 'src/data/pokemon/form_species_table_pointers.h',
                                                 'src/data/graphics/pokemon.h',

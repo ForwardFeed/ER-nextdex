@@ -4,6 +4,7 @@ import * as Evolutions from './evolutions'
 import * as EggMoves from './egg_moves'
 import * as LevelUpLearnSets from './level_up_learnsets'
 import * as TMHMLearnsets from './tmhm_learnsets'
+import * as TutorMoves from './tutor_learnsets'
 import * as FormsSpecies from './form_species'
 
 export interface Specie {
@@ -25,7 +26,8 @@ export function parse(pokeData: string): Specie[]{
     const eggMovesResult = EggMoves.parse(lines, evolutionsResult.fileIterator)
     const levelUpLearnsetsResult = LevelUpLearnSets.parse(lines, eggMovesResult.fileIterator)
     const TMHMLearnsetsResult = TMHMLearnsets.parse(lines, levelUpLearnsetsResult.fileIterator)
-    const formsResult = FormsSpecies.parse(lines, TMHMLearnsetsResult.fileIterator)
+    const TutorMovesResult = TutorMoves.parse(lines, TMHMLearnsetsResult.fileIterator)
+    const formsResult = FormsSpecies.parse(lines, TutorMovesResult.fileIterator)
 
     const Species: Specie[] = []
     baseStatsResult.baseStats.forEach((BaseStats, key)=>{

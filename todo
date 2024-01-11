@@ -14,4 +14,42 @@
 [ ] Comment more the code
 [ ] Refractor the UI hydration and pannel filling as well as the CSS
 [ ] add additionnal sub pannel controls in bot Info bar for species and probably in moves
-[ ]
+[ ] add code of the different abilities, species related from
+[ ] add list of sSkillSwapBannedAbilities things like that in battle utils
+
+
+const u16 gTutorMoves[] =
+{
+    if (tutor < 32)
+    {
+        u32 mask = 1 << tutor;
+
+        return sTutorLearnsets[species][0] & mask;
+    }
+
+    else if (tutor < 64)
+    {
+        u32 mask = 1 << (tutor - 32);
+
+        return sTutorLearnsets[species][1] & mask;
+    }
+    else if (tutor < 96)
+    {
+        u32 mask = 1 << (tutor - 64);
+
+        return sTutorLearnsets[species][2] & mask;
+    }
+ 
+    else if (tutor < 128)
+    {
+        u32 mask = 1 << (tutor - 96);
+
+        return sTutorLearnsets[species][3] & mask;
+    }
+    else
+    {
+        u32 mask = 1 << (tutor - 128);
+
+        return sTutorLearnsets[species][4] & mask;
+    }
+}
