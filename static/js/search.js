@@ -12,3 +12,7 @@ $('#main-search').on('keyup', function(ev){
     }, 100)
     
 })
+
+$('#filter-icon').on('click', function(){
+    $('#filter-data').toggle()
+})

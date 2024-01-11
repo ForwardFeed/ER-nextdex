@@ -3,6 +3,12 @@ import { Ability } from "./abilities";
 import { Evolution } from "./species/evolutions";
 import { NAMEtoName } from "./parse_utils";
 
+interface CompactEvolution{
+    kd: number,
+    rs: string,
+    in: number,
+}
+
 interface CompactLevelUpMove{
     lv: number,
     id: number,
@@ -48,7 +54,7 @@ export interface CompactSpecie{
     NAME: string,
     name: string,
     stats: CompactBaseStats,
-    evolutions: Evolution[],
+    evolutions: CompactEvolution[],
     eggMoves: number[],
     levelUpMoves: CompactLevelUpMove[],
     TMHMMoves: number[],
@@ -65,6 +71,7 @@ export interface CompactGameData{
     splitT: string[],
     eggT: string[], // egg group table
     colT: string[], //color table
+    evoKindT: string[],
 }
 function initCompactGameData(): CompactGameData{
     return {
@@ -77,6 +84,7 @@ function initCompactGameData(): CompactGameData{
         splitT: [],
         eggT: [],
         colT: [],
+        evoKindT: [],
     }
 }
 
@@ -122,7 +130,12 @@ export function compactify(gameData: GameData): CompactGameData{
             lDesc: move.longDesc
         })
     })
+    const NAMET: string[] = []
+    gameData.species.forEach((val)=>{
+        NAMET.push(val.NAME)
+    })
     const nameT: string[] = []
+
     gameData.species.forEach((val)=>{
         const bs = val.baseStats
         compacted.species.push({
@@ -179,7 +192,14 @@ export function compactify(gameData: GameData): CompactGameData{
                 noFlip: bs.noFlip,
                 flags: bs.flags, 
             },
-            evolutions: val.evolutions,
+            evolutions: val.evolutions.map((x)=>{
+                const evo = {} as CompactEvolution
+                if (!compacted.evoKindT.includes(x.kind)) compacted.evoKindT.push(x.kind)
+                evo.kd = compacted.evoKindT.indexOf(x.kind)
+                evo.rs = x.specifier
+                evo.in = NAMET.indexOf(x.into)
+                return evo
+            }),
             eggMoves: val.eggMoves.map((x) => {
                 if (!movesT.includes(x)) return 0
                     return movesT.indexOf(x)

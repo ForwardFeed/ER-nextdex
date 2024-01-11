@@ -32,9 +32,9 @@
 }
 .panel{
     display: flex;
+    font-size: 2vmax;
     width: 100%;
     height: 100%;
-    font-size: 2vmax;
 }
 
 .sel-active{
@@ -47,7 +47,25 @@
     background-color: var(--selHover);
 }
 
-
+.data-list{
+    text-align: center;
+    width: 9em;
+    height: 100%;
+    display: flex;
+}
+.data-list-row{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: inset 0 0 1vmax rgb(44, 8, 2);
+}
+.data-data{
+    flex-grow: 1;
+    background-color: var(--colorC);
+    display: flex;
+    flex-direction: column;
+}
 /* ABILITIES */
 #abis-list{
     display: flex;
@@ -70,29 +88,14 @@
 }
 
 /* MOVES */
-#moves-list{
-    text-align: center;
-    width: 9em;
-    height: 100%;
-    overflow-y: scroll;
-    display: flex;
-    flex-direction: column;
-    min-width: 9em;
-}
-
-#moves-data{
-    height: 100%;
-    flex-grow: 1;
-    background-color: var(--colorC);
-    display: flex;
-    flex-direction: column;
-}
 .moves-top{
     display: flex;
-    width: 100%;
     background-color: var(--colorB);
-    height: 10vw;
     text-align: center;
+}
+.moves-top-sub{
+    width: 50%;
+    display: flex;
 }
 .moves-large{
     height: 100%;
@@ -156,45 +159,36 @@
 #moves-desc{
     
 }
-
+@media (orientation: landscape) {
+    .moves-top{
+        width: 100%;
+        height: 10vw;
+    }
+}
+@media (orientation: portrait) {
+    .moves-top{
+        width: 100%;
+        height: 40vw;
+        flex-direction: column;
+    }
+    .moves-top-sub{
+        width: 100%;
+    }
+    .moves-xlarge{
+        width: auto;
+        flex-grow: 1;
+    }
+}
 /* SPECIES */
-#panel-species{
-    
-}
-#species-list{
-    text-align: center;
-    width: 9em;
-    height: 100%;
-    overflow-y: scroll;
-    display: flex;
-    flex-direction: column;
-}
-
-.species-row, .moves-row{
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    min-height: 2em;
-    box-shadow: inset 0 0 1vmax rgb(44, 8, 2);
-}
-
-#species-data{
-    height: 100%;
-    flex-grow: 1;
-    background-color: var(--colorC);
-    display: flex;
-    flex-direction: column;
-}
-
 .species-top{
     display: flex;
     width: 100%;
     background-color: var(--colorB);
+    height: 10vmax;
 }
 #species-front{
-    width: 10vw;
-    height: 10vw;
+    width: 10vmax;
+    height: 10vmax;
     min-width: 64px;
     min-height: 64px;
     margin: auto;
@@ -262,9 +256,10 @@
     overflow-y: scroll
 }
 
-.species-info-bar{
+.species-mid{
     display: flex;
     flex-direction: row;
+    position: relative;
 }
 
 #specie-name{
@@ -280,21 +275,27 @@
     margin-left: 2%;
     border-radius: 5px;
 }
-.species-moves{
+.species-switch{
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    right: 0;
+}
+.species-sub-pannel{
     background-color: var(--colorC);
     display: grid;
     grid-auto-flow:column;
     flex-grow: 1;
 }
 .species-bot-row{
-    display: flex;
-    flex-direction: column
+    
 }
 .species-moves-title{
     text-align: center;
     background-color: var(--colorC);
 }
 .species-move-list{
+    
     flex-grow: 1;
     overflow-y: scroll;
 }
@@ -308,3 +309,40 @@
 #eggmoves{
     background-color: var(--colorD);
 }
+
+@media (orientation: landscape) {
+    .data-list{
+        height: 90vh;
+        overflow-y: scroll;
+        flex-direction: column;
+    }
+    .data-list-row{
+        min-height: 2em;
+    }
+    .data-data{
+        height: 100%;
+    }
+}
+
+@media (orientation: portrait) {
+    .panel{
+        flex-direction: column;
+    }
+    .data-list{
+        width: 100%;
+        height: 8vh;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        flex-direction: row;
+        margin-bottom: auto
+    }
+    .data-list-row{
+        min-width: 6em;
+        align-items: normal
+    }
+    .data-data{
+        height: 72vh;
+        width: 100%;
+    }
+}
+

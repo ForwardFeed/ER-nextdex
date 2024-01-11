@@ -1,7 +1,7 @@
 function feedPanelMoves(moveID){
     const move = gameData.moves[moveID]
     $('#moves-name').text(move.name)
-    $('#moves-pwr').text(move.pwr || "--")
+    $('#moves-pwr').text(move.pwr ? move.pwr == 1 ? "?" : move.pwr : "--")
     $('#moves-acc').text(move.acc)
     $('#moves-chance').text(move.chance)
     $('#moves-pp').text(move.pp)

@@ -1,0 +1,9 @@
+#filter-data{
+    z-index: 1;
+    width: 50vw;
+    height: 50vh;
+    background-color: purple;
+    position: absolute;
+    top: 10vh;
+    left: 30vw;
+}

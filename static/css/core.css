@@ -31,13 +31,14 @@ body{
     margin: 0;
 }
 
-#main-header{
+#top-header{
     position: relative;
     top: 0;
     height: 10vh;
     display: flex;
     align-items: center;
     box-shadow: inset 0 0 1vmax rgb(44, 8, 2);
+    overflow: hidden;
 }
 .main-title{
     text-align: justify;
@@ -56,14 +57,19 @@ body{
     width: 35vw;
     height: 80%;
 }
+#filter-icon{
+    width: 7vh;
+    height: 7vh;
+    padding: 2vh;
+}
+#filter-icon:hover{
+    background-color: var(--btnHover);
+}
 aside{
-    float: right;
-    height: 90vh;
-    width: 15vw;
-    display: grid;
-    flex-direction: column;
+    display: flex;
 }
 aside > div{
+    flex-grow: 1;
     box-shadow: inset 0 0 1vmax rgb(44, 8, 2);
 }
 .side-btn{
@@ -89,23 +95,47 @@ aside > div{
 }
 
 main{
-    height: 90vh;
-    width: 85vw;
     background-color: blueviolet;
     overflow-y: scroll;
-}
-
-.panel{
-
-}
-
-footer{
-    height: 8vh;
-    width: 85vw;
-    background-color: rgb(15, 14, 14);
-    color: white
 }
 
 input[type="text"] {
     font-size: 2vmax;
 }
+
+
+@media (orientation: landscape) {
+    #non-header{
+        display: flex;
+    }
+    aside{
+        height: 90vh;
+        width: 15vw;
+        flex-direction: column;
+    }
+    main{
+        height: 90vh;
+        width: 85vw;
+    }
+  }
+  
+  @media (orientation: portrait) {
+    body{
+        display: flex;
+        flex-direction: column;
+    }
+    #non-header{
+        display: flex;
+        flex-direction: column;
+    }
+    aside{
+        width: 100vw;
+        height: 10vh;
+        display: flex;
+        flex-direction: row;
+    }
+    main{
+        height: 80vh;
+        width: 100vw;
+    }
+  }

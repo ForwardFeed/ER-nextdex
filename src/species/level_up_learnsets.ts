@@ -75,7 +75,6 @@ export function parse(lines: string[], fileIterator: number): Result{
         executionMap[context.execFlag](line, context)
         if (context.stopRead) break
     }
-    console.log(context.levelUpLearnset)
     return {
         fileIterator: fileIterator,
         levelLearnsets: context.levelUpLearnset

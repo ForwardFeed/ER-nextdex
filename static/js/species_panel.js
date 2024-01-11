@@ -85,8 +85,8 @@ function changeBaseStat(node, value, statID){
     //const offsetColor = minMax[1] - minMax[0] // this is to make the most powerfull stats as 100% and min a 100%
     //value = value - minMax[0]
     const average = +gameData.minMaxBaseStats[statID][2]
-    const color = [
-        [0, "gray"],
+    const color = [ // it's not very regular i need to find a better way to do that
+        [0, "gray"], 
         [40, "#ff3300"],
         [80, "#cc6600"],
         [120, "#cccc00"],
@@ -95,12 +95,29 @@ function changeBaseStat(node, value, statID){
         [240, "#00ff99"],
         [280, "#0033cc"],
     ].filter((x)=> x[0] >= ((value / average) * 100).toPrecision(2))[0][1]
+
+    /*const CV = 210// color variator, the closer to 255, the brighter
+    let colorMath = +(((value / average) * CV).toPrecision(2))
+    console.log(colorMath)
+    let color;
+
+    if (colorMath < CV){
+        color = `rgb(170, ${colorMath}, 0)`
+    } else if (colorMath < (CV * 1.5)){
+        colorMath = colorMath > 254 ? 255 : colorMath
+        color = `rgb(${colorMath / 2}, ${colorMath}, 0)`
+    } else {
+        colorMath = colorMath > 254 ? 255 : colorMath
+        color = `rgb(0, ${colorMath / 2}, ${colorMath})`
+    }
+    ^ this one is funky but not working yet
+    */
+
     const maxValue = statID < 6? 255: gameData.minMaxBaseStats[statID][1]
     const percent = ((value / maxValue ) * 100).toFixed()
     node.find('.stat-num').css('background-color', color)
     node.find('.stat-bar').css('background', `linear-gradient(to right, ${color} ${percent}%, white 0%)`)
 }
-
 
 function setAbilities(abilities){
     const node = $('#species-abilities')
