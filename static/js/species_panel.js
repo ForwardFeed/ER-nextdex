@@ -9,6 +9,7 @@ function feedPanelSpecies(id){
     setTypes(specie.stats.types)
     setMoves($('#learnset'), specie.levelUpMoves)
     setMoves($('#tmhm'), specie.TMHMMoves)
+    setMoves($('#tutor'), specie.tutor)
     setMoves($('#eggmoves'), specie.eggMoves)
     setEvos(specie.evolutions)
     $('#species-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
