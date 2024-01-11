@@ -70,7 +70,6 @@ aside{
 }
 aside > div{
     flex-grow: 1;
-    box-shadow: inset 0 0 1vmax rgb(44, 8, 2);
 }
 .side-btn{
     font-size: 3vmax;
@@ -103,6 +102,10 @@ input[type="text"] {
     font-size: 2vmax;
 }
 
+.btn, .side-btn{
+    box-shadow: inset 0 0 1vmax rgb(44, 8, 2);
+    cursor:pointer;
+}
 
 @media (orientation: landscape) {
     #non-header{

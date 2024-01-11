@@ -58,7 +58,6 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    box-shadow: inset 0 0 1vmax rgb(44, 8, 2);
 }
 .data-data{
     flex-grow: 1;
@@ -66,6 +65,7 @@
     display: flex;
     flex-direction: column;
 }
+
 /* ABILITIES */
 #abis-list{
     display: flex;
@@ -168,7 +168,7 @@
 @media (orientation: portrait) {
     .moves-top{
         width: 100%;
-        height: 40vw;
+        height: 30vw;
         flex-direction: column;
     }
     .moves-top-sub{
@@ -184,11 +184,8 @@
     display: flex;
     width: 100%;
     background-color: var(--colorB);
-    height: 10vmax;
 }
 #species-front{
-    width: 10vmax;
-    height: 10vmax;
     min-width: 64px;
     min-height: 64px;
     margin: auto;
@@ -222,7 +219,7 @@
 }
 .stat-row{
     display: flex;
-    font-size: 1.4vmax;
+    font-size: 1.9vmax;
     align-items: center;
 }
 .stat-name{
@@ -281,6 +278,9 @@
     flex-direction: row;
     right: 0;
 }
+.species-switch > * {
+    margin-right: 1em;
+}
 .species-sub-pannel{
     background-color: var(--colorC);
     display: grid;
@@ -322,6 +322,13 @@
     .data-data{
         height: 100%;
     }
+    .species-top{
+        height: 15vw;
+    }
+    #species-front{
+        height: 15vw;
+        width: 15vw;
+    }
 }
 
 @media (orientation: portrait) {
@@ -343,6 +350,13 @@
     .data-data{
         height: 72vh;
         width: 100%;
+    }
+    .species-top{
+        height: 15vh;
+    }
+    #species-front{
+        height: 15vh;
+        width: 15vh;
     }
 }
 

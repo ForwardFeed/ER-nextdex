@@ -67,7 +67,7 @@ function hydrateMoves(){
         if (i == 0) continue
         const mv = moves[i]
         const core = document.createElement('div')
-        core.className = "data-list-row sel-n-active"
+        core.className = "btn data-list-row sel-n-active"
         const name = document.createElement('span')
         name.innerText = mv.name || "Unknown"
         core.append(name)
@@ -97,7 +97,7 @@ function hydrateSpecies(){
             if (statID < 6)spec.stats.base[6] += + value
         }
         const core = document.createElement('div')
-        core.className = "data-list-row sel-n-active"
+        core.className = "btn data-list-row sel-n-active"
         const name = document.createElement('span')
         name.innerText = spec.name || "unknown"
         core.append(name)
