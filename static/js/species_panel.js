@@ -151,6 +151,21 @@ function setInnates(innates){
 }
 
 
+function setupSpeciesSubPanel(){
+    const subPanelsAndBtns = [
+        ["#switch-moves", "#species-moves"],
+        ["#switch-evos", "#species-evos"]
+    ]
+    subPanelsAndBtns.forEach((x)=>{
+        $(x[0]).on('click', ()=>{
+            console.log($(x[1]))
+            $(this).parent().find('.sel-active').addClass('sel-n-active').removeClass('sel-active')
+            $(this).addClass('sel-active').removeClass('sel-n-active')
+            $("#species-bot").find('.active-sub-panel').removeClass('active-sub-panel').hide()
+            $(x[1]).addClass('active-sub-panel').show()
+        })
+    })
+}
 
 function updateSpecies(search){
     const species = gameData.species
