@@ -84,6 +84,7 @@
 }
 .abi-name{
     width: 9em;
+    min-width: 9em;
     text-align: center;
 }
 
