@@ -14,6 +14,7 @@ export interface Specie {
     evolutions: Evolutions.Evolution[],
     eggMoves: string[],
     levelUpMoves: LevelUpLearnSets.LevelUpMove[],
+    tutorMoves: string[],
     TMHMMoves: string[],
     forms: string[],
 }
@@ -39,6 +40,7 @@ export function parse(pokeData: string): Specie[]{
             eggMoves: eggMovesResult.eggMoves.get(key) || [],
             levelUpMoves: levelUpLearnsetsResult.levelLearnsets.get(key) || [],
             TMHMMoves: TMHMLearnsetsResult.tmhmLearnsets.get(key) || [],
+            tutorMoves: TutorMovesResult.tutorMoves.get(key) || [],
             forms: formsResult.forms.get(key) || [],
         })
     })

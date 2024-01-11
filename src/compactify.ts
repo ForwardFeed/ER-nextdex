@@ -58,6 +58,7 @@ export interface CompactSpecie{
     eggMoves: number[],
     levelUpMoves: CompactLevelUpMove[],
     TMHMMoves: number[],
+    tutor: number[],
     forms: string[],
 }
 
@@ -216,6 +217,12 @@ export function compactify(gameData: GameData): CompactGameData{
             TMHMMoves: val.TMHMMoves.map((x) => {
                 x = x.replace(/((TM)|(HM))[^_]+/, 'MOVE')
                 if (x === "MOVE_SOLARBEAM") x = "MOVE_SOLAR_BEAM"
+                if (!movesT.includes(x)) {
+                    console.warn(`couldn't figure out ${x} TMHM move`)
+                }
+                return movesT.indexOf(x)
+            }),
+            tutor: val.tutorMoves.map((x) => {
                 if (!movesT.includes(x)) {
                     console.warn(`couldn't figure out ${x} TMHM move`)
                 }

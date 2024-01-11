@@ -95,7 +95,7 @@ export function parse(lines: string[], fileIterator: number): Result{
             }
             const moveID = +move
             for (let i = 0; i < 32; i++){
-                if (moveID & i) {
+                if (moveID & ( 1 << i)) {
                     moveUnraveledArray.push(context.tutorArray[i + (tutorNum * 32)])
                 }
             }
@@ -103,7 +103,6 @@ export function parse(lines: string[], fileIterator: number): Result{
         }
         map.set(specie, moveUnraveledArray)
     })
-    console.log(context.tutorMoves)
     return {
         fileIterator: fileIterator,
         tutorMoves: context.tutorMoves
