@@ -10,7 +10,7 @@ function feedPanelSpecies(id){
     setMoves($('#learnset'), specie.levelUpMoves)
     setMoves($('#tmhm'), specie.TMHMMoves)
     setMoves($('#eggmoves'), specie.eggMoves)
-
+    setEvos(specie.evolutions)
     $('#species-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
     $('#species-list').children().eq(id - 1).addClass("sel-active").removeClass("sel-n-active")
 }
@@ -164,6 +164,68 @@ function setupSpeciesSubPanel(){
             $(x[1]).addClass('active-sub-panel').show()
         })
     })
+}
+function toLowerButFirstCase(word){
+    word = word.toLowerCase()
+    return word.charAt(0).toUpperCase() + word.slice(1);
+}
+function convertItemNames(word){
+    return word.replace('ITEM_', '').split('_').map(toLowerButFirstCase).join(' ')
+}
+function convertMoveNames(word){
+    return word.replace('MOVE_', '').split('_').map(toLowerButFirstCase).join(' ')
+}
+function convertSpeciesNames(word){
+    return word.replace('SPECIES_', '').split('_').map(toLowerButFirstCase).join(' ')
+}
+
+function setEvos(evos){
+    const frag = document.createDocumentFragment()
+    for (const evo of evos){
+        const node = document.createElement('div')
+        node.className = "evo-parent" // i dunno how do classname it
+        const intoSpecieNode = document.createElement('div')
+        intoSpecieNode.className = "evo-into"
+        intoSpecieNode.innerText = `into ${gameData.species[evo.in].name}`
+        node.append(intoSpecieNode)
+        const reason = document.createElement('div')
+        reason.className = "evo-reason"
+        reason.innerText = setEvoReason(evo.kd, evo.rs)
+        node.append(reason)
+        frag.append(node)
+    }
+    $('#species-evos').empty().append(frag)
+}
+/**
+ * 
+ * @param {number} kindID that is mapped into gameData evoKindT
+ * @param {string} reason the whatever reason that is given
+ * @returns text
+ */
+function setEvoReason(kindID, reason){
+    return {
+        "EVO_LEVEL": `Evolves at level: ${reason}`,
+        "EVO_MEGA_EVOLUTION": `Mega-evolves with ${convertItemNames(reason)}`,
+        "EVO_ITEM": `Evolves with ${convertItemNames(reason)}`,
+        "EVO_MOVE": `Evolves with ${convertMoveNames(reason)}`,
+        "EVO_LEVEL_ATK_LT_DEF": `Evolves if Atk < def`,
+        "EVO_LEVEL_ATK_GT_DEF": `Evolves if Atk > def`,
+        "EVO_LEVEL_ATK_EQ_DEF": `Evolves if Atk = def`,
+        "EVO_LEVEL_SILCOON": "???",
+        "EVO_LEVEL_CASCOON": "???" ,
+        "EVO_PRIMAL_REVERSION": "???",
+        "EVO_ITEM_MALE": `Evolves with ${convertItemNames(reason)}`,
+        "EVO_ITEM_FEMALE": `Evolves with ${convertItemNames(reason)}`,
+        "EVO_LEVEL_NINJASK": "???",
+        "EVO_LEVEL_SHEDINJA": "???",
+        "EVO_MOVE_MEGA_EVOLUTION": `Mega-evolves with ${convertMoveNames(reason)}`,
+        "EVO_LEVEL_FEMALE": `Evolves at level: ${reason} if female`,
+        "EVO_LEVEL_MALE": `Evolves at level: ${reason} if male`,
+        "EVO_SPECIFIC_MON_IN_PARTY": `Evolves if ${convertSpeciesNames(reason)} is in party`,
+        "EVO_LEVEL_NIGHT": `Evolves at night if level ${reason}`,
+        "EVO_LEVEL_DUSK": `Evolves at dusk if level ${reason}`,
+        "EVO_LEVEL_DAY": `Evolves at day if level ${reason}`,
+    }[gameData.evoKindT[kindID]]
 }
 
 function updateSpecies(search){
