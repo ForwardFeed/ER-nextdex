@@ -158,9 +158,8 @@ function setupSpeciesSubPanel(){
     ]
     subPanelsAndBtns.forEach((x)=>{
         $(x[0]).on('click', ()=>{
-            console.log($(x[1]))
-            $(this).parent().find('.sel-active').addClass('sel-n-active').removeClass('sel-active')
-            $(this).addClass('sel-active').removeClass('sel-n-active')
+            $(x[0]).parent().find('.sel-active').addClass('sel-n-active').removeClass('sel-active')
+            $(x[0]).addClass('sel-active').removeClass('sel-n-active')
             $("#species-bot").find('.active-sub-panel').removeClass('active-sub-panel').hide()
             $(x[1]).addClass('active-sub-panel').show()
         })
