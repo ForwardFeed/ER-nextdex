@@ -10,9 +10,10 @@
 [ ] Add a panel to have the global stats, the number of species, abilities and stuff like that
 [ ] Add the filter pannel
 [ ] Craft moves animation from the gamefile into a gif or webp (is this possible?)
-[ ] Stop with button alternating color
+[ ] Stop with row alternating color in abilities
 [ ] Comment more the code
 [ ] Refractor the UI hydration and pannel filling as well as the CSS
-[ ] add additionnal sub pannel controls in bot Info bar for species and probably in moves
+[x] add additionnal sub pannel controls in bot Info bar for species and probably in moves
 [ ] add code of the different abilities, species related from
 [ ] add list of sSkillSwapBannedAbilities things like that in battle utils
+[ ] add dex-strategy from 'src/data/dex-strategy.md'

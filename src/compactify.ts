@@ -1,7 +1,39 @@
 import { GameData } from "./main";
 import { Ability } from "./abilities";
-import { Evolution } from "./species/evolutions";
 import { NAMEtoName } from "./parse_utils";
+
+interface CompactLocations{
+    maps: CompactLocation[],
+    landRate: number[],
+    waterRate: number[],
+    fishRate: number[],
+    honeyRate: number[],
+    rockRate: number[],
+    hiddenRate: number[],
+    rodGrade: number[],
+}
+
+interface CompactLocation{
+    name: string,
+    land: CompactEncounter[] | undefined,
+    landR: number | undefined,
+    water: CompactEncounter[] | undefined,
+    waterR: number | undefined,
+    fish: CompactEncounter[] | undefined,
+    fishR: number | undefined,
+    honey: CompactEncounter[] | undefined,
+    honeyR: number | undefined,
+    rock: CompactEncounter[] | undefined,
+    rockR: number | undefined,
+    hidden: CompactEncounter[] | undefined,
+    hiddenR: number | undefined,
+}
+
+type CompactEncounter = [
+    number, //min
+    number, //max
+    number, //specie ID
+]
 
 interface CompactEvolution{
     kd: number,
@@ -59,13 +91,14 @@ export interface CompactSpecie{
     levelUpMoves: CompactLevelUpMove[],
     TMHMMoves: number[],
     tutor: number[],
-    forms: string[],
+    forms: number[],
 }
 
 export interface CompactGameData{
     abilities: Ability[],
     moves: compactMove[],
     species: CompactSpecie[],
+    locations: CompactLocations,
     typeT: string[], //types tabes
     targetT: string[], //targets table
     flagsT: string[],
@@ -79,6 +112,7 @@ function initCompactGameData(): CompactGameData{
         abilities: [],
         moves: [],
         species: [],
+        locations: {} as CompactLocations,
         typeT: [],
         targetT: [],
         flagsT: [],
@@ -228,8 +262,48 @@ export function compactify(gameData: GameData): CompactGameData{
                 }
                 return movesT.indexOf(x)
             }),
-            forms: val.forms,
+            forms: val.forms.map((x)=>{
+                return NAMET.indexOf(x)
+            }),
         })
     })
+    compacted.locations = {
+        landRate: gameData.locations.landRate,
+        waterRate: gameData.locations.waterRate,
+        fishRate:gameData.locations.fishRate,
+        honeyRate: gameData.locations.honeyRate,
+        rockRate: gameData.locations.rockRate,
+        hiddenRate: gameData.locations.hiddenRate,
+        rodGrade: gameData.locations.rodGrade,
+        maps: gameData.locations.maps.map((map)=>{
+            return {
+                name: map.name,
+                land: map.land ? map.land.map((x)=>{
+                    return [x.min, x.max, NAMET.indexOf(x.specie)]
+                }) : undefined,
+                landR: map.landR,
+                water: map.water ? map.water.map((x)=>{
+                    return [x.min, x.max, NAMET.indexOf(x.specie)]
+                }) : undefined,
+                waterR: map.waterR,
+                fish: map.fish ? map.fish.map((x)=>{
+                    return [x.min, x.max, NAMET.indexOf(x.specie)]
+                }) : undefined,
+                fishR: map.fishR,
+                honey: map.honey ? map.honey.map((x)=>{
+                    return [x.min, x.max, NAMET.indexOf(x.specie)]
+                }) : undefined,
+                honeyR: map.honeyR,
+                rock: map.rock ? map.rock.map((x)=>{
+                    return [x.min, x.max, NAMET.indexOf(x.specie)]
+                }) : undefined,
+                rockR: map.rockR,
+                hidden: map.hidden ? map.hidden.map((x)=>{
+                    return [x.min, x.max, NAMET.indexOf(x.specie)]
+                }) : undefined,
+                hiddenR: map.hiddenR,
+            }
+        })
+    }
     return compacted
 }

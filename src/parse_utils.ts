@@ -27,3 +27,11 @@ export function NAMEtoName(NAME: string): string{
                 .map((x)=> upperCaseFirst(x))
                 .join(' ')
 }
+
+export function Xtox(prefix: string | RegExp, X: string): string{
+    return X .replace(prefix, '')
+                .toLowerCase().replace(/_/g, ' ')
+                .split(' ')
+                .map((x)=> upperCaseFirst(x))
+                .join(' ')
+}

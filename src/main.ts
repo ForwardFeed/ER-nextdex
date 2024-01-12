@@ -6,9 +6,11 @@ import * as Moves from './moves'
 import * as Species from './species/species'
 import * as Abilities from './abilities'
 import * as Sprites from './sprites'
+import * as Locations from './locations'
+
 import { CompactGameData, compactify } from './compactify';
 
-const ROOT_PRJ = "/media/notalinux/_dev_sdb3/Website/reduxelite"
+const ROOT_PRJ = "/media/notalinux/_dev_sdb3/Website/reduxelite" // you already know how well organized i am
 
 
 
@@ -16,19 +18,19 @@ export interface GameData {
     species: Species.Specie[]
     abilities: [string, Abilities.Ability][]
     moves:[string, Moves.Move][]
+    locations: Locations.Locations
 }
 
 const gameData: GameData = {
     species: [] as Species.Specie[],
     abilities: [],
     moves: [],
+    locations: {} as Locations.Locations
 }
 
 function main(){
     const OUTPUT_VERSION = process.argv[2] ? "V" + process.argv[2] : ""
     const OUTPUT = `./dist/gameData${OUTPUT_VERSION}.js`
-
-
     getFileData(Path.join(ROOT_PRJ, 'include/global.h'))
     .then((global_h) => {
         global_h.data
@@ -51,6 +53,7 @@ function main(){
             promiseArray.push(getSpecies(optionsGlobal_h))
             promiseArray.push(getMoves(optionsGlobal_h))
             promiseArray.push(getAbilities(optionsGlobal_h))
+            promiseArray.push(getLocations())
             Promise.allSettled(promiseArray)
                 .then(()=>{
                     outputGameData(compactify(gameData), OUTPUT)
@@ -184,8 +187,22 @@ function getSprites(optionsGlobal_h: FileDataOptions, output_dir: string){
             reject(err)
         })
     })
-    
 }
 
+function getLocations(){
+    return new Promise((resolve: (undefined: undefined)=>void, reject)=>{
+         // include 'src/data/region_map/region_map_entries.h' ?
+        const filepath = Path.join(ROOT_PRJ, 'src/data/wild_encounters.json')
+        FS.readFile(filepath, 'utf8', 
+            (err_exist: NodeJS.ErrnoException, data: string) => {
+                if (err_exist){
+                    reject(`Error trying to read ${filepath}`)
+                } else {
+                    gameData.locations = Locations.parse(data)
+                    resolve(undefined)
+                }
+        }) 
+    })
+}
 
 main()
