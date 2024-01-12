@@ -368,6 +368,9 @@
 /* LOCATIONS */
 #locations-data{
     flex-direction: row;
+    flex-flow: row wrap;
+    justify-content: center;
+    overflow-y: scroll;
 }
 .location-table{
     width: fit-content;
@@ -375,11 +378,19 @@
     text-align: center;
 }
 .location-field{
-
+    padding: 1%;
+    box-shadow: 2px 0 0 rgb(44, 8, 2);
+    overflow-y: scroll;
 }
 .location-title{
     background-color: var(--colorD);
 }
 .location-row{
     display: flex;
+}
+.location-specie{
+    min-width: 6em;
+}
+.location-rate{
+    min-width: 2em;
 }
