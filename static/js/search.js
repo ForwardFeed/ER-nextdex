@@ -15,5 +15,6 @@ $('#main-search').on('keyup', function(ev){
 })
 
 $('#filter-icon').on('click', function(){
-    $('#filter-data').toggle()
+    //$('#filter-data').toggle()
+    console.log('nope, not ready yet')
 })
