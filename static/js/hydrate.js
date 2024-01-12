@@ -13,6 +13,7 @@ function hydrate(){
     hydrateAbilities()
     hydrateMoves()
     hydrateSpecies()
+    hydrateLocation()
 }
 
 function feedMinMaxBaseStats(statID, value){
@@ -114,4 +115,56 @@ function hydrateSpecies(){
     const panel = $("#species-list");
     panel.append(fragment);
     feedPanelSpecies(1)
+}
+
+function hydrateLocation(){
+    const fragmentList = document.createDocumentFragment();
+    const maps = gameData.locations.maps
+    for (const i in maps){
+        const map = maps[i]
+        const listRow = document.createElement('div')
+        listRow.className = "btn data-list-row sel-n-active"
+        const name = document.createElement('span')
+        name.innerText = map.name || "unknown"
+        listRow.append(name)
+        listRow.dataset.id = i
+        $(listRow).on('click', function(){
+            fastdom.mutate(() => {
+                feedPanelLocations($(this).attr('data-id'))
+            });
+        });
+        fragmentList.append(listRow)
+    }
+    $("#locations-list").append(fragmentList);
+    const xrateTable = [
+        "land",
+        "water",
+        "fish",
+        "honey",
+        "rock",
+        "hidden",
+    ]
+    const locations = gameData.locations
+    for (const rateName of xrateTable){
+        const rates = locations[rateName+ "Rate"]
+        if (!rates) continue
+        const fragmentRate = document.createDocumentFragment();
+        for (const rate of rates){
+            const nodeCore = document.createElement('div')
+            nodeCore.className = "location-row"
+            const nodeRate = document.createElement('div')
+            nodeRate.className = "location-rate"
+            nodeRate.innerText = rate
+            nodeCore.append(nodeRate)
+            const nodeSpecie = document.createElement('div')
+            nodeSpecie.className = "location-specie"
+            nodeCore.append(nodeSpecie)
+            const nodeLvl = document.createElement('div')
+            nodeLvl.className = "location-lvl"
+            nodeCore.append(nodeLvl)
+            fragmentRate.append(nodeCore)
+        }
+        $('#locations-' + rateName).append(fragmentRate)
+    }
+    feedPanelLocations(0)
 }

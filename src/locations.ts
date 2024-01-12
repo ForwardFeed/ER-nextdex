@@ -70,11 +70,16 @@ export function parse(data: string): Locations{
         ["honey_mons", "honey"],
         ["hidden_mons", "hidden"]
     ]
-    const locationsEncountersJSON = obj.wild_encounter_groups[0].encounters
+    const locationsEncountersJSON = obj.wild_encounter_groups[0].encounters.concat(obj.wild_encounter_groups[3].encounters)
     const maps = []
     for (const locationJSON of locationsEncountersJSON){
         const location = {} as Location 
-        location.name = Xtox('MAP_', locationJSON.map)
+        if (locationJSON.map) {
+            location.name = Xtox('MAP_', locationJSON.map)
+        } else {
+            location.name = locationJSON.base_label.replace('gBerry', 'Tree ')
+        }
+
         for(const field of xmapFields){
             const JSONF = field[0]
             const F = field[1] as keyof Location

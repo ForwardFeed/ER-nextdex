@@ -3,6 +3,7 @@ function setupPanels(){
         ["#btn-species", "#panel-species"],
         ["#btn-abis", "#panel-abis"],
         ["#btn-moves", "#panel-moves"],
+        ["#btn-locations", "#panel-locations"],
     ]
     for (const btnPanel of panelTable){
         $(btnPanel[0]).on('click', ()=>{
@@ -20,7 +21,7 @@ function setupPanels(){
         })
         $(btnPanel[1]).toggle()
     }
-    const defaultShow = 0
+    const defaultShow = 3
     const defaultPanel = $(panelTable[defaultShow][1])
     defaultPanel.addClass('active-panel')
     defaultPanel.toggle()

@@ -319,6 +319,7 @@
         height: 90vh;
         overflow-y: scroll;
         flex-direction: column;
+        background-color: var(--selNActive);
     }
     .data-list-row{
         min-height: 2em;
@@ -364,3 +365,21 @@
     }
 }
 
+/* LOCATIONS */
+#locations-data{
+    flex-direction: row;
+}
+.location-table{
+    width: fit-content;
+    margin-left: 1vh;
+    text-align: center;
+}
+.location-field{
+
+}
+.location-title{
+    background-color: var(--colorD);
+}
+.location-row{
+    display: flex;
+}
