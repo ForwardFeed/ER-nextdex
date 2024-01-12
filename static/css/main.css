@@ -379,7 +379,7 @@
 }
 .location-field{
     padding: 1%;
-    box-shadow: 2px 0 0 rgb(44, 8, 2);
+    box-shadow: inset 0 0 1px rgb(44, 8, 2);
     overflow-y: scroll;
 }
 .location-title{

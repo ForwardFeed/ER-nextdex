@@ -7,6 +7,7 @@ $('#main-search').on('keyup', function(ev){
             updateAbilities($(this).val().toLowerCase())
             updateSpecies($(this).val().toLowerCase())
             updateMoves($(this).val().toLowerCase())
+            updateLocations($(this).val().toLowerCase())
             window.searchTimeout = null
         });
     }, 100)

@@ -28,14 +28,13 @@ function feedPanelLocations(mapID){
 }
 
 function updateLocations(search){
-    const moves = gameData.moves
-    const nodeList = $('#moves-list').children()
+    const maps = gameData.locations.maps
+    const nodeList = $('#locations-list').children()
     let validID;
-    for (const i in moves){
-        if (i == 0 ) continue
-        const move = moves[i]
-        const node = nodeList.eq(i - 1)
-        if (move.name.toLowerCase().indexOf(search) >= 0 ? true : false)
+    for (const i in maps){
+        const map = maps[i]
+        const node = nodeList.eq(i)
+        if (map.name.toLowerCase().indexOf(search) >= 0 ? true : false)
         {
                 if (!validID) validID = i
                 node.show()
