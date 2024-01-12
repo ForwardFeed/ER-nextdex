@@ -166,5 +166,5 @@ function hydrateLocation(){
         }
         $('#locations-' + rateName).append(fragmentRate)
     }
-    feedPanelLocations(1)
+    feedPanelLocations(0)
 }
