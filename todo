@@ -1,12 +1,12 @@
 [ ] Add explanations
     [ ] base stats colors are based on the average, not the total
     [ ] How the project works in the readme
-[ ] Add tutor moves
+[x] Add tutor moves
 [x] Invert Abilities with species in the side bar
-[ ] Add versionning changes
-    [ ] Dynamic js file loading and remove the hydrate() call in it to be handled by the async loading function
+[x] Add versionning changes
+    [x] Dynamic js file loading for gameVersion
 [ ] Make a beta version that will autofetch OR having Automated tool that will update the github daily about latest beta changes.
-[ ] Change the layout for phone or lateral screen
+[x] Change the layout for phone or lateral screen
 [ ] Add a panel to have the global stats, the number of species, abilities and stuff like that
 [ ] Add the filter pannel
 [ ] Craft moves animation from the gamefile into a gif or webp (is this possible?)
@@ -18,3 +18,4 @@
 [ ] add list of sSkillSwapBannedAbilities things like that in battle utils
 [ ] add dex-strategy from 'src/data/dex-strategy.md'
 [ ] locations exception for the fishe and rods
+[ ] get pre-evolutions

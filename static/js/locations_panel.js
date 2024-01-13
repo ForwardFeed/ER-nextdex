@@ -16,7 +16,6 @@ function feedPanelLocations(mapID){
             continue
         }
         node.parent().show()
-        console.log(rateName)
         for (const i in rates){
             const rate = rates[i]
             node.children().eq(i).find('.location-specie').text(gameData.species[rate[2]].name)

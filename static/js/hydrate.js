@@ -57,8 +57,7 @@ function hydrateAbilities(){
         core.append(desc)
         fragment.append(core)
     }
-    const panel = $("#abis-list");
-    panel.append(fragment);
+    $("#abis-list").empty().append(fragment);
 }
 
 function hydrateMoves(){
@@ -80,8 +79,7 @@ function hydrateMoves(){
         });
         fragment.append(core)
     }
-    const panel = $("#moves-list");
-    panel.append(fragment);
+    $("#moves-list").empty().append(fragment);
     feedPanelMoves(1)
 }
 
@@ -112,8 +110,7 @@ function hydrateSpecies(){
         fragment.append(core)
     }
     setMeanBaseStats()
-    const panel = $("#species-list");
-    panel.append(fragment);
+    $("#species-list").empty().append(fragment);
     feedPanelSpecies(1)
 }
 
@@ -135,7 +132,7 @@ function hydrateLocation(){
         });
         fragmentList.append(listRow)
     }
-    $("#locations-list").append(fragmentList);
+    $("#locations-list").empty().append(fragmentList);
     const xrateTable = [
         "land",
         "water",
