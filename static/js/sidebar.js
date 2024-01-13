@@ -1,11 +1,13 @@
 function setupPanels(){
+    // if modified sync it with "search.js > search > panelUpdatesTable" variable
     const panelTable = [
         ["#btn-species", "#panel-species"],
         ["#btn-abis", "#panel-abis"],
         ["#btn-moves", "#panel-moves"],
         ["#btn-locations", "#panel-locations"],
     ]
-    for (const btnPanel of panelTable){
+    for (const i in panelTable){
+        const btnPanel = panelTable[i]
         $(btnPanel[0]).on('click', ()=>{
             const curBtn = $('.btn-active')
             curBtn.addClass('btn-n-active')
@@ -18,9 +20,24 @@ function setupPanels(){
             curPan.toggle()
             $(btnPanel[1]).addClass('active-panel')
             $(btnPanel[1]).toggle()
+            
+            // tell the search only to update this
+            search.panelUpdatesIndex = i
+            //if an update was caused when this pannel was frozen
+            if (search.panelFrozenUpdate[i]){
+                fastdom.mutate(() => {
+                    //then refresh in the next frame
+                    search.panelUpdatesTable[i]($('#main-search').val())
+                    //and tell this pannel has done the required search
+                    search.panelFrozenUpdate[i] = false
+                })
+                
+            }
+            
         })
         $(btnPanel[1]).toggle()
     }
+    // if modified sync it with "search.js > search > panelUpdatesIndex" variable
     const defaultShow = 0
     const defaultPanel = $(panelTable[defaultShow][1])
     defaultPanel.addClass('active-panel')

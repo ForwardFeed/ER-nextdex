@@ -122,6 +122,5 @@ function updateMoves(search){
                 node.hide()
         }
     }
-    if (validID) feedPanelLocations(validID)
-    feedPanelMoves(validID || 1) //1 ??
+    if (validID) feedPanelMoves(validID)
 }
