@@ -299,9 +299,23 @@
     background-color: var(--colorC);
 }
 .species-move-list{
-    
     flex-grow: 1;
     overflow-y: scroll;
+}
+.species-move-list > *{
+    border-bottom: rgb(49, 44, 44);
+    border-bottom-style: dashed;
+    border-bottom-width: 1px;
+}
+.species-levelup-row{
+    display: flex;
+}
+.species-levelup-lvl{
+    width: 1.5em;
+    background-color: var(--colorC);
+}
+.species-levelup-name{
+    width: 100%;
 }
 #learnset{
     background-color: var(--colorD);

@@ -7,7 +7,7 @@ function feedPanelSpecies(id){
     setAbilities(specie.stats.abis)
     setInnates(specie.stats.inns)
     setTypes(specie.stats.types)
-    setMoves($('#learnset'), specie.levelUpMoves)
+    setLevelUpMoves($('#learnset'), specie.levelUpMoves)
     setMoves($('#tmhm'), specie.TMHMMoves)
     setMoves($('#tutor'), specie.tutor)
     setMoves($('#eggmoves'), specie.eggMoves)
@@ -37,26 +37,37 @@ function setMoves(core, moves){
     core.empty()
     const frag = document.createDocumentFragment()
     for (const moveID of moves){
-        if (typeof moveID === "object"){
-            const move = gameData.moves[moveID.id]
-            if (!move) {
-                console.warn(`unable to find move with ID ${moveID.id}`)
-                continue
-            }
-            const node = document.createElement('div')
-            node.innerText = move.name
-            frag.append(node)
-        } else {
-            const move = gameData.moves[moveID]
-            if (!move) {
-                console.warn(`unable to find move with ID ${moveID}`)
-                continue
-            }
-            const node = document.createElement('div')
-            node.innerText = move.name
-            frag.append(node)
+        const move = gameData.moves[moveID]
+        if (!move) {
+            console.warn(`unable to find move with ID ${moveID}`)
+            continue
         }
-        
+        const node = document.createElement('div')
+        node.innerText = move.name
+        frag.append(node)
+    }
+    core.append(frag)
+}
+function setLevelUpMoves(core, moves){
+    core.empty()
+    const frag = document.createDocumentFragment()
+    for (const moveID of moves){
+        const move = gameData.moves[moveID.id]
+        if (!move) {
+            console.warn(`unable to find move with ID ${moveID.id}`)
+            continue
+        }
+        const row = document.createElement('div')
+        row.className="species-levelup-row"
+        const nodeMoveLvl = document.createElement('div')
+        nodeMoveLvl.innerText = moveID.lv
+        nodeMoveLvl.className = "species-levelup-lvl"
+        row.append(nodeMoveLvl)
+        const nodeMoveName = document.createElement('div')
+        nodeMoveName.innerText = move.name
+        nodeMoveName.className = "species-levelup-name"
+        row.append(nodeMoveName)
+        frag.append(row)
     }
     core.append(frag)
 }
