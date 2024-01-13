@@ -5,8 +5,27 @@ function hydrate(){
     /*
         add some reconstitution data for ease of use here
     */
-    gameData.minMaxBaseStats = new Array(6) 
-    gameData.BST = []
+    gameData.minMaxBaseStats = new Array(6).fill(0)
+    gameData.speciesStats = {
+        result: {
+            top5: new Array(6).fill(0),
+            top20: new Array(6).fill(0),
+            median: new Array(6).fill(0),
+            min20: new Array(6).fill(0),
+            min5: new Array(6).fill(0),
+            maxBST: 0,
+        },
+        data: [
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+        ],
+    }
+    
     /*
         hydrate the UI with the data
     */
@@ -16,27 +35,25 @@ function hydrate(){
     hydrateLocation()
 }
 
-function feedMinMaxBaseStats(statID, value){
-    const row = gameData.minMaxBaseStats[statID]
-    if (row){
-        if (row[0] > value){
-            gameData.minMaxBaseStats[statID][0] = value
-        }
-        if (row[1] < value){
-            gameData.minMaxBaseStats[statID][1] = value
-        }
-        gameData.minMaxBaseStats[statID][2] += value
-    } else {
-        gameData.minMaxBaseStats[statID] = [value, value, value]
+function feedBaseStatsStats(statID, value){
+    gameData.speciesStats.data[statID].push(value)
+    if (statID == 6 && (value > gameData.speciesStats.result.maxBST)) {
+        gameData.speciesStats.result.maxBST = value
     }
 }
 
 function setMeanBaseStats(){
-    for (let statID = 0; statID < 7; statID++){
-        // - 1 because of the first none specie
-        gameData.minMaxBaseStats[statID][2] = (gameData.minMaxBaseStats[statID][2] / (gameData.species.length - 1)).toFixed()
+    for (const statID in gameData.speciesStats.data){
+        const sorted = gameData.speciesStats.data[statID].sort((a,b)=>{return a - b})
+        const len = sorted.length
+        gameData.speciesStats.result.min5[statID] = sorted[Math.ceil(len * 0.05)]
+        gameData.speciesStats.result.min20[statID] = sorted[Math.ceil(len * 0.2)]
+        gameData.speciesStats.result.median[statID] = sorted[Math.ceil(len * 0.5)]
+        gameData.speciesStats.result.top20[statID] = sorted[Math.ceil(len * 0.80)]
+        gameData.speciesStats.result.top5[statID] = sorted[Math.ceil(len * 0.95)]
     }
-    
+    // i don't trust the garbage collector
+    delete gameData.speciesStats.data
 }
 
 function hydrateAbilities(){
@@ -92,7 +109,7 @@ function hydrateSpecies(){
         spec.stats.base[6] = 0
         for (const statID in spec.stats.base){
             const value = spec.stats.base[statID]
-            feedMinMaxBaseStats(statID, value)
+            feedBaseStatsStats(statID, value)
             if (statID < 6)spec.stats.base[6] += + value
         }
         const core = document.createElement('div')

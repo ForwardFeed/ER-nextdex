@@ -2,6 +2,7 @@ function feedPanelSpecies(id){
     const specie = gameData.species[id]
 
     $('#species-name').text(specie.name)
+    console.log(id)
     updateBaseStats(specie.stats.base)
     setSprite(specie.NAME)
     setAbilities(specie.stats.abis)
@@ -94,20 +95,18 @@ function setSprite(NAME){
 
 function changeBaseStat(node, value, statID){
     node.find('.stat-num').text(value)
-    //const offsetColor = minMax[1] - minMax[0] // this is to make the most powerfull stats as 100% and min a 100%
-    //value = value - minMax[0]
-    const average = +gameData.minMaxBaseStats[statID][2]
-    const color = [ // it's not very regular i need to find a better way to do that
-        [0, "gray"], 
-        [40, "#ff3300"],
-        [80, "#cc6600"],
-        [120, "#cccc00"],
-        [160, "#99cc00"],
-        [200, "#33cc33"],
-        [240, "#00ff99"],
-        [280, "#0033cc"],
-    ].filter((x)=> x[0] >= ((value / average) * 100).toPrecision(2))[0][1]
-
+    let color = "gray"
+    for (const colorMapped of colorMap = [
+        [gameData.speciesStats.result.min5[statID], "#ff3300"],
+        [gameData.speciesStats.result.min20[statID], "#cc6600"],
+        [gameData.speciesStats.result.median[statID], "#cccc00"],
+        [gameData.speciesStats.result.top20[statID], "#99cc00"],
+        [gameData.speciesStats.result.top5[statID], "#33cc33"],
+        [256, "#0033cc"],
+    ]){
+        if (value < colorMapped[0]) break
+        color = colorMapped[1]
+    }
     /*const CV = 210// color variator, the closer to 255, the brighter
     let colorMath = +(((value / average) * CV).toPrecision(2))
     console.log(colorMath)
@@ -124,8 +123,7 @@ function changeBaseStat(node, value, statID){
     }
     ^ this one is funky but not working yet
     */
-
-    const maxValue = statID < 6? 255: gameData.minMaxBaseStats[statID][1]
+    const maxValue = statID < 6 ? 255 : gameData.speciesStats.result.maxBST
     const percent = ((value / maxValue ) * 100).toFixed()
     node.find('.stat-num').css('background-color', color)
     node.find('.stat-bar').css('background', `linear-gradient(to right, ${color} ${percent}%, white 0%)`)
