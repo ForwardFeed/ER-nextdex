@@ -161,7 +161,7 @@ function hydrateLocation(){
             nodeCore.append(nodeLvl)
             fragmentRate.append(nodeCore)
         }
-        $('#locations-' + rateName).append(fragmentRate)
+        $('#locations-' + rateName).empty().append(fragmentRate)
     }
     feedPanelLocations(0)
 }
