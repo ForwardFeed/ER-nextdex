@@ -2,7 +2,6 @@ function feedPanelSpecies(id){
     const specie = gameData.species[id]
 
     $('#species-name').text(specie.name)
-    console.log(id)
     updateBaseStats(specie.stats.base)
     setSprite(specie.NAME)
     setAbilities(specie.stats.abis)
