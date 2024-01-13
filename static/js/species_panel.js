@@ -60,7 +60,7 @@ function setLevelUpMoves(core, moves){
         const row = document.createElement('div')
         row.className="species-levelup-row"
         const nodeMoveLvl = document.createElement('div')
-        nodeMoveLvl.innerText = moveID.lv
+        nodeMoveLvl.innerText = +moveID.lv || "Ev"
         nodeMoveLvl.className = "species-levelup-lvl"
         row.append(nodeMoveLvl)
         const nodeMoveName = document.createElement('div')
