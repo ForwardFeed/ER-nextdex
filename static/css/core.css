@@ -53,7 +53,7 @@ body{
     background: linear-gradient(0deg, rgba(216,84,84,1)30%, rgba(172,171,155,1)  100%); 
 }
 #main-search{
-    margin-left: 5vw;
+    margin-left: 1vw;
     width: 35vw;
     height: 80%;
 }

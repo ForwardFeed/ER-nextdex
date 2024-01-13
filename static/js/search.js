@@ -1,6 +1,7 @@
 window.searchTimeout;
 
 $('#main-search').on('keyup', function(ev){
+    //$(this).val($(this).val().toLowerCase())
     if (window.searchTimeout) clearTimeout(window.searchTimeout)
     window.searchTimeout = setTimeout(()=>{
         fastdom.mutate(() => {

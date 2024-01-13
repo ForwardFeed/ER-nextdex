@@ -41,5 +41,5 @@ function updateLocations(search){
                 node.hide()
         }
     }
-    feedPanelLocations(validID || 0)
+    if (validID) feedPanelLocations(validID)
 }

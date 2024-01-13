@@ -245,5 +245,5 @@ function updateSpecies(search){
                 node.hide()
         }
     }
-    feedPanelSpecies(validID || 1) //1 ??
+    if (validID) feedPanelSpecies(validID)
 }
