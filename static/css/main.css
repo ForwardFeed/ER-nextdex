@@ -290,6 +290,7 @@
     display: grid;
     grid-auto-flow:column;
     flex-grow: 1;
+    font-size: 1.5vmax;
 }
 .species-bot-row{
     text-align: center;
@@ -297,6 +298,7 @@
 .species-moves-title{
     text-align: center;
     background-color: var(--colorC);
+    font-size: 2vmax;
 }
 .species-move-list{
     flex-grow: 1;
