@@ -101,7 +101,6 @@
 }
 .moves-large{
     height: 100%;
-    width: 12vw;
 }
 #moves-pwr{
     font-size: 3.5em;
@@ -170,7 +169,6 @@
 @media (orientation: portrait) {
     .moves-top{
         width: 100%;
-        height: 30vw;
         flex-direction: column;
     }
     .moves-top-sub{
