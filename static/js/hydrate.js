@@ -112,6 +112,14 @@ function hydrateSpecies(){
             feedBaseStatsStats(statID, value)
             if (statID < 6)spec.stats.base[6] += + value
         }
+        //share the eggmoves to the evolution
+        for (const evo of spec.evolutions){
+            if (evo.in == -1) continue
+            const nextEvo = species[evo.in]
+            nextEvo.eggMoves = spec.eggMoves
+            if (!nextEvo.TMHMMoves.length) nextEvo.TMHMMoves = spec.TMHMMoves
+            if (!nextEvo.tutor.length) nextEvo.tutor = spec.tutor
+        }
         const core = document.createElement('div')
         core.className = "btn data-list-row sel-n-active"
         const name = document.createElement('span')
