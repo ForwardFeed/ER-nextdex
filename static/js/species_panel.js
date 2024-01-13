@@ -194,6 +194,7 @@ function convertSpeciesNames(word){
 function setEvos(evos){
     const frag = document.createDocumentFragment()
     for (const evo of evos){
+        if (evo.in == -1) continue //not set yet
         const node = document.createElement('div')
         node.className = "evo-parent" // i dunno how do classname it
         const intoSpecieNode = document.createElement('div')

@@ -95,8 +95,11 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
         if (!line) return
         if (line.match(/^\[SPECIES/)){
             if (context.currKey){
-                context.baseStats.set(context.currKey, context.current)
-                context.current = initBaseStats()
+                if (context.current.baseSpeed != 0){
+                    // having a base speed of 0 means it don't have to be set in
+                    context.baseStats.set(context.currKey, context.current)
+                    context.current = initBaseStats()
+                }
             }
             context.currKey = regexGrabStr(line, /(?<=^\[)\w+/)
             return
@@ -132,8 +135,11 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
         } else if (line.match('.noFlip')){
             context.current.noFlip = regexGrabStr(line, /(?<==)\w+/) === "TRUE"
         } else if (line.match('};')){
-            context.baseStats.set(context.currKey, context.current)
-            context.stopRead = true
+            if (context.current.baseSpeed != 0){
+                context.baseStats.set(context.currKey, context.current)
+                context.stopRead = true
+            }
+            
         }
     }
 }
