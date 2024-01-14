@@ -141,6 +141,7 @@ function setAbilities(abilities){
         const name = document.createElement('div')
         name.className = "species-abilities"
         name.innerText = abi.name
+        addTooltip(name, abi.desc)
         fragment.append(name)
     }
     node.append(fragment)
@@ -155,6 +156,7 @@ function setInnates(innates){
         const name = document.createElement('div')
         name.className = "species-innate"
         name.innerText = inn.name
+        addTooltip(name, inn.desc)
         fragment.append(name)
     }
     node.append(fragment)
