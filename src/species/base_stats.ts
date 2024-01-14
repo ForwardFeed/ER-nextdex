@@ -98,8 +98,8 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
                 if (context.current.baseSpeed != 0){
                     // having a base speed of 0 means it don't have to be set in
                     context.baseStats.set(context.currKey, context.current)
-                    context.current = initBaseStats()
                 }
+                context.current = initBaseStats()
             }
             context.currKey = regexGrabStr(line, /(?<=^\[)\w+/)
             return

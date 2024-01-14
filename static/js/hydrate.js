@@ -204,3 +204,8 @@ function hydrateLocation(){
     }
     feedPanelLocations(0)
 }
+
+function hydrateTrainers(){
+    const trainers = gameData.trainers
+    // make trainers rematch / insane
+}
