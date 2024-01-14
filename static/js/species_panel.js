@@ -1,3 +1,4 @@
+import { addTooltip } from "./utils.js"
 export function feedPanelSpecies(id){
     const specie = gameData.species[id]
 

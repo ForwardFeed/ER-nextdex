@@ -1,4 +1,4 @@
-function addTooltip(node, description) {
+export function addTooltip(node, description) {
 	const tooltip = document.createElement("div");
 	tooltip.innerText = description;
     tooltip.className = "tooltip"
