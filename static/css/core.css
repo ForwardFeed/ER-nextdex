@@ -40,6 +40,10 @@ body{
     box-shadow: inset 0 0 1vmax rgb(44, 8, 2);
     overflow: hidden;
 }
+
+#top-header > * {
+    margin: auto;
+}
 .main-title{
     text-align: center;
     font-size: 3vmax;
