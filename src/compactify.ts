@@ -1,6 +1,6 @@
 import { GameData } from "./main";
 import { Ability } from "./abilities";
-import { NAMEtoName } from "./parse_utils";
+import { NAMEtoName, Xtox } from "./parse_utils";
 
 interface CompactLocations{
     maps: CompactLocation[],
@@ -68,7 +68,7 @@ interface CompactBaseStats{
 interface compactMove {
     name: string,
     sName: string,
-    eff: string,
+    eff: number,
     pwr: number,
     types: number[],
     acc: number,
@@ -94,18 +94,39 @@ export interface CompactSpecie{
     forms: number[],
 }
 
+export interface CompactTrainers{
+    name: string,
+    db: boolean,
+    team: CompactTrainerPokemon[]
+}
+
+interface CompactTrainerPokemon{
+    spc: number,
+    abi: number,
+    ivs: number[],
+    evs: number[],
+    item: number,
+    nature: number,
+    moves: number[]
+}
+
 export interface CompactGameData{
     abilities: Ability[],
     moves: compactMove[],
     species: CompactSpecie[],
     locations: CompactLocations,
+    trainers: CompactTrainers[],
     typeT: string[], //types tabes
     targetT: string[], //targets table
     flagsT: string[],
+    effT: string[], // effect table
     splitT: string[],
     eggT: string[], // egg group table
+    growT: string[]; // Growth Table
     colT: string[], //color table
     evoKindT: string[],
+    itemT: string[],
+    natureT: string[],
 }
 function initCompactGameData(): CompactGameData{
     return {
@@ -113,13 +134,18 @@ function initCompactGameData(): CompactGameData{
         moves: [],
         species: [],
         locations: {} as CompactLocations,
+        trainers: [],
         typeT: [],
         targetT: [],
         flagsT: [],
+        effT: [],
         splitT: [],
         eggT: [],
+        growT: [],
         colT: [],
         evoKindT: [],
+        itemT: [],
+        natureT: [],
     }
 }
 
@@ -138,7 +164,10 @@ export function compactify(gameData: GameData): CompactGameData{
         compacted.moves.push({
             name: move.name,
             sName: move.shortName,
-            eff: move.effect.replace(/^EFFECT_/, ''),
+            eff: ((x) => {
+                if (!compacted.effT.includes(x)) compacted.effT.push(x)
+                return compacted.effT.indexOf(x)
+            })(move.effect.replace(/^EFFECT_/, '')),
             pwr: move.power,
             types: move.types.map((x) => {
                 if (!compacted.typeT.includes(x)) compacted.typeT.push(x)
@@ -207,7 +236,10 @@ export function compactify(gameData: GameData): CompactGameData{
                 gender: bs.genderRatio,
                 eggC: bs.eggCycles,
                 fren: bs.friendship,
-                grow: bs.growthRate, 
+                grow: ((gr)=>{
+                    if (!compacted.growT.includes(gr)) compacted.growT.push(gr)
+                    return compacted.growT.indexOf(gr)
+                })(bs.growthRate), 
                 eggG: bs.eggGroup.map((x) => {
                     if (!compacted.eggT.includes(x)) compacted.eggT.push(x)
                     return compacted.eggT.indexOf(x)
@@ -303,6 +335,34 @@ export function compactify(gameData: GameData): CompactGameData{
                 }) : undefined,
                 hiddenR: map.hiddenR,
             }
+        })
+    }
+    for (const trainer of gameData.trainers){
+        compacted.trainers.push({
+            name: trainer.name,
+            db: trainer.double,
+            team: trainer.team.map((poke)=>{
+                return {
+                    spc: NAMET.indexOf(poke.specie),
+                    abi: poke.ability,
+                    ivs: poke.ivs,
+                    evs: poke.evs,
+                    item: ((item)=>{
+                        item = Xtox('ITEM_', item)
+                        if (!compacted.itemT.includes(item))compacted.itemT.push(item)
+                        return compacted.itemT.indexOf(item)
+                    })(poke.item),
+                    nature: ((nat)=>{
+                        nat = Xtox('NATURE_', nat)
+                        if (!compacted.natureT.includes(nat))compacted.natureT.push(nat)
+                        return compacted.natureT.indexOf(nat)
+                    })(poke.nature),
+                    moves: poke.moves.map((mv)=>{
+                        if (!movesT.includes(mv))movesT.push(mv)
+                        return movesT.indexOf(mv)
+                    })
+                }
+            })
         })
     }
     return compacted

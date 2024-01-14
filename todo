@@ -18,4 +18,11 @@
 [ ] add list of sSkillSwapBannedAbilities things like that in battle utils
 [ ] add dex-strategy from 'src/data/dex-strategy.md'
 [ ] locations exception for the fishe and rods
-[ ] get pre-evolutions
+[x] get pre-evolutions
+[ ] add trainers
+    [ ] Trainer Locations from /data/maps/scripts.pory or script.inc
+    [ ] Get Trainer Rematch from RematchTrainer gRematchTable in /src/battle_setup.c
+    [ ] Get Trainer info from /src/data/trainers.h
+    [ ] Get Trainer Team from src/data/trainer_parties.h
+    
+ 
