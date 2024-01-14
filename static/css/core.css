@@ -32,8 +32,6 @@ body{
 }
 
 #top-header{
-    position: relative;
-    top: 0;
     height: 10vh;
     display: flex;
     align-items: center;

@@ -71,7 +71,7 @@
 
 span{
     height: fit-content;
-    margin: auto;
+    margin: auto 0;
 }
 
 /* ABILITIES */
@@ -215,9 +215,20 @@ span{
     display: grid;
     padding: 1%;
     flex-grow: 1;
-}
-.species-innate .species-ability{
+    cursor: default;
 
+}
+.species-innate,.species-ability{
+}
+
+.tooltip{
+    display: none;
+    position: absolute;
+    background-color: var(--colorA);
+    border-style: solid;
+    border-radius: 5px;
+    padding: 10px;
+    z-index: 1;
 }
 #species-basestats{
     flex-grow: 1;
@@ -227,7 +238,7 @@ span{
 .stat-row{
     display: flex;
     font-size: 1.9vmax;
-    align-items: center;
+    text-align: center;
 }
 .stat-name{
     width: 1.5em;
