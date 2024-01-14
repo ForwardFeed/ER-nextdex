@@ -8,5 +8,9 @@ export function addTooltip(node, description) {
 	node.onmouseleave = () => {
 		tooltip.style.display = "none";
 	};
+	// support for touchpad
+	node.ontouchstart = () => {
+		tooltip.style.display = tooltip.style.display === "block" ? "none" : "block"
+	};
 	node.appendChild(tooltip);
 }
