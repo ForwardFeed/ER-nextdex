@@ -1,4 +1,6 @@
-function setupPanels(){
+import { search } from "./search.js"
+
+export function setupPanels(){
     // if modified sync it with "search.js > search > panelUpdatesTable" variable
     const panelTable = [
         ["#btn-species", "#panel-species"],
@@ -43,3 +45,5 @@ function setupPanels(){
     defaultPanel.addClass('active-panel')
     defaultPanel.toggle()
 }
+
+export default setupPanels

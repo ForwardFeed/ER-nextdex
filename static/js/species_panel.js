@@ -1,4 +1,4 @@
-function feedPanelSpecies(id){
+export function feedPanelSpecies(id){
     const specie = gameData.species[id]
 
     $('#species-name').text(specie.name)
@@ -96,7 +96,7 @@ function setSprite(NAME){
 function changeBaseStat(node, value, statID){
     node.find('.stat-num').text(value)
     let color = "gray"
-    for (const colorMapped of colorMap = [
+    for (const colorMapped of [
         [gameData.speciesStats.result.min5[statID], "#ff3300"],
         [gameData.speciesStats.result.min20[statID], "#cc6600"],
         [gameData.speciesStats.result.median[statID], "#cccc00"],
@@ -161,7 +161,7 @@ function setInnates(innates){
 }
 
 
-function setupSpeciesSubPanel(){
+export function setupSpeciesSubPanel(){
     const subPanelsAndBtns = [
         ["#switch-moves", "#species-moves"],
         ["#switch-evos", "#species-evos"],
@@ -258,7 +258,7 @@ function setLocations(locations){
     $('#species-locations').empty().append(frag)
 }
 
-function updateSpecies(search){
+export function updateSpecies(search){
     const species = gameData.species
     const nodeList = $('#species-list').children()
     let validID;

@@ -1,4 +1,8 @@
-function hydrate(){
+import { feedPanelSpecies } from "./species_panel.js"
+import { feedPanelMoves } from "./moves_panel.js"
+import { feedPanelLocations } from "./locations_panel.js"
+
+export function hydrate(){
     if (!gameData){
         return console.warn("couldn't find gameData")
     }
@@ -209,3 +213,5 @@ function hydrateTrainers(){
     const trainers = gameData.trainers
     // make trainers rematch / insane
 }
+
+export default hydrate
