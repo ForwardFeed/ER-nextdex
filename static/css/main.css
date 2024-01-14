@@ -59,12 +59,19 @@
     align-items: center;
     justify-content: center;
     text-align: center;
+    
 }
 .data-data{
     flex-grow: 1;
     background-color: var(--colorC);
     display: flex;
     flex-direction: column;
+
+}
+
+span{
+    height: fit-content;
+    margin: auto;
 }
 
 /* ABILITIES */

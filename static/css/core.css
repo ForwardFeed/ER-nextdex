@@ -41,7 +41,7 @@ body{
     overflow: hidden;
 }
 .main-title{
-    text-align: justify;
+    text-align: center;
     font-size: 3vmax;
     padding-left: 1vw;
     display: inline-block;
@@ -52,10 +52,18 @@ body{
     background: rgb(172,171,155);
     background: linear-gradient(0deg, rgba(216,84,84,1)30%, rgba(172,171,155,1)  100%); 
 }
-#main-search{
+#main-search-label{
+    height: 100%;
     margin-left: 1vw;
+    text-align: center;
+    display: flex;
+    
+}
+#main-search{
     width: 35vw;
-    height: 80%;
+    border-radius: 7px;
+    margin: auto;
+
 }
 #filter-icon{
     width: 7vh;
