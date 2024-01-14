@@ -7,7 +7,7 @@ import * as Species from './species/species'
 import * as Abilities from './abilities'
 import * as Sprites from './sprites'
 import * as Locations from './locations'
-import * as Trainers from './species/trainers'
+import * as Trainers from './trainers'
 
 import { CompactGameData, compactify } from './compactify';
 
