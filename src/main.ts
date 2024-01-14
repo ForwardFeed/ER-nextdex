@@ -7,6 +7,7 @@ import * as Species from './species/species'
 import * as Abilities from './abilities'
 import * as Sprites from './sprites'
 import * as Locations from './locations'
+import * as Trainers from './species/trainers'
 
 import { CompactGameData, compactify } from './compactify';
 
@@ -19,13 +20,15 @@ export interface GameData {
     abilities: [string, Abilities.Ability][]
     moves:[string, Moves.Move][]
     locations: Locations.Locations
+    trainers: Trainers.Trainer[]
 }
 
 const gameData: GameData = {
     species: [] as Species.Specie[],
     abilities: [],
     moves: [],
-    locations: {} as Locations.Locations
+    locations: {} as Locations.Locations,
+    trainers: [] as Trainers.Trainer[],
 }
 
 function main(){
@@ -54,6 +57,7 @@ function main(){
             promiseArray.push(getMoves(optionsGlobal_h))
             promiseArray.push(getAbilities(optionsGlobal_h))
             promiseArray.push(getLocations())
+            promiseArray.push(getTrainers())
             Promise.allSettled(promiseArray)
                 .then(()=>{
                     outputGameData(compactify(gameData), OUTPUT)
@@ -205,6 +209,21 @@ function getLocations(){
     })
 }
 
+function getTrainers(){
+    return new Promise((resolve: (undefined: undefined)=>void, reject)=>{
+        // include 'src/data/region_map/region_map_entries.h' ?
+       const filepath = Path.join(ROOT_PRJ, 
+                                    'src/data/trainer_parties.h',
+                                    )
+        getFileData(filepath, {filterComments: true, filterMacros:false, macros: new Map()}) 
+            .then((fileData)=>{
+                gameData.trainers = Trainers.parse(fileData.data)
+                resolve(undefined)
+            })
+            .catch(reject)
+   })
+}
+
 main()
 
 /**
@@ -230,7 +249,8 @@ size list of all read files in bash
     "include/constants/battle_config.h"
     "src/data/battle_moves.h"
     "src/data/text/move_descriptions.h"
-    "src/data/text/move_names.h")
+    "src/data/text/move_names.h",
+    "src/data/trainer_parties.h")
     b=()
     for x in ${a[@]}; do b+=($(du -c ${BASE}${x} | tail -1 | cut -f 1)); done
     sum=0
