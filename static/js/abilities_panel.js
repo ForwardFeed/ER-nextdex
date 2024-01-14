@@ -1,4 +1,4 @@
-function updateAbilities(search){
+export function updateAbilities(search){
     const abis = gameData.abilities
     const nodeList = $('#abis-list').children()
     for (const i in abis){

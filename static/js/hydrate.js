@@ -1,4 +1,8 @@
-function hydrate(){
+import { feedPanelSpecies } from "./species_panel.js"
+import { feedPanelMoves } from "./moves_panel.js"
+import { feedPanelLocations } from "./locations_panel.js"
+
+export function hydrate(){
     if (!gameData){
         return console.warn("couldn't find gameData")
     }
@@ -120,6 +124,9 @@ function hydrateSpecies(){
             if (!nextEvo.TMHMMoves.length) nextEvo.TMHMMoves = spec.TMHMMoves
             if (!nextEvo.tutor.length) nextEvo.tutor = spec.tutor
         }
+        // prepare to be appended a list of location where this pokemon appear
+        spec.locations = [];
+        // add to the html list 
         const core = document.createElement('div')
         core.className = "btn data-list-row sel-n-active"
         const name = document.createElement('span')
@@ -130,7 +137,6 @@ function hydrateSpecies(){
             fastdom.mutate(() => {
                 feedPanelSpecies($(this).attr('data-id'))
             });
-            
         });
         fragment.append(core)
     }
@@ -140,16 +146,36 @@ function hydrateSpecies(){
 }
 
 function hydrateLocation(){
+    const xmapTable = [
+        "land",
+        "water",
+        "fish",
+        "honey",
+        "rock",
+        "hidden",
+    ]
     const fragmentList = document.createDocumentFragment();
     const maps = gameData.locations.maps
-    for (const i in maps){
-        const map = maps[i]
+    for (const mapID in maps){
+        const map = maps[mapID]
+        // FEED the pokemons location
+        for (const locName of xmapTable){
+            const mons = map[locName]
+            if (!mons) continue
+            for (const monID of mons){
+                const specieID = monID[2]
+                if (specieID < 1) continue
+                gameData.species[specieID].locations.push(mapID)
+            }
+        }
+
+        // hydrate the html list
         const listRow = document.createElement('div')
         listRow.className = "btn data-list-row sel-n-active"
         const name = document.createElement('span')
         name.innerText = map.name || "unknown"
         listRow.append(name)
-        listRow.dataset.id = i
+        listRow.dataset.id = mapID
         $(listRow).on('click', function(){
             fastdom.mutate(() => {
                 feedPanelLocations($(this).attr('data-id'))
@@ -158,16 +184,8 @@ function hydrateLocation(){
         fragmentList.append(listRow)
     }
     $("#locations-list").empty().append(fragmentList);
-    const xrateTable = [
-        "land",
-        "water",
-        "fish",
-        "honey",
-        "rock",
-        "hidden",
-    ]
     const locations = gameData.locations
-    for (const rateName of xrateTable){
+    for (const rateName of xmapTable){
         const rates = locations[rateName+ "Rate"]
         if (!rates) continue
         const fragmentRate = document.createDocumentFragment();
@@ -190,3 +208,10 @@ function hydrateLocation(){
     }
     feedPanelLocations(0)
 }
+
+function hydrateTrainers(){
+    const trainers = gameData.trainers
+    // make trainers rematch / insane
+}
+
+export default hydrate

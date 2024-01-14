@@ -1,4 +1,4 @@
-function feedPanelSpecies(id){
+export function feedPanelSpecies(id){
     const specie = gameData.species[id]
 
     $('#species-name').text(specie.name)
@@ -12,6 +12,7 @@ function feedPanelSpecies(id){
     setMoves($('#tutor'), specie.tutor)
     setMoves($('#eggmoves'), specie.eggMoves)
     setEvos(specie.evolutions)
+    setLocations(specie.locations)
     $('#species-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
     $('#species-list').children().eq(id - 1).addClass("sel-active").removeClass("sel-n-active")
 }
@@ -95,7 +96,7 @@ function setSprite(NAME){
 function changeBaseStat(node, value, statID){
     node.find('.stat-num').text(value)
     let color = "gray"
-    for (const colorMapped of colorMap = [
+    for (const colorMapped of [
         [gameData.speciesStats.result.min5[statID], "#ff3300"],
         [gameData.speciesStats.result.min20[statID], "#cc6600"],
         [gameData.speciesStats.result.median[statID], "#cccc00"],
@@ -162,10 +163,11 @@ function setInnates(innates){
 }
 
 
-function setupSpeciesSubPanel(){
+export function setupSpeciesSubPanel(){
     const subPanelsAndBtns = [
         ["#switch-moves", "#species-moves"],
-        ["#switch-evos", "#species-evos"]
+        ["#switch-evos", "#species-evos"],
+        ["#switch-locations", "#species-locations"]
     ]
     subPanelsAndBtns.forEach((x)=>{
         $(x[0]).on('click', ()=>{
@@ -240,7 +242,25 @@ function setEvoReason(kindID, reason){
     }[gameData.evoKindT[kindID]]
 }
 
-function updateSpecies(search){
+
+function setLocations(locations){
+    locations = locations.reduce(function(a,b){
+        if (a.indexOf(b) < 0 ) a.push(b);
+        return a;
+      },[]); // remove duplicates
+    const frag = document.createDocumentFragment()
+    for (const locID of locations){
+        const loc = gameData.locations.maps[locID]
+        if (!loc) continue 
+        const node = document.createElement('div')
+        node.className = "specie-locs"
+        node.innerText = loc.name
+        frag.append(node)
+    }
+    $('#species-locations').empty().append(frag)
+}
+
+export function updateSpecies(search){
     const species = gameData.species
     const nodeList = $('#species-list').children()
     let validID;

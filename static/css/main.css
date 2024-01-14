@@ -303,10 +303,13 @@ span{
 }
 .species-sub-pannel{
     background-color: var(--colorC);
-    display: grid;
-    grid-auto-flow:column;
+    display: flex;
+    flex-direction: row;
     flex-grow: 1;
     font-size: 1.5vmax;
+}
+.species-sub-pannel > * {
+    flex-grow: 1;
 }
 .species-bot-row{
     text-align: center;
@@ -394,6 +397,9 @@ span{
     #species-front{
         height: 15vh;
         width: 15vh;
+    }
+    .specie-locs{
+
     }
 }
 

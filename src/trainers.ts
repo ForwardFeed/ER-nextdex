@@ -1,4 +1,4 @@
-import { regexGrabNum, regexGrabStr, TYPE_toType } from "../parse_utils"
+import { regexGrabNum, regexGrabStr, TYPE_toType } from "./parse_utils"
 
 export interface Trainer{
     name: string,
@@ -55,6 +55,17 @@ function initContext(): Context{
 }
 
 const executionMap: {[key: string]: (line: string, context: Context) => void} = {
+    "AwaitForrematch" : (line, context) =>{
+        if (line.match('RematchTrainer gRematchTable')){
+            context.execFlag = "rematch"
+        }
+
+    },
+    "rematch" : (line, context) =>{
+        if (line.match('}')){
+            context.execFlag = "main"
+        }
+    },
     "main": (line, context) =>{
         if (!line) return
         if (line.match('TrainerMonItemCustomMoves')){

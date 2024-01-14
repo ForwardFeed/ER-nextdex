@@ -7,7 +7,7 @@ import * as Species from './species/species'
 import * as Abilities from './abilities'
 import * as Sprites from './sprites'
 import * as Locations from './locations'
-import * as Trainers from './species/trainers'
+import * as Trainers from './trainers'
 
 import { CompactGameData, compactify } from './compactify';
 
@@ -75,7 +75,7 @@ function main(){
 }
 
 function outputGameData(gameData: GameData | CompactGameData, output: string){
-    const dataTowrite = "gameData = " + JSON.stringify(gameData) + ";hydrate()"
+    const dataTowrite = "gameData = " + JSON.stringify(gameData)
     FS.writeFile(output, dataTowrite , (err_exist)=>{
         if (err_exist){
             console.error(`couldn't write the gamedata output to ${output}`)

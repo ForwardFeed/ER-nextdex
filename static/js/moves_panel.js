@@ -1,4 +1,4 @@
-function feedPanelMoves(moveID){
+export function feedPanelMoves(moveID){
     const move = gameData.moves[moveID]
     $('#moves-name').text(move.name)
     $('#moves-pwr').text(move.pwr ? move.pwr == 1 ? "?" : move.pwr : "--")
@@ -106,7 +106,7 @@ function setTarget(targetID){
     }
 }
 
-function updateMoves(search){
+export function updateMoves(search){
     const moves = gameData.moves
     const nodeList = $('#moves-list').children()
     let validID;

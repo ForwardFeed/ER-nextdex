@@ -1,8 +1,9 @@
-/**
- * To select which version of the game to have
- */
+import { hydrate } from './hydrate.js'
 
-function setAvailableVersion(){
+/**
+ * To select which version of the game data to have
+ */
+export function setAvailableVersion(){
     const allVersions = [
         "1.6.1",
         "Alpha",
@@ -29,4 +30,7 @@ $('#versions').on('change', function(ev){
     loadGameData.type = "text/javascript";
     loadGameData.src = `gameDataV${$(this).val()}.js`;
     document.body.appendChild(loadGameData)
+    loadGameData.onload = function(){
+        hydrate()
+    }
 })

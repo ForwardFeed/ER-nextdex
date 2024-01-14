@@ -1,4 +1,4 @@
-function feedPanelLocations(mapID){
+export function feedPanelLocations(mapID){
     const map = gameData.locations.maps[mapID]
     const xrateTable = [
         "land",
@@ -26,7 +26,7 @@ function feedPanelLocations(mapID){
     $('#locations-list').children().eq(mapID).addClass("sel-active").removeClass("sel-n-active")
 }
 
-function updateLocations(search){
+export function updateLocations(search){
     const maps = gameData.locations.maps
     const nodeList = $('#locations-list').children()
     let validID;
