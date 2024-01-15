@@ -356,7 +356,7 @@ export function compactify(gameData: GameData): CompactGameData{
         let name = Xtox('TRAINER_', trainer.name)
         let category = Xtox('TRAINER_CLASS_', trainer.category)
         name = `${category} ${name}`
-        if (!name.includes('Grunt') || !name.includes('Gabby And Ty')){
+        if (!name.includes('Grunt') && !name.includes('Gabby And Ty')){
             //grunts in pokemon are only recognizeable by their 1
             // however trainers have random numbers in them
             name = name.replace(/\s\d+$/,'')

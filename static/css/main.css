@@ -259,8 +259,8 @@ span{
     border-bottom-width: 2px;
     border-left-width: 0.5px;
     border-radius: 3px;
-
     flex-grow: 1;
+    margin-top: 0.2em;
 }
 
 .species-bot{
@@ -436,4 +436,14 @@ span{
 }
 .location-lvl{
     width: 3.5em;
+}
+
+/* Trainers */
+
+@media (orientation: landscape) {
+    
+}
+
+@media (orientation: portrait) {
+    
 }

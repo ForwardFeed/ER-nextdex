@@ -2,6 +2,7 @@ import { updateSpecies } from "./species_panel.js"
 import { updateAbilities} from "./abilities_panel.js"
 import { updateMoves } from "./moves_panel.js"
 import { updateLocations } from "./locations_panel.js"
+import { updateTrainers } from "./trainers_panel.js"
 
 export const search = {
     // the search guard is here to prevent that while the app is searching
@@ -16,10 +17,12 @@ export const search = {
         updateAbilities,
         updateMoves,
         updateLocations,
+        updateTrainers,
     ],
     // 
     // if modified sync it with "siderbar.js > setupPanels() > panelTable" variable
     panelFrozenUpdate: [
+        false,
         false,
         false,
         false,

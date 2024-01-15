@@ -120,10 +120,10 @@ export function filterMacros(data: string, macros: MacroMap = defaultMacroMap())
             line = line.replace(/.*#define/, '').trim() //
             let macro = ""
             // does not work well for complex. But well out of my scope
-            if (line.match(/[^ ]+/g)){
-                macro = line.match(/[^ ]+/g)[0]
+            if (line.match(/^\w+/)){
+                macro = line.match(/^\w+/)[0]
             }
-            const value = line.replace(macro, '') || true
+            const value = line.replace(macro, '').trim() || true
             if (macro && value){
                 macros.set(macro, value)
             }

@@ -7,6 +7,7 @@ export function setupPanels(){
         ["#btn-abis", "#panel-abis"],
         ["#btn-moves", "#panel-moves"],
         ["#btn-locations", "#panel-locations"],
+        ["#btn-trainers", "#panel-trainers"]
     ]
     for (const i in panelTable){
         const btnPanel = panelTable[i]
