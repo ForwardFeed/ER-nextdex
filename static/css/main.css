@@ -239,6 +239,7 @@ span{
     display: flex;
     font-size: 1.9vmax;
     text-align: center;
+    align-items: center;
 }
 .stat-name{
     width: 1.5em;

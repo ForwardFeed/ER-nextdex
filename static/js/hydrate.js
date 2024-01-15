@@ -186,27 +186,69 @@ function hydrateLocation(){
     $("#locations-list").empty().append(fragmentList);
     const locations = gameData.locations
     for (const rateName of xmapTable){
+        
         const rates = locations[rateName+ "Rate"]
         if (!rates) continue
+        
+        if(rateName === "fish")
+        {
+            $('#locations-' + rateName).empty().append(fishingTable(rates))
+            continue
+        }
+
         const fragmentRate = document.createDocumentFragment();
         for (const rate of rates){
-            const nodeCore = document.createElement('div')
-            nodeCore.className = "location-row"
-            const nodeRate = document.createElement('div')
-            nodeRate.className = "location-rate"
-            nodeRate.innerText = rate
-            nodeCore.append(nodeRate)
-            const nodeSpecie = document.createElement('div')
-            nodeSpecie.className = "location-specie"
-            nodeCore.append(nodeSpecie)
-            const nodeLvl = document.createElement('div')
-            nodeLvl.className = "location-lvl"
-            nodeCore.append(nodeLvl)
-            fragmentRate.append(nodeCore)
+            
+            addRow(fragmentRate, rate)
         }
         $('#locations-' + rateName).empty().append(fragmentRate)
     }
     feedPanelLocations(0)
+}
+
+function fishingTable(rates)
+{
+    const fragmentRate = document.createDocumentFragment();
+    let parent = document.createElement('div')
+    parent.className="old-rod"
+    parent.innerHTML="Old Rod"
+    fragmentRate.append(parent)
+    for( let i = 0; i < rates.length;i++)
+    {
+        const rate = rates[i]
+        if(i === 3)
+        {
+            parent = document.createElement('div')
+            fragmentRate.append(parent)
+            parent.className="good-rod"
+            parent.innerHTML="Good Rod"
+        }
+        if(i === 6)
+        {
+            parent = document.createElement('div')
+            fragmentRate.append(parent)
+            parent.className="super-rod"
+            parent.innerHTML="Super Rod"
+        }
+        addRow(parent, rate)
+    }
+    return fragmentRate
+}
+
+function addRow(parent, rate) {
+    const nodeCore = document.createElement('div')
+    nodeCore.className = "location-row"
+    const nodeRate = document.createElement('div')
+    nodeRate.className = "location-rate"
+    nodeRate.innerText = rate
+    nodeCore.append(nodeRate)
+    const nodeSpecie = document.createElement('div')
+    nodeSpecie.className = "location-specie"
+    nodeCore.append(nodeSpecie)
+    const nodeLvl = document.createElement('div')
+    nodeLvl.className = "location-lvl"
+    nodeCore.append(nodeLvl)
+    parent.append(nodeCore)
 }
 
 function hydrateTrainers(){
