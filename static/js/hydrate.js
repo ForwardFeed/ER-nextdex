@@ -1,4 +1,4 @@
-import { feedPanelSpecies } from "./species_panel.js"
+import { feedPanelSpecies, getSpritesURL } from "./species_panel.js"
 import { feedPanelMoves } from "./moves_panel.js"
 import { feedPanelLocations } from "./locations_panel.js"
 import { feedPanelTrainers } from "./trainers_panel.js"
@@ -131,8 +131,16 @@ function hydrateSpecies(){
         // add to the html list 
         const core = document.createElement('div')
         core.className = "btn data-list-row sel-n-active"
+        const image = document.createElement('img')
+        image.className = 'species-list-sprite'
+        image.src = getSpritesURL(spec.NAME)
+        image.alt = spec.name
+        core.appendChild(image)
+
+
         const name = document.createElement('span')
         name.innerText = spec.name || "unknown"
+        name.className="species-name"
         core.append(name)
         core.dataset.id = i
         $(core).on('click', function(){
