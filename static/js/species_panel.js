@@ -19,6 +19,19 @@ export function feedPanelSpecies(id){
     $('#species-list').children().eq(id - 1).addClass("sel-active").removeClass("sel-n-active")
 }
 
+function handleClick(move)
+{
+    const mainSearch = document.getElementById("main-search")
+    mainSearch.value = move.name
+    $("#btn-moves").click()
+    $('#main-search').keyup()
+
+    //Needed for moves like powder, where it have gone poison powder because it's first alphabetically
+    $("#moves-list").children().filter(function() {
+        return $(this).text() === move.name
+      }).click()
+}
+
 function setTypes(types){
     const core = $('#species-types')
     const type1 = gameData.typeT[types[0]]
@@ -47,6 +60,7 @@ function setMoves(core, moves){
         }
         const node = document.createElement('div')
         node.innerText = move.name
+        node.onclick=() => {handleClick(move)}
         frag.append(node)
     }
     core.append(frag)
@@ -67,6 +81,7 @@ function setLevelUpMoves(core, moves){
         nodeMoveLvl.className = "species-levelup-lvl"
         row.append(nodeMoveLvl)
         const nodeMoveName = document.createElement('div')
+        nodeMoveName.onclick=() => {handleClick(move)}
         nodeMoveName.innerText = move.name
         nodeMoveName.className = "species-levelup-name"
         row.append(nodeMoveName)

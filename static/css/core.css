@@ -65,7 +65,8 @@ body{
     width: 35vw;
     border-radius: 7px;
     margin: auto;
-
+    padding-left: 7px;
+    outline: none;
 }
 #filter-icon{
     width: 7vh;

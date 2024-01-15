@@ -167,6 +167,16 @@ span{
 #moves-desc{
     
 }
+
+.species-list-sprite{
+    height:70%;
+    left: 0%;
+    margin: 5px;
+}
+
+.species-name{
+    width: min-content;
+}
 @media (orientation: landscape) {
     .moves-top{
         width: 100%;
@@ -239,6 +249,7 @@ span{
     display: flex;
     font-size: 1.9vmax;
     text-align: center;
+    align-items: center;
 }
 .stat-name{
     width: 1.5em;
@@ -358,6 +369,7 @@ span{
     }
     .data-list-row{
         min-height: 2em;
+        padding: 10px;
     }
     .data-data{
         height: 100%;
@@ -385,7 +397,8 @@ span{
     }
     .data-list-row{
         min-width: 6em;
-        align-items: normal
+        padding: 10px;
+        align-items: normal;
     }
     .data-data{
         height: 72vh;

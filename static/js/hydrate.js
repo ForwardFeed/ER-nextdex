@@ -1,4 +1,4 @@
-import { feedPanelSpecies } from "./species_panel.js"
+import { feedPanelSpecies, getSpritesURL } from "./species_panel.js"
 import { feedPanelMoves } from "./moves_panel.js"
 import { feedPanelLocations } from "./locations_panel.js"
 import { feedPanelTrainers } from "./trainers_panel.js"
@@ -131,8 +131,16 @@ function hydrateSpecies(){
         // add to the html list 
         const core = document.createElement('div')
         core.className = "btn data-list-row sel-n-active"
+        const image = document.createElement('img')
+        image.className = 'species-list-sprite'
+        image.src = getSpritesURL(spec.NAME)
+        image.alt = spec.name
+        core.appendChild(image)
+
+
         const name = document.createElement('span')
         name.innerText = spec.name || "unknown"
+        name.className="species-name"
         core.append(name)
         core.dataset.id = i
         $(core).on('click', function(){
@@ -188,27 +196,69 @@ function hydrateLocation(){
     $("#locations-list").empty().append(fragmentList);
     const locations = gameData.locations
     for (const rateName of xmapTable){
+        
         const rates = locations[rateName+ "Rate"]
         if (!rates) continue
+        
+        if(rateName === "fish")
+        {
+            $('#locations-' + rateName).empty().append(fishingTable(rates))
+            continue
+        }
+
         const fragmentRate = document.createDocumentFragment();
         for (const rate of rates){
-            const nodeCore = document.createElement('div')
-            nodeCore.className = "location-row"
-            const nodeRate = document.createElement('div')
-            nodeRate.className = "location-rate"
-            nodeRate.innerText = rate
-            nodeCore.append(nodeRate)
-            const nodeSpecie = document.createElement('div')
-            nodeSpecie.className = "location-specie"
-            nodeCore.append(nodeSpecie)
-            const nodeLvl = document.createElement('div')
-            nodeLvl.className = "location-lvl"
-            nodeCore.append(nodeLvl)
-            fragmentRate.append(nodeCore)
+            
+            addRow(fragmentRate, rate)
         }
         $('#locations-' + rateName).empty().append(fragmentRate)
     }
     feedPanelLocations(1)
+}
+
+function fishingTable(rates)
+{
+    const fragmentRate = document.createDocumentFragment();
+    let parent = document.createElement('div')
+    parent.className="old-rod"
+    parent.innerHTML="Old Rod"
+    fragmentRate.append(parent)
+    for( let i = 0; i < rates.length;i++)
+    {
+        const rate = rates[i]
+        if(i === 3)
+        {
+            parent = document.createElement('div')
+            fragmentRate.append(parent)
+            parent.className="good-rod"
+            parent.innerHTML="Good Rod"
+        }
+        if(i === 6)
+        {
+            parent = document.createElement('div')
+            fragmentRate.append(parent)
+            parent.className="super-rod"
+            parent.innerHTML="Super Rod"
+        }
+        addRow(parent, rate)
+    }
+    return fragmentRate
+}
+
+function addRow(parent, rate) {
+    const nodeCore = document.createElement('div')
+    nodeCore.className = "location-row"
+    const nodeRate = document.createElement('div')
+    nodeRate.className = "location-rate"
+    nodeRate.innerText = rate
+    nodeCore.append(nodeRate)
+    const nodeSpecie = document.createElement('div')
+    nodeSpecie.className = "location-specie"
+    nodeCore.append(nodeSpecie)
+    const nodeLvl = document.createElement('div')
+    nodeLvl.className = "location-lvl"
+    nodeCore.append(nodeLvl)
+    parent.append(nodeCore)
 }
 
 function hydrateTrainers(){
