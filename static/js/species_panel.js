@@ -5,7 +5,7 @@ export function feedPanelSpecies(id){
 
     $('#species-name').text(specie.name)
     updateBaseStats(specie.stats.base)
-    setSprite(specie.NAME)
+    $('#species-front').attr('src', getSpritesURL(specie.NAME))
     setAbilities(specie.stats.abis)
     setInnates(specie.stats.inns)
     setTypes(specie.stats.types)
@@ -90,9 +90,9 @@ function updateBaseStats(stats){
     }
 }
 
-function setSprite(NAME){
+export function getSpritesURL(NAME){
     NAME = NAME.replace(/^SPECIES_/, '')
-    $('#species-front').attr("src",`./sprites/${NAME}.png`);
+    return `./sprites/${NAME}.png`
 }
 
 function changeBaseStat(node, value, statID){

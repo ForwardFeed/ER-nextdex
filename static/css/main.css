@@ -439,7 +439,15 @@ span{
 }
 
 /* Trainers */
-
+#trainers-team{
+    display: flex;
+}
+.trainers-pokemon{
+    margin-left: 0.5vw;
+    margin-right: 0.5vw;
+    background-color: var(--colorD);
+    text-align: center;
+}
 @media (orientation: landscape) {
     
 }
