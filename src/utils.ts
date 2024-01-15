@@ -117,11 +117,14 @@ export function filterMacros(data: string, macros: MacroMap = defaultMacroMap())
     for (let line of lines){
         if (line.includes("#define"))
         {
-            line = line.replace(/.*#define /, '')
-            const macroAndValue = line.match(/\w+/g)
-            if (macroAndValue){
-                const macro = macroAndValue[0]
-                const value = macroAndValue[1] || true
+            line = line.replace(/.*#define/, '').trim() //
+            let macro = ""
+            // does not work well for complex. But well out of my scope
+            if (line.match(/^\w+/)){
+                macro = line.match(/^\w+/)[0]
+            }
+            const value = line.replace(macro, '').trim() || true
+            if (macro && value){
                 macros.set(macro, value)
             }
             isIncluded = true

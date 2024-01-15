@@ -24,5 +24,7 @@
     [ ] Get Trainer Rematch from RematchTrainer gRematchTable in /src/battle_setup.c
     [ ] Get Trainer info from /src/data/trainers.h
     [ ] Get Trainer Team from src/data/trainer_parties.h
-    
+[ ] Settings pannel
+    [ ] Supports multiple color theme
+    [ ] Sorting abilities by alphabet
  

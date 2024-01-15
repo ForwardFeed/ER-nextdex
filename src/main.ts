@@ -7,7 +7,7 @@ import * as Species from './species/species'
 import * as Abilities from './abilities'
 import * as Sprites from './sprites'
 import * as Locations from './locations'
-import * as Trainers from './trainers'
+import * as Trainers from './trainers/trainers'
 
 import { CompactGameData, compactify } from './compactify';
 
@@ -34,9 +34,8 @@ const gameData: GameData = {
 function main(){
     const OUTPUT_VERSION = process.argv[2] ? "V" + process.argv[2] : ""
     const OUTPUT = `./dist/gameData${OUTPUT_VERSION}.js`
-    getFileData(Path.join(ROOT_PRJ, 'include/global.h'))
+    getFileData(Path.join(ROOT_PRJ, 'include/global.h'), {filterComments: true, filterMacros: true, macros: new Map()})
     .then((global_h) => {
-        global_h.data
         const optionsGlobal_h = {
             filterComments: true,
             filterMacros: true,
@@ -211,17 +210,20 @@ function getLocations(){
 
 function getTrainers(){
     return new Promise((resolve: (undefined: undefined)=>void, reject)=>{
-        // include 'src/data/region_map/region_map_entries.h' ?
-       const filepath = Path.join(ROOT_PRJ, 
-                                    'src/data/trainer_parties.h',
-                                    )
-        getFileData(filepath, {filterComments: true, filterMacros:false, macros: new Map()}) 
-            .then((fileData)=>{
-                gameData.trainers = Trainers.parse(fileData.data)
+        const filepaths = autojoinFilePath(ROOT_PRJ, [  'src/data/trainers.h',
+                                                        'src/battle_setup.c',
+                                                        'src/data/trainer_parties.h'])
+        getMulFilesData(filepaths, {filterComments: true, filterMacros: true, macros: new Map()})
+        .then((fileData)=>{
+                gameData.trainers = Trainers.parse(fileData)
                 resolve(undefined)
-            })
-            .catch(reject)
-   })
+        })
+        .catch((reason)=>{
+            const err = 'Failed at gettings species reason: ' + reason
+            reject(err)
+        })
+    })
+    
 }
 
 main()

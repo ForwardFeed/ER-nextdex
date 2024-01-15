@@ -260,8 +260,8 @@ span{
     border-bottom-width: 2px;
     border-left-width: 0.5px;
     border-radius: 3px;
-
     flex-grow: 1;
+    margin-top: 0.2em;
 }
 
 .species-bot{
@@ -437,4 +437,22 @@ span{
 }
 .location-lvl{
     width: 3.5em;
+}
+
+/* Trainers */
+#trainers-team{
+    display: flex;
+}
+.trainers-pokemon{
+    margin-left: 0.5vw;
+    margin-right: 0.5vw;
+    background-color: var(--colorD);
+    text-align: center;
+}
+@media (orientation: landscape) {
+    
+}
+
+@media (orientation: portrait) {
+    
 }

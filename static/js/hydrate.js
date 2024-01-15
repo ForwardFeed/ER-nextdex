@@ -1,6 +1,7 @@
 import { feedPanelSpecies } from "./species_panel.js"
 import { feedPanelMoves } from "./moves_panel.js"
 import { feedPanelLocations } from "./locations_panel.js"
+import { feedPanelTrainers } from "./trainers_panel.js"
 
 export function hydrate(){
     if (!gameData){
@@ -37,6 +38,7 @@ export function hydrate(){
     hydrateMoves()
     hydrateSpecies()
     hydrateLocation()
+    hydrateTrainers()
 }
 
 function feedBaseStatsStats(statID, value){
@@ -108,7 +110,7 @@ function hydrateSpecies(){
     const fragment = document.createDocumentFragment();
     const species = gameData.species
     for (const i in species){
-        if (i == 0) continue //because of NONE species
+        if (i == 0) continue
         const spec = species[i]
         spec.stats.base[6] = 0
         for (const statID in spec.stats.base){
@@ -203,7 +205,7 @@ function hydrateLocation(){
         }
         $('#locations-' + rateName).empty().append(fragmentRate)
     }
-    feedPanelLocations(0)
+    feedPanelLocations(1)
 }
 
 function fishingTable(rates)
@@ -252,8 +254,29 @@ function addRow(parent, rate) {
 }
 
 function hydrateTrainers(){
+    // still missing in the data the alternative like for the rivals
+    // and it's not ordered (it requires to have an order set manually)
+    const frag = document.createDocumentFragment();
     const trainers = gameData.trainers
-    // make trainers rematch / insane
+    for (const i in trainers){
+        if (i == 0) continue
+        const trainer = trainers[i]
+        // add to the html list 
+        const core = document.createElement('div')
+        core.className = "btn data-list-row sel-n-active"
+        const name = document.createElement('span')
+        name.innerText = trainer.name || "unknown"
+        core.append(name)
+        core.dataset.id = i
+        $(core).on('click', function(){
+            fastdom.mutate(() => {
+                feedPanelTrainers($(this).attr('data-id'))
+            });
+        });
+        frag.append(core)
+    }
+    $('#trainers-list').empty().append(frag)
+    feedPanelTrainers(1)
 }
 
 export default hydrate
