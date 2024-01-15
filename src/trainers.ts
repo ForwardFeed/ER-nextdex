@@ -3,14 +3,18 @@ import { regexGrabNum, regexGrabStr, TYPE_toType } from "./parse_utils"
 export interface Trainer{
     name: string,
     double: boolean,
-    team: TrainerPokemon[]
+    team: TrainerPokemon[],
+    //insane: TrainerPokemon[]  insane Team
+    //rematches Trainer[] rematches
 }
 
 function initTrainer(): Trainer{
     return {
         name: "",
         double: false,
-        team: []
+        team: [],
+        // insane: [],
+        // rematches: [],
     }
 }
 export interface TrainerPokemon{
@@ -53,15 +57,25 @@ function initContext(): Context{
         stopRead: false
     }
 }
-
+// need to inclide Trainer gTrainers
+// and RematchTrainer gRematchTable from battle_setup.c
+/**
+ * TRAINER_GRUNT_MAGMA_HIDEOUT_14 <= first take this to make the name
+ * ^<= also i need if there is an insane team associated
+ * [TRAINER_ROSE_1, TRAINER_ROSE_2, TRAINER_ROSE_3, TRAINER_ROSE_4] <= then get rematch this way
+ */
 const executionMap: {[key: string]: (line: string, context: Context) => void} = {
-    "AwaitForrematch" : (line, context) =>{
+    "AwaitForRematch" : (line, context) =>{
         if (line.match('RematchTrainer gRematchTable')){
             context.execFlag = "rematch"
         }
-
     },
     "rematch" : (line, context) =>{
+        if (line.match('}')){
+            context.execFlag = "main"
+        }
+    },
+    "awaitForMain" : (line, context) =>{
         if (line.match('}')){
             context.execFlag = "main"
         }

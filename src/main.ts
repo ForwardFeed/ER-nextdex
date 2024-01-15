@@ -34,9 +34,8 @@ const gameData: GameData = {
 function main(){
     const OUTPUT_VERSION = process.argv[2] ? "V" + process.argv[2] : ""
     const OUTPUT = `./dist/gameData${OUTPUT_VERSION}.js`
-    getFileData(Path.join(ROOT_PRJ, 'include/global.h'))
+    getFileData(Path.join(ROOT_PRJ, 'include/global.h'), {filterComments: true, filterMacros: true, macros: new Map()})
     .then((global_h) => {
-        global_h.data
         const optionsGlobal_h = {
             filterComments: true,
             filterMacros: true,
