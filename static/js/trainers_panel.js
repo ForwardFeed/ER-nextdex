@@ -1,7 +1,6 @@
 import { getSpritesURL } from "./species_panel.js"
 
 export function feedPanelTrainers(trainerID){
-    trainerID  = trainerID - 1
     $('#trainers-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
     $('#trainers-list').children().eq().addClass("sel-active").removeClass("sel-n-active")
 
