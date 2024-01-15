@@ -1,6 +1,7 @@
 import { GameData } from "./main";
 import { Ability } from "./abilities";
 import { NAMEtoName, Xtox } from "./parse_utils";
+import { TrainerPokemon } from "./trainers/teams";
 
 interface CompactLocations{
     maps: CompactLocation[],
@@ -97,7 +98,9 @@ export interface CompactSpecie{
 export interface CompactTrainers{
     name: string,
     db: boolean,
-    team: CompactTrainerPokemon[]
+    party: CompactTrainerPokemon[],
+    insane: CompactTrainerPokemon[],
+    rem: CompactTrainerRematch[],
 }
 
 interface CompactTrainerPokemon{
@@ -108,6 +111,11 @@ interface CompactTrainerPokemon{
     item: number,
     nature: number,
     moves: number[]
+}
+
+interface CompactTrainerRematch{
+    db: boolean,
+    party: CompactTrainerPokemon[]
 }
 
 export interface CompactGameData{
@@ -158,36 +166,29 @@ export function compactify(gameData: GameData): CompactGameData{
         compacted.abilities.push(val[1])
     })
     const movesT: string[] = []
+    const tablize = ((x: unknown, table: unknown[]) => {
+        if (!table.includes(x)) table.push(x)
+        return table.indexOf(x)
+    })
     gameData.moves.forEach((val)=>{
         movesT.push(val[0])
         const move = val[1]
         compacted.moves.push({
             name: move.name,
             sName: move.shortName,
-            eff: ((x) => {
-                if (!compacted.effT.includes(x)) compacted.effT.push(x)
-                return compacted.effT.indexOf(x)
-            })(move.effect.replace(/^EFFECT_/, '')),
+            eff: tablize(move.effect, compacted.effT),
             pwr: move.power,
             types: move.types.map((x) => {
-                if (!compacted.typeT.includes(x)) compacted.typeT.push(x)
-                return compacted.typeT.indexOf(x)
+                return tablize(x, compacted.typeT)
             }),
             acc: move.acc,
             pp: move.pp,
             chance: move.chance,
-            target: ((x) => {
-                if (!compacted.targetT.includes(x)) compacted.targetT.push(x)
-                return compacted.targetT.indexOf(x)
-            })(move.target),
+            target: tablize(move.target, compacted.targetT),
             prio: move.priority,
-            split: ((x) => {
-                if (!compacted.splitT.includes(x)) compacted.splitT.push(x)
-                return compacted.splitT.indexOf(x)
-            })(move.split),
+            split: tablize(move.split, compacted.splitT),
             flags: move.flags.map((x) => {
-                if (!compacted.flagsT.includes(x)) compacted.flagsT.push(x)
-                return compacted.flagsT.indexOf(x)
+                return tablize(x, compacted.flagsT)
             }),
             arg: move.argument,
             desc: move.desc,
@@ -220,8 +221,7 @@ export function compactify(gameData: GameData): CompactGameData{
                         bs.baseSpeed,
                     ],
                 types: bs.types.map((x) => {
-                    if (!compacted.typeT.includes(x)) compacted.typeT.push(x)
-                    return compacted.typeT.indexOf(x)
+                    return tablize(x, compacted.typeT)
                 }),
                 catchR: bs.catchRate,
                 exp: bs.expYield,
@@ -236,10 +236,7 @@ export function compactify(gameData: GameData): CompactGameData{
                 gender: bs.genderRatio,
                 eggC: bs.eggCycles,
                 fren: bs.friendship,
-                grow: ((gr)=>{
-                    if (!compacted.growT.includes(gr)) compacted.growT.push(gr)
-                    return compacted.growT.indexOf(gr)
-                })(bs.growthRate), 
+                grow: tablize(bs.growthRate, compacted.growT), 
                 eggG: bs.eggGroup.map((x) => {
                     if (!compacted.eggT.includes(x)) compacted.eggT.push(x)
                     return compacted.eggT.indexOf(x)
@@ -252,10 +249,7 @@ export function compactify(gameData: GameData): CompactGameData{
                     if (!abiT.includes(x)) return 0
                     return abiT.indexOf(x)
                 }),
-                col: ((x) => {
-                    if (!compacted.colT.includes(x)) compacted.colT.push(x)
-                    return compacted.colT.indexOf(x)
-                })(bs.bodyColor),
+                col: tablize(bs.bodyColor, compacted.colT),
                 noFlip: bs.noFlip,
                 flags: bs.flags, 
             },
@@ -337,30 +331,45 @@ export function compactify(gameData: GameData): CompactGameData{
             }
         })
     }
+    const compactPoke = (poke: TrainerPokemon)=>{
+        return {
+            spc: NAMET.indexOf(poke.specie),
+            abi: poke.ability,
+            ivs: poke.ivs,
+            evs: poke.evs,
+            item: ((item)=>{
+                item = Xtox('ITEM_', item)
+                if (!compacted.itemT.includes(item))compacted.itemT.push(item)
+                return compacted.itemT.indexOf(item)
+            })(poke.item),
+            nature: ((nat)=>{
+                nat = Xtox('NATURE_', nat)
+                if (!compacted.natureT.includes(nat))compacted.natureT.push(nat)
+                return compacted.natureT.indexOf(nat)
+            })(poke.nature),
+            moves: poke.moves.map((mv)=>{
+                return tablize(mv, movesT)
+            })
+        }
+    }
     for (const trainer of gameData.trainers){
+        let name = Xtox('TRAINER_', trainer.name)
+        let category = Xtox('TRAINER_CLASS_', trainer.category)
+        name = `${category} ${name}`
+        if (!name.includes('Grunt') || !name.includes('Gabby And Ty')){
+            //grunts in pokemon are only recognizeable by their 1
+            // however trainers have random numbers in them
+            name = name.replace(/\s\d+$/,'')
+        }
         compacted.trainers.push({
-            name: trainer.name,
+            name: name,
             db: trainer.double,
-            team: trainer.team.map((poke)=>{
+            party: trainer.party.map(compactPoke),
+            insane: trainer.insane.map(compactPoke),
+            rem: trainer.rematches.map((rem)=>{
                 return {
-                    spc: NAMET.indexOf(poke.specie),
-                    abi: poke.ability,
-                    ivs: poke.ivs,
-                    evs: poke.evs,
-                    item: ((item)=>{
-                        item = Xtox('ITEM_', item)
-                        if (!compacted.itemT.includes(item))compacted.itemT.push(item)
-                        return compacted.itemT.indexOf(item)
-                    })(poke.item),
-                    nature: ((nat)=>{
-                        nat = Xtox('NATURE_', nat)
-                        if (!compacted.natureT.includes(nat))compacted.natureT.push(nat)
-                        return compacted.natureT.indexOf(nat)
-                    })(poke.nature),
-                    moves: poke.moves.map((mv)=>{
-                        if (!movesT.includes(mv))movesT.push(mv)
-                        return movesT.indexOf(mv)
-                    })
+                    db: rem.double,
+                    party: rem.party.map(compactPoke)
                 }
             })
         })
