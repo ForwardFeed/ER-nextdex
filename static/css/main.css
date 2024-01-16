@@ -364,7 +364,7 @@ span{
     cursor: pointer;
 }
 
-.species-move-list>*:hover{
+.species-move-list>*:hover, .location-specie:hover{
     background-color: var(--selHover);;
 }
 #learnset{
