@@ -1,3 +1,5 @@
+import { handleLocation } from "./locations_panel.js"
+import { handleMove } from "./moves_panel.js"
 import { addTooltip } from "./utils.js"
 
 export function feedPanelSpecies(id){
@@ -16,19 +18,18 @@ export function feedPanelSpecies(id){
     setEvos(specie.evolutions)
     setLocations(specie.locations)
     $('#species-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
-    $('#species-list').children().eq(id - 1).addClass("sel-active").removeClass("sel-n-active")
+    $('#species-list').children().eq(id-1).addClass("sel-active").removeClass("sel-n-active")
 }
 
-function handleClick(move)
-{
+export function handleSpecie(specieName) {
     const mainSearch = document.getElementById("main-search")
-    mainSearch.value = move.name
-    $("#btn-moves").click()
+    mainSearch.value = specieName
+    $("#btn-species").click()
     $('#main-search').keyup()
 
     //Needed for moves like powder, where it have gone poison powder because it's first alphabetically
-    $("#moves-list").children().filter(function() {
-        return $(this).text() === move.name
+    $("#species-list").children().filter(function() {
+        return $(this).text() === specieName
       }).click()
 }
 
@@ -59,8 +60,9 @@ function setMoves(core, moves){
             continue
         }
         const node = document.createElement('div')
+        node.className = "species-move"
         node.innerText = move.name
-        node.onclick=() => {handleClick(move)}
+        node.onclick=() => {handleMove(move)}
         frag.append(node)
     }
     core.append(frag)
@@ -81,7 +83,7 @@ function setLevelUpMoves(core, moves){
         nodeMoveLvl.className = "species-levelup-lvl"
         row.append(nodeMoveLvl)
         const nodeMoveName = document.createElement('div')
-        nodeMoveName.onclick=() => {handleClick(move)}
+        nodeMoveName.onclick=() => {handleMove(move)}
         nodeMoveName.innerText = move.name
         nodeMoveName.className = "species-levelup-name"
         row.append(nodeMoveName)
@@ -272,10 +274,14 @@ function setLocations(locations){
         const node = document.createElement('div')
         node.className = "specie-locs"
         node.innerText = loc.name
+        node.onclick = () => {
+            handleLocation(loc)
+        }
         frag.append(node)
     }
     $('#species-locations').empty().append(frag)
 }
+
 
 export function updateSpecies(search){
     const species = gameData.species

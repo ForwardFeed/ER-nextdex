@@ -1,3 +1,5 @@
+import { handleSpecie } from "./species_panel.js"
+
 export function feedPanelLocations(mapID){
     const map = gameData.locations.maps[mapID]
     const xrateTable = [
@@ -18,8 +20,13 @@ export function feedPanelLocations(mapID){
         node.parent().show()
         for (const i in rates){
             const rate = rates[i]
-            node.children().eq(i).find('.location-specie').text(gameData.species[rate[2]].name)
-            node.children().eq(i).find('.location-lvl').text(rate[0] + "-" + rate[1])
+            const specie = node.find('.location-specie').eq(i)
+            const specieName = gameData.species[rate[2]].name
+            specie.on("click" , () => {
+                handleSpecie(specieName)
+            })
+            specie.text(specieName)
+            node.children().find('.location-lvl').eq(i).text(rate[0] + "-" + rate[1])
         }
     }
     $('#locations-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
@@ -42,4 +49,16 @@ export function updateLocations(search){
         }
     }
     if (validID) feedPanelLocations(validID)
+}
+
+export function handleLocation(location)
+{
+    const mainSearch = document.getElementById("main-search")
+    mainSearch.value = location.name
+    $("#btn-locations").click()
+    $('#main-search').keyup()
+    
+    $("#locations-list").children().filter(function() {
+        return $(this).text() === location.name
+      }).click()
 }

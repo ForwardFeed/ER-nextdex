@@ -124,3 +124,16 @@ export function updateMoves(search){
     }
     if (validID) feedPanelMoves(validID)
 }
+
+export function handleMove(move)
+{
+    const mainSearch = document.getElementById("main-search")
+    mainSearch.value = move.name
+    $("#btn-moves").click()
+    $('#main-search').keyup()
+
+    //Needed for moves like powder, where it have gone poison powder because it's first alphabetically
+    $("#moves-list").children().filter(function() {
+        return $(this).text() === move.name
+      }).click()
+}
