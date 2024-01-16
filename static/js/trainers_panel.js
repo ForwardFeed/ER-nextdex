@@ -1,4 +1,4 @@
-import { getSpritesURL } from "./species_panel.js"
+import { getSpritesURL, redirectSpecie } from "./species_panel.js"
 import { query } from "./search.js"
 
 export function feedPanelTrainers(trainerID){
@@ -21,6 +21,9 @@ export function feedPanelTrainers(trainerID){
 
         const core = document.createElement('div')
         core.className="trainers-pokemon"
+        core.onclick = () => {
+          redirectSpecie(poke.spc)
+        }
 
         const leftPanel = document.createElement('div')
         leftPanel.className = "trainers-pokemon-left"
