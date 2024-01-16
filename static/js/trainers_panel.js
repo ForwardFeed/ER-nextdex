@@ -14,6 +14,8 @@ export function feedPanelTrainers(trainerID){
         const moves = poke.moves.map((x)=>{
             return gameData.moves[x]
         })
+        const item = gameData.itemT[poke.item]
+        const nature = gameData.natureT[poke.nature]
 
         const core = document.createElement('div')
         core.className="trainers-pokemon"
@@ -42,7 +44,25 @@ export function feedPanelTrainers(trainerID){
         }
         core.append(pokeMoves)
 
-        
+        const pokeItem = document.createElement('div')
+        pokeItem.className = "trainers-poke-item"
+        pokeItem.innerText = item
+        core.append(pokeItem)
+
+        const pokeNature = document.createElement('div')
+        pokeNature.className = "trainers-poke-nature"
+        pokeNature.innerText = nature
+        core.append(pokeNature)
+
+        const pokeIVs = document.createElement('div')
+        pokeIVs.className = "trainers-poke-nature"
+        pokeIVs.innerText = 'IVs: ' + poke.ivs.join(' ')
+        core.append(pokeIVs)
+
+        const pokeEVs = document.createElement('div')
+        pokeEVs.className = "trainers-poke-nature"
+        pokeEVs.innerText = 'EVs: ' + poke.evs.join(' ')
+        core.append(pokeEVs)
 
         frag.append(core)
     }
