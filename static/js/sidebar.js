@@ -30,7 +30,7 @@ export function setupPanels(){
             if (search.panelFrozenUpdate[i]){
                 fastdom.mutate(() => {
                     //then refresh in the next frame
-                    search.panelUpdatesTable[i]($('#main-search').val())
+                    $('#main-search').change()
                     //and tell this pannel has done the required search
                     search.panelFrozenUpdate[i] = false
                 })
