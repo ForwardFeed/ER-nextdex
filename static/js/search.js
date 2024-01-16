@@ -61,3 +61,83 @@ export function setupSearch(){
         console.log('nope, not ready yet')
     })
 }
+
+
+/**
+ * About the filtering
+ * The ui will be adapting itself to what i'm gonna do
+ * So here's the deal
+ * I need a hold a synthax where i can recursively add keys and items and relations between then
+ * {op: 'OR', em: [{key: "name", data:"Bunbasaur"}, {key: "move", data:"SolarBeam"}]} //not recursively will show a pokemon named bunbasaur or a solar beam stuff
+ * {op: 'OR', em: [{op: '',em: '', key: "name", data:"Bunbasaur"}, {key: "move", data:"SolarBeam"}, ]
+ *  
+ * } //recursive
+ * [ 'OR', [['', '','name', '']['','','move','solar beam']], '', ''
+ * ] // optimized recursive
+ * 
+ * and now the hard part the parsing
+ * each pannel will have an update() function that will eat up the request.
+ * an util with be shared in search that will just need the request and an object mapped with function
+ * the key of the mapped object will be a name of a request key
+ * the key will point to a function that will eat the data and return true if it matched, or false if it didn't
+ */
+
+/**
+ * @callback searchAssertion
+ * @param {unknow} data
+ * @param {string} queryData
+ *  
+ * @returns {boolean} did it matched? //OUPPPS missed that sometimes it should NOT match
+ * 
+ * @typedef {Object.<string, searchAssertion>} SearchMap
+ * 
+ * @typedef {Object} QueryElements
+ * 
+ * @typedef {Object} Query - a query
+ * @property {string} op - Operation to do to all direct sub element
+ * @property {keyof SearchMap} k - a key for the searchmap
+ * @property {Query} queryData - data of the query
+ * @param {boolean} [not=false] - should it not match
+ * 
+ * @property {string} queryData - string to compare it to the data
+ * 
+ * @param {Query|Query[]} query - a query or multiple to resolve against the data thanks to the keymap
+ * @param {Object} data - the data to query on
+ * @param {SearchMap} keymap - a map with key (k) which points to a function return a function
+ * @returns {boolean} - did the object matched?
+ */
+//! NOT READY YET <= in cooking
+export function query(query, data, keymap){
+    if (query.constructor === Array){
+        console.log('break it down until it is no longer an array and solve using the parent op')
+        const subQueriesAnswer = []
+        for (const subQuery of query){
+            subQueriesAnswer.push(query(subQuery, data, keymap))
+        }
+        if (query.op === "XOR"){
+            let flag = false
+            for (const answer of subQueriesAnswer){
+                if (flag == true && answer) return false
+                flag = answer
+            }
+        } else if (query.op === "OR"){
+            for (const answer of subQueriesAnswer){
+                if (answer) return true
+            }
+            return false
+        } else { //Default AND
+            for (const answer of subQueriesAnswer){
+                if (!answer) return false
+            }
+            return true
+        }
+    } else {
+        console.log('we can break this one down')
+        const execFn = keymap[query.k]
+        if (execFn) {
+            return query.not ? !execFn(query.data, data) : execFn(query.data, data)
+        }
+    }
+    
+
+}

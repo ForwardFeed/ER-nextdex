@@ -135,6 +135,7 @@ function hydrateSpecies(){
         image.className = 'species-list-sprite'
         image.src = getSpritesURL(spec.NAME)
         image.alt = spec.name
+        image.loading = "lazy"
         core.appendChild(image)
 
 
@@ -217,30 +218,34 @@ function hydrateLocation(){
 
 function addFishingTable(rates)
 {
-    let parent = document.createDocumentFragment()
-    let node = document.createElement('div')
-    node.className="old-rod"
-    node.innerText="Old Rod"
-    parent.append(node)
+    const fragmentRate = document.createDocumentFragment();
+    let parent = document.createElement('div')
+    parent.className="old-rod"
+    parent.innerHTML="Old Rod"
+    fragmentRate.append(parent)
+    // I took this data from the games files
+    // and sunk cost fallacy made me use it instead of using a comprehensible way
+    const rodGrades = gameData.locations.rodGrade 
     for( let i = 0; i < rates.length;i++)
     {
-        if(i === 2)
+        const rate = rates[i]
+        if(i === rodGrades[0] + 1)
         {
-            node = document.createElement('div')
-            node.className="good-rod"
-            node.innerText="Good Rod"
-            parent.append(node)
+            parent = document.createElement('div')
+            parent.className="good-rod"
+            parent.innerText="Good Rod"
+            fragmentRate.append(parent)
         }
-        if(i === 5)
+        if(i === rodGrades[1] + 1)
         {
-            node = document.createElement('div')
-            node.className="super-rod"
-            node.innerText="Super Rod"
-            parent.append(node)
+            parent = document.createElement('div')
+            parent.className="super-rod"
+            parent.innerText="Super Rod"
+            fragmentRate.append(parent)
         }
-        parent.append(addLocationRow(rates[i]))
+        fragmentRate.append(addLocationRow(rates[i]))
     }
-    return parent
+    return fragmentRate
 }
 
 function addLocationRow(rate) {
