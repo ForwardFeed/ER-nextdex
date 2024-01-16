@@ -6,6 +6,7 @@ export function feedPanelTrainers(trainerID){
 
     const trainer = gameData.trainers[trainerID]
     $('#trainers-name').text(trainer.name)
+
     const party = trainer.party
     const frag = document.createDocumentFragment()
     for (const poke of party){
@@ -19,20 +20,29 @@ export function feedPanelTrainers(trainerID){
 
         const core = document.createElement('div')
         core.className="trainers-pokemon"
+
+        const leftPanel = document.createElement('div')
+        leftPanel.className = "trainers-pokemon-left"
+
         const pokeName = document.createElement('div')
         pokeName.className = "trainers-pokemon-specie"
         pokeName.innerText = specie.name
-        core.append(pokeName)
 
         const pokeImg = document.createElement('img')
         pokeImg.className = "trainer-pokemon-sprite"
         pokeImg.src = getSpritesURL(specie.NAME)
-        core.append(pokeImg)
 
         const pokeAbility = document.createElement('div')
         pokeAbility.className = "trainers-poke-ability"
         pokeAbility.innerText = ability.name
-        core.append(pokeAbility)
+
+        leftPanel.append(pokeName)
+        leftPanel.append(pokeImg)
+        leftPanel.append(pokeAbility)
+        core.append(leftPanel)
+
+        const midPanel = document.createElement('div')
+        midPanel.className = "trainers-pokemon-mid"
 
         const pokeMoves = document.createElement('div')
         pokeMoves.className = "trainers-poke-moves"
@@ -42,27 +52,36 @@ export function feedPanelTrainers(trainerID){
             moveNode.innerText = move.name
             pokeMoves.append(moveNode)
         }
-        core.append(pokeMoves)
+
+        midPanel.append(pokeMoves)
+        core.append(midPanel)
+
+        const rightPanel = document.createElement('div')
+        rightPanel.className = "trainers-pokemon-right"
 
         const pokeItem = document.createElement('div')
         pokeItem.className = "trainers-poke-item"
         pokeItem.innerText = item
-        core.append(pokeItem)
 
         const pokeNature = document.createElement('div')
         pokeNature.className = "trainers-poke-nature"
         pokeNature.innerText = nature
-        core.append(pokeNature)
+        
 
         const pokeIVs = document.createElement('div')
         pokeIVs.className = "trainers-poke-nature"
         pokeIVs.innerText = 'IVs: ' + poke.ivs.join(' ')
-        core.append(pokeIVs)
+        
 
         const pokeEVs = document.createElement('div')
         pokeEVs.className = "trainers-poke-nature"
         pokeEVs.innerText = 'EVs: ' + poke.evs.join(' ')
-        core.append(pokeEVs)
+        
+        rightPanel.append(pokeItem)
+        rightPanel.append(pokeNature)
+        rightPanel.append(pokeIVs)
+        rightPanel.append(pokeEVs)
+        core.append(rightPanel)
 
         frag.append(core)
     }

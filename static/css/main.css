@@ -454,7 +454,6 @@ span{
 
 /* Trainers */
 #trainers-team{
-    display: flex;
     overflow-y: scroll;
 }
 .trainers-pokemon{
@@ -462,6 +461,21 @@ span{
     margin-right: 0.5vw;
     background-color: var(--colorD);
     text-align: center;
+    display: flex;
+    border-bottom: rgb(49, 44, 44);
+    border-bottom-width: medium;
+    border-bottom-style: none;
+    border-bottom-style: dashed;
+    border-bottom-width: 1px;
+}
+.trainers-pokemon-left{
+    width: 30%;
+}
+.trainers-pokemon-mid{
+    width: 30%;
+}
+.trainers-pokemon-right{
+    width: 40%;
 }
 @media (orientation: landscape) {
     

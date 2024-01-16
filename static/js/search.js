@@ -91,24 +91,53 @@ export function setupSearch(){
  * 
  * @typedef {Object.<string, searchAssertion>} SearchMap
  * 
+ * @typedef {Object} QueryElements
+ * 
  * @typedef {Object} Query - a query
- * @property {string} op - Operation to do to all direct sub elements
- * @property {Query} sq - a sub query
- * @property {keyof SearchMap} k - a key to 
+ * @property {string} op - Operation to do to all direct sub element
+ * @property {keyof SearchMap} k - a key for the searchmap
+ * @property {Query} queryData - data of the query
  * @param {boolean} [not=false] - should it not match
+ * 
  * @property {string} queryData - string to compare it to the data
  * 
- * @param {Query} query - a query to feed 
+ * @param {Query|Query[]} query - a query or multiple to resolve against the data thanks to the keymap
  * @param {Object} data - the data to query on
  * @param {SearchMap} keymap - a map with key (k) which points to a function return a function
  * @returns {boolean} - did the object matched?
  */
 //! NOT READY YET <= in cooking
 export function query(query, data, keymap){
-    // at the smallest level here what it is
-    const execFn = keymap[query.k]
-    if (execFn) {
-        return query.not ? !execFn(query.data, data) : execFn(query.data, data)
+    if (query.constructor === Array){
+        console.log('break it down until it is no longer an array and solve using the parent op')
+        const subQueriesAnswer = []
+        for (const subQuery of query){
+            subQueriesAnswer.push(query(subQuery, data, keymap))
+        }
+        if (query.op === "XOR"){
+            let flag = false
+            for (const answer of subQueriesAnswer){
+                if (flag == true && answer) return false
+                flag = answer
+            }
+        } else if (query.op === "OR"){
+            for (const answer of subQueriesAnswer){
+                if (answer) return true
+            }
+            return false
+        } else { //Default AND
+            for (const answer of subQueriesAnswer){
+                if (!answer) return false
+            }
+            return true
+        }
+    } else {
+        console.log('we can break this one down')
+        const execFn = keymap[query.k]
+        if (execFn) {
+            return query.not ? !execFn(query.data, data) : execFn(query.data, data)
+        }
     }
+    
 
 }
