@@ -69,12 +69,12 @@ export function feedPanelTrainers(trainerID){
         
 
         const pokeIVs = document.createElement('div')
-        pokeIVs.className = "trainers-poke-nature"
+        pokeIVs.className = "trainers-poke-ivs"
         pokeIVs.innerText = 'IVs: ' + poke.ivs.join(' ')
         
 
         const pokeEVs = document.createElement('div')
-        pokeEVs.className = "trainers-poke-nature"
+        pokeEVs.className = "trainers-poke-evs"
         pokeEVs.innerText = 'EVs: ' + poke.evs.join(' ')
         
         rightPanel.append(pokeItem)

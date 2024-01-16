@@ -477,6 +477,9 @@ span{
 .trainers-pokemon-right{
     width: 40%;
 }
+.trainers-poke-ivs, .trainers-poke-evs, .trainers-poke-move{
+    text-align: left
+}
 @media (orientation: landscape) {
     
 }
