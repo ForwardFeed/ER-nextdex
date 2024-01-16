@@ -67,6 +67,7 @@ body{
     margin: auto;
     padding-left: 7px;
     outline: none;
+    height: 2.5em;
 }
 #filter-icon{
     width: 7vh;

@@ -21,9 +21,9 @@
 [x] get pre-evolutions
 [ ] add trainers
     [ ] Trainer Locations from /data/maps/scripts.pory or script.inc
-    [ ] Get Trainer Rematch from RematchTrainer gRematchTable in /src/battle_setup.c
-    [ ] Get Trainer info from /src/data/trainers.h
-    [ ] Get Trainer Team from src/data/trainer_parties.h
+    [x] Get Trainer Rematch from RematchTrainer gRematchTable in /src/battle_setup.c
+    [x] Get Trainer info from /src/data/trainers.h
+    [x] Get Trainer Team from src/data/trainer_parties.h
 [ ] Settings pannel
     [ ] Supports multiple color theme
     [ ] Sorting abilities by alphabet
