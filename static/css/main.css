@@ -503,3 +503,15 @@ span{
 @media (orientation: portrait) {
     
 }
+
+/* SETTINGS */
+#settings-frame{
+    z-index: 10;
+    width: 80vw;
+    height: 80vh;
+    margin: 10vh 10vh 10vw 10vw;
+    background-color: var(--colorA);
+    position: absolute;
+    top: 0;
+    border: 5px ridge var(--colorB);
+}

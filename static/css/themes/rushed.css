@@ -1,0 +1,17 @@
+:root{
+    --btnActive: rgb(179, 27, 27);
+    --btnHover: rgb(116, 32, 32);
+    --btnNActive:  rgb(216,84,84);
+    --selActive: rgb(228, 81, 23);
+    --selHover: rgb(138, 47, 11);
+    --selNActive:  rgb(214, 109, 68);
+    --colorA: rgb(240, 224, 79);
+    --colorB: rgb(240, 189, 79);
+    --colorC: rgb(194, 166, 74);
+    --colorD: rgb(194, 142, 74);
+    --background: rgb(160, 76, 65);
+    --shadow: rgb(44, 8, 2);
+    --headerBG: rgb(172,171,155);
+    --headerBGL: linear-gradient(0deg, rgba(216,84,84,1)30%, rgba(172,171,155,1)  100%);
+    --font-color: black;
+}
