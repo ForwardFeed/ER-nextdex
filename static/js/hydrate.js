@@ -1,4 +1,4 @@
-import { feedPanelSpecies, getSpritesURL } from "./species_panel.js"
+import { feedPanelSpecies, getSpritesURL, handleSpecie } from "./species_panel.js"
 import { feedPanelMoves } from "./moves_panel.js"
 import { feedPanelLocations } from "./locations_panel.js"
 import { feedPanelTrainers } from "./trainers_panel.js"
@@ -200,52 +200,50 @@ function hydrateLocation(){
         const rates = locations[rateName+ "Rate"]
         if (!rates) continue
         
+        const fragmentRate = document.createDocumentFragment();
         if(rateName === "fish")
         {
-            $('#locations-' + rateName).empty().append(fishingTable(rates))
+            $('#locations-' + rateName).empty().append(addFishingTable(rates))
             continue
         }
-
-        const fragmentRate = document.createDocumentFragment();
-        for (const rate of rates){
-            
-            addRow(fragmentRate, rate)
-        }
+        else
+            for (const rate of rates){
+                fragmentRate.appendChild(addLocationRow(rate))
+            }
         $('#locations-' + rateName).empty().append(fragmentRate)
     }
     feedPanelLocations(1)
 }
 
-function fishingTable(rates)
+function addFishingTable(rates)
 {
-    const fragmentRate = document.createDocumentFragment();
-    let parent = document.createElement('div')
-    parent.className="old-rod"
-    parent.innerHTML="Old Rod"
-    fragmentRate.append(parent)
+    let parent = document.createDocumentFragment()
+    let node = document.createElement('div')
+    node.className="old-rod"
+    node.innerText="Old Rod"
+    parent.append(node)
     for( let i = 0; i < rates.length;i++)
     {
-        const rate = rates[i]
-        if(i === 3)
+        if(i === 2)
         {
-            parent = document.createElement('div')
-            fragmentRate.append(parent)
-            parent.className="good-rod"
-            parent.innerHTML="Good Rod"
+            node = document.createElement('div')
+            node.className="good-rod"
+            node.innerText="Good Rod"
+            parent.append(node)
         }
-        if(i === 6)
+        if(i === 5)
         {
-            parent = document.createElement('div')
-            fragmentRate.append(parent)
-            parent.className="super-rod"
-            parent.innerHTML="Super Rod"
+            node = document.createElement('div')
+            node.className="super-rod"
+            node.innerText="Super Rod"
+            parent.append(node)
         }
-        addRow(parent, rate)
+        parent.append(addLocationRow(rates[i]))
     }
-    return fragmentRate
+    return parent
 }
 
-function addRow(parent, rate) {
+function addLocationRow(rate) {
     const nodeCore = document.createElement('div')
     nodeCore.className = "location-row"
     const nodeRate = document.createElement('div')
@@ -258,7 +256,7 @@ function addRow(parent, rate) {
     const nodeLvl = document.createElement('div')
     nodeLvl.className = "location-lvl"
     nodeCore.append(nodeLvl)
-    parent.append(nodeCore)
+    return nodeCore
 }
 
 function hydrateTrainers(){

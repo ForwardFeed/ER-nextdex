@@ -349,6 +349,13 @@ span{
 .species-levelup-name{
     width: 100%;
 }
+.species-move{
+    cursor: pointer;
+}
+
+.specie-locs{
+    cursor: pointer;
+}
 #learnset{
     background-color: var(--colorD);
 }
@@ -411,9 +418,7 @@ span{
         height: 15vh;
         width: 15vh;
     }
-    .specie-locs{
-
-    }
+    
 }
 
 /* LOCATIONS */
@@ -443,6 +448,7 @@ span{
 }
 .location-specie{
     width: 6em;
+    cursor: pointer;
 }
 .location-rate{
     width: 1.5em;
