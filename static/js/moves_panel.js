@@ -114,6 +114,13 @@ export function updateMoves(searchQuery){
     const queryMap = {
         "name": (queryData, move) => {
             return move.name.toLowerCase().indexOf(queryData) >= 0 ? true : false
+        },
+        "type": (queryData, move) => {
+            const types = move.types.map((x)=>gameData.typeT[x].toLowerCase())
+            for (const type of types){
+                if (type == queryData) return true
+            }
+            return false
         }
     }
     let validID;

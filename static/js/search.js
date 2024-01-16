@@ -29,7 +29,12 @@ export const search = {
         false,
     ],
     // if modified sync it with "siderbar.js > setupPanels() > defaultShow" variable
-    panelUpdatesIndex: 0 
+    panelUpdatesIndex: 0,
+    // if any pannel needs a special key you need to append it here
+    queryKeys: [
+        "name",
+        "type"
+    ]
 }
 
 export function setupSearch(){
@@ -66,6 +71,19 @@ export function setupSearch(){
         //$('#filter-data').toggle()
         console.log('nope, not ready yet')
     })
+    $('#search-keys').on('click', function(){
+        $('#search-keys-selections').toggle()
+    })
+    const keyNode = $('#search-keys-selections')
+    for (const key of search.queryKeys){
+        const option = document.createElement('option')
+        option.innerText = key
+        option.onclick = ()=>{
+            $('#search-keys').val(key)
+            $('#search-keys-selections').toggle()
+        }
+        keyNode.append(option)
+    }
 }
 
 
@@ -148,6 +166,7 @@ export function query(query, data, keymap){
         if (execFn) {
             return query.not ? !execFn(query.data, data) : execFn(query.data, data)
         }
+        else return true // true i suppose?
     }
     
 

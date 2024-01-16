@@ -291,6 +291,13 @@ export function updateSpecies(searchQuery){
     const queryMap = {
         "name": (queryData, specie) => {
             return specie.name.toLowerCase().indexOf(queryData) >= 0 ? true : false
+        },
+        "type": (queryData, specie) => {
+            const types = specie.stats.types.map((x)=>gameData.typeT[x].toLowerCase())
+            for (const type of types){
+                if (type == queryData) return true
+            }
+            return false
         }
     }
     for (const i in species){
