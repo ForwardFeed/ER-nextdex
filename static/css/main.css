@@ -343,12 +343,19 @@ span{
     display: flex;
     cursor: pointer;
 }
+.species-move-list{
+    cursor: pointer;
+}
+
 .species-levelup-lvl{
     width: 1.5em;
     background-color: var(--colorC);
 }
 .species-levelup-name{
     width: 100%;
+}
+.species-move-list>*:hover{
+    background-color: var(--selHover);;
 }
 #learnset{
     background-color: var(--colorD);
