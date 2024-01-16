@@ -455,6 +455,7 @@ span{
 /* Trainers */
 #trainers-team{
     display: flex;
+    overflow-y: scroll;
 }
 .trainers-pokemon{
     margin-left: 0.5vw;
