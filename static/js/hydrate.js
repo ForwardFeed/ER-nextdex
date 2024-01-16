@@ -223,17 +223,20 @@ function fishingTable(rates)
     parent.className="old-rod"
     parent.innerHTML="Old Rod"
     fragmentRate.append(parent)
+    // I took this data from the games files
+    // and sunk cost fallacy made me use it instead of using a comprehensible way
+    const rodGrades = gameData.locations.rodGrade 
     for( let i = 0; i < rates.length;i++)
     {
         const rate = rates[i]
-        if(i === 3)
+        if(i === rodGrades[0] + 1)
         {
             parent = document.createElement('div')
             fragmentRate.append(parent)
             parent.className="good-rod"
             parent.innerHTML="Good Rod"
         }
-        if(i === 6)
+        if(i === rodGrades[1] + 1)
         {
             parent = document.createElement('div')
             fragmentRate.append(parent)

@@ -341,6 +341,7 @@ span{
 }
 .species-levelup-row{
     display: flex;
+    cursor: pointer;
 }
 .species-levelup-lvl{
     width: 1.5em;
