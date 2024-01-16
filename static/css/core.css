@@ -59,15 +59,44 @@ body{
     margin-left: 1vw;
     text-align: center;
     display: flex;
-    
+    width: 35vw;
+    padding-left: 7px;
+}
+#main-search-label > *, .search-selectors>*{
+    margin: auto 0;
+    flex-grow: 1;
+    outline: none;
+    border: none;
 }
 #main-search{
-    width: 35vw;
-    border-radius: 7px;
-    margin: auto;
-    padding-left: 7px;
-    outline: none;
-    height: 2.5em;
+    width: 22vw;
+    /* top-left top-righ bot-right bot-left*/
+    border-radius: 0 7px 7px 0;
+    font-size: 1.5em;
+}
+
+#search-not{
+    cursor: pointer;
+    display: flex;
+}
+.search-not-n-active{
+    text-decoration:line-through
+}
+
+#search-not>span{
+    width: 1vw;
+    margin: auto 0;
+    flex-grow: 1;
+}
+.search-selectors{
+    display: flex;
+    width: 13vw;
+}
+
+#search-keys{
+    font-size: 1.5em;
+    width: 10vw;
+    background: rgba(0, 0, 0, 0);
 }
 #filter-icon{
     width: 7vh;

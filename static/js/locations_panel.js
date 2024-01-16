@@ -1,4 +1,5 @@
 import { handleSpecie } from "./species_panel.js"
+import { query } from "./search.js"
 
 export function feedPanelLocations(mapID){
     const map = gameData.locations.maps[mapID]
@@ -33,24 +34,6 @@ export function feedPanelLocations(mapID){
     $('#locations-list').children().eq(mapID).addClass("sel-active").removeClass("sel-n-active")
 }
 
-export function updateLocations(search){
-    const maps = gameData.locations.maps
-    const nodeList = $('#locations-list').children()
-    let validID;
-    for (const i in maps){
-        const map = maps[i]
-        const node = nodeList.eq(i)
-        if (map.name.toLowerCase().indexOf(search) >= 0 ? true : false)
-        {
-                if (!validID) validID = i
-                node.show()
-        } else {
-                node.hide()
-        }
-    }
-    if (validID) feedPanelLocations(validID)
-}
-
 export function handleLocation(location)
 {
     const mainSearch = document.getElementById("main-search")
@@ -61,4 +44,27 @@ export function handleLocation(location)
     $("#locations-list").children().filter(function() {
         return $(this).text() === location.name
       }).click()
+}
+
+export function updateLocations(searchQuery){
+    const maps = gameData.locations.maps
+    const nodeList = $('#locations-list').children()
+    let validID;
+    const queryMap = {
+        "name": (queryData, map) => {
+            return map.name.toLowerCase().indexOf(queryData) >= 0 ? true : false
+        }
+    }
+    for (const i in maps){
+        const map = maps[i]
+        const node = nodeList.eq(i)
+        if (query(searchQuery, map, queryMap))
+        {
+                if (!validID) validID = i
+                node.show()
+        } else {
+                node.hide()
+        }
+    }
+    if (validID) feedPanelLocations(validID)
 }

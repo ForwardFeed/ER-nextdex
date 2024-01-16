@@ -1,3 +1,5 @@
+import { query } from "./search.js"
+
 export function feedPanelMoves(moveID){
     const move = gameData.moves[moveID]
     $('#moves-name').text(move.name)
@@ -106,15 +108,20 @@ function setTarget(targetID){
     }
 }
 
-export function updateMoves(search){
+export function updateMoves(searchQuery){
     const moves = gameData.moves
     const nodeList = $('#moves-list').children()
+    const queryMap = {
+        "name": (queryData, move) => {
+            return move.name.toLowerCase().indexOf(queryData) >= 0 ? true : false
+        }
+    }
     let validID;
     for (const i in moves){
         if (i == 0 ) continue
         const move = moves[i]
         const node = nodeList.eq(i - 1)
-        if (move.name.toLowerCase().indexOf(search) >= 0 ? true : false)
+        if (query(searchQuery, move, queryMap))
         {
                 if (!validID) validID = i
                 node.show()

@@ -1,4 +1,5 @@
 import { getSpritesURL } from "./species_panel.js"
+import { query } from "./search.js"
 
 export function feedPanelTrainers(trainerID){
     $('#trainers-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
@@ -88,15 +89,20 @@ export function feedPanelTrainers(trainerID){
     $('#trainers-team').empty().append(frag)
 }
 
-export function updateTrainers(search){
+export function updateTrainers(searchQuery){
     const trainers = gameData.trainers
     const nodeList = $('#trainers-list').children()
     let validID;
+    const queryMap = {
+        "name": (queryData, trainer) => {
+            return trainer.name.toLowerCase().indexOf(queryData) >= 0 ? true : false
+        }
+    }
     for (const i in trainers){
         if (i == 0) continue
         const trainer = trainers[i]
         const node = nodeList.eq(i - 1)
-        if (trainer.name.toLowerCase().indexOf(search) >= 0 ? true : false)
+        if (query(searchQuery, trainer, queryMap))
         {
                 if (!validID) validID = i
                 node.show()

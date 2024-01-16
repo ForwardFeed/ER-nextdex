@@ -1,6 +1,7 @@
 import { handleLocation } from "./locations_panel.js"
 import { handleMove } from "./moves_panel.js"
 import { addTooltip } from "./utils.js"
+import { query } from "./search.js"
 
 export function feedPanelSpecies(id){
     const specie = gameData.species[id]
@@ -283,15 +284,20 @@ function setLocations(locations){
 }
 
 
-export function updateSpecies(search){
+export function updateSpecies(searchQuery){
     const species = gameData.species
     const nodeList = $('#species-list').children()
     let validID;
+    const queryMap = {
+        "name": (queryData, specie) => {
+            return specie.name.toLowerCase().indexOf(queryData) >= 0 ? true : false
+        }
+    }
     for (const i in species){
         if (i == 0 ) continue
         const specie = species[i]
         const node = nodeList.eq(i - 1)
-        if (specie.name.toLowerCase().indexOf(search) >= 0 ? true : false)
+        if (query(searchQuery, specie, queryMap))
         {
                 if (!validID) validID = i
                 node.show()

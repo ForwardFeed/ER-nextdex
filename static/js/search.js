@@ -33,9 +33,9 @@ export const search = {
 }
 
 export function setupSearch(){
-    $('#main-search').on('keyup', function(){
-        $(this).val($(this).val().toLowerCase())
-        const searchValue = $(this).val()
+    $('#main-search, #search-keys').on('keyup change', function(){
+        $('#main-search').val($('#main-search').val().toLowerCase())
+        const queryData = $('#main-search').val()
         if (search.updateGuard) {
             search.updateQueue = true
             return
@@ -48,7 +48,13 @@ export function setupSearch(){
                     return search.panelUpdatesIndex != index
                 })
                 //execute the update of the active panel
-                search.panelUpdatesTable[search.panelUpdatesIndex](searchValue)
+                const query = {
+                    op:"OR", // default yet not introduced
+                    not: false, //not yet implemented
+                    k: $('#search-keys').val(),
+                    data: queryData
+                }
+                search.panelUpdatesTable[search.panelUpdatesIndex](query)
             })
             if (!search.updateQueue) break
             search.updateQueue = false
@@ -108,8 +114,12 @@ export function setupSearch(){
  */
 //! NOT READY YET <= in cooking
 export function query(query, data, keymap){
+    const queryNot = (notFlag, value) => {
+        return notFlag ? !value : value
+    }
+
     if (query.constructor === Array){
-        console.log('break it down until it is no longer an array and solve using the parent op')
+        //'break it down until it is no longer an array and solve using the parent op'
         const subQueriesAnswer = []
         for (const subQuery of query){
             subQueriesAnswer.push(query(subQuery, data, keymap))
@@ -117,22 +127,23 @@ export function query(query, data, keymap){
         if (query.op === "XOR"){
             let flag = false
             for (const answer of subQueriesAnswer){
-                if (flag == true && answer) return false
-                flag = answer
+                if (flag == true && answer) return queryNot(query.not, false)
+                if (answer) flag = true
             }
+            return queryNot(query.not, flag)
         } else if (query.op === "OR"){
             for (const answer of subQueriesAnswer){
-                if (answer) return true
+                if (answer) return queryNot(query.not, true)
             }
-            return false
+            return queryNot(query.not, false)
         } else { //Default AND
             for (const answer of subQueriesAnswer){
-                if (!answer) return false
+                if (!answer) queryNot(query.not, false)
             }
-            return true
+            return queryNot(query.not, true)
         }
     } else {
-        console.log('we can break this one down')
+        //we can break this one down'
         const execFn = keymap[query.k]
         if (execFn) {
             return query.not ? !execFn(query.data, data) : execFn(query.data, data)
