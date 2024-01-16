@@ -135,6 +135,7 @@ function hydrateSpecies(){
         image.className = 'species-list-sprite'
         image.src = getSpritesURL(spec.NAME)
         image.alt = spec.name
+        image.loading = "lazy"
         core.appendChild(image)
 
 

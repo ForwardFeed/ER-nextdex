@@ -11,20 +11,39 @@ export function feedPanelTrainers(trainerID){
     for (const poke of party){
         const specie = gameData.species[poke.spc]
         const ability = gameData.abilities[specie.stats.abis[poke.abi]]
+        const moves = poke.moves.map((x)=>{
+            return gameData.moves[x]
+        })
+
         const core = document.createElement('div')
         core.className="trainers-pokemon"
         const pokeName = document.createElement('div')
         pokeName.className = "trainers-pokemon-specie"
         pokeName.innerText = specie.name
         core.append(pokeName)
+
         const pokeImg = document.createElement('img')
         pokeImg.className = "trainer-pokemon-sprite"
         pokeImg.src = getSpritesURL(specie.NAME)
         core.append(pokeImg)
+
         const pokeAbility = document.createElement('div')
         pokeAbility.className = "trainers-poke-ability"
         pokeAbility.innerText = ability.name
         core.append(pokeAbility)
+
+        const pokeMoves = document.createElement('div')
+        pokeMoves.className = "trainers-poke-moves"
+        for (const move of moves){
+            const moveNode = document.createElement('div')
+            moveNode.className = "trainers-poke-move"
+            moveNode.innerText = move.name
+            pokeMoves.append(moveNode)
+        }
+        core.append(pokeMoves)
+
+        
+
         frag.append(core)
     }
     $('#trainers-team').empty().append(frag)
