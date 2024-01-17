@@ -1,3 +1,4 @@
+import { gameData } from "./data_version.js"
 import { query } from "./search.js"
 
 export function feedPanelMoves(moveID){
@@ -139,15 +140,12 @@ export function updateMoves(searchQuery){
     if (validID) feedPanelMoves(validID)
 }
 
-export function handleMove(move)
+export function redirectMove(moveId)
 {
     const mainSearch = document.getElementById("main-search")
-    mainSearch.value = move.name
+    mainSearch.value = gameData.moves[moveId].name
     $("#btn-moves").click()
-    $('#main-search').keyup()
 
     //Needed for moves like powder, where it have gone poison powder because it's first alphabetically
-    $("#moves-list").children().filter(function() {
-        return $(this).text() === move.name
-      }).click()
+    $('#moves-list').children().eq(moveId - 1).click()[0].scrollIntoView({behavior:"smooth"})
 }

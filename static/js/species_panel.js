@@ -1,7 +1,8 @@
-import { handleLocation } from "./locations_panel.js"
-import { handleMove } from "./moves_panel.js"
+import { redirectLocation } from "./locations_panel.js"
+import { redirectMove } from "./moves_panel.js"
 import { addTooltip } from "./utils.js"
 import { query } from "./search.js"
+import { gameData } from "./data_version.js"
 
 export function feedPanelSpecies(id){
     const specie = gameData.species[id]
@@ -22,16 +23,14 @@ export function feedPanelSpecies(id){
     $('#species-list').children().eq(id-1).addClass("sel-active").removeClass("sel-n-active")
 }
 
-export function handleSpecie(specieName) {
+export function redirectSpecie(specieId) {
+
     const mainSearch = document.getElementById("main-search")
-    mainSearch.value = specieName
+    mainSearch.value = gameData.species[specieId].name
     $("#btn-species").click()
-    $('#main-search').keyup()
 
     //Needed for moves like powder, where it have gone poison powder because it's first alphabetically
-    $("#species-list").children().filter(function() {
-        return $(this).text() === specieName
-      }).click()
+    $('#species-list').children().eq(specieId-1).click()[0].scrollIntoView({behavior:"smooth"})
 }
 
 function setTypes(types){
@@ -63,7 +62,7 @@ function setMoves(core, moves){
         const node = document.createElement('div')
         node.className = "species-move"
         node.innerText = move.name
-        node.onclick=() => {handleMove(move)}
+        node.onclick=() => {redirectMove(moveID)}
         frag.append(node)
     }
     core.append(frag)
@@ -71,20 +70,20 @@ function setMoves(core, moves){
 function setLevelUpMoves(core, moves){
     core.empty()
     const frag = document.createDocumentFragment()
-    for (const moveID of moves){
-        const move = gameData.moves[moveID.id]
+    for (const {lv: lvl, id:id} of moves){
+        const move = gameData.moves[id]
         if (!move) {
-            console.warn(`unable to find move with ID ${moveID.id}`)
+            console.warn(`unable to find move with ID ${id}`)
             continue
         }
         const row = document.createElement('div')
         row.className="species-levelup-row"
         const nodeMoveLvl = document.createElement('div')
-        nodeMoveLvl.innerText = +moveID.lv || "Ev"
+        nodeMoveLvl.innerText = +lvl || "Ev"
         nodeMoveLvl.className = "species-levelup-lvl"
         row.append(nodeMoveLvl)
         const nodeMoveName = document.createElement('div')
-        nodeMoveName.onclick=() => {handleMove(move)}
+        nodeMoveName.onclick=() => {redirectMove(id)}
         nodeMoveName.innerText = move.name
         nodeMoveName.className = "species-levelup-name"
         row.append(nodeMoveName)
@@ -218,9 +217,12 @@ function setEvos(evos){
         if (evo.in == -1) continue //not set yet
         const node = document.createElement('div')
         node.className = "evo-parent" // i dunno how do classname it
-        const intoSpecieNode = document.createElement('div')
+        const intoSpecieNode = document.createElement('span')
         intoSpecieNode.className = "evo-into"
         intoSpecieNode.innerText = `into ${gameData.species[evo.in].name}`
+        intoSpecieNode.onclick = () => {
+          redirectSpecie(evo.in)
+        }
         node.append(intoSpecieNode)
         const reason = document.createElement('div')
         reason.className = "evo-reason"
@@ -276,7 +278,7 @@ function setLocations(locations){
         node.className = "specie-locs"
         node.innerText = loc.name
         node.onclick = () => {
-            handleLocation(loc)
+            redirectLocation(locID)
         }
         frag.append(node)
     }

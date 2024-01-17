@@ -38,7 +38,7 @@ export const search = {
 }
 
 export function setupSearch(){
-    $('#main-search, #search-keys').on('keyup change', function(){
+    $('#main-search, #search-keys').on('keyup search', function(){
         $('#main-search').val($('#main-search').val().toLowerCase())
         const queryData = $('#main-search').val()
         if (search.updateGuard) {

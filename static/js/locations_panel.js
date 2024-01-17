@@ -1,5 +1,6 @@
-import { handleSpecie } from "./species_panel.js"
+import { redirectSpecie } from "./species_panel.js"
 import { query } from "./search.js"
+import { gameData } from "./data_version.js"
 
 export function feedPanelLocations(mapID){
     const map = gameData.locations.maps[mapID]
@@ -22,11 +23,10 @@ export function feedPanelLocations(mapID){
         for (const i in rates){
             const rate = rates[i]
             const specie = node.find('.location-specie').eq(i)
-            const specieName = gameData.species[rate[2]].name
             specie.on("click" , () => {
-                handleSpecie(specieName)
+                redirectSpecie(rate[2])
             })
-            specie.text(specieName)
+            specie.text(gameData.species[rate[2]].name)
             node.children().find('.location-lvl').eq(i).text(rate[0] + "-" + rate[1])
         }
     }
@@ -34,16 +34,14 @@ export function feedPanelLocations(mapID){
     $('#locations-list').children().eq(mapID).addClass("sel-active").removeClass("sel-n-active")
 }
 
-export function handleLocation(location)
+export function redirectLocation(mapId)
 {
     const mainSearch = document.getElementById("main-search")
-    mainSearch.value = location.name
+    mainSearch.value = gameData.locations.maps[mapId].name
     $("#btn-locations").click()
-    $('#main-search').keyup()
-    
-    $("#locations-list").children().filter(function() {
-        return $(this).text() === location.name
-      }).click()
+    const location = $('#locations-list').children().eq(mapId)
+    location.click()[0].scrollIntoView({behavior:"smooth"})
+
 }
 
 export function updateLocations(searchQuery){
