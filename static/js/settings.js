@@ -21,6 +21,7 @@ if (!localStorage.getItem('init_storage')){
 
 
 function changeTheme(){
+    // /!\ Sync it with setup Settings because of a javascript moment
     const themesList =  [
         "blueish",
         "rushed"
@@ -33,6 +34,7 @@ function changeTheme(){
 }
 
 function setupSettings(){
+    // /!\ Sync it with setup Theme because of a javascript moment
     const themesList =  [
         "blueish",
         "rushed"
