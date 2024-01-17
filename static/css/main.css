@@ -518,3 +518,16 @@ span{
     top: 0;
     border: 5px ridge var(--colorB);
 }
+
+.settings-row{
+    font-size: 2em;
+}
+.settings-row > input[type='radio'] { 
+    transform: scale(2); 
+    margin-top: -1px;
+    vertical-align: middle;
+}
+.settings-row > * {
+    margin-right: 2%;
+    height: 100%;
+}
