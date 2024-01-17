@@ -43,7 +43,7 @@
 .sel-n-active{
     background-color: var(--selNActive);
 }
-.sel-n-active:hover, .sel-active:hover, .evo-into:hover{
+.sel-n-active:hover, .evo-into:hover{
     background-color: var(--selHover);
 }
 

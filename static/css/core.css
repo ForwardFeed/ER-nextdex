@@ -107,7 +107,7 @@ body{
     height: 7vh;
     padding: 2vh;
 }
-#filter-icon:hover, #search-keys:hover{
+#filter-icon:hover, #settings-btn:hover, #search-keys:hover, .btn-n-active:hover{
     background-color: var(--btnHover);
 }
 #settings-btn{
@@ -136,15 +136,11 @@ aside > div{
 .btn-n-active{
     background-color: var(--btnNActive);
 }
-.btn-n-active:hover{
-    background-color: var(--btnHover);
-}
+
 .btn-active{
     background-color: var(--btnActive);
 }
-.btn-active:hover{
-    background-color: var(--btnHover);
-}
+
 
 main{
     overflow-y: scroll;
