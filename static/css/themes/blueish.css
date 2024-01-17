@@ -2,16 +2,16 @@
     --btnActive: rgb(99, 99, 99);
     --btnHover: rgb(68, 68, 68);
     --btnNActive:  rgb(46, 46, 46);
-    --selActive: rgb(86, 103, 112);
-    --selHover: rgb(57, 69, 75);
+    --selActive:  rgb(118, 147, 161);
+    --selHover: rgb(94, 112, 119);
     --selNActive:  rgb(32, 39, 43);
-    --colorA: rgb(41, 47, 49);
-    --colorB: rgb(74, 83, 88);
-    --colorC: rgb(60, 72, 77);
-    --colorD: rgb(58, 64, 68);
+    --colorA: rgb(45, 52, 54);
+    --colorB: rgb(26, 30, 31);
+    --colorC: rgb(59, 63, 65);
+    --colorD: rgb(33, 35, 36);
     --background: rgb(44, 62, 75);
-    --shadow: rgb(9, 23, 51);
+    --shadow: rgb(10, 42, 107);
     --headerBG: rgb(155, 165, 172);
-    --headerBGL: linear-gradient(0deg, rgb(84, 146, 216)30%, rgb(135, 138, 139)  100%);
+    --headerBGL: linear-gradient(0deg, rgb(28, 64, 105)30%, rrgb(81, 96, 100) 100%);
     --font-color: white;
 }
