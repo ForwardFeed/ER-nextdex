@@ -2,6 +2,7 @@ import { redirectLocation } from "./locations_panel.js"
 import { redirectMove } from "./moves_panel.js"
 import { addTooltip } from "./utils.js"
 import { query } from "./search.js"
+import { gameData } from "./data_version.js"
 
 export function feedPanelSpecies(id){
     const specie = gameData.species[id]

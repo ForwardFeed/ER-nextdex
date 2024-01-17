@@ -1,5 +1,6 @@
 import { getSpritesURL, redirectSpecie } from "./species_panel.js"
 import { query } from "./search.js"
+import { gameData } from "./data_version.js"
 
 export function feedPanelTrainers(trainerID){
     $('#trainers-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
@@ -39,12 +40,10 @@ export function feedPanelTrainers(trainerID){
         const pokeAbility = document.createElement('div')
         pokeAbility.className = "trainers-poke-ability"
         pokeAbility.innerText = ability.name
-
         leftPanel.append(pokeName)
         leftPanel.append(pokeImg)
         leftPanel.append(pokeAbility)
         core.append(leftPanel)
-
         const midPanel = document.createElement('div')
         midPanel.className = "trainers-pokemon-mid"
 

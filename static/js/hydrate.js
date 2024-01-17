@@ -2,6 +2,7 @@ import { feedPanelSpecies, getSpritesURL } from "./species_panel.js"
 import { feedPanelMoves } from "./moves_panel.js"
 import { feedPanelLocations } from "./locations_panel.js"
 import { feedPanelTrainers } from "./trainers_panel.js"
+import { gameData } from "./data_version.js"
 
 export function hydrate(){
     if (!gameData){
@@ -10,6 +11,7 @@ export function hydrate(){
     /*
         add some reconstitution data for ease of use here
     */
+   
     gameData.minMaxBaseStats = new Array(6).fill(0)
     gameData.speciesStats = {
         result: {

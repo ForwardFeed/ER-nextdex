@@ -74,7 +74,7 @@ function main(){
 }
 
 function outputGameData(gameData: GameData | CompactGameData, output: string){
-    const dataTowrite = "gameData = " + JSON.stringify(gameData)
+    const dataTowrite = JSON.stringify(gameData)
     FS.writeFile(output, dataTowrite , (err_exist)=>{
         if (err_exist){
             console.error(`couldn't write the gamedata output to ${output}`)

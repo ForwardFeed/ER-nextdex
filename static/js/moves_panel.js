@@ -1,3 +1,4 @@
+import { gameData } from "./data_version.js"
 import { query } from "./search.js"
 
 export function feedPanelMoves(moveID){

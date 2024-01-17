@@ -1,5 +1,6 @@
 import { redirectSpecie } from "./species_panel.js"
 import { query } from "./search.js"
+import { gameData } from "./data_version.js"
 
 export function feedPanelLocations(mapID){
     const map = gameData.locations.maps[mapID]

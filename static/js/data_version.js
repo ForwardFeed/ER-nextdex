@@ -3,6 +3,9 @@ import { hydrate } from './hydrate.js'
 /**
  * To select which version of the game data to have
  */
+/**@type {import('./compactify.js').CompactGameData} */
+export let gameData;
+
 export function setAvailableVersion(){
     const allVersions = [
         "1.6.1",
@@ -25,12 +28,13 @@ export function setAvailableVersion(){
 
 }
 
-$('#versions').on('change', function(ev){
-    const loadGameData = document.createElement("script");
-    loadGameData.type = "text/javascript";
-    loadGameData.src = `gameDataV${$(this).val()}.js`;
-    document.body.appendChild(loadGameData)
-    loadGameData.onload = function(){
-        hydrate()
-    }
+$('#versions').on('change', function(){
+    fetch(`./gameDataV${$(this).val()}.json`)
+        .then((response) => response.json())
+        .then((data) => {
+          gameData = data
+          hydrate()
+        })
+    
+    
 })
