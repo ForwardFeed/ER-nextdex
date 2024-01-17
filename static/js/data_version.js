@@ -26,11 +26,13 @@ export function setAvailableVersion(){
 }
 
 $('#versions').on('change', function(ev){
-    const loadGameData = document.createElement("script");
-    loadGameData.type = "text/javascript";
-    loadGameData.src = `gameDataV${$(this).val()}.js`;
-    document.body.appendChild(loadGameData)
-    loadGameData.onload = function(){
-        hydrate()
-    }
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            window.gameData = JSON.parse(xhttp.responseText)
+            hydrate()
+        }
+    };
+    xhttp.open("GET", `gameDataV${$(this).val()}.json`, true);
+    xhttp.send();
 })
