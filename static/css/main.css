@@ -1,4 +1,5 @@
 /* GENERAL */
+
 .normal{background-color: #aa9;}
 .fire{background-color: #f42;}
 .water{background-color: #39f;}
@@ -17,6 +18,27 @@
 .dark{background-color: #754;}
 .steel{background-color: #aab;}
 .fairy{background-color: #e9e;}
+
+
+.normal-t{color: #aa9;}
+.fire-t{color: #f42;}
+.water-t{color: #39f;}
+.electric-t{color: #fc3;}
+.grass-t{color: #7c5;}
+.ice-t{  color: #6cf;}
+.fighting-t{color: #b54;}
+.poison-t{color: #a59;}
+.ground-t{color: #db5;}
+.flying-t{color: #89f}
+.psychic-t{color: #f59;}
+.bug-t{color: #ab2;}
+.rock-t{color: #ba6;}
+.ghost-t{color: #66b;}
+.dragon-t{color: #76e;}
+.dark-t{color: #754;}
+.steel-t{color: #aab;}
+.fairy-t{color: #e9e;}
+
 
 .colorA{
     background-color: var(--colorA);
@@ -72,6 +94,11 @@
 span{
     height: fit-content;
     margin: auto 0;
+}
+
+.down-arrow{
+    height: 10px;
+    width: 7px;
 }
 
 /* ABILITIES */
@@ -367,7 +394,7 @@ span{
 }
 
 .species-move-list>*:hover, .location-specie:hover, .trainers-pokemon:hover, .specie-locs:hover{
-    background-color: var(--selHover);;
+    background-color: var(--selHover);
 }
 #learnset{
     background-color: var(--colorD);
@@ -497,7 +524,11 @@ span{
     width: 40%;
 }
 .trainers-poke-ivs, .trainers-poke-evs, .trainers-poke-move{
-    text-align: left
+    text-align: left;
+    padding-left: 0.3em;
+}
+.trainers-poke-move{
+
 }
 @media (orientation: landscape) {
     
