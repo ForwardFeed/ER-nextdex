@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ER NextDex</title>
     <link rel="stylesheet" href="./css/core.css">
+    <!--load css themes-->
+    <link rel="stylesheet" href="./css/themes/blueish.css" id="styles-blueish">
+    <link rel="stylesheet" href="./css/themes/rushed.css" id="styles-rushed">
+    <script src="./js/settings.js"></script>
 </head>
 <body>
     <div id="top-header" class="header-gradient-ER">
@@ -26,11 +30,11 @@
             <input type="search" name="" id="main-search" autocomplete="off" pattern="[a-z0-9]+" required>
         </label old search>
         <img id="filter-icon" src="./icons/filter.png" alt="">
-        <span class="warning" hidden> 🛑 👷 IN 🏗️ CONSTRUCTION 🚧 🛑</span>
         <div class="versionning">
             <label for="versions">Game Version</label>
             <select name="versions" id="versions"></select>
         </div>
+        <img id="settings-btn" src="./icons/settings.png" alt="settings panel">
         
     </div>
     <div id="non-header">
@@ -280,12 +284,13 @@
     </aside>
     </div>
     <div id="filter-data" style="display: none;">
+    </div>
+    <div id="settings-frame" style="display: none;">
 
     </div>
     <script src="./vendor/fastdom.js"></script>
     <script src="./vendor/jquery3.7.1.min.js"></script>
     <link rel="stylesheet" href="./css/main.css">
-    <link rel="stylesheet" href="./css/filter.css">
     <!-- load the main js code here or additionnal heavy stuff-->
     <script type="module" src="js/index.js"></script>
 </body>

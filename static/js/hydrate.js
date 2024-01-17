@@ -1,4 +1,4 @@
-import { feedPanelSpecies, getSpritesURL, redirectSpecie } from "./species_panel.js"
+import { feedPanelSpecies, getSpritesURL } from "./species_panel.js"
 import { feedPanelMoves } from "./moves_panel.js"
 import { feedPanelLocations } from "./locations_panel.js"
 import { feedPanelTrainers } from "./trainers_panel.js"

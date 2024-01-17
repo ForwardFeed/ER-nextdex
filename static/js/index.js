@@ -8,4 +8,5 @@ $(document).ready(function(){
     setupSpeciesSubPanel()
     setAvailableVersion()
     setupSearch()
+    setupSettings()
 })
