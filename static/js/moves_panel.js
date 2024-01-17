@@ -142,7 +142,7 @@ export function updateMoves(searchQuery){
 
 export function redirectMove(moveId)
 {
-    const mainSearch = document.getElementById("main-search")
+    const mainSearch = document.getElementById("search-bar")
     mainSearch.value = gameData.moves[moveId].name
     $("#btn-moves").click()
 

@@ -15,25 +15,18 @@
         <span class="main-title">
             Elite Redux Nextdex
         </span>
-        <label id="main-search-label" for="main-search">
-            <div class="search-selectors">
-                <div id="search-not" class="search-not-n-active" style="display: none;">
-                    <span>NOT</span>
-                </div>
-                <div class="search-keys-wrapper">
-                    <input type="button" id="search-keys" name="search-keys" value="name">
-                    <div id="search-keys-selections" style="display: none;">
-
-                    </div>
+        <div class="search-wrapper">
+            <div class="search-keys-wrapper">
+                <input type="button" id="search-keys" name="search-keys" value="name">
+                <div style="width: 100%; position: absolute;">
+                    <div id="search-keys-selections" style="display: none;"></div>
                 </div>
             </div>
-            <input type="search" name="" id="main-search" autocomplete="off" pattern="[a-z0-9]+" required>
-        </label old search>
-        <img id="filter-icon" src="./icons/filter.png" alt="">
-        <div class="versionning">
-            <label for="versions">Game Version</label>
-            <select name="versions" id="versions"></select>
+            <label class="main-search-label" for="search-bar">
+                <input type="search" name="" id="search-bar" autocomplete="off">
+            </label>
         </div>
+        <img id="filter-icon" src="./icons/filter.png" alt="">
         <img id="settings-btn" src="./icons/settings.png" alt="settings panel">
         
     </div>
@@ -286,7 +279,10 @@
     <div id="filter-data" style="display: none;">
     </div>
     <div id="settings-frame" style="display: none;">
-
+        <div class="versionning">
+            <label for="versions">Game Version</label>
+            <select name="versions" id="versions"></select>
+        </div>
     </div>
     <script src="./vendor/fastdom.js"></script>
     <script src="./vendor/jquery3.7.1.min.js"></script>

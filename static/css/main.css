@@ -365,7 +365,7 @@ span{
     overflow-y: scroll;
 }
 .species-move-list > *{
-    border-bottom: rgb(49, 44, 44);
+    border-bottom: var(--shadow);
     border-bottom-style: dashed;
     border-bottom-width: 1px;
 }
@@ -548,10 +548,14 @@ span{
     position: absolute;
     top: 0;
     border: 5px ridge var(--colorB);
-}
-
-.settings-row{
     font-size: 2em;
+}
+.versionning > select{
+    margin-top: -1px;
+    vertical-align: middle;
+}
+.settings-row{
+    
 }
 .settings-row > input[type='radio'] { 
     transform: scale(2); 

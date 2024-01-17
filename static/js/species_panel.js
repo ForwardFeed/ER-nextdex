@@ -25,7 +25,7 @@ export function feedPanelSpecies(id){
 
 export function redirectSpecie(specieId) {
 
-    const mainSearch = document.getElementById("main-search")
+    const mainSearch = document.getElementById("search-bar")
     mainSearch.value = gameData.species[specieId].name
     $("#btn-species").click()
 

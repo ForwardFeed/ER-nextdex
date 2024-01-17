@@ -38,9 +38,9 @@ export const search = {
 }
 
 export function setupSearch(){
-    $('#main-search, #search-keys').on('keyup search', function(){
-        $('#main-search').val($('#main-search').val().toLowerCase())
-        const queryData = $('#main-search').val()
+    $('#search-bar, #search-keys').on('keyup search', function(){
+        $('#search-bar').val($('#search-bar').val().toLowerCase())
+        const queryData = $('#search-bar').val()
         if (search.updateGuard) {
             search.updateQueue = true
             return
