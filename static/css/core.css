@@ -74,6 +74,7 @@ body {
     position: absolute;
     width: 100%;
     text-align: center;
+    font-size: 0.7em;
 }
 
 #search-keys-selections>option {
@@ -91,8 +92,7 @@ body {
     padding-left: 7px;
     width: 100%;
     height: 100%;
-    margin-top: -1px;
-    vertical-align: middle;
+    vertical-align: top;
 }
 
 @media (orientation: landscape) {
@@ -104,6 +104,9 @@ body {
     .main-search-label{
         width: 70%;
         border-radius: 7px 0 0 7px;
+    }
+    #search-keys, #search-bar{
+        font-size: 1.5vmax;
     }
 }
 
