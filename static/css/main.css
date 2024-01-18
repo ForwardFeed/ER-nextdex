@@ -379,7 +379,10 @@ span{
 .species-move-list, .species-move, .specie-block{
     cursor: pointer;
 }
-
+#species-evos{
+    display: flex;
+    flex-direction: column;
+}
 .evo-into{
     display: flex;
     align-items: center;

@@ -107,6 +107,34 @@ function hydrateMoves(){
     $("#moves-list").empty().append(fragment);
     feedPanelMoves(1)
 }
+/**
+ * Not a fully functionnally recursive way to add specie evolution
+ * @param {number} currentSpecieID - species into what the pokemon is evolving
+ * @param {import("./compactify.js").CompactEvolution} currentEvo - the how this pokemon is getting evolved (first degree)
+ */
+function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo){
+    if (currentEvo.in == -1) return
+    if (currentEvo.from){
+        console.log(gameData.species[previousSpecieID].name, gameData.species[currentEvo.in].name)
+    } else {
+        const previousSpecie = gameData.species[previousSpecieID]
+        const currentSpecie = gameData.species[currentEvo.in]
+        if (!currentSpecie.eggMoves.length) currentSpecie.eggMoves = previousSpecie.eggMoves
+        if (!currentSpecie.TMHMMoves.length) currentSpecie.TMHMMoves = previousSpecie.TMHMMoves
+        if (!currentSpecie.tutor.length) currentSpecie.tutor = previousSpecie.tutor
+        //import evolution
+        currentSpecie.evolutions.push({
+            kd: currentEvo.kd, 
+            rs: currentEvo.rs,
+            in: previousSpecieID,
+            from: true// its a added flag so we can know if into into but from
+        })
+    }
+}
+
+function hydrateFromPreviousEvolutions(previousSpecieID, currentEvo){
+
+}
 
 function hydrateSpecies(){
     const fragment = document.createDocumentFragment();
@@ -120,13 +148,9 @@ function hydrateSpecies(){
             feedBaseStatsStats(statID, value)
             if (statID < 6)spec.stats.base[6] += + value
         }
-        //share the eggmoves to the evolution
+        //share the eggmoves to the evolutions recursively
         for (const evo of spec.evolutions){
-            if (evo.in == -1) continue
-            const nextEvo = species[evo.in]
-            nextEvo.eggMoves = spec.eggMoves
-            if (!nextEvo.TMHMMoves.length) nextEvo.TMHMMoves = spec.TMHMMoves
-            if (!nextEvo.tutor.length) nextEvo.tutor = spec.tutor
+            hydrateNextEvolutionWithMoves(i, evo)
         }
         // prepare to be appended a list of location where this pokemon appear
         spec.locations = [];
