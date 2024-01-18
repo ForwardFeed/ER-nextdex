@@ -32,8 +32,8 @@ export const search = {
     panelUpdatesIndex: 0,
     // if any pannel needs a special key you need to append it here
     queryKeys: [
-        "name",
-        "type"
+        "Name",
+        "Type"
     ]
 }
 
@@ -56,7 +56,7 @@ export function setupSearch(){
                 const query = {
                     op:"OR", // default yet not introduced
                     not: false, //not yet implemented
-                    k: $('#search-keys').val(),
+                    k: $('#search-keys').val().toLowerCase(),
                     data: queryData
                 }
                 search.panelUpdatesTable[search.panelUpdatesIndex](query)

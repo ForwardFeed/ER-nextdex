@@ -62,6 +62,9 @@ body {
     width: 100%;
     background: rgba(0, 0, 0, 0);
     border-radius: 10px 0 0 10px  ;
+    border-color: var(--selActive);
+    border-style: solid;
+    color: var(--font-color);
 }
 
 .search-keys-wrapper {
@@ -130,11 +133,13 @@ body {
     padding: 2vh;
 }
 
+#search-keys:hover{
+    background-color: var(--selHover);
+}
 
 
 #filter-icon:hover,
 #settings-btn:hover,
-#search-keys:hover,
 .btn-n-active:hover {
     background-color: var(--btnHover);
 }
