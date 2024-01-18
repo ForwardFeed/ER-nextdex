@@ -353,16 +353,9 @@ export function compactify(gameData: GameData): CompactGameData{
         }
     }
     for (const trainer of gameData.trainers){
-        let name = Xtox('TRAINER_', trainer.name)
         let category = Xtox('TRAINER_CLASS_', trainer.category)
-        name = `${category} ${name}`
-        if (!name.includes('Grunt') && !name.includes('Gabby And Ty')){
-            //grunts in pokemon are only recognizeable by their 1
-            // however trainers have random numbers in them
-            name = name.replace(/\s\d+$/,'')
-        }
         compacted.trainers.push({
-            name: name,
+            name: `${category} ${trainer.name}`,
             db: trainer.double,
             party: trainer.party.map(compactPoke),
             insane: trainer.insane.map(compactPoke),
