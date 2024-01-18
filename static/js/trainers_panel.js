@@ -9,13 +9,22 @@ export function feedPanelTrainers(trainerID){
     const trainer = gameData.trainers[trainerID]
     $('#trainers-name').text(trainer.name)
 
-    setBaseTrainer(trainer.party)
+    setBaseTrainer(trainer)
     setRematchesBar(trainer.rem)
-    setInsane(trainer.insane)
+    setInsane(trainer)
     setPartyPanel(trainer.party)
 }
 
-function setBaseTrainer(party){
+function setDouble(double){
+    if (double){
+        $('#trainers-double').show()
+    } else {
+        $('#trainers-double').hide()
+    }
+}
+
+function setBaseTrainer(baseTrainer){
+    const party = baseTrainer.party
     if (!party || party.length < 1) {
         $('#trainers-normal').empty()
         return
@@ -29,9 +38,11 @@ function setBaseTrainer(party){
         nodeNormal.className = "trainer-match-btn sel-active"
     }
     $('#trainers-normal').empty().append(nodeNormal)
+    setDouble(baseTrainer.db)
 }
 
-function setInsane(insaneTeam){
+function setInsane(trainer){
+    const insaneTeam = trainer.insane
     if (!insaneTeam || insaneTeam.length < 1) {
         $('#trainers-elite').empty()
         return
@@ -45,6 +56,7 @@ function setInsane(insaneTeam){
         nodeElite.className = "trainer-match-btn sel-active"
     }
     $('#trainers-elite').empty().append(nodeElite)
+    setDouble(baseTrainer.db)
 }
 
 function setRematchesBar(rematches){
@@ -61,6 +73,7 @@ function setRematchesBar(rematches){
             setPartyPanel(rem.party)
             $('#trainers-infobar').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
             $('#trainers-rematch').children().eq(+remI + 1).addClass("sel-active").removeClass("sel-n-active")
+            setDouble(rem.db)
         }
         frag.append(nodeRem)
     }
