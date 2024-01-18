@@ -612,7 +612,9 @@ span{
 
 @media (orientation: landscape) {
     #filter-data{
+        font-size: 2vmax;
         top: 10vh;
+        left: 9em;
         width: 80vw;
         height: 90vh;
     }
