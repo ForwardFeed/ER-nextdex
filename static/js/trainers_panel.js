@@ -23,8 +23,8 @@ function setDouble(double){
     }
 }
 
-function setBaseTrainer(baseTrainer){
-    const party = baseTrainer.party
+function setBaseTrainer(trainer){
+    const party = trainer.party
     if (!party || party.length < 1) {
         $('#trainers-normal').empty()
         return
@@ -38,7 +38,7 @@ function setBaseTrainer(baseTrainer){
         nodeNormal.className = "trainer-match-btn sel-active"
     }
     $('#trainers-normal').empty().append(nodeNormal)
-    setDouble(baseTrainer.db)
+    setDouble(trainer.db)
 }
 
 function setInsane(trainer){
@@ -56,7 +56,7 @@ function setInsane(trainer){
         nodeElite.className = "trainer-match-btn sel-active"
     }
     $('#trainers-elite').empty().append(nodeElite)
-    setDouble(baseTrainer.db)
+    setDouble(trainer.db)
 }
 
 function setRematchesBar(rematches){
