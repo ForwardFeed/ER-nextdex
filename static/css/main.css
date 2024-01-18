@@ -340,8 +340,6 @@ span{
     right: 0;
 }
 .species-switch > * {
-    padding: 1px;
-    border-radius: 5px;
     margin-right: 0.5em;
 }
 .species-sub-pannel{
