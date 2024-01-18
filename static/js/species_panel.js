@@ -222,7 +222,7 @@ function setEvos(evos){
         node.className = "evo-parent" // i dunno how do classname it
         const intoSpecieNode = document.createElement('span')
         intoSpecieNode.className = "evo-into"
-        intoSpecieNode.innerText = evo.from ? "From" : "Into "
+        intoSpecieNode.innerText = `into `
         intoSpecieNode.appendChild(createSpeciesBlock(evo.in))
         node.append(intoSpecieNode)
         const reason = document.createElement('div')
