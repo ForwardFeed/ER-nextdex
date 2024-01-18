@@ -458,12 +458,10 @@ span{
         overflow-x: scroll;
         overflow-y: hidden;
         flex-direction: row;
-        margin-bottom: auto
+        margin-bottom: auto;
     }
     .data-list-row{
         min-width: 6em;
-        padding: 10px;
-        align-items: normal;
     }
     .data-data{
         height: 72vh;
@@ -601,4 +599,29 @@ span{
 .settings-row > * {
     margin-right: 2%;
     height: 100%;
+}
+
+
+/* SEARCH */
+#filter-data{
+    position: absolute;
+    z-index: 11; /* 10 would be reserved to a invisible click to close filer with 100% height and with */
+    background-color: var(--colorB);
+    margin: auto;
+}
+
+@media (orientation: landscape) {
+    #filter-data{
+        top: 10vh;
+        width: 80vw;
+        height: 90vh;
+    }
+}
+
+@media (orientation: portrait) {
+    #filter-data{
+        top: 18vh;
+        height: 82vh;
+        width: 100vw;
+    }
 }

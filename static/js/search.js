@@ -69,7 +69,7 @@ export function setupSearch(){
     })
     
     $('#filter-icon').on('click', function(){
-        //$('#filter-data').toggle()
+        $('#filter-data').toggle()
         console.log('nope, not ready yet')
     })
     $('#search-keys').on('click', function(){
@@ -151,6 +151,4 @@ export function queryFilter(query, data, keymap){
         }
         else return true // true i suppose?
     }
-    
-
 }
