@@ -222,7 +222,7 @@ function addFishingTable(rates)
 {
     const fragmentRate = document.createDocumentFragment();
     let parent = document.createElement('div')
-    parent.className="old-rod"
+    parent.className="location-rod"
     parent.innerHTML="Old Rod"
     fragmentRate.append(parent)
     // I took this data from the games files
@@ -234,14 +234,14 @@ function addFishingTable(rates)
         if(i === rodGrades[0] + 1)
         {
             parent = document.createElement('div')
-            parent.className="good-rod"
+            parent.className="location-rod"
             parent.innerText="Good Rod"
             fragmentRate.append(parent)
         }
         if(i === rodGrades[1] + 1)
         {
             parent = document.createElement('div')
-            parent.className="super-rod"
+            parent.className="location-rod"
             parent.innerText="Super Rod"
             fragmentRate.append(parent)
         }

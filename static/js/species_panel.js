@@ -219,10 +219,8 @@ function setEvos(evos){
         node.className = "evo-parent" // i dunno how do classname it
         const intoSpecieNode = document.createElement('span')
         intoSpecieNode.className = "evo-into"
-        intoSpecieNode.innerText = `into ${gameData.species[evo.in].name}`
-        intoSpecieNode.onclick = () => {
-          redirectSpecie(evo.in)
-        }
+        intoSpecieNode.innerText = `into `
+        intoSpecieNode.appendChild(createSpeciesBlock(evo.in))
         node.append(intoSpecieNode)
         const reason = document.createElement('div')
         reason.className = "evo-reason"
@@ -232,6 +230,22 @@ function setEvos(evos){
     }
     $('#species-evos').empty().append(frag)
 }
+
+export function createSpeciesBlock(specieId)
+{
+    //create a div, then inside an image and the species name with redirection
+    const node = $("<span/>").addClass("specie-block").click(() => {
+      redirectSpecie(specieId)
+    })
+    const specie = gameData.species[specieId]
+    const img= $("<img/>").attr('src', getSpritesURL(specie.NAME))
+                .addClass("sprite")
+    const name = $("<span/>").html(specie.name)
+    return node.append(img).append(name)[0]
+
+}
+
+
 /**
  * 
  * @param {number} kindID that is mapped into gameData evoKindT

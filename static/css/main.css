@@ -65,7 +65,7 @@
 .sel-n-active{
     background-color: var(--selNActive);
 }
-.sel-n-active:hover, .evo-into:hover{
+.sel-n-active:hover{
     background-color: var(--selHover);
 }
 
@@ -288,6 +288,7 @@ span{
     width: 1.5em;
     margin-left: 2%;
     border-radius: 2px;
+    color: black;
 }
 .stat-bar{
     background-color: green;
@@ -373,8 +374,19 @@ span{
     display: flex;
     cursor: pointer;
 }
-.species-move-list, .evo-into{
+.species-move-list, .species-move, .specie-block{
     cursor: pointer;
+}
+
+.evo-into{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.specie-block{
+    display: flex;
+    align-items: center;
 }
 
 .species-levelup-lvl{
@@ -384,16 +396,14 @@ span{
 .species-levelup-name{
     width: 100%;
 }
-.species-move{
-    cursor: pointer;
-}
+
 
 .specie-locs{
     cursor: pointer;
     height: fit-content;
 }
 
-.species-move-list>*:hover, .location-specie:hover, .trainers-pokemon:hover, .specie-locs:hover{
+.species-move-list>*:hover, .trainers-pokemon:hover, .specie-locs:hover, .specie-block:hover{
     background-color: var(--selHover);
 }
 #learnset{
@@ -405,6 +415,10 @@ span{
 }
 #eggmoves{
     background-color: var(--colorD);
+}
+
+.sprite{
+    height: 30px;
 }
 
 @media (orientation: landscape) {
@@ -484,17 +498,22 @@ span{
 }
 .location-row{
     display: flex;
-    width: 11em;
+    background-color: var(--colorA);
+    justify-content: space-between;
 }
 .location-specie{
     width: 6em;
-    cursor: pointer;
+    flex-grow: 1;
 }
 .location-rate{
-    width: 1.5em;
+    width: 2em;
 }
 .location-lvl{
-    width: 3.5em;
+    width: 3em;
+}
+
+.location-rod{
+    background-color: var(--colorE);
 }
 
 /* Trainers */
