@@ -78,7 +78,6 @@ body {
     position: absolute;
     width: 100%;
     text-align: center;
-    font-size: 0.7em;
 }
 
 #search-keys-selections>option {
@@ -114,6 +113,9 @@ body {
     #search-keys, #search-bar{
         font-size: 1.5vmax;
     }
+    #search-keys-selections > option{
+        font-size: 1.5em;
+    }
 }
 
 @media (orientation: portrait) {
@@ -125,6 +127,9 @@ body {
     }
     #search-bar, #search-keys{
         border-radius: 0;
+    }
+    #search-keys-selections > option{
+        font-size: 0.9em;
     }
 }
 #filter-icon {

@@ -1,7 +1,7 @@
 import { redirectLocation } from "./locations_panel.js"
 import { redirectMove } from "./moves_panel.js"
 import { addTooltip } from "./utils.js"
-import { query } from "./search.js"
+import { queryFilter } from "./search.js"
 import { gameData } from "./data_version.js"
 
 export function feedPanelSpecies(id){
@@ -59,8 +59,9 @@ function setMoves(core, moves){
             console.warn(`unable to find move with ID ${moveID}`)
             continue
         }
+        const type1 = gameData.typeT[move.types[0]].toLowerCase()
         const node = document.createElement('div')
-        node.className = "species-move"
+        node.className = `species-move ${type1}-t`
         node.innerText = move.name
         node.onclick=() => {redirectMove(moveID)}
         frag.append(node)
@@ -82,10 +83,12 @@ function setLevelUpMoves(core, moves){
         nodeMoveLvl.innerText = +lvl || "Ev"
         nodeMoveLvl.className = "species-levelup-lvl"
         row.append(nodeMoveLvl)
+
+        const type1 = gameData.typeT[move.types[0]].toLowerCase()
         const nodeMoveName = document.createElement('div')
         nodeMoveName.onclick=() => {redirectMove(id)}
         nodeMoveName.innerText = move.name
-        nodeMoveName.className = "species-levelup-name"
+        nodeMoveName.className = `species-levelup-name ${type1}-t`
         row.append(nodeMoveName)
         frag.append(row)
     }
@@ -210,6 +213,9 @@ function convertMoveNames(word){
 function convertSpeciesNames(word){
     return word.replace('SPECIES_', '').split('_').map(toLowerButFirstCase).join(' ')
 }
+function convertMapName(word){
+    return word.replace('MAPSEC_', '').split('_').map(toLowerButFirstCase).join(' ')
+}
 
 function setEvos(evos){
     const frag = document.createDocumentFragment()
@@ -219,7 +225,7 @@ function setEvos(evos){
         node.className = "evo-parent" // i dunno how do classname it
         const intoSpecieNode = document.createElement('span')
         intoSpecieNode.className = "evo-into"
-        intoSpecieNode.innerText = `into `
+        intoSpecieNode.innerText = evo.from ? "From" : "Into "
         intoSpecieNode.appendChild(createSpeciesBlock(evo.in))
         node.append(intoSpecieNode)
         const reason = document.createElement('div')
@@ -275,6 +281,7 @@ function setEvoReason(kindID, reason){
         "EVO_LEVEL_NIGHT": `Evolves at night if level ${reason}`,
         "EVO_LEVEL_DUSK": `Evolves at dusk if level ${reason}`,
         "EVO_LEVEL_DAY": `Evolves at day if level ${reason}`,
+        "EVO_SPECIFIC_MAPSEC": `Evolves when level up at ${convertMapName(reason)}`
     }[gameData.evoKindT[kindID]]
 }
 
@@ -314,13 +321,24 @@ export function updateSpecies(searchQuery){
                 if (type == queryData) return true
             }
             return false
+        },
+        "ability": (queryData, specie) => {
+            let abilities = specie.stats.abis.map((x)=>gameData.abilities[x].name.toLowerCase())
+            for (const abi of abilities){
+                if (abi == queryData) return true
+            }
+            let innates = specie.stats.inns.map((x)=>gameData.abilities[x].name.toLowerCase())
+            for (const abi of innates){
+                if (abi == queryData) return true
+            }
+            return false
         }
     }
     for (const i in species){
         if (i == 0 ) continue
         const specie = species[i]
         const node = nodeList.eq(i - 1)
-        if (query(searchQuery, specie, queryMap))
+        if (queryFilter(searchQuery, specie, queryMap))
         {
                 if (!validID) validID = i
                 node.show()

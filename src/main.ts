@@ -211,7 +211,6 @@ function getLocations(){
 function getTrainers(){
     return new Promise((resolve: (undefined: undefined)=>void, reject)=>{
         const filepaths = autojoinFilePath(ROOT_PRJ, [  'src/data/trainers.h',
-                                                        'src/battle_setup.c',
                                                         'src/data/trainer_parties.h'])
         getMulFilesData(filepaths, {filterComments: true, filterMacros: true, macros: new Map()})
         .then((fileData)=>{

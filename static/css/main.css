@@ -58,7 +58,9 @@
     width: 100%;
     height: 100%;
 }
-
+.sel-n-active, .sel-active{
+    cursor: pointer;
+}
 .sel-active{
     background-color: var(--selActive);
 }
@@ -72,7 +74,6 @@
 .data-list{
     text-align: center;
     width: 9em;
-    min-width: 9em;
     height: 100%;
     display: flex;
 }
@@ -155,7 +156,7 @@ span{
 .xlarge-row > span{
     padding-right: 0.5em;
 }
-#moves-split{
+#moves-split, #species-front{
     image-rendering:optimizeSpeed;             /* Legal fallback */
     image-rendering:-moz-crisp-edges;          /* Firefox        */
     image-rendering:-o-crisp-edges;            /* Opera          */
@@ -338,8 +339,6 @@ span{
     right: 0;
 }
 .species-switch > * {
-    padding: 1px;
-    border-radius: 5px;
     margin-right: 0.5em;
 }
 .species-sub-pannel{
@@ -377,7 +376,10 @@ span{
 .species-move-list, .species-move, .specie-block{
     cursor: pointer;
 }
-
+#species-evos{
+    display: flex;
+    flex-direction: column;
+}
 .evo-into{
     display: flex;
     align-items: center;
@@ -427,9 +429,11 @@ span{
         overflow-y: scroll;
         flex-direction: column;
         background-color: var(--selNActive);
+        width: 15vw;
     }
     .data-list-row{
         min-height: 2em;
+        overflow-y: scroll;
         padding: 10px;
     }
     .data-data{
@@ -454,12 +458,10 @@ span{
         overflow-x: scroll;
         overflow-y: hidden;
         flex-direction: row;
-        margin-bottom: auto
+        margin-bottom: auto;
     }
     .data-list-row{
         min-width: 6em;
-        padding: 10px;
-        align-items: normal;
     }
     .data-data{
         height: 72vh;
@@ -517,6 +519,19 @@ span{
 }
 
 /* Trainers */
+.trainers-infobar{
+    display: flex;
+}
+#trainers-rematch{
+    margin-left: auto;
+    display: flex
+}
+.trainer-match-btn{
+    min-width: 1em;
+    border: 2px ridge var(--colorB);
+    text-align: center;
+    margin-left: 0.2em;
+}
 #trainers-team{
     overflow-y: scroll;
 }
@@ -584,4 +599,31 @@ span{
 .settings-row > * {
     margin-right: 2%;
     height: 100%;
+}
+
+
+/* SEARCH */
+#filter-data{
+    position: absolute;
+    z-index: 11; /* 10 would be reserved to a invisible click to close filer with 100% height and with */
+    background-color: var(--colorB);
+    margin: auto;
+}
+
+@media (orientation: landscape) {
+    #filter-data{
+        font-size: 2vmax;
+        top: 10vh;
+        left: 15vw;
+        width: 85vw;
+        height: 90vh;
+    }
+}
+
+@media (orientation: portrait) {
+    #filter-data{
+        top: 18vh;
+        height: 82vh;
+        width: 100vw;
+    }
 }

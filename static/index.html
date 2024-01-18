@@ -8,7 +8,11 @@
     <!--load css themes-->
     <link rel="stylesheet" href="./css/themes/blueish.css" id="styles-blueish">
     <link rel="stylesheet" href="./css/themes/rushed.css" id="styles-rushed">
-    <script src="./js/settings.js"></script>
+    <script type="module" src="./js/settings.js"></script>
+    <script type="module">
+        import {initAppSettings} from './js/settings.js'
+        initAppSettings()
+    </script>
 </head>
 <body>
     <div id="top-header" class="header-gradient-ER">
@@ -248,8 +252,11 @@
 
             </div>
             <div id="trainers-data" class="data-data"> 
-                <div class="trainers-infobar">
+                <div id="trainers-infobar" class="trainers-infobar">
                     <div id="trainers-name"></div>
+                    <div id="trainers-double">Double!</div>
+                    <div id="trainers-normal"></div>
+                    <div id="trainers-elite"></div>
                     <div id="trainers-rematch"></div>
                 </div>
                 <div id="trainers-team"></div>
@@ -277,6 +284,7 @@
     </aside>
     </div>
     <div id="filter-data" style="display: none;">
+        Soon™
     </div>
     <div id="settings-frame" style="display: none;">
         <div class="versionning">

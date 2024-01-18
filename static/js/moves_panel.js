@@ -1,5 +1,5 @@
 import { gameData } from "./data_version.js"
-import { query } from "./search.js"
+import { queryFilter } from "./search.js"
 
 export function feedPanelMoves(moveID){
     const move = gameData.moves[moveID]
@@ -129,7 +129,7 @@ export function updateMoves(searchQuery){
         if (i == 0 ) continue
         const move = moves[i]
         const node = nodeList.eq(i - 1)
-        if (query(searchQuery, move, queryMap))
+        if (queryFilter(searchQuery, move, queryMap))
         {
                 if (!validID) validID = i
                 node.show()
