@@ -1,31 +1,35 @@
-/*
-    I'll load the settings and preference before everything because it will hold the 
-*/
 
-if (!localStorage.getItem('init_storage')){
-    window.settings = { //default settings
-        theme: "blueish",
-        init_storage: true
+const appName = "ERdex"
+const appSettings = appName + "_settings"
+const settingsVersion = "1"
+const themesList =  [
+    "blueish",
+    "rushed"
+]
+export const settings = {
+
+}
+
+export function initAppSettings(){
+    if (!localStorage.getItem(appSettings)){
+        //default settings
+        Object.assign(settings, { 
+            theme: "blueish",
+            settingsVersion: settingsVersion,
+        })
+        saveSettings()
+    } else {
+        Object.assign(settings, JSON.parse(localStorage.getItem(appSettings)))
     }
-    for (const key of Object.keys(window.settings)){
-        localStorage.setItem(key, JSON.stringify(window.settings[key]))
-    }
-    
-} else {
-    window.settings = {}
-    for (const key of Object.keys(localStorage)){
-        window.settings[key] = localStorage.getItem(key)
-    }
+    changeTheme()
+}
+
+export function saveSettings(){
+    localStorage.setItem(appSettings, JSON.stringify(settings))
 }
 
 
-
 function changeTheme(){
-    // /!\ Sync it with setup Settings because of a javascript moment
-    const themesList =  [
-        "blueish",
-        "rushed"
-    ]
     const settingsTheme = settings.theme
     for (const theme of themesList){
         document.getElementById(`styles-${theme}`).disabled = theme !== settingsTheme
@@ -33,12 +37,7 @@ function changeTheme(){
     
 }
 
-function setupSettings(){
-    // /!\ Sync it with setup Theme because of a javascript moment
-    const themesList =  [
-        "blueish",
-        "rushed"
-    ]
+export function setupSettings(){
     $('#settings-btn').on('click', function(){
         $('#settings-frame').toggle()
     })
@@ -63,8 +62,8 @@ function setupSettings(){
         themeInput.id = `${name}-${theme}`
         if (settings[name] === theme) themeInput.checked = true
         themeInput.onchange = () => {
-            window.settings[name] = theme
-            localStorage.setItem(name, theme)
+            settings.theme = theme
+            saveSettings()
             changeTheme()
         }
         frag.append(themeLabel)
@@ -73,8 +72,3 @@ function setupSettings(){
     themeCore.append(frag)
     $('#settings-frame').append(themeCore)
 }
-
-// setup it early so the theme load quickly
-changeTheme()
-
-//setupSettings() will be loaded in the index js

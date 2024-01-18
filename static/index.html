@@ -8,7 +8,11 @@
     <!--load css themes-->
     <link rel="stylesheet" href="./css/themes/blueish.css" id="styles-blueish">
     <link rel="stylesheet" href="./css/themes/rushed.css" id="styles-rushed">
-    <script src="./js/settings.js"></script>
+    <script type="module" src="./js/settings.js"></script>
+    <script type="module">
+        import {initAppSettings} from './js/settings.js'
+        initAppSettings()
+    </script>
 </head>
 <body>
     <div id="top-header" class="header-gradient-ER">
