@@ -32,9 +32,9 @@ export const search = {
     panelUpdatesIndex: 0,
     // if any pannel needs a special key you need to append it here
     queryKeys: [
-        "name",
-        "type",
-        "ability",
+        "Name",
+        "Type",
+        "Ability",
     ]
 }
 
