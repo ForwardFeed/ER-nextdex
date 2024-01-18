@@ -518,6 +518,19 @@ span{
 }
 
 /* Trainers */
+.trainers-infobar{
+    display: flex;
+}
+#trainers-rematch{
+    margin-left: auto;
+    display: flex
+}
+.trainer-rem-btn{
+    min-width: 1em;
+    border: 2px ridge var(--colorB);
+    text-align: center;
+    margin-left: 0.2em;
+}
 #trainers-team{
     overflow-y: scroll;
 }

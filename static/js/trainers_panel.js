@@ -9,7 +9,61 @@ export function feedPanelTrainers(trainerID){
     const trainer = gameData.trainers[trainerID]
     $('#trainers-name').text(trainer.name)
 
-    const party = trainer.party
+    setBaseTrainer(trainer.party)
+    setRematchesBar(trainer.rem)
+    setInsane(trainer.insane)
+
+    setPartyPanel(trainer.party)
+}
+
+function setBaseTrainer(party){
+    console.log(party)
+    if (!party || party.length < 1) {
+        $('#trainers-normal').empty()
+        return
+    }
+    const nodeNormal = document.createElement('div')
+    nodeNormal.innerText = "Normal"
+    nodeNormal.className = "trainer-rem-btn"
+    nodeNormal.onclick = ()=>{
+        setPartyPanel(party)
+    }
+    $('#trainers-normal').empty().append(nodeNormal)
+}
+
+function setInsane(insaneTeam){
+    if (!insaneTeam || insaneTeam.length < 1) {
+        $('#trainers-elite').empty()
+        return
+    }
+    const nodeElite = document.createElement('div')
+    nodeElite.innerText = "Elite"
+    nodeElite.className = "trainer-rem-btn"
+    nodeElite.onclick = ()=>{
+        setPartyPanel(insaneTeam)
+    }
+    $('#trainers-elite').empty().append(nodeElite)
+}
+
+function setRematchesBar(rematches){
+    const frag = document.createDocumentFragment()
+    const spanInfo = document.createElement('span')
+    spanInfo.innerText = "Rematches :"
+    frag.append(spanInfo)
+    for (const remI in rematches){
+        const rem = rematches[remI]
+        const nodeRem = document.createElement('div')
+        nodeRem.innerText = +remI + 1
+        nodeRem.className = "trainer-rem-btn"
+        nodeRem.onclick = ()=>{
+            setPartyPanel(rem.party)
+        }
+        frag.append(nodeRem)
+    }
+    $('#trainers-rematch').empty().append(frag)
+}
+
+function setPartyPanel(party){
     const frag = document.createDocumentFragment()
     for (const poke of party){
         const specie = gameData.species[poke.spc]
