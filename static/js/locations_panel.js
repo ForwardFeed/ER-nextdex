@@ -1,4 +1,4 @@
-import { redirectSpecie } from "./species_panel.js"
+import { createSpeciesBlock, redirectSpecie } from "./species_panel.js"
 import { query } from "./search.js"
 import { gameData } from "./data_version.js"
 
@@ -23,10 +23,7 @@ export function feedPanelLocations(mapID){
         for (const i in rates){
             const rate = rates[i]
             const specie = node.find('.location-specie').eq(i)
-            specie.on("click" , () => {
-                redirectSpecie(rate[2])
-            })
-            specie.text(gameData.species[rate[2]].name)
+            specie.empty().append(createSpeciesBlock(rate[2]))
             node.children().find('.location-lvl').eq(i).text(rate[0] + "-" + rate[1])
         }
     }
