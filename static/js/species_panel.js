@@ -210,6 +210,9 @@ function convertMoveNames(word){
 function convertSpeciesNames(word){
     return word.replace('SPECIES_', '').split('_').map(toLowerButFirstCase).join(' ')
 }
+function convertMapName(word){
+    return word.replace('MAPSEC_', '').split('_').map(toLowerButFirstCase).join(' ')
+}
 
 function setEvos(evos){
     const frag = document.createDocumentFragment()
@@ -275,6 +278,7 @@ function setEvoReason(kindID, reason){
         "EVO_LEVEL_NIGHT": `Evolves at night if level ${reason}`,
         "EVO_LEVEL_DUSK": `Evolves at dusk if level ${reason}`,
         "EVO_LEVEL_DAY": `Evolves at day if level ${reason}`,
+        "EVO_SPECIFIC_MAPSEC": `Evolves when level up at ${convertMapName(reason)}`
     }[gameData.evoKindT[kindID]]
 }
 
