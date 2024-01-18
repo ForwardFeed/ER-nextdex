@@ -33,7 +33,8 @@ export const search = {
     // if any pannel needs a special key you need to append it here
     queryKeys: [
         "name",
-        "type"
+        "type",
+        "ability",
     ]
 }
 
@@ -87,31 +88,13 @@ export function setupSearch(){
 }
 
 
-/**
- * About the filtering
- * The ui will be adapting itself to what i'm gonna do
- * So here's the deal
- * I need a hold a synthax where i can recursively add keys and items and relations between then
- * {op: 'OR', em: [{key: "name", data:"Bunbasaur"}, {key: "move", data:"SolarBeam"}]} //not recursively will show a pokemon named bunbasaur or a solar beam stuff
- * {op: 'OR', em: [{op: '',em: '', key: "name", data:"Bunbasaur"}, {key: "move", data:"SolarBeam"}, ]
- *  
- * } //recursive
- * [ 'OR', [['', '','name', '']['','','move','solar beam']], '', ''
- * ] // optimized recursive
- * 
- * and now the hard part the parsing
- * each pannel will have an update() function that will eat up the request.
- * an util with be shared in search that will just need the request and an object mapped with function
- * the key of the mapped object will be a name of a request key
- * the key will point to a function that will eat the data and return true if it matched, or false if it didn't
- */
 
 /**
  * @callback searchAssertion
  * @param {unknow} data
  * @param {string} queryData
  *  
- * @returns {boolean} did it matched? //OUPPPS missed that sometimes it should NOT match
+ * @returns {boolean} did it matched?
  * 
  * @typedef {Object.<string, searchAssertion>} SearchMap
  * 
@@ -131,7 +114,7 @@ export function setupSearch(){
  * @returns {boolean} - did the object matched?
  */
 //! NOT READY YET <= in cooking
-export function query(query, data, keymap){
+export function queryFilter(query, data, keymap){
     const queryNot = (notFlag, value) => {
         return notFlag ? !value : value
     }

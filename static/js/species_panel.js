@@ -1,7 +1,7 @@
 import { redirectLocation } from "./locations_panel.js"
 import { redirectMove } from "./moves_panel.js"
 import { addTooltip } from "./utils.js"
-import { query } from "./search.js"
+import { queryFilter } from "./search.js"
 import { gameData } from "./data_version.js"
 
 export function feedPanelSpecies(id){
@@ -321,13 +321,24 @@ export function updateSpecies(searchQuery){
                 if (type == queryData) return true
             }
             return false
+        },
+        "ability": (queryData, specie) => {
+            let abilities = specie.stats.abis.map((x)=>gameData.abilities[x].name.toLowerCase())
+            for (const abi of abilities){
+                if (abi == queryData) return true
+            }
+            let innates = specie.stats.inns.map((x)=>gameData.abilities[x].name.toLowerCase())
+            for (const abi of innates){
+                if (abi == queryData) return true
+            }
+            return false
         }
     }
     for (const i in species){
         if (i == 0 ) continue
         const specie = species[i]
         const node = nodeList.eq(i - 1)
-        if (query(searchQuery, specie, queryMap))
+        if (queryFilter(searchQuery, specie, queryMap))
         {
                 if (!validID) validID = i
                 node.show()

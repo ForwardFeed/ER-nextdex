@@ -1,5 +1,5 @@
 import { getSpritesURL, redirectSpecie } from "./species_panel.js"
-import { query } from "./search.js"
+import { queryFilter } from "./search.js"
 import { gameData } from "./data_version.js"
 
 export function feedPanelTrainers(trainerID){
@@ -183,7 +183,7 @@ export function updateTrainers(searchQuery){
         if (i == 0) continue
         const trainer = trainers[i]
         const node = nodeList.eq(i - 1)
-        if (query(searchQuery, trainer, queryMap))
+        if (queryFilter(searchQuery, trainer, queryMap))
         {
                 if (!validID) validID = i
                 node.show()

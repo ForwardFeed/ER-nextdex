@@ -1,5 +1,5 @@
 import { createSpeciesBlock, redirectSpecie } from "./species_panel.js"
-import { query } from "./search.js"
+import { queryFilter } from "./search.js"
 import { gameData } from "./data_version.js"
 
 export function feedPanelLocations(mapID){
@@ -53,7 +53,7 @@ export function updateLocations(searchQuery){
     for (const i in maps){
         const map = maps[i]
         const node = nodeList.eq(i)
-        if (query(searchQuery, map, queryMap))
+        if (queryFilter(searchQuery, map, queryMap))
         {
                 if (!validID) validID = i
                 node.show()
