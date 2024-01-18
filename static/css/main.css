@@ -58,7 +58,9 @@
     width: 100%;
     height: 100%;
 }
-
+.sel-n-active, .sel-active{
+    cursor: pointer;
+}
 .sel-active{
     background-color: var(--selActive);
 }
@@ -525,7 +527,7 @@ span{
     margin-left: auto;
     display: flex
 }
-.trainer-rem-btn{
+.trainer-match-btn{
     min-width: 1em;
     border: 2px ridge var(--colorB);
     text-align: center;

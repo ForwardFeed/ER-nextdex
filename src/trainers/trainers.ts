@@ -61,12 +61,20 @@ export function parse(fileData: string): Trainer[]{
             double: value.double,
             party: TrainersTeamResult.trainers.get(value.partyPtr) || [],
             insane: TrainersTeamResult.trainers.get(value.insanePtr) || [],
-            rematches: value.rematches.map((x)=>{
-                return {
-                    double: x.double,
-                    party: TrainersTeamResult.trainers.get(x.partyPtr) || []
-                }
-            })
+            rematches: value.rematches
+                .filter((x)=> { 
+                    if (TrainersTeamResult.trainers.get(x.partyPtr)){
+                        return TrainersTeamResult.trainers.get(x.partyPtr).length > 0
+                    } else {
+                        return false
+                    }     
+                })
+                .map((x)=>{
+                    return {
+                        double: x.double,
+                        party: TrainersTeamResult.trainers.get(x.partyPtr) || []
+                    }
+                })
         })
     })
     return trainers

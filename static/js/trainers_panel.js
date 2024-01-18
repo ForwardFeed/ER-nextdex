@@ -4,7 +4,7 @@ import { gameData } from "./data_version.js"
 
 export function feedPanelTrainers(trainerID){
     $('#trainers-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
-    $('#trainers-list').children().eq().addClass("sel-active").removeClass("sel-n-active")
+    $('#trainers-list').children().eq(trainerID - 1).addClass("sel-active").removeClass("sel-n-active")
 
     const trainer = gameData.trainers[trainerID]
     $('#trainers-name').text(trainer.name)
@@ -12,21 +12,21 @@ export function feedPanelTrainers(trainerID){
     setBaseTrainer(trainer.party)
     setRematchesBar(trainer.rem)
     setInsane(trainer.insane)
-
     setPartyPanel(trainer.party)
 }
 
 function setBaseTrainer(party){
-    console.log(party)
     if (!party || party.length < 1) {
         $('#trainers-normal').empty()
         return
     }
     const nodeNormal = document.createElement('div')
     nodeNormal.innerText = "Normal"
-    nodeNormal.className = "trainer-rem-btn"
+    nodeNormal.className = "trainer-match-btn sel-active"
     nodeNormal.onclick = ()=>{
         setPartyPanel(party)
+        $('#trainers-infobar').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
+        nodeNormal.className = "trainer-match-btn sel-active"
     }
     $('#trainers-normal').empty().append(nodeNormal)
 }
@@ -38,9 +38,11 @@ function setInsane(insaneTeam){
     }
     const nodeElite = document.createElement('div')
     nodeElite.innerText = "Elite"
-    nodeElite.className = "trainer-rem-btn"
+    nodeElite.className = "trainer-match-btn sel-n-active"
     nodeElite.onclick = ()=>{
         setPartyPanel(insaneTeam)
+        $('#trainers-infobar').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
+        nodeElite.className = "trainer-match-btn sel-active"
     }
     $('#trainers-elite').empty().append(nodeElite)
 }
@@ -54,9 +56,11 @@ function setRematchesBar(rematches){
         const rem = rematches[remI]
         const nodeRem = document.createElement('div')
         nodeRem.innerText = +remI + 1
-        nodeRem.className = "trainer-rem-btn"
+        nodeRem.className = "trainer-match-btn sel-n-active"
         nodeRem.onclick = ()=>{
             setPartyPanel(rem.party)
+            $('#trainers-infobar').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
+            $('#trainers-rematch').children().eq(+remI + 1).addClass("sel-active").removeClass("sel-n-active")
         }
         frag.append(nodeRem)
     }
@@ -64,6 +68,9 @@ function setRematchesBar(rematches){
 }
 
 function setPartyPanel(party){
+    if (party.length < 1 ){
+        return console.warn('party had team ' + party)
+    }
     const frag = document.createDocumentFragment()
     for (const poke of party){
         const specie = gameData.species[poke.spc]

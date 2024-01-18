@@ -68,6 +68,7 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
             if (context.key){
                 context.trainers.set(context.key, context.currentTrainer)
             }
+            context.key = ""
             context.currentTrainer = []
         }
     },
@@ -98,9 +99,14 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
         } else if (line.match('.moves')){
             context.currentPokemon.moves = regexGrabStr(line.replace(/\s/g, ''), /(?<==)[\w,]+/).split(',')
         } else if (line.match('}')){
-            context.currentTrainer.push(context.currentPokemon)
-            context.currentPokemon = initTrainerPokemon()
-            context.execFlag = "main"
+            if (context.currentPokemon.ability != -1 &&
+            context.currentPokemon.moves.length != 0 &&
+            context.currentPokemon.nature !== ""){
+                context.currentTrainer.push(context.currentPokemon)
+                context.currentPokemon = initTrainerPokemon()
+                context.execFlag = "main"
+            }
+            
         }
     }
 }
