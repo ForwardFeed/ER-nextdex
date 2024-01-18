@@ -60,6 +60,9 @@ function setInsane(trainer){
 }
 
 function setRematchesBar(rematches){
+    if (rematches.length < 1){
+        return $('#trainers-rematch').empty()
+    }
     const frag = document.createDocumentFragment()
     const spanInfo = document.createElement('span')
     spanInfo.innerText = "Rematches :"
