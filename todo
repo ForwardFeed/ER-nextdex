@@ -17,7 +17,7 @@
 [ ] add code of the different abilities, species related from
 [ ] add list of sSkillSwapBannedAbilities things like that in battle utils
 [ ] add dex-strategy from 'src/data/dex-strategy.md'
-[ ] locations exception for the fishe and rods
+[x] locations exception for the fishe and rods
 [x] get pre-evolutions
 [ ] add trainers
     [ ] Trainer Locations from /data/maps/scripts.pory or script.inc
@@ -29,3 +29,5 @@
     [ ] Sorting abilities by alphabet
 [ ] tooltip for moves
 [ ] btw the dex is up
+[ ] Add pokemon weakness
+    [ ] make a team builder

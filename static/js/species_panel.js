@@ -59,8 +59,9 @@ function setMoves(core, moves){
             console.warn(`unable to find move with ID ${moveID}`)
             continue
         }
+        const type1 = gameData.typeT[move.types[0]].toLowerCase()
         const node = document.createElement('div')
-        node.className = "species-move"
+        node.className = `species-move ${type1}-t`
         node.innerText = move.name
         node.onclick=() => {redirectMove(moveID)}
         frag.append(node)
@@ -82,10 +83,12 @@ function setLevelUpMoves(core, moves){
         nodeMoveLvl.innerText = +lvl || "Ev"
         nodeMoveLvl.className = "species-levelup-lvl"
         row.append(nodeMoveLvl)
+
+        const type1 = gameData.typeT[move.types[0]].toLowerCase()
         const nodeMoveName = document.createElement('div')
         nodeMoveName.onclick=() => {redirectMove(id)}
         nodeMoveName.innerText = move.name
-        nodeMoveName.className = "species-levelup-name"
+        nodeMoveName.className = `species-levelup-name ${type1}-t`
         row.append(nodeMoveName)
         frag.append(row)
     }
