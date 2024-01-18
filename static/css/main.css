@@ -74,7 +74,6 @@
 .data-list{
     text-align: center;
     width: 9em;
-    min-width: 9em;
     height: 100%;
     display: flex;
 }
@@ -430,6 +429,7 @@ span{
         overflow-y: scroll;
         flex-direction: column;
         background-color: var(--selNActive);
+        width: 15vw;
     }
     .data-list-row{
         min-height: 2em;
@@ -614,8 +614,8 @@ span{
     #filter-data{
         font-size: 2vmax;
         top: 10vh;
-        left: 9em;
-        width: 80vw;
+        left: 15vw;
+        width: 85vw;
         height: 90vh;
     }
 }
