@@ -113,27 +113,19 @@ function hydrateMoves(){
  * @param {import("./compactify.js").CompactEvolution} currentEvo - the how this pokemon is getting evolved (first degree)
  */
 function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo){
-    if (currentEvo.in == -1) return
-    if (currentEvo.from){
-        console.log(gameData.species[previousSpecieID].name, gameData.species[currentEvo.in].name)
-    } else {
-        const previousSpecie = gameData.species[previousSpecieID]
-        const currentSpecie = gameData.species[currentEvo.in]
-        if (!currentSpecie.eggMoves.length) currentSpecie.eggMoves = previousSpecie.eggMoves
-        if (!currentSpecie.TMHMMoves.length) currentSpecie.TMHMMoves = previousSpecie.TMHMMoves
-        if (!currentSpecie.tutor.length) currentSpecie.tutor = previousSpecie.tutor
-        //import evolution
-        currentSpecie.evolutions.push({
-            kd: currentEvo.kd, 
-            rs: currentEvo.rs,
-            in: previousSpecieID,
-            from: true// its a added flag so we can know if into into but from
-        })
-    }
-}
-
-function hydrateFromPreviousEvolutions(previousSpecieID, currentEvo){
-
+    if (currentEvo.in == -1 || currentEvo.from) return
+    const previousSpecie = gameData.species[previousSpecieID]
+    const currentSpecie = gameData.species[currentEvo.in]
+    if (!currentSpecie.eggMoves.length) currentSpecie.eggMoves = previousSpecie.eggMoves
+    if (!currentSpecie.TMHMMoves.length) currentSpecie.TMHMMoves = previousSpecie.TMHMMoves
+    if (!currentSpecie.tutor.length) currentSpecie.tutor = previousSpecie.tutor
+    //import evolution
+    currentSpecie.evolutions.push({
+        kd: currentEvo.kd, 
+        rs: currentEvo.rs,
+        in: previousSpecieID,
+        from: true// its a added flag so we can know if into into but from
+    })
 }
 
 function hydrateSpecies(){
