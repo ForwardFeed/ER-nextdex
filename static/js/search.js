@@ -35,11 +35,12 @@ export const search = {
         "Name",
         "Type",
         "Ability",
-        "Move"
+        "Move",
+        "Move-effect",
     ]
 }
 /**
- * Will execute any filter query so far
+ * Will execute all filters query so far
  */
 function executeAllFilters(){
     const allQueries = [{
@@ -48,15 +49,16 @@ function executeAllFilters(){
         k: $('#search-keys').val().toLowerCase(),
         data: $('#search-bar').val().toLowerCase()
     }]
-    $('.filter-field').each(function(){
+    $('.filter-field').each(function(){ 
         allQueries.push({
             op:"OR",
-            not: false, //not yet implemented
+            //if you use data('state') jquery util here you're fucked for no acceptable reason
+            not: $(this).find('.filter-not')[0].dataset.state === "on" ? true : false,
             k: $(this).find('.filter-key').val().toLowerCase(),
             data: $(this).find('.filter-search').val().toLowerCase()
         })
     })
-    // set everything into a big AND
+    // set everything into a big AND //TODO implement the UI change for that
     const megaQuery = {
         op: "AND",
         not: false,
@@ -115,21 +117,36 @@ function appendFilter(){
     const divField = document.createElement('div')
     divField.className = "filter-field"
 
-    /*const divNot = document.createElement('div')
+    const divNot = document.createElement('div')
     divNot.className = "filter-not"
     divNot.innerText = "¿?"
-    divField.append(divNot)*/ //not implemented yet
+    divNot.type = "button"
+    divNot.dataset.state = "off"
+    divField.append(divNot)
 
     const divKeyWrapper = document.createElement('div')
     divKeyWrapper.className = "filter-key-wrapper"
     divField.append(divKeyWrapper)
 
-    const divKey = document.createElement('input')
-    divKey.className = "filter-key"
-    divKey.type = "button"
-    divKey.value = search.queryKeys[0] || "Name"
-    divKey.onchange = activateSearch
-    divKeyWrapper.append(divKey)
+    const inputKey = document.createElement('input')
+    inputKey.className = "filter-key"
+    inputKey.type = "button"
+    inputKey.value = search.queryKeys[0] || "Name"
+    inputKey.onchange = activateSearch
+    divKeyWrapper.append(inputKey)
+
+    divNot.onclick = ()=>{
+        if (divNot.dataset.state === "off"){
+            divNot.dataset.state = "on"
+            divNot.classList.add('filter-not-not')
+            inputKey.classList.add('filter-not-not')
+        } else {
+            divNot.dataset.state = "off"
+            divNot.classList.remove('filter-not-not')
+            inputKey.classList.remove('filter-not-not')
+        }
+        activateSearch()
+    }
 
     const divAbsolute = document.createElement('div')
     divAbsolute.className = "filter-key-absolute"
@@ -143,31 +160,32 @@ function appendFilter(){
         const option = document.createElement('option')
         option.innerText = key
         option.onclick = ()=>{
-            divKey.value = key
+            inputKey.value = key
             $(divKeySelection).toggle()
-            $(divKey).toggle()
+            $(inputKey).toggle()
         }
         divKeySelection.append(option)
     }
 
-    divKey.onclick = () =>{
+    inputKey.onclick = () =>{
         $(divKeySelection).toggle()
-        $(divKey).toggle()
+        $(inputKey).toggle()
     }
 
     const divLabel = document.createElement('label')
     divLabel.className = "filter-label"
     divField.append(divLabel)
 
-    const divSearch = document.createElement('input')
-    divSearch.className = "filter-search"
-    divSearch.type = "search"
-    divSearch.onkeyup = activateSearch
-    divLabel.append(divSearch)
+    const inputSearch = document.createElement('input')
+    inputSearch.className = "filter-search"
+    inputSearch.type = "search"
+    inputSearch.onkeyup = activateSearch
+    divLabel.append(inputSearch)
 
     const divRemove = document.createElement('div')
     divRemove.className = "filter-remove"
     divRemove.innerText = "X"
+    divRemove.style.color = "red"
     divRemove.onclick = ()=>{
         divField.remove()
     }

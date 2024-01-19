@@ -28,43 +28,43 @@ export function feedPanelMoves(moveID){
 
 function listMoveFlags(flags){
     const flagMap = {
-        "MAKES_CONTACT": "Has contact and Big Pecks boost",
-        //"KINGS_ROCK_AFFECTED": "King's rock effective",
-        "HIGH_CRIT": "High crits chances",
-        "IRON_FIST_BOOST": "Iron fist boost",
-        "SHEER_FORCE_BOOST": "Sheer force boost",
-        "KEEN_EDGE_BOOST": "Keen edge boost",
-        "AIR_BASED": "Giant wings boost",
-        "SNATCH_AFFECTED": "Can be snatched",
-        "DANCE" : "Dance",
-        "ALWAYS_CRIT" :"Always Crit",
-        "FIELD_BASED" :"Field Explorer boost",
-        "STRIKER_BOOST" :"Striker boost",
-        "TWO_STRIKES" :"Hit twice",
-        "RECKLESS_BOOST" :"Reckless boost",
-        "MAGIC_COAT_AFFECTED" :"Affected by magic coat",
-        "HORN_BASED" :"Mighty Horn boost",
-        "STRONG_JAW_BOOST" :"Strong Jaw boost",
-        "SOUND" :"Is a sound move",
-        "MEGA_LAUNCHER_BOOST" :"Mega Launcher Boost",
-        "BALLISTIC" :"Is a bullet move",
-        "DMG_UNDERWATER" :"Damage foes under water",
-        "WEATHER_BASED" :"Changes with the weather",
-        "POWDER" :"Power move",
-        "DMG_IN_AIR" :"Damages foes in air",
-        "DMG_UNDERGROUND" :"Damages foes underground",
-        "BONE_BASED" :"Is a bonemove",
-        "THAW_USER" :"Unfreeze the user",
-        "PROTECTION_MOVE" :"Gives protection to the user",
-        "DMG_2X_IN_AIR" :"Damage the foes in air with 2X damage",
-        "STAT_STAGES_IGNORED" :"Ignore Stats boost",
-        "DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING" :"",
-        "HIT_IN_SUBSTITUTE" :"Hit Throught Substitute",
-        "TARGET_ABILITY_IGNORED" :"Target Ability is ignored",
+        "Makes Contact": "Has contact and Big Pecks boost",
+        "Kings Rock Affected": "Triggers King's rock",
+        "High Crit": "High crits chances",
+        "Iron Fist Boost": "Iron fist boost",
+        "Sheer Force Boost": "Sheer force boost",
+        "Keen Edge Boost": "Keen edge boost",
+        "Air Based": "Giant wings boost",
+        "Snatch Affected": "Can be snatched",
+        "Dance": "Dance",
+        "Always Crit": "Always Crit",
+        "Field Based": "Field Explorer boost",
+        "Striker Boost": "Striker boost",
+        "Two Strikes": "Hit twice",
+        "Reckless Boost": "Reckless boost",
+        "Magic Coat Affected": "Affected by magic coat",
+        "Horn Based": "Mighty Horn boost",
+        "Strong Jaw Boost": "Strong Jaw boost",
+        "Sound": "Is a sound move",
+        "Mega Launcher Boost": "Mega Launcher Boost",
+        "Ballistic": "Is a bullet move",
+        "Dmg Underwater": "Damage foes under water",
+        "Weather Based": "Changes with the weather",
+        "Powder": "Power move",
+        "Dmg In Air": "Damages foes in air",
+        "Dmg Underground": "Damages foes underground",
+        "Bone Based": "Is a bonemove",
+        "Dmg Ungrounded Ignore Type If Flying": "",
+        "Thaw User": "Unfreeze the user",
+        "Protection Move": "Gives protection to the user",
+        "Dmg 2x In Air": "Damage the foes in air with 2X damage",
+        "Stat Stages Ignored": "Ignore Stats boost",
+        "Hit In Substitute": "Hit Throught Substitute",
+        "Target Ability Ignored": "Target Ability is ignored",
     }
     const NoFlagMap = {
-        "PROTECT_AFFECTED": "Isn't affected by protect",
-        "MIRROR_MOVE_AFFECTED": "Cannot be mirrored",
+        "Protect Affected": "Isn't affected by protect",
+        "Mirror Move Affected": "Cannot be mirrored",
     }
     const core = $('#moves-flags')
     core.empty()
@@ -122,7 +122,16 @@ export function updateMoves(searchQuery){
                 if (type == queryData) return true
             }
             return false
-        }
+        },
+        "move-effect": (queryData, move) => {
+            //it's called effect but in the data it's flags not effect
+            //effect in the data might be useless to the calc, at least to short and medium terms
+            const flags = move.flags.map((x)=>gameData.flagsT[x].toLowerCase())
+            for (const flag of flags){
+                if (flag.includes(queryData)) return true
+            }
+            return false
+        },
     }
     let validID;
     for (const i in moves){

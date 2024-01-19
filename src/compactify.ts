@@ -1,6 +1,6 @@
 import { GameData } from "./main";
 import { Ability } from "./abilities";
-import { NAMEtoName, Xtox } from "./parse_utils";
+import { Xtox } from "./parse_utils";
 import { TrainerPokemon } from "./trainers/teams";
 
 interface CompactLocations{
@@ -162,8 +162,8 @@ export function compactify(gameData: GameData): CompactGameData{
     const compacted = initCompactGameData()
     const abiT: string[] = []
     gameData.abilities.forEach((val)=>{
-        abiT.push(val[0])
-        compacted.abilities.push(val[1])
+        abiT.push(val.name)
+        compacted.abilities.push(val)
     })
     const movesT: string[] = []
     const tablize = ((x: unknown, table: unknown[]) => {
@@ -205,8 +205,8 @@ export function compactify(gameData: GameData): CompactGameData{
         const bs = val.baseStats
         compacted.species.push({
             name: ((x, X)=>{
-                if (nameT.includes(x)){
-                    x = NAMEtoName(X)
+                if (nameT.includes(x)){ // because megas are the same names as the non-megas
+                    x = Xtox('SPECIES_', X)
                 }
                 nameT.push(x)
                 return x

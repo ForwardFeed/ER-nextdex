@@ -9,6 +9,8 @@ import * as Sprites from './sprites'
 import * as Locations from './locations'
 import * as Trainers from './trainers/trainers'
 
+import * as Additionnal from './additional_data/additional'
+
 import { CompactGameData, compactify } from './compactify';
 
 const ROOT_PRJ = "/media/notalinux/_dev_sdb3/Website/reduxelite" // you already know how well organized i am
@@ -17,7 +19,7 @@ const ROOT_PRJ = "/media/notalinux/_dev_sdb3/Website/reduxelite" // you already 
 
 export interface GameData {
     species: Species.Specie[]
-    abilities: [string, Abilities.Ability][]
+    abilities: Map<string, Abilities.Ability>
     moves:[string, Moves.Move][]
     locations: Locations.Locations
     trainers: Trainers.Trainer[]
@@ -25,7 +27,7 @@ export interface GameData {
 
 const gameData: GameData = {
     species: [] as Species.Specie[],
-    abilities: [],
+    abilities: new Map(),
     moves: [],
     locations: {} as Locations.Locations,
     trainers: [] as Trainers.Trainer[],
@@ -34,6 +36,8 @@ const gameData: GameData = {
 function main(){
     const OUTPUT_VERSION = process.argv[2] ? "V" + process.argv[2] : ""
     const OUTPUT = `./dist/gameData${OUTPUT_VERSION}.json`
+    const OUTPUT_ADDITIONNAL = `./dist/additional${OUTPUT_VERSION}.json`
+
     getFileData(Path.join(ROOT_PRJ, 'include/global.h'), {filterComments: true, filterMacros: true, macros: new Map()})
     .then((global_h) => {
         const optionsGlobal_h = {
@@ -59,6 +63,7 @@ function main(){
             promiseArray.push(getTrainers())
             Promise.allSettled(promiseArray)
                 .then(()=>{
+                    getAdditionnalData(OUTPUT_ADDITIONNAL, gameData)
                     outputGameData(compactify(gameData), OUTPUT)
                 })
                 .catch((err)=>{
@@ -223,6 +228,19 @@ function getTrainers(){
         })
     })
     
+}
+
+function getAdditionnalData(outputFile: string, gameData: GameData){
+    getFileData(Path.join(ROOT_PRJ, 'src/battle_util.c'), {filterComments: true, filterMacros: true, macros: new Map()})
+        .then((filedata)=>{
+            const data = Additionnal.replaceWithName(Additionnal.parse(filedata.data), gameData.abilities)
+            const dataTowrite = JSON.stringify(data)
+            FS.writeFile(outputFile, dataTowrite , (err_exist)=>{
+                if (err_exist){
+                    console.error(`couldn't write the gamedata output to ${outputFile}`)
+                }
+            })
+        }) 
 }
 
 main()

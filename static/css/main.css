@@ -112,11 +112,11 @@ span{
     display: flex;
     width: 100%;
     font-size: 2vmax;
+    box-shadow: inset 0 0 1vmax var(--shadow);
 }
 .abi-desc{
     padding-left: 1%;
     flex-grow: 1;
-    flex-direction: column;
 }
 .abi-name{
     width: 9em;
@@ -643,6 +643,11 @@ span{
 .filter-not{
     padding-left: 0.1em;
     border-radius: 10px 0 0 10px;
+}
+.filter-not-not{
+    text-decoration: line-through;
+    text-decoration-style: double;
+    text-decoration-thickness: 2px;
 }
 .filter-key-wrapper{
     position: relative;

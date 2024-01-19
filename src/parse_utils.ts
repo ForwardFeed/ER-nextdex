@@ -15,19 +15,6 @@ export function upperCaseFirst(word: string): string{
     return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
-export function TYPE_toType(type: string): string{
-    return upperCaseFirst(type.replace("TYPE_", '').toLowerCase())
-}
-
-
-export function NAMEtoName(NAME: string): string{
-    return NAME .replace(/^SPECIES_/, '')
-                .toLowerCase().replace(/_/g, ' ')
-                .split(' ')
-                .map((x)=> upperCaseFirst(x))
-                .join(' ')
-}
-
 export function Xtox(prefix: string | RegExp, X: string): string{
     return X .replace(prefix, '')
                 .toLowerCase().replace(/_/g, ' ')
