@@ -14,3 +14,7 @@ export function addTooltip(node, description) {
 	};
 	node.appendChild(tooltip);
 }
+
+export function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}

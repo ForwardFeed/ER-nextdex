@@ -1,6 +1,6 @@
 import { redirectLocation } from "./locations_panel.js"
 import { redirectMove } from "./moves_panel.js"
-import { addTooltip } from "./utils.js"
+import { addTooltip, capitalizeFirstLetter } from "./utils.js"
 import { queryFilter } from "./search.js"
 import { gameData } from "./data_version.js"
 
@@ -83,7 +83,8 @@ function setLevelUpMoves(core, moves){
         nodeMoveLvl.innerText = +lvl || "Ev"
         nodeMoveLvl.className = "species-levelup-lvl"
         row.append(nodeMoveLvl)
-
+        if(!gameData.typeT[move.types[0]]) //the spike cannon bug, to be removed later
+            gameData.typeT[move.types[0]] = "normal"
         const type1 = gameData.typeT[move.types[0]].toLowerCase()
         const nodeMoveName = document.createElement('div')
         nodeMoveName.onclick=() => {redirectMove(id)}
@@ -287,17 +288,24 @@ function setEvoReason(kindID, reason){
 
 
 function setLocations(locations){
-    locations = locations.reduce(function(a,b){
-        if (a.indexOf(b) < 0 ) a.push(b);
-        return a;
-      },[]); // remove duplicates
     const frag = document.createDocumentFragment()
-    for (const locID of locations){
+    for (const [locID,value] of locations){
         const loc = gameData.locations.maps[locID]
         if (!loc) continue 
         const node = document.createElement('div')
         node.className = "specie-locs"
-        node.innerText = loc.name
+        let locationString = `Can be found at ${loc.name}`
+        
+        let first = true
+        for (const field of value) {
+            if(first) first=false
+            else
+            {
+                locationString+=` and`
+            }
+            locationString+=` on ${capitalizeFirstLetter(field)}`
+        }
+        node.innerText = locationString
         node.onclick = () => {
             redirectLocation(locID)
         }

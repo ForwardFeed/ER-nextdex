@@ -1,4 +1,4 @@
-import { feedPanelSpecies, getSpritesURL } from "./species_panel.js"
+import { feedPanelSpecies, getSpritesURL} from "./species_panel.js"
 import { feedPanelMoves } from "./moves_panel.js"
 import { feedPanelLocations } from "./locations_panel.js"
 import { feedPanelTrainers } from "./trainers_panel.js"
@@ -145,7 +145,7 @@ function hydrateSpecies(){
             hydrateNextEvolutionWithMoves(i, evo)
         }
         // prepare to be appended a list of location where this pokemon appear
-        spec.locations = [];
+        spec.locations = new Map();
         // add to the html list 
         const core = document.createElement('div')
         core.className = "btn data-list-row sel-n-active"
@@ -194,7 +194,10 @@ function hydrateLocation(){
             for (const monID of mons){
                 const specieID = monID[2]
                 if (specieID < 1) continue
-                gameData.species[specieID].locations.push(mapID)
+
+                if(!gameData.species[specieID].locations.get(mapID))
+                    gameData.species[specieID].locations.set(mapID,new Set())
+                gameData.species[specieID].locations.get(mapID).add(locName)
             }
         }
 

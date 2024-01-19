@@ -65,6 +65,7 @@ body {
     border-color: var(--selActive);
     border-style: solid;
     color: var(--font-color);
+    user-select: none;
 }
 
 .search-keys-wrapper {

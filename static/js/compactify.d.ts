@@ -82,6 +82,7 @@ export interface CompactSpecie {
     TMHMMoves: number[];
     tutor: number[];
     forms: number[];
+    locations:Map<number,Set<string>>;
 }
 export interface CompactTrainers {
     name: string;
