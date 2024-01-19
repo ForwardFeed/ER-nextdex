@@ -106,7 +106,10 @@ const stageBattleMovesExecutionMap: {[key: string]: (line: string, context: Cont
         } else if (line.match('.priority')){
             context.currMove.priority = regexGrabNum(line, /(?<==)\d+/, 0)
         } else if (line.match('.flags')){
-            context.currMove.flags = regexGrabStr(line, /(?<==)[^,]+/).split("|").map((x)=>x.replace(/^FLAG_/, ''))
+            context.currMove.flags = regexGrabStr(line, /(?<==)[^,]+/)
+                .split("|")
+                .map((x)=>Xtox('FLAG_',x))
+                .filter(x => x !== "0")
         } else if (line.match('.split')){
             context.currMove.split = regexGrabStr(line, /(?<==)\w+/).replace(/^SPLIT_/, '')
         } else if (line.match('.argument')){

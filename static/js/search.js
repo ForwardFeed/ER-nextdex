@@ -32,14 +32,15 @@ export const search = {
     panelUpdatesIndex: 0,
     // if any pannel needs a special key you need to append it here
     queryKeys: [
-        "name",
-        "type",
-        "ability",
-        "move",
+        "Name",
+        "Type",
+        "Ability",
+        "Move",
+        "Move-effect",
     ]
 }
 /**
- * Will execute any filter query so far
+ * Will execute all filters query so far
  */
 function executeAllFilters(){
     const allQueries = [{
@@ -56,7 +57,7 @@ function executeAllFilters(){
             data: $(this).find('.filter-search').val().toLowerCase()
         })
     })
-    // set everything into a big AND
+    // set everything into a big AND //TODO implement the UI change for that
     const megaQuery = {
         op: "AND",
         not: false,
