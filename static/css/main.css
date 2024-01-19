@@ -82,7 +82,7 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    
+    user-select: none;
 }
 .data-data{
     flex-grow: 1;
@@ -242,6 +242,7 @@ span{
     flex-direction: column;
     align-items: center;
     text-align: center;
+    user-select: none;
 }
 .abi-inn-info{
     width: 100%;
@@ -337,6 +338,7 @@ span{
     display: flex;
     flex-direction: row;
     right: 0;
+    user-select: none;
 }
 .species-switch > * {
     margin-right: 0.5em;
@@ -373,9 +375,7 @@ span{
     display: flex;
     cursor: pointer;
 }
-.species-move-list, .species-move, .specie-block{
-    cursor: pointer;
-}
+
 #species-evos{
     display: flex;
     flex-direction: column;
@@ -407,6 +407,8 @@ span{
 
 .species-move-list>*:hover, .trainers-pokemon:hover, .specie-locs:hover, .specie-block:hover{
     background-color: var(--selHover);
+    cursor: pointer;
+    user-select: none;
 }
 #learnset{
     background-color: var(--colorD);
@@ -433,8 +435,10 @@ span{
     }
     .data-list-row{
         min-height: 2em;
+        min-width: fit-content;
         overflow-y: scroll;
         padding: 10px;
+        overflow: hidden;
     }
     .data-data{
         height: 100%;
