@@ -37,6 +37,11 @@ export const search = {
         "Ability",
         "Move",
         "Move-effect",
+    ],
+    operators: [
+        "OR",
+        "AND",
+        "XOR",
     ]
 }
 /**
@@ -44,14 +49,14 @@ export const search = {
  */
 function executeAllFilters(){
     const allQueries = [{
-        op:"OR",
+        op:"AND",
         not: false, //not yet implemented
         k: $('#search-keys').val().toLowerCase(),
         data: $('#search-bar').val().toLowerCase()
     }]
     $('.filter-field').each(function(){ 
         allQueries.push({
-            op:"OR",
+            op:"AND",
             //if you use data('state') jquery util here you're fucked for no acceptable reason
             not: $(this).find('.filter-not')[0].dataset.state === "on" ? true : false,
             k: $(this).find('.filter-key').val().toLowerCase(),
@@ -60,10 +65,10 @@ function executeAllFilters(){
     })
     // set everything into a big AND //TODO implement the UI change for that
     const megaQuery = {
-        op: "AND",
+        op: $('#filter-main-operator').val(),
         not: false,
         k: "",
-        data: allQueries
+        data: allQueries.filter((x)=> x.data) //filters the empty query 
     }
     //execute the update of the active panel
     search.panelUpdatesTable[search.panelUpdatesIndex](megaQuery)
@@ -104,6 +109,16 @@ export function setupSearch(){
     $('#filter-clear-all').on('click', function(){
         $(this).closest('.filter-panel').find('.filter-field').remove()
         activateSearch()
+    })
+    for(const operator of search.operators){
+        const option = document.createElement('option')
+        option.value = operator
+        option.innerText =  operator
+        $('#filter-main-operator').append(option)
+    }
+    $('#filter-main-operator').on('change', function(){
+        activateSearch()
+        console.log('changed')
     })
     const keyNode = $('#search-keys-selections')
     for (const key of search.queryKeys){
