@@ -151,8 +151,6 @@ export function updateMoves(searchQuery){
 
 export function redirectMove(moveId)
 {
-    const mainSearch = document.getElementById("search-bar")
-    mainSearch.value = gameData.moves[moveId].name
     $("#btn-moves").click()
 
     //Needed for moves like powder, where it have gone poison powder because it's first alphabetically

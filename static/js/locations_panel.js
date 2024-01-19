@@ -33,8 +33,6 @@ export function feedPanelLocations(mapID){
 
 export function redirectLocation(mapId)
 {
-    const mainSearch = document.getElementById("search-bar")
-    mainSearch.value = gameData.locations.maps[mapId].name
     $("#btn-locations").click()
     const location = $('#locations-list').children().eq(mapId)
     location.click()[0].scrollIntoView({behavior:"smooth"})

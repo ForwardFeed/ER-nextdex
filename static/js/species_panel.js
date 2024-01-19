@@ -24,12 +24,7 @@ export function feedPanelSpecies(id){
 }
 
 export function redirectSpecie(specieId) {
-
-    const mainSearch = document.getElementById("search-bar")
-    mainSearch.value = gameData.species[specieId].name
     $("#btn-species").click()
-
-    //Needed for moves like powder, where it have gone poison powder because it's first alphabetically
     $('#species-list').children().eq(specieId-1).click()[0].scrollIntoView({behavior:"smooth"})
 }
 
