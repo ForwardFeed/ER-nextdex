@@ -332,7 +332,20 @@ export function updateSpecies(searchQuery){
                 if (abi == queryData) return true
             }
             return false
-        }
+        },
+        "move": (queryData, specie) => {
+            let moves = specie.eggMoves.concat(
+                specie.levelUpMoves.map(x=>x.id).concat(
+                    specie.TMHMMoves.concat(
+                        specie.tutor
+                    )
+                )
+            ).map((x)=>gameData.moves[x].name.toLowerCase())
+            for (const move of moves){
+                if (move == queryData) return true
+            }
+            return false
+        },
     }
     for (const i in species){
         if (i == 0 ) continue

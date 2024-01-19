@@ -35,6 +35,7 @@ export const search = {
         "name",
         "type",
         "ability",
+        "move",
     ]
 }
 /**
