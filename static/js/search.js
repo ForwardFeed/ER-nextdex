@@ -74,7 +74,7 @@ function executeAllFilters(){
     search.panelUpdatesTable[search.panelUpdatesIndex](megaQuery)
 }
 
-function activateSearch(){
+export function activateSearch(){
     if (search.updateGuard) {
         search.updateQueue = true
         return
@@ -118,7 +118,6 @@ export function setupSearch(){
     }
     $('#filter-main-operator').on('change', function(){
         activateSearch()
-        console.log('changed')
     })
     const keyNode = $('#search-keys-selections')
     for (const key of search.queryKeys){

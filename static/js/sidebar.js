@@ -1,4 +1,4 @@
-import { search } from "./search.js"
+import { search , activateSearch} from "./search.js"
 
 export function setupPanels(){
     // if modified sync it with "search.js > search > panelUpdatesTable" variable
@@ -30,7 +30,7 @@ export function setupPanels(){
             if (search.panelFrozenUpdate[i]){
                 fastdom.mutate(() => {
                     //then refresh in the next frame
-                    $('#search-keys').change()
+                    activateSearch()
                     //and tell this pannel has done the required search
                     search.panelFrozenUpdate[i] = false
                 })
