@@ -162,8 +162,8 @@ export function compactify(gameData: GameData): CompactGameData{
     const compacted = initCompactGameData()
     const abiT: string[] = []
     gameData.abilities.forEach((val)=>{
-        abiT.push(val[0])
-        compacted.abilities.push(val[1])
+        abiT.push(val.name)
+        compacted.abilities.push(val)
     })
     const movesT: string[] = []
     const tablize = ((x: unknown, table: unknown[]) => {

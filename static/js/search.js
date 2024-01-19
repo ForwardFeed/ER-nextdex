@@ -122,7 +122,7 @@ function appendFilter(){
     divNot.innerText = "¿?"
     divNot.type = "button"
     divNot.dataset.state = "off"
-    divField.append(divNot) //not implemented yet
+    divField.append(divNot)
 
     const divKeyWrapper = document.createElement('div')
     divKeyWrapper.className = "filter-key-wrapper"

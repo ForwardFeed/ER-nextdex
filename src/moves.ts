@@ -115,6 +115,10 @@ const stageBattleMovesExecutionMap: {[key: string]: (line: string, context: Cont
         } else if (line.match('.argument')){
             context.currMove.argument = regexGrabStr(line, /(?<==)\w+/)
         } else if (line.match(/};/)) {
+            if (context.currMove.name) {
+                if (!context.currMove.types.length) context.currMove.types = ["Normal"] // default value
+                context.moves.set(context.currMove.name, context.currMove)
+            }
             context.stage = stageDescriptionExecutionMap
             context.execFlag = "desc"
             return

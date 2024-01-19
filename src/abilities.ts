@@ -67,7 +67,7 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
     }
 }
 
-export function parse(fileData: string): [string, Ability][]{
+export function parse(fileData: string): Map<string, Ability>{
     const lines = fileData.split('\n')
     const lineLen = lines.length
     const context = initContext()
@@ -76,5 +76,5 @@ export function parse(fileData: string): [string, Ability][]{
         executionMap[context.execFlag](line, context)
         if (context.stopRead) break
     }
-    return Array.from(context.abilities.entries()) 
+    return context.abilities
 }
