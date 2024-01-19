@@ -35,45 +35,69 @@ export const search = {
         "Name",
         "Type",
         "Ability",
+        "Move"
     ]
+}
+/**
+ * Will execute any filter query so far
+ */
+function executeAllFilters(){
+    const allQueries = [{
+        op:"OR",
+        not: false, //not yet implemented
+        k: $('#search-keys').val().toLowerCase(),
+        data: $('#search-bar').val().toLowerCase()
+    }]
+    $('.filter-field').each(function(){
+        allQueries.push({
+            op:"OR",
+            not: false, //not yet implemented
+            k: $(this).find('.filter-key').val().toLowerCase(),
+            data: $(this).find('.filter-search').val().toLowerCase()
+        })
+    })
+    // set everything into a big AND
+    const megaQuery = {
+        op: "AND",
+        not: false,
+        k: "",
+        data: allQueries
+    }
+    //execute the update of the active panel
+    search.panelUpdatesTable[search.panelUpdatesIndex](megaQuery)
+}
+
+function activateSearch(){
+    if (search.updateGuard) {
+        search.updateQueue = true
+        return
+    }
+    search.updateGuard = true
+    while(true){
+        fastdom.mutate(() => {
+            //tells all panels that once they get to switch in they have to do an update
+            search.panelFrozenUpdate = search.panelFrozenUpdate.map((x, index)=>{
+                return search.panelUpdatesIndex != index
+            })
+            executeAllFilters()
+        })
+        if (!search.updateQueue) break
+        search.updateQueue = false
+    }
+    search.updateGuard = false    
 }
 
 export function setupSearch(){
-    $('#search-bar, #search-keys').on('keyup search', function(){
-        $('#search-bar').val($('#search-bar').val().toLowerCase())
-        const queryData = $('#search-bar').val()
-        if (search.updateGuard) {
-            search.updateQueue = true
-            return
-        }
-        search.updateGuard = true
-        while(true){
-            fastdom.mutate(() => {
-                //tells all panels that once they get to switch in they have to do an update
-                search.panelFrozenUpdate = search.panelFrozenUpdate.map((x, index)=>{
-                    return search.panelUpdatesIndex != index
-                })
-                //execute the update of the active panel
-                const query = {
-                    op:"OR", // default yet not introduced
-                    not: false, //not yet implemented
-                    k: $('#search-keys').val().toLowerCase(),
-                    data: queryData
-                }
-                search.panelUpdatesTable[search.panelUpdatesIndex](query)
-            })
-            if (!search.updateQueue) break
-            search.updateQueue = false
-        }
-        search.updateGuard = false    
-    })
+    $('#search-bar, #search-keys').on('keyup search', activateSearch)
     
     $('#filter-icon').on('click', function(){
-        $('#filter-data').toggle()
-        console.log('nope, not ready yet')
+        $('#filter-frame').toggle()
     })
     $('#search-keys').on('click', function(){
         $('#search-keys-selections').toggle()
+    })
+    $('.filter-add').on('click', function(){
+        appendFilter()
     })
     const keyNode = $('#search-keys-selections')
     for (const key of search.queryKeys){
@@ -85,6 +109,71 @@ export function setupSearch(){
         }
         keyNode.append(option)
     }
+}
+
+function appendFilter(){    
+    const divField = document.createElement('div')
+    divField.className = "filter-field"
+
+    /*const divNot = document.createElement('div')
+    divNot.className = "filter-not"
+    divNot.innerText = "¿?"
+    divField.append(divNot)*/ //not implemented yet
+
+    const divKeyWrapper = document.createElement('div')
+    divKeyWrapper.className = "filter-key-wrapper"
+    divField.append(divKeyWrapper)
+
+    const divKey = document.createElement('input')
+    divKey.className = "filter-key"
+    divKey.type = "button"
+    divKey.value = search.queryKeys[0] || "Name"
+    divKey.onchange = activateSearch
+    divKeyWrapper.append(divKey)
+
+    const divAbsolute = document.createElement('div')
+    divAbsolute.className = "filter-key-absolute"
+    divKeyWrapper.append(divAbsolute)
+
+    const divKeySelection = document.createElement('div')
+    divKeySelection.className = "filter-key-selection"
+    divKeySelection.style.display = "none"
+    divAbsolute.append(divKeySelection)
+    for (const key of search.queryKeys){
+        const option = document.createElement('option')
+        option.innerText = key
+        option.onclick = ()=>{
+            divKey.value = key
+            $(divKeySelection).toggle()
+            $(divKey).toggle()
+        }
+        divKeySelection.append(option)
+    }
+
+    divKey.onclick = () =>{
+        $(divKeySelection).toggle()
+        $(divKey).toggle()
+    }
+
+    const divLabel = document.createElement('label')
+    divLabel.className = "filter-label"
+    divField.append(divLabel)
+
+    const divSearch = document.createElement('input')
+    divSearch.className = "filter-search"
+    divSearch.type = "search"
+    divSearch.onkeyup = activateSearch
+    divLabel.append(divSearch)
+
+    const divRemove = document.createElement('div')
+    divRemove.className = "filter-remove"
+    divRemove.innerText = "X"
+    divRemove.onclick = ()=>{
+        divField.remove()
+    }
+    divField.append(divRemove)
+
+    $('#filter-data').find('.filter-add').before(divField)
 }
 
 
@@ -118,12 +207,11 @@ export function queryFilter(query, data, keymap){
     const queryNot = (notFlag, value) => {
         return notFlag ? !value : value
     }
-
-    if (query.constructor === Array){
+    if (query.data.constructor === Array){
         //'break it down until it is no longer an array and solve using the parent op'
         const subQueriesAnswer = []
-        for (const subQuery of query){
-            subQueriesAnswer.push(query(subQuery, data, keymap))
+        for (const subQuery of query.data){
+            subQueriesAnswer.push(queryFilter(subQuery, data, keymap))
         }
         if (query.op === "XOR"){
             let flag = false
@@ -139,7 +227,7 @@ export function queryFilter(query, data, keymap){
             return queryNot(query.not, false)
         } else { //Default AND
             for (const answer of subQueriesAnswer){
-                if (!answer) queryNot(query.not, false)
+                if (!answer) return queryNot(query.not, false)
             }
             return queryNot(query.not, true)
         }

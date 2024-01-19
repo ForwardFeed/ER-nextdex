@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,10 +11,11 @@
     <link rel="stylesheet" href="./css/themes/rushed.css" id="styles-rushed">
     <script type="module" src="./js/settings.js"></script>
     <script type="module">
-        import {initAppSettings} from './js/settings.js'
+        import { initAppSettings } from './js/settings.js'
         initAppSettings()
     </script>
 </head>
+
 <body>
     <div id="top-header" class="header-gradient-ER">
         <span class="main-title">
@@ -32,259 +34,275 @@
         </div>
         <img id="filter-icon" src="./icons/filter.png" alt="">
         <img id="settings-btn" src="./icons/settings.png" alt="settings panel">
-        
+
     </div>
     <div id="non-header">
-    <main>
-        <div id="panel-abis" class="panel">
-            <div id="abis-list">
+        <main>
+            <div id="panel-abis" class="panel">
+                <div id="abis-list">
 
-            </div>
-        </div>
-        <div id="panel-moves" class="panel">
-            <div id="moves-list" class="data-list">
-            </div>
-            <div id="moves-data" class="data-data">
-                <div class="moves-top">
-                    <div class="moves-top-sub">
-                        <div class="moves-large">
-                            <span>Power</span>
-                            <div id="moves-pwr"></div>
-                        </div>
-                        <div class="moves-xlarge">
-                            <div class="xlarge-row">
-                                <span>acc</span>
-                                <div id="moves-acc"></div>
-                            </div>
-                            <div class="xlarge-row">
-                                <span>pp</span>
-                                <div id="moves-pp"></div>
-                            </div>
-                            <div class="xlarge-row">
-                                <span>Priority</span>
-                                <div id="moves-prio"></div>
-                            </div>
-                            <div class="xlarge-row">
-                                <span>Eff. Chance</span>
-                                <div id="moves-chance"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="moves-top-sub">
-                        <img id="moves-split">
-                        <div id="moves-target">
-                            <div class="target-row">
-                                <div id="foe1" class="foe">Foe</div>
-                                <div id="foe2" class="foe">Foe</div>
-                                <div id="foe3" class="foe">Foe</div>
-                            </div>
-                            <div class="target-row">
-                                <div id="ally1" class="ally">ally</div>
-                                <div id="allySelf" class="self">self</div>
-                                <div id="ally2" class="ally">ally</div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-                <div class="moves-bot">
-                    <div class="moves-bot-info">
-                        <div id="moves-name"></div>
-                        <div id="moves-types1"></div>
-                        <div id="moves-types2"></div>
-                    </div>
-                    <div id="moves-desc"></div>
-                    <div id="moves-flags"></div>
+            </div>
+            <div id="panel-moves" class="panel">
+                <div id="moves-list" class="data-list">
                 </div>
+                <div id="moves-data" class="data-data">
+                    <div class="moves-top">
+                        <div class="moves-top-sub">
+                            <div class="moves-large">
+                                <span>Power</span>
+                                <div id="moves-pwr"></div>
+                            </div>
+                            <div class="moves-xlarge">
+                                <div class="xlarge-row">
+                                    <span>acc</span>
+                                    <div id="moves-acc"></div>
+                                </div>
+                                <div class="xlarge-row">
+                                    <span>pp</span>
+                                    <div id="moves-pp"></div>
+                                </div>
+                                <div class="xlarge-row">
+                                    <span>Priority</span>
+                                    <div id="moves-prio"></div>
+                                </div>
+                                <div class="xlarge-row">
+                                    <span>Eff. Chance</span>
+                                    <div id="moves-chance"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="moves-top-sub">
+                            <img id="moves-split">
+                            <div id="moves-target">
+                                <div class="target-row">
+                                    <div id="foe1" class="foe">Foe</div>
+                                    <div id="foe2" class="foe">Foe</div>
+                                    <div id="foe3" class="foe">Foe</div>
+                                </div>
+                                <div class="target-row">
+                                    <div id="ally1" class="ally">ally</div>
+                                    <div id="allySelf" class="self">self</div>
+                                    <div id="ally2" class="ally">ally</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="moves-bot">
+                        <div class="moves-bot-info">
+                            <div id="moves-name"></div>
+                            <div id="moves-types1"></div>
+                            <div id="moves-types2"></div>
+                        </div>
+                        <div id="moves-desc"></div>
+                        <div id="moves-flags"></div>
+                    </div>
 
-            </div>
-        </div>
-        <div id="panel-species" class="panel">
-            <div id="species-list" class="data-list">
-            </div>
-            <div id="species-data" class="data-data">
-                <div class="species-top">
-                    <img id="species-front">
-                    <div class="species-abi-inn">
-                        <div class="abi-inn-info">
-                            Abilities
-                        </div>
-                        <div id="species-abilities">
-                            
-                        </div>
-                    </div>
-                    <div class="species-abi-inn">
-                        <div class="abi-inn-info">
-                            Innates
-                        </div>
-                        <div id="species-innates">
-
-                        </div>
-                    </div>
-                    <div id="species-basestats">
-                        <div id="BHP" class="stat-row">
-                            <span class="stat-name">HP</span>
-                            <span class="stat-num">0</span>
-                            <div id="BHPBar" class="stat-bar"></div>
-                        </div>
-                        <div id="BAT" class="stat-row">
-                            <span class="stat-name">Atk</span>
-                            <span class="stat-num">0</span>
-                            <div id="BATBar" class="stat-bar"></div>
-                        </div>
-                        <div id="BDF" class="stat-row">
-                            <span class="stat-name">Def</span>
-                            <span class="stat-num">0</span>
-                            <div id="BDFBar" class="stat-bar"></div>
-                        </div>
-                        <div id="BSA" class="stat-row">
-                            <span class="stat-name">SpA</span>
-                            <span class="stat-num">0</span>
-                            <div id="BSABar" class="stat-bar"></div>
-                        </div>
-                        <div id="BSD" class="stat-row">
-                            <span class="stat-name">SpD</span>
-                            <span class="stat-num">0</span>
-                            <div id="BSDBar" class="stat-bar"></div>
-                        </div>
-                        <div id="BSP" class="stat-row">
-                            <span class="stat-name">Spe</span>
-                            <span class="stat-num">0</span>
-                            <div id="BSPBar" class="stat-bar"></div>
-                        </div>
-                        <div id="BST" class="stat-row">
-                            <span class="stat-name">BST</span>
-                            <span class="stat-num">0</span>
-                            <div id="BSTBar" class="stat-bar"></div>
-                        </div>
-                    </div>
                 </div>
-                <div class="species-mid">
-                    <div id="species-name"></div>
-                    <div id="species-types">
-                        <div class="species-type"></div>
-                        <div class="species-type"></div>
-                    </div>
-                    <div class="species-switch">
-                        <div id="switch-moves" class="btn sel-active">Moves</div>
-                        <div id="switch-evos" class="btn sel-n-active">Evolutions</div>
-                        <div id="switch-locations" class="btn sel-n-active">Locations</div>
-                    </div>
+            </div>
+            <div id="panel-species" class="panel">
+                <div id="species-list" class="data-list">
                 </div>
-                <div id="species-bot" class="species-bot">
-                    <div id="species-moves" class="species-sub-pannel active-sub-panel">
-                        <div class="species-bot-row">
-                            <div class="species-moves-title">
-                                Learn Sets
+                <div id="species-data" class="data-data">
+                    <div class="species-top">
+                        <img id="species-front">
+                        <div class="species-abi-inn">
+                            <div class="abi-inn-info">
+                                Abilities
                             </div>
-                            <div class="species-move-list" id="learnset">
+                            <div id="species-abilities">
 
                             </div>
                         </div>
-                        <div class="species-bot-row">
-                            <div class="species-moves-title">
-                                TM/HM
+                        <div class="species-abi-inn">
+                            <div class="abi-inn-info">
+                                Innates
                             </div>
-                            <div class="species-move-list" id="tmhm">
+                            <div id="species-innates">
 
                             </div>
                         </div>
-                        <div class="species-bot-row">
-                            <div class="species-moves-title">
-                                Tutor moves
+                        <div id="species-basestats">
+                            <div id="BHP" class="stat-row">
+                                <span class="stat-name">HP</span>
+                                <span class="stat-num">0</span>
+                                <div id="BHPBar" class="stat-bar"></div>
                             </div>
-                            <div class="species-move-list" id="tutor">
-
+                            <div id="BAT" class="stat-row">
+                                <span class="stat-name">Atk</span>
+                                <span class="stat-num">0</span>
+                                <div id="BATBar" class="stat-bar"></div>
+                            </div>
+                            <div id="BDF" class="stat-row">
+                                <span class="stat-name">Def</span>
+                                <span class="stat-num">0</span>
+                                <div id="BDFBar" class="stat-bar"></div>
+                            </div>
+                            <div id="BSA" class="stat-row">
+                                <span class="stat-name">SpA</span>
+                                <span class="stat-num">0</span>
+                                <div id="BSABar" class="stat-bar"></div>
+                            </div>
+                            <div id="BSD" class="stat-row">
+                                <span class="stat-name">SpD</span>
+                                <span class="stat-num">0</span>
+                                <div id="BSDBar" class="stat-bar"></div>
+                            </div>
+                            <div id="BSP" class="stat-row">
+                                <span class="stat-name">Spe</span>
+                                <span class="stat-num">0</span>
+                                <div id="BSPBar" class="stat-bar"></div>
+                            </div>
+                            <div id="BST" class="stat-row">
+                                <span class="stat-name">BST</span>
+                                <span class="stat-num">0</span>
+                                <div id="BSTBar" class="stat-bar"></div>
                             </div>
                         </div>
-                        <div class="species-bot-row">
-                            <div class="species-moves-title">
-                                Egg Moves
-                            </div>
-                            <div class="species-move-list" id="eggmoves">
-                                
-                            </div>
+                    </div>
+                    <div class="species-mid">
+                        <div id="species-name"></div>
+                        <div id="species-types">
+                            <div class="species-type"></div>
+                            <div class="species-type"></div>
+                        </div>
+                        <div class="species-switch">
+                            <div id="switch-moves" class="btn sel-active">Moves</div>
+                            <div id="switch-evos" class="btn sel-n-active">Evolutions</div>
+                            <div id="switch-locations" class="btn sel-n-active">Locations</div>
                         </div>
                     </div>
-                    <div id="species-evos" class="species-sub-pannel" style="display: none;">
-                        
+                    <div id="species-bot" class="species-bot">
+                        <div id="species-moves" class="species-sub-pannel active-sub-panel">
+                            <div class="species-bot-row">
+                                <div class="species-moves-title">
+                                    Learn Sets
+                                </div>
+                                <div class="species-move-list" id="learnset">
+
+                                </div>
+                            </div>
+                            <div class="species-bot-row">
+                                <div class="species-moves-title">
+                                    TM/HM
+                                </div>
+                                <div class="species-move-list" id="tmhm">
+
+                                </div>
+                            </div>
+                            <div class="species-bot-row">
+                                <div class="species-moves-title">
+                                    Tutor moves
+                                </div>
+                                <div class="species-move-list" id="tutor">
+
+                                </div>
+                            </div>
+                            <div class="species-bot-row">
+                                <div class="species-moves-title">
+                                    Egg Moves
+                                </div>
+                                <div class="species-move-list" id="eggmoves">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="species-evos" class="species-sub-pannel" style="display: none;">
+
+                        </div>
+                        <div id="species-locations" class="species-sub-pannel" style="display: none;">
+
+                        </div>
+
                     </div>
-                    <div id="species-locations" class="species-sub-pannel" style="display: none;">
-                        
+                </div>
+            </div>
+            <div id="panel-locations" class="panel">
+                <div id="locations-list" class="data-list">
+
+                </div>
+                <div id="locations-data" class="data-data">
+                    <div class="location-field">
+                        <div class="location-title">Land</div>
+                        <div id="locations-land" class="location-table"></div>
                     </div>
-                    
-                </div>
-            </div>
-        </div>
-        <div id="panel-locations" class="panel">
-            <div id="locations-list" class="data-list">
+                    <div class="location-field">
+                        <div class="location-title">Water</div>
+                        <div id="locations-water" class="location-table"></div>
+                    </div>
+                    <div class="location-field">
+                        <div class="location-title">Fishing</div>
+                        <div id="locations-fish" class="location-table"></div>
+                    </div>
+                    <div class="location-field">
+                        <div class="location-title">Honey</div>
+                        <div id="locations-honey" class="location-table"></div>
+                    </div>
+                    <div class="location-field">
+                        <div class="location-title">Rock-Smash</div>
+                        <div id="locations-rock" class="location-table"></div>
+                    </div>
+                    <div class="location-field">
+                        <div class="location-title">Hiddens</div>
+                        <div id="locations-hidden" class="location-table"></div>
+                    </div>
 
+                </div>
             </div>
-            <div id="locations-data" class="data-data">
-                <div class="location-field">
-                    <div class="location-title">Land</div>
-                    <div id="locations-land"  class="location-table"></div>
-                </div>
-                <div class="location-field">
-                    <div class="location-title">Water</div>
-                    <div id="locations-water" class="location-table"></div>
-                </div>
-                <div class="location-field">
-                    <div class="location-title">Fishing</div>
-                    <div id="locations-fish"  class="location-table"></div>
-                </div>
-                <div class="location-field">
-                    <div class="location-title">Honey</div>
-                    <div id="locations-honey" class="location-table"></div>
-                </div>
-                <div class="location-field">
-                    <div class="location-title">Rock-Smash</div>
-                    <div id="locations-rock"  class="location-table"></div>
-                </div>
-                <div class="location-field">
-                    <div class="location-title">Hiddens</div>
-                    <div id="locations-hidden"class="location-table"></div>
-                </div>
+            <div id="panel-trainers" class="panel">
+                <div id="trainers-list" class="data-list">
 
-            </div>
-        </div>
-        <div id="panel-trainers" class="panel">
-            <div id="trainers-list" class="data-list">
-
-            </div>
-            <div id="trainers-data" class="data-data"> 
-                <div id="trainers-infobar" class="trainers-infobar">
-                    <div id="trainers-name"></div>
-                    <div id="trainers-double">Double!</div>
-                    <div id="trainers-normal"></div>
-                    <div id="trainers-elite"></div>
-                    <div id="trainers-rematch"></div>
                 </div>
-                <div id="trainers-team"></div>
+                <div id="trainers-data" class="data-data">
+                    <div id="trainers-infobar" class="trainers-infobar">
+                        <div id="trainers-name"></div>
+                        <div id="trainers-double">Double!</div>
+                        <div id="trainers-normal"></div>
+                        <div id="trainers-elite"></div>
+                        <div id="trainers-rematch"></div>
+                    </div>
+                    <div id="trainers-team"></div>
+                </div>
             </div>
-        </div>
-    </main>
-    <aside>
-        <div class="side-btn btn-active" id="btn-species">
-            <span>Species</span>
-        </div>
-        <div class="side-btn btn-n-active" id="btn-abis">
-            <span>
-                Abilities
-            </span>      
-        </div>
-        <div class="side-btn btn-n-active" id="btn-moves">
-            <span>Moves</span>
-        </div>
-        <div class="side-btn btn-n-active" id="btn-locations">
-            <span>Locations</span>
-        </div>
-        <div class="side-btn btn-n-active" id="btn-trainers">
-            <span>Trainers</span>
-        </div>
-    </aside>
+        </main>
+        <aside>
+            <div class="side-btn btn-active" id="btn-species">
+                <span>Species</span>
+            </div>
+            <div class="side-btn btn-n-active" id="btn-abis">
+                <span>
+                    Abilities
+                </span>
+            </div>
+            <div class="side-btn btn-n-active" id="btn-moves">
+                <span>Moves</span>
+            </div>
+            <div class="side-btn btn-n-active" id="btn-locations">
+                <span>Locations</span>
+            </div>
+            <div class="side-btn btn-n-active" id="btn-trainers">
+                <span>Trainers</span>
+            </div>
+        </aside>
     </div>
-    <div id="filter-data" style="display: none;">
-        Soon™
+    <div id="filter-frame" style="display: none;">
+        <div class="filter-panel">
+            <div class="filter-title">
+                <span>Filter</span>
+            </div>
+            <div class="filter-data" id="filter-data">
+                <div class="filter-add">
+                    <span class="filter-plus">+</span>
+                    <span>Add a filter</span>
+                </div>
+            </div>
+        </div>
+        <div class="filter-panel">
+            <div class="filter-title">
+                <span>Order</span>
+            </div>
+            <div class="filter-data" id="order-data"></div>
+        </div>
     </div>
     <div id="settings-frame" style="display: none;">
         <div class="versionning">
@@ -298,4 +316,5 @@
     <!-- load the main js code here or additionnal heavy stuff-->
     <script type="module" src="js/index.js"></script>
 </body>
+
 </html>

@@ -1,4 +1,5 @@
 import { queryFilter } from "./search.js"
+import { gameData } from "./data_version.js"
 
 export function updateAbilities(searchQuery){
     const abis = gameData.abilities
@@ -11,6 +12,7 @@ export function updateAbilities(searchQuery){
             return ability.name.includes(queryData) 
         }
     }
+    if (!searchQuery) return
     for (const i in abis){
         if (i == 0 ) continue
         const abi = abis[i]

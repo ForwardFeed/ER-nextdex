@@ -607,25 +607,105 @@ span{
 
 
 /* SEARCH */
-#filter-data{
+#filter-frame{
     position: absolute;
     z-index: 11; /* 10 would be reserved to a invisible click to close filer with 100% height and with */
     background-color: var(--colorB);
     margin: auto;
 }
+.filter-panel{
+    min-height: 50%;
+    width: 100%;
+}
+.filter-title{
+    width: 100%;
+    background-color: var(--colorA);
+}
 
+.filter-panel, .filter-data{
+    display: flex;
+    flex-direction: column;
+}
+.filter-data{
+    width: 100%;
+}
+.filter-data > *{
+    margin: auto;
+}
+.filter-field{
+    display: flex;
+}
+
+.filter-field *{
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
+}
+.filter-not{
+    padding-left: 0.1em;
+    border-radius: 10px 0 0 10px;
+}
+.filter-key-wrapper{
+    position: relative;
+    display: flex;
+    width: 3em;
+}
+.filter-key{
+    width: 100%;
+    background: rgba(0, 0, 0, 0);
+    border-radius: 10px 0 0 10px;
+    border-color: var(--selActive);
+    border-style: solid;
+    color: var(--font-color);
+    font-size: 1.5vmax;
+}
+.filter-key-absolute{
+    position: absolute;
+
+}
+.filter-key-selection > option:hover{
+    background-color: var(--selHover);
+}
+.filter-key-selection > option{
+    background-color: var(--colorC);
+}
+.filter-label{
+    
+}
+.filter-search{
+    font-size: 1.6vmax;
+    text-align: center;
+    padding-left: 7px;
+    border-radius: 0 10px 10px 0;
+    outline: none;
+}
+
+.filter-remove{
+    padding-right: 0.1em;
+}
+.filter-add{
+    border-radius: 10px;
+    border-style: dotted;
+    border-width: 2px;
+}
+.filter-add > *{
+    margin: auto;
+}
+.filter-key:hover, .filter-not:hover, .filter-remove:hover, .filter-add:hover{
+    background-color: var(--selHover);
+    cursor: pointer;
+}
 @media (orientation: landscape) {
-    #filter-data{
+    #filter-frame{
         font-size: 2vmax;
         top: 10vh;
         left: 15vw;
-        width: 85vw;
+        width: 70vw;
         height: 90vh;
     }
 }
 
 @media (orientation: portrait) {
-    #filter-data{
+    #filter-frame{
         top: 18vh;
         height: 82vh;
         width: 100vw;
