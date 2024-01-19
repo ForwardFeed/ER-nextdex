@@ -29,7 +29,7 @@ export function feedPanelMoves(moveID){
 function listMoveFlags(flags){
     const flagMap = {
         "MAKES_CONTACT": "Has contact and Big Pecks boost",
-        //"KINGS_ROCK_AFFECTED": "King's rock effective",
+        //"KINGS_ROCK_AFFECTED": "King's rock is affected",
         "HIGH_CRIT": "High crits chances",
         "IRON_FIST_BOOST": "Iron fist boost",
         "SHEER_FORCE_BOOST": "Sheer force boost",

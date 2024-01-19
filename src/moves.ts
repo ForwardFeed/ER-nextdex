@@ -1,4 +1,4 @@
-import { regexGrabNum, regexGrabStr, TYPE_toType } from "./parse_utils"
+import { regexGrabNum, regexGrabStr, Xtox } from "./parse_utils"
 
 interface Description {
     ptrDesc: string,
@@ -40,7 +40,7 @@ function initMove(): Move{
         acc: 100,
         pp: 0,
         chance: 0,
-        target: "", // maybe set default
+        target: "",
         priority: 0,
         flags: [],
         split: "",
@@ -84,16 +84,17 @@ const stageBattleMovesExecutionMap: {[key: string]: (line: string, context: Cont
         line = line.replace(/\s/g, '')
         if (line.match(/\[MOVE/)){
             if (context.currMove.name) {
+                if (!context.currMove.types.length) context.currMove.types = ["Normal"] // default value
                 context.moves.set(context.currMove.name, context.currMove)
                 context.currMove = initMove()
             }
             context.currMove.name = regexGrabStr(line, /MOVE_\w+/)
         } else if (line.match('.effect')){
-            context.currMove.effect = regexGrabStr(line, /EFFECT_\w+/)
+            context.currMove.effect = Xtox('EFFECT_',regexGrabStr(line, /EFFECT_\w+/))
         } else if (line.match('.power')){
             context.currMove.power = regexGrabNum(line, /(?<==)\d+/)
         } else if (line.match('.type')){
-            context.currMove.types.push(TYPE_toType(regexGrabStr(line, /TYPE_\w+/)))
+            context.currMove.types.push(Xtox('TYPE_', regexGrabStr(line, /TYPE_\w+/)))
         } else if (line.match('.acc')){
             context.currMove.acc = regexGrabNum(line, /(?<==)\d+/, 100)
         } else if (line.match('.pp')){

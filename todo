@@ -38,4 +38,5 @@
 [ ] Filters
     [ ] by megas
     [ ] redux forms
-    [ ] innates/abilities
+    [x] innates/abilities
+    [ ] add move flags / effect

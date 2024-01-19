@@ -1,4 +1,4 @@
-import { regexGrabNum, regexGrabStr, TYPE_toType } from "../parse_utils"
+import { regexGrabNum, regexGrabStr, Xtox } from "../parse_utils"
 
 
 export interface BaseStats {
@@ -123,7 +123,7 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
                 context.current.genderRatio = 255
             }
         } else if (line.match('.type')){
-            context.current.types.push(TYPE_toType(regexGrabStr(line, /(?<==)\w+/)))
+            context.current.types.push(Xtox('TYPE_',regexGrabStr(line, /(?<==)\w+/)))
         } else if (line.match('.egg')){
             context.current.eggGroup.push(regexGrabStr(line, /(?<==)\w+/))
         } else if (line.match('.item')){
