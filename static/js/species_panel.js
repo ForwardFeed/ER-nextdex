@@ -321,7 +321,7 @@ export function updateSpecies(searchQuery){
         "type": (queryData, specie) => {
             const types = specie.stats.types.map((x)=>gameData.typeT[x].toLowerCase())
             for (const type of types){
-                if (type == queryData) return true
+                if (type.includes(queryData))return true
             }
             return false
         },
