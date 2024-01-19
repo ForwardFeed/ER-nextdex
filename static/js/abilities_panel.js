@@ -1,4 +1,5 @@
 import { queryFilter } from "./search.js"
+import { gameData } from "./data_version.js"
 
 export function updateAbilities(searchQuery){
     const abis = gameData.abilities
