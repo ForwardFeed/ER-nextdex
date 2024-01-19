@@ -640,6 +640,11 @@ span{
     padding-left: 0.1em;
     border-radius: 10px 0 0 10px;
 }
+.filter-not-not{
+    text-decoration: line-through;
+    text-decoration-style: double;
+    text-decoration-thickness: 2px;
+}
 .filter-key-wrapper{
     position: relative;
     display: flex;

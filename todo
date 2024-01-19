@@ -36,7 +36,7 @@
     [ ] stats
     [ ] Aplhabethically
 [ ] Filters
-    [ ] by megas
+    [x] by megas :<= Just type "Mega in the name"
     [ ] redux forms
     [x] innates/abilities
-    [ ] add move flags / effect
+    [x] add move flags / effect
