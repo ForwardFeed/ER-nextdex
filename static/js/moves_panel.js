@@ -119,7 +119,7 @@ export function updateMoves(searchQuery){
         "type": (queryData, move) => {
             const types = move.types.map((x)=>gameData.typeT[x].toLowerCase())
             for (const type of types){
-                if (type == queryData) return true
+                if (type.includes(queryData)) return true
             }
             return false
         },
