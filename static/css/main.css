@@ -618,10 +618,22 @@ span{
     width: 100%;
 }
 .filter-title{
+    display: flex;
     width: 100%;
     background-color: var(--colorA);
 }
-
+.filter-title > div:last-child{
+    margin: auto;
+    margin-right: 2%;
+}
+.filter-title > *:first-child{
+    margin: auto;
+    margin-left: 2%;
+}
+#filter-clear-all:hover {
+    background-color: var(--selHover);
+    cursor: default;
+}
 .filter-panel, .filter-data{
     display: flex;
     flex-direction: column;

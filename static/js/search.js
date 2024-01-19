@@ -101,6 +101,10 @@ export function setupSearch(){
     $('.filter-add').on('click', function(){
         appendFilter()
     })
+    $('#filter-clear-all').on('click', function(){
+        $(this).closest('.filter-panel').find('.filter-field').remove()
+        activateSearch()
+    })
     const keyNode = $('#search-keys-selections')
     for (const key of search.queryKeys){
         const option = document.createElement('option')
