@@ -167,14 +167,10 @@ function appendFilter(){
         activateSearch()
     }
 
-    const divAbsolute = document.createElement('div')
-    divAbsolute.className = "filter-key-absolute"
-    divKeyWrapper.append(divAbsolute)
-
     const divKeySelection = document.createElement('div')
     divKeySelection.className = "filter-key-selection"
     divKeySelection.style.display = "none"
-    divAbsolute.append(divKeySelection)
+    divKeyWrapper.append(divKeySelection)
     for (const key of search.queryKeys){
         const option = document.createElement('option')
         option.innerText = key
@@ -239,7 +235,6 @@ function appendFilter(){
  * @param {SearchMap} keymap - a map with key (k) which points to a function return a function
  * @returns {boolean} - did the object matched?
  */
-//! NOT READY YET <= in cooking
 export function queryFilter(query, data, keymap){
     const queryNot = (notFlag, value) => {
         return notFlag ? !value : value

@@ -675,9 +675,9 @@ span{
     color: var(--font-color);
     font-size: 1.5vmax;
 }
-.filter-key-absolute{
+.filter-key-selection{
     position: absolute;
-
+    z-index: 12;
 }
 .filter-key-selection > option:hover{
     background-color: var(--selHover);
