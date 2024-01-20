@@ -679,14 +679,19 @@ span{
     position: absolute;
     z-index: 12;
 }
-.filter-key-selection > option:hover{
+.filter-key-selection > option:hover, .filter-suggestions > option:hover{
     background-color: var(--selHover);
 }
-.filter-key-selection > option{
+.filter-key-selection > option, .filter-suggestions > option{
     background-color: var(--colorC);
 }
+
 .filter-label{
     
+}
+.filter-suggestions{
+    position: absolute;
+    z-index: 12;
 }
 .filter-search{
     font-size: 1.6vmax;

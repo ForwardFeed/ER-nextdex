@@ -46,7 +46,7 @@ export function updateLocations(searchQuery){
     let validID;
     const queryMap = {
         "name": (queryData, map) => {
-            return AisInB(queryData, map.name.toLowerCase())
+            return AisInB(queryData, map.name.toLowerCase(), true)
         }
     }
     for (const i in maps){

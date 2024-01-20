@@ -1,4 +1,4 @@
-import { queryFilter } from "./search.js"
+import { queryFilter, search } from "./search.js"
 import { gameData } from "./data_version.js"
 import { AisInB } from "./utils.js"
 
@@ -7,12 +7,10 @@ export function updateAbilities(searchQuery){
     const nodeList = $('#abis-list').children()
     const queryMap = {
         "name": (queryData, ability) => {
-            return  AisInB(queryData, ability.name.toLowerCase()) || 
-                    AisInB(queryData, ability.desc.toLowerCase())
+            return (AisInB(queryData, ability.name.toLowerCase(), true))
         },
         "ability": (queryData, ability) => {
-            return  AisInB(queryData, ability.name.toLowerCase()) || 
-                    AisInB(queryData, ability.desc.toLowerCase())
+            return (AisInB(queryData, ability.name.toLowerCase()))
         }
     }
     if (!searchQuery) return
