@@ -1,6 +1,6 @@
 import { gameData } from "./data_version.js"
 import { queryFilter } from "./search.js"
-
+import { AisInB } from "./utils.js"
 export function feedPanelMoves(moveID){
     const move = gameData.moves[moveID]
     $('#moves-name').text(move.name)
@@ -114,12 +114,15 @@ export function updateMoves(searchQuery){
     const nodeList = $('#moves-list').children()
     const queryMap = {
         "name": (queryData, move) => {
-            return move.name.toLowerCase().indexOf(queryData) >= 0 ? true : false
+            return AisInB(queryData, move.name.toLowerCase())
+        },
+        "move": (queryData, move) => {
+            return AisInB(queryData, move.name.toLowerCase())
         },
         "type": (queryData, move) => {
             const types = move.types.map((x)=>gameData.typeT[x].toLowerCase())
             for (const type of types){
-                if (type.includes(queryData)) return true
+                if (AisInB(queryData, type)) return true
             }
             return false
         },
@@ -128,7 +131,7 @@ export function updateMoves(searchQuery){
             //effect in the data might be useless to the calc, at least to short and medium terms
             const flags = move.flags.map((x)=>gameData.flagsT[x].toLowerCase())
             for (const flag of flags){
-                if (flag.includes(queryData)) return true
+                if (AisInB(queryData, flag)) return true
             }
             return false
         },

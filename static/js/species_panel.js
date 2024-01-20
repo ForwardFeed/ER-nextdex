@@ -1,6 +1,6 @@
 import { redirectLocation } from "./locations_panel.js"
 import { redirectMove } from "./moves_panel.js"
-import { addTooltip, capitalizeFirstLetter } from "./utils.js"
+import { addTooltip, capitalizeFirstLetter, AisInB } from "./utils.js"
 import { queryFilter } from "./search.js"
 import { gameData } from "./data_version.js"
 
@@ -316,23 +316,23 @@ export function updateSpecies(searchQuery){
     let validID;
     const queryMap = {
         "name": (queryData, specie) => {
-            return specie.name.toLowerCase().indexOf(queryData) >= 0 ? true : false
+            return AisInB(queryData, specie.name.toLowerCase())
         },
         "type": (queryData, specie) => {
             const types = specie.stats.types.map((x)=>gameData.typeT[x].toLowerCase())
             for (const type of types){
-                if (type.includes(queryData))return true
+                if (AisInB(queryData, type)) return true
             }
             return false
         },
         "ability": (queryData, specie) => {
-            let abilities = specie.stats.abis.map((x)=>gameData.abilities[x].name.toLowerCase())
+            let abilities = specie.stats.abis
+                            .map((x)=>gameData.abilities[x].name.toLowerCase())
+                            .concat(
+                                specie.stats.inns.map((x)=>gameData.abilities[x].name.toLowerCase())
+                            )
             for (const abi of abilities){
-                if (abi == queryData) return true
-            }
-            let innates = specie.stats.inns.map((x)=>gameData.abilities[x].name.toLowerCase())
-            for (const abi of innates){
-                if (abi == queryData) return true
+                if (AisInB(queryData, abi)) return true
             }
             return false
         },
@@ -345,7 +345,7 @@ export function updateSpecies(searchQuery){
                 )
             ).map((x)=>gameData.moves[x].name.toLowerCase())
             for (const move of moves){
-                if (move == queryData) return true
+                if (AisInB(queryData, move)) return true
             }
             return false
         },
