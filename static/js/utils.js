@@ -18,3 +18,12 @@ export function addTooltip(node, description) {
 export function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
+/**
+ * Uses indexOf which is significantly faster in V8 than includes
+ * @param {string} a is included in b? 
+ * @param {string} b include a?
+ * @returns {boolean}
+ */
+export function AisInB(a, b){
+	return b.indexOf(a) == -1 ? false : true
+}

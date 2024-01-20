@@ -1,6 +1,7 @@
 import { getSpritesURL, redirectSpecie } from "./species_panel.js"
 import { queryFilter } from "./search.js"
 import { gameData } from "./data_version.js"
+import { AisInB } from "./utils.js"
 
 export function feedPanelTrainers(trainerID){
     $('#trainers-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
@@ -176,7 +177,7 @@ export function updateTrainers(searchQuery){
     let validID;
     const queryMap = {
         "name": (queryData, trainer) => {
-            return trainer.name.toLowerCase().indexOf(queryData) >= 0 ? true : false
+            return AisInB(queryData, trainer.name.toLowerCase())
         }
     }
     for (const i in trainers){

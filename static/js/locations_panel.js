@@ -1,6 +1,7 @@
 import { createSpeciesBlock, redirectSpecie } from "./species_panel.js"
 import { queryFilter } from "./search.js"
 import { gameData } from "./data_version.js"
+import { AisInB } from "./utils.js"
 
 export function feedPanelLocations(mapID){
     const map = gameData.locations.maps[mapID]
@@ -45,7 +46,7 @@ export function updateLocations(searchQuery){
     let validID;
     const queryMap = {
         "name": (queryData, map) => {
-            return map.name.toLowerCase().indexOf(queryData) >= 0 ? true : false
+            return AisInB(queryData, map.name.toLowerCase())
         }
     }
     for (const i in maps){
