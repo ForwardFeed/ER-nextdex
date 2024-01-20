@@ -70,6 +70,7 @@ function executeAllFilters(){
         k: "",
         data: allQueries.filter((x)=> x.data) //filters the empty query 
     }
+    if(megaQuery.data.length<1) megaQuery.op="AND"
     //execute the update of the active panel
     search.panelUpdatesTable[search.panelUpdatesIndex](megaQuery)
 }
