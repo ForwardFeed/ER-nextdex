@@ -91,6 +91,9 @@ body {
     background-color: var(--selHover);
 }
 
+.main-search-label{
+    position: relative;
+}
 #search-bar{
     text-align: center;
     padding-left: 7px;
@@ -100,7 +103,16 @@ body {
     border-radius:0 10px 10px 0 ;
     outline: none;
 }
-
+#search-suggestion{
+    position: absolute;
+    z-index: 2;
+    width: 100%;
+}
+#search-suggestion > option{
+    background-color: var(--selNActive);
+    text-align: center;
+    font-size: 1.5em;
+}
 @media (orientation: landscape) {
     .search-keys-wrapper{
         /* top-left top-righ bot-right bot-left*/

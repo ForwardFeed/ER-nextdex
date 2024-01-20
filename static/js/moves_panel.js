@@ -114,15 +114,15 @@ export function updateMoves(searchQuery){
     const nodeList = $('#moves-list').children()
     const queryMap = {
         "name": (queryData, move) => {
-            return AisInB(queryData, move.name.toLowerCase())
+            return AisInB(queryData, move.name.toLowerCase(), true)
         },
         "move": (queryData, move) => {
-            return AisInB(queryData, move.name.toLowerCase())
+            return AisInB(queryData, move.name.toLowerCase(), true)
         },
         "type": (queryData, move) => {
             const types = move.types.map((x)=>gameData.typeT[x].toLowerCase())
             for (const type of types){
-                if (AisInB(queryData, type)) return true
+                if (AisInB(queryData, type), true) return true
             }
             return false
         },
@@ -131,7 +131,7 @@ export function updateMoves(searchQuery){
             //effect in the data might be useless to the calc, at least to short and medium terms
             const flags = move.flags.map((x)=>gameData.flagsT[x].toLowerCase())
             for (const flag of flags){
-                if (AisInB(queryData, flag)) return true
+                if (AisInB(queryData, flag, true)) return true
             }
             return false
         },

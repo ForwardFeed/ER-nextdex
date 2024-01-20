@@ -1,7 +1,7 @@
 import { redirectLocation } from "./locations_panel.js"
 import { redirectMove } from "./moves_panel.js"
 import { addTooltip, capitalizeFirstLetter, AisInB } from "./utils.js"
-import { queryFilter } from "./search.js"
+import { queryFilter, search } from "./search.js"
 import { gameData } from "./data_version.js"
 
 export function feedPanelSpecies(id){
@@ -316,12 +316,12 @@ export function updateSpecies(searchQuery){
     let validID;
     const queryMap = {
         "name": (queryData, specie) => {
-            return AisInB(queryData, specie.name.toLowerCase())
+            return AisInB(queryData, specie.name.toLowerCase(), true)
         },
         "type": (queryData, specie) => {
             const types = specie.stats.types.map((x)=>gameData.typeT[x].toLowerCase())
             for (const type of types){
-                if (AisInB(queryData, type)) return true
+                return AisInB(queryData, type, true)
             }
             return false
         },
@@ -332,7 +332,7 @@ export function updateSpecies(searchQuery){
                                 specie.stats.inns.map((x)=>gameData.abilities[x].name.toLowerCase())
                             )
             for (const abi of abilities){
-                if (AisInB(queryData, abi)) return true
+                if (AisInB(queryData, abi, true)) return true
             }
             return false
         },
@@ -345,7 +345,7 @@ export function updateSpecies(searchQuery){
                 )
             ).map((x)=>gameData.moves[x].name.toLowerCase())
             for (const move of moves){
-                if (AisInB(queryData, move)) return true
+                if (AisInB(queryData, move, true)) return true
             }
             return false
         },

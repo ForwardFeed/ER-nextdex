@@ -40,4 +40,5 @@
     [ ] redux forms
     [x] innates/abilities
     [x] add move flags / effect
-    [ ] Add explanation
+    [ ] Add manual of utilisation
+[ ] pressing control or shift allow to not be redicted but add move as filter

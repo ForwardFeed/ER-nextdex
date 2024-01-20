@@ -177,7 +177,7 @@ export function updateTrainers(searchQuery){
     let validID;
     const queryMap = {
         "name": (queryData, trainer) => {
-            return AisInB(queryData, trainer.name.toLowerCase())
+            return AisInB(queryData, trainer.name.toLowerCase(), true)
         }
     }
     for (const i in trainers){

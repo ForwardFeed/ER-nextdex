@@ -1,3 +1,5 @@
+import { search } from "./search.js";
+
 export function addTooltip(node, description) {
 	const tooltip = document.createElement("div");
 	tooltip.innerText = description;
@@ -22,8 +24,13 @@ export function capitalizeFirstLetter(string) {
  * Uses indexOf which is significantly faster in V8 than includes
  * @param {string} a is included in b? 
  * @param {string} b include a?
+ * @param {boolean} addToSuggestion if it includes, add b to the suggestion list?
  * @returns {boolean}
  */
-export function AisInB(a, b){
-	return b.indexOf(a) == -1 ? false : true
+export function AisInB(a, b, addToSuggestion=false){
+	if (b.indexOf(a) != -1){
+		if (addToSuggestion) search.addSuggestion(b)
+		return true
+	} 
+	return false
 }

@@ -42,13 +42,27 @@ export const search = {
         "AND",
         "OR",
         "XOR",
-    ]
+    ],
+    maxSuggestion: 5,
+    suggestions: [],
+    suggestionNode: null,
+    suggestionInput: null,
+    suggestionSaved: "",
+    addSuggestion : function(suggestion){
+        if (this.suggestions.length == this.maxSuggestion) return
+        if (this.suggestions.includes(suggestion)) return
+        this.suggestions.push(suggestion)
+    },
+    clearSuggestion: function(){
+        this.suggestions = []
+    },
+
 }
 /**
  * Will execute all filters query so far
  */
 function executeAllFilters(){
-    const allQueries = [{
+    const allQueries = [{ //this is the top bar search
         op:"AND",
         not: false, //not yet implemented
         k: $('#search-keys').val().toLowerCase(),
@@ -88,6 +102,15 @@ export function activateSearch(){
                 return search.panelUpdatesIndex != index
             })
             executeAllFilters()
+            search.suggestionNode.innerText = "" //remove all previous suggestions
+            for (const suggestion of search.suggestions){
+                const option = document.createElement('option')
+                option.innerText = suggestion
+                option.onclick = ()=>{
+                    search.suggestionInput.value = suggestion
+                }
+                search.suggestionNode.append(option)
+            }
         })
         if (!search.updateQueue) break
         search.updateQueue = false
@@ -96,8 +119,19 @@ export function activateSearch(){
 }
 
 export function setupSearch(){
-    $('#search-bar, #search-keys').on('keyup search', activateSearch)
-    
+    $('#search-keys').on('change', activateSearch)
+    $('#search-bar').on('keyup search', (ev)=>{
+        activateSearch()
+        search.suggestionNode = $('#search-suggestion')[0]
+        search.suggestionInput = $('#search-bar')[0]
+        if (evKeymap[ev.key]){
+            evKeymap[ev.key]()
+            // reacted to a non-text key
+            return
+        }
+        search.suggestionSaved = search.suggestionInput.value
+        search.clearSuggestion()
+    })
     $('#filter-icon').on('click', function(){
         $('#filter-frame').toggle()
     })
@@ -131,6 +165,38 @@ export function setupSearch(){
         }
         keyNode.append(option)
     }
+}
+
+// non-text key that affect the searching bar 
+// made for the suggestion systeme
+const evKeymap = {
+    /*"Backspace": ()=>{
+        if (!inputSearch.placeholder){
+            inputSearch.placeholder = "Delete filter with backspace"
+        } else {
+            divField.remove()
+        }
+    },*/
+    "ArrowUp": ()=>{
+        let value = +search.suggestionNode.dataset.suggestion
+        search.suggestionNode.dataset.suggestion = (value ? value : search.maxSuggestion ) -1
+        const suggestionSelected = search.suggestions[search.suggestionNode.dataset.suggestion]
+        if (suggestionSelected) search.suggestionInput.value = suggestionSelected
+    },  
+    "ArrowDown": ()=>{
+        search.suggestionNode.dataset.suggestion = (+search.suggestionNode.dataset.suggestion + 1) % search.maxSuggestion
+        const suggestionSelected = search.suggestions[search.suggestionNode.dataset.suggestion]
+        if (suggestionSelected) search.suggestionInput.value = suggestionSelected
+    },
+    "ArrowRight": ()=>{
+        // use first active Selection
+        const suggestionSelected = search.suggestions[search.suggestionNode.dataset.suggestion]
+        if (suggestionSelected) search.suggestionInput.value = suggestionSelected
+    },
+    "ArrowLeft": ()=>{
+        // return to prio value before selection
+        search.suggestionInput.value = search.suggestionSaved
+    },
 }
 
 function appendFilter(){    
@@ -196,8 +262,34 @@ function appendFilter(){
     const inputSearch = document.createElement('input')
     inputSearch.className = "filter-search"
     inputSearch.type = "search"
-    inputSearch.onkeyup = activateSearch
     divLabel.append(inputSearch)
+
+    const divSuggestions = document.createElement('div')
+    divSuggestions.style.display = "none"
+    divSuggestions.className = "filter-suggestions"
+    divSuggestions.dataset.suggestion = 0
+    divLabel.append(divSuggestions)
+
+    let timeoutAutoComplete
+    inputSearch.onkeyup = (ev)=>{
+        divSuggestions.style.display = "block"
+        if (timeoutAutoComplete) clearTimeout(timeoutAutoComplete)
+        timeoutAutoComplete = setTimeout(()=>{
+            divSuggestions.style.display = "none"
+        }, 3000) // 3 secs
+        activateSearch()
+        search.suggestionNode = divSuggestions
+        search.suggestionInput = inputSearch
+        if (evKeymap[ev.key]){
+            evKeymap[ev.key]()
+            // reacted to a non-text key
+            return
+        }
+        search.suggestionSaved = search.suggestionInput.value
+        search.clearSuggestion()
+        // due to the async nature of activate search
+        // the first letter and the first letters if typed quickly won't have a suggestion
+    }
 
     const divRemove = document.createElement('div')
     divRemove.className = "filter-remove"
