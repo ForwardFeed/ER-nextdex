@@ -39,8 +39,8 @@ export const search = {
         "Move-effect",
     ],
     operators: [
-        "OR",
         "AND",
+        "OR",
         "XOR",
     ]
 }
@@ -70,7 +70,6 @@ function executeAllFilters(){
         k: "",
         data: allQueries.filter((x)=> x.data) //filters the empty query 
     }
-    if (megaQuery.data.length < 1) return
     //execute the update of the active panel
     search.panelUpdatesTable[search.panelUpdatesIndex](megaQuery)
 }
@@ -127,6 +126,7 @@ export function setupSearch(){
         option.onclick = ()=>{
             $('#search-keys').val(key)
             $('#search-keys-selections').toggle()
+            activateSearch()
         }
         keyNode.append(option)
     }
@@ -182,6 +182,7 @@ function appendFilter(){
             inputKey.value = key
             $(divKeySelection).toggle()
             $(inputKey).toggle()
+            activateSearch()
         }
         divKeySelection.append(option)
     }
@@ -207,6 +208,7 @@ function appendFilter(){
     divRemove.style.color = "red"
     divRemove.onclick = ()=>{
         divField.remove()
+        activateSearch()
     }
     divField.append(divRemove)
 
@@ -262,7 +264,7 @@ export function queryFilter(query, data, keymap){
                 if (answer) return queryNot(query.not, true)
             }
             return queryNot(query.not, false)
-        } else { //Default AND
+        } else { //Default ANDk
             for (const answer of subQueriesAnswer){
                 if (!answer) return queryNot(query.not, false)
             }
