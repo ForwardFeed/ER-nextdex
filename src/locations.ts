@@ -2,6 +2,7 @@ import * as FS from 'fs'
 import * as Path from 'path'
 
 import { Xtox } from './parse_utils'
+import { GameData } from './main'
 
 export interface Locations{
     maps: Location[],
@@ -36,7 +37,7 @@ export interface Encounter{
     specie: string
 }
 
-export function parse(data: string): Locations{
+function parse(data: string): Locations{
     const obj = JSON.parse(data)
     
     const locations = {} as Locations
@@ -101,4 +102,20 @@ export function parse(data: string): Locations{
     }
     locations.maps = maps
     return locations
+}
+
+export function getLocations(ROOT_PRJ: string, gameData: GameData): Promise<void>{
+    return new Promise((resolve: ()=>void, reject)=>{
+         // include 'src/data/region_map/region_map_entries.h' ?
+        const filepath = Path.join(ROOT_PRJ, 'src/data/wild_encounters.json')
+        FS.readFile(filepath, 'utf8', 
+            (err_exist: NodeJS.ErrnoException, data: string) => {
+                if (err_exist){
+                    reject(`Error trying to read ${filepath}`)
+                } else {
+                    gameData.locations = parse(data)
+                    resolve()
+                }
+        }) 
+    })
 }

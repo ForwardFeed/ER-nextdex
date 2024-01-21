@@ -1,4 +1,7 @@
+import { copyFileSync, existsSync, mkdirSync } from "fs"
 import { regexGrabNum, regexGrabStr, upperCaseFirst } from "./parse_utils"
+import { FileDataOptions, getMulFilesData, autojoinFilePath } from "./utils"
+import { join } from "path"
 
 export interface Result{
     fileIterator: number,
@@ -56,4 +59,45 @@ export function parse(lines: string[], fileIterator: number): Result{
         fileIterator: fileIterator,
         spritesPath: context.sprites 
     }
+}
+
+export function getSprites(ROOT_PRJ: string, optionsGlobal_h: FileDataOptions, output_dir: string){
+    return new Promise((resolve: (undefined: undefined)=>void, reject)=>{
+        if (!existsSync(output_dir)) {
+            try {
+                mkdirSync(output_dir)
+            } catch{
+                reject(`Failed to create output directory for sprites : ${output_dir}`)
+            }
+        }
+        getMulFilesData(autojoinFilePath(ROOT_PRJ, ['src/data/graphics/pokemon.h',
+                                                'src/data/pokemon_graphics/front_pic_table.h',
+                                            ]), optionsGlobal_h)
+        .then((spriteData)=>{
+            const lines = spriteData.split('\n')
+            const spriteResult = parse(lines, 0)
+            
+            spriteResult.spritesPath.forEach((val, key)=>{
+                const inFilePath = join(ROOT_PRJ, val)
+                const outFileName = key.replace(/^SPECIES_/, '') + ".png"
+                const outFilePath = join(output_dir, outFileName)
+                try{
+                    if (existsSync(inFilePath)){
+                        copyFileSync(inFilePath, outFilePath)
+                    } else {
+                        throw `${inFilePath} does not exist`
+                    }
+                    
+                } catch(e){
+                    console.warn(`Tried to copy ${inFilePath} to ${outFilePath} error: ${e}`)
+                }
+                
+            })
+            resolve(null)
+        })
+        .catch((reason)=>{
+            const err = 'Failed at gettings species reason: ' + reason
+            reject(err)
+        })
+    })
 }

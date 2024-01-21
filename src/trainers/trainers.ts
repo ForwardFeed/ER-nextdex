@@ -1,4 +1,5 @@
-import { Xtox } from "../parse_utils";
+import { GameData } from "../main";
+import { autojoinFilePath, getMulFilesData } from "../utils";
 import * as TrainerNames from './names'
 //import * as Rematches from './rematches'
 import * as TrainersTeam from './teams'
@@ -19,7 +20,7 @@ export interface RematchTrainer{
     party: TrainersTeam.TrainerPokemon[]
 }
 
-export function parse(fileData: string): Trainer[]{
+function parse(fileData: string): Trainer[]{
     const lines = fileData.split('\n')
     const TrainerNamesResult = TrainerNames.parse(lines,0)
     //const RematchesResult = Rematches.parse(lines, TrainerNamesResult.fileIterator)
@@ -52,4 +53,21 @@ export function parse(fileData: string): Trainer[]{
         })
     })
     return trainers
+}
+
+export function getTrainers(ROOT_PRJ: string, gameData: GameData): Promise<void>{
+    return new Promise((resolve: ()=>void, reject)=>{
+        const filepaths = autojoinFilePath(ROOT_PRJ, [  'src/data/trainers.h',
+                                                        'src/data/trainer_parties.h'])
+        getMulFilesData(filepaths, {filterComments: true, filterMacros: true, macros: new Map()})
+        .then((fileData)=>{
+                gameData.trainers = parse(fileData)
+                resolve()
+        })
+        .catch((reason)=>{
+            const err = 'Failed at gettings species reason: ' + reason
+            reject(err)
+        })
+    })
+    
 }

@@ -1,4 +1,6 @@
+import { GameData } from "./main"
 import { regexGrabNum, regexGrabStr, upperCaseFirst } from "./parse_utils"
+import { FileDataOptions, getMulFilesData, autojoinFilePath } from "./utils"
 
 export interface Result{
     fileIterator: number,
@@ -67,7 +69,7 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
     }
 }
 
-export function parse(fileData: string): Map<string, Ability>{
+function parse(fileData: string): Map<string, Ability>{
     const lines = fileData.split('\n')
     const lineLen = lines.length
     const context = initContext()
@@ -77,4 +79,20 @@ export function parse(fileData: string): Map<string, Ability>{
         if (context.stopRead) break
     }
     return context.abilities
+}
+
+export function getAbilities(ROOT_PRJ: string, optionsGlobal_h: FileDataOptions, gameData: GameData): Promise<void>{
+    return new Promise((resolve: ()=>void, reject)=>{
+        getMulFilesData(autojoinFilePath(ROOT_PRJ, ['src/data/text/abilities.h',
+                                                ]), optionsGlobal_h)
+            .then((abilityData)=>{
+                gameData.abilities = parse(abilityData)
+                resolve()
+            })
+            .catch((reason)=>{
+                const err = 'Failed at gettings species reason: ' + reason
+                reject(err)
+            })
+    })
+    
 }

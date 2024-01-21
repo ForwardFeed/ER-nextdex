@@ -5,6 +5,10 @@ import * as RolePlay from './banned_roleplay'
 import * as WorrySeed from './banned_worry_seed'
 import * as GastroAcid from './banned_gastro_acid'
 import * as Entrainement from './banned_entrainment'
+import { GameData } from '../main'
+import { getFileData } from '../utils'
+import { writeFile } from 'fs'
+import { join } from 'path'
 
 export interface AdditionalData{
     banSkillSwap: string[],
@@ -31,8 +35,7 @@ export function parse(fileData: string): AdditionalData{
         banEntrainement: EntrainementResult.data,
     }
 }
-
-export function replaceWithName(data: AdditionalData, abilities: Map<string, Ability>): AdditionalData{
+function replaceWithName(data: AdditionalData, abilities: Map<string, Ability>): AdditionalData{
     const keys = Object.keys(data)
     for( const key of keys){
         const fields = data[key as keyof AdditionalData]
@@ -45,4 +48,25 @@ export function replaceWithName(data: AdditionalData, abilities: Map<string, Abi
         data[key as keyof AdditionalData] = newField
     }
     return data
+}
+
+export function getAdditionnalData(ROOT_PRJ: string, outputFile: string, gameData: GameData): Promise<undefined>{
+    return new Promise((resolved, rejected)=>{
+        getFileData(join(ROOT_PRJ, 'src/battle_util.c'), {filterComments: true, filterMacros: true, macros: new Map()})
+        .then((filedata)=>{
+            const data = replaceWithName(parse(filedata.data), gameData.abilities)
+            const dataTowrite = JSON.stringify(data)
+            writeFile(outputFile, dataTowrite , (err_exist)=>{
+                if (err_exist){
+                    rejected(`couldn't write the gamedata output to ${outputFile}`)
+                } else {
+                    resolved(null)
+                }
+            })
+        })
+        .catch((x)=>{
+            rejected(x)
+        })
+    })
+    
 }

@@ -1,4 +1,7 @@
+import { join } from "path"
 import { regexGrabNum, regexGrabStr, Xtox } from "./parse_utils"
+import { FileDataOptions, getFileData, getMulFilesData, autojoinFilePath } from "./utils"
+import { GameData } from "./main"
 
 interface Description {
     ptrDesc: string,
@@ -226,7 +229,7 @@ const stageNameExecutionMap: {[key: string]: (line: string, context: Context) =>
     }
 }
 
-export function parse(filedata: string){
+export function parse(filedata: string): Map<string, Move>{
     const lines = filedata.split('\n')
 
     const context = initContext()
@@ -237,5 +240,29 @@ export function parse(filedata: string){
         context.stage[context.execFlag](line, context)
         if (context.stopRead) break
     }
-    return Array.from(context.moves.entries()) 
+    return context.moves
+}
+
+export function getMoves(ROOT_PRJ: string, optionsGlobal_h: FileDataOptions, gameData: GameData): Promise<void>{
+    return new Promise((resolve: ()=>void, reject)=>{
+        getFileData(join(ROOT_PRJ, 'include/constants/battle_config.h'), optionsGlobal_h)
+                .then((battle_config) => {
+                    const optionsBattle = {
+                        filterComments: true,
+                        filterMacros: true,
+                        macros: battle_config.macros
+                    }
+                    getMulFilesData(autojoinFilePath(ROOT_PRJ, ['src/data/battle_moves.h', 
+                                                                'src/data/text/move_descriptions.h',
+                                                                'src/data/text/move_names.h'] ), optionsBattle)
+                        .then((movesData)=>{
+                            gameData.moves = parse(movesData)
+                            resolve()
+                        })
+                        .catch(reject)
+                        
+                })
+                .catch(reject)
+    })
+  
 }

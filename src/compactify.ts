@@ -3,6 +3,11 @@ import { Ability } from "./abilities";
 import { Xtox } from "./parse_utils";
 import { TrainerPokemon } from "./trainers/teams";
 
+interface CompactedScripted{
+    how: number,
+    map: string,
+}
+
 interface CompactLocations{
     maps: CompactLocation[],
     landRate: number[],
@@ -93,6 +98,7 @@ export interface CompactSpecie{
     TMHMMoves: number[],
     tutor: number[],
     forms: number[],
+    SEnc:CompactedScripted[], // scripted encounters
 }
 
 export interface CompactTrainers{
@@ -135,6 +141,7 @@ export interface CompactGameData{
     evoKindT: string[],
     itemT: string[],
     natureT: string[],
+    ScriptedEncoutersHowT: string[],
 }
 function initCompactGameData(): CompactGameData{
     return {
@@ -154,6 +161,7 @@ function initCompactGameData(): CompactGameData{
         evoKindT: [],
         itemT: [],
         natureT: [],
+        ScriptedEncoutersHowT: [],
     }
 }
 
@@ -170,9 +178,9 @@ export function compactify(gameData: GameData): CompactGameData{
         if (!table.includes(x)) table.push(x)
         return table.indexOf(x)
     })
-    gameData.moves.forEach((val)=>{
-        movesT.push(val[0])
-        const move = val[1]
+    gameData.moves.forEach((val, key)=>{
+        movesT.push(key)
+        const move = val
         compacted.moves.push({
             name: move.name,
             sName: move.shortName,
@@ -291,6 +299,7 @@ export function compactify(gameData: GameData): CompactGameData{
             forms: val.forms.map((x)=>{
                 return NAMET.indexOf(x)
             }),
+            SEnc: [],
         })
     })
     compacted.locations = {
@@ -365,6 +374,14 @@ export function compactify(gameData: GameData): CompactGameData{
                     party: rem.party.map(compactPoke)
                 }
             })
+        })
+    }
+    // now add all scripted encouters
+    for (const scriptedEncouter of gameData.speciesScripted){
+        const id = NAMET.indexOf(scriptedEncouter.specie)
+        compacted.species[id].SEnc.push({
+            how: tablize(scriptedEncouter.how, compacted.ScriptedEncoutersHowT),
+            map: scriptedEncouter.map
         })
     }
     return compacted
