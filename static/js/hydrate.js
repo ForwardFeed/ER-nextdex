@@ -99,6 +99,7 @@ function hydrateMoves(){
         core.dataset.id = i
         $(core).on('click', function(){
             fastdom.mutate(() => {
+                $("#filter-frame").hide() 
                 feedPanelMoves($(this).attr('data-id'))
             });
         });
@@ -163,6 +164,7 @@ function hydrateSpecies(){
         core.append(name)
         core.dataset.id = i
         $(core).on('click', function(){
+            $("#filter-frame").hide() 
             fastdom.mutate(() => {
                 feedPanelSpecies($(this).attr('data-id'))
             });
