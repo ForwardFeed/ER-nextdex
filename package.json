@@ -7,7 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "run": "node ./target/main.js",
-    "dist": "node ./target/main.js v1",
     "sprites": "node ./target/main.js sprites"
   },
   "keywords": [
