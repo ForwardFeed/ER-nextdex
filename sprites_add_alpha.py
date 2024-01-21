@@ -4,10 +4,11 @@ from os import listdir, path, makedirs
 
 def generate(fullpath):
     img = Image.open(fullpath)
+    #sometimes you need to do that because the front is mixed with front anim
+    img = img.crop((0, 0, 64, 64)) 
     # add a transparency layer
     img = img.convert("RGBA")
     datas = img.getdata()
-
     newData = []
     # the first pixel is considered the transparency color
     trns = datas[0]
