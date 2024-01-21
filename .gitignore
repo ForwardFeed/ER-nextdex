@@ -2,7 +2,8 @@
 dist/
 target/
 debug.txt
-test.txt
+update_data.sh
+nextdex_config.json
 
 # nodejs related
 node_modules/

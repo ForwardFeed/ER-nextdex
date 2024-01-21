@@ -13,8 +13,7 @@ import * as SpeciesScripted from './species_scripted'
 import * as Additionnal from './additional_data/additional'
 
 import { CompactGameData, compactify } from './compactify';
-
-const ROOT_PRJ = "/media/notalinux/_dev_sdb3/Website/reduxelite" // you already know how well organized i am
+import * as Configuration from './configuration';
 
 export interface GameData {
     species: Species.Specie[]
@@ -34,7 +33,8 @@ const gameData: GameData = {
     speciesScripted: [] as SpeciesScripted.SpeciesScripted[],
 }
 
-function main(){
+function main(configuration: Configuration.Configuration){
+    const ROOT_PRJ = configuration.project_root
     const OUTPUT_VERSION = process.argv[2] ? "V" + process.argv[2] : ""
     const OUTPUT = `./dist/gameData${OUTPUT_VERSION}.json`
     const OUTPUT_ADDITIONNAL = `./dist/additional${OUTPUT_VERSION}.json`
@@ -98,37 +98,20 @@ function outputGameData(gameData: GameData | CompactGameData, output: string){
 
 
 
-
-main()
-
-/**
-size list of all read files in bash
-    BASE="/media/notalinux/_dev_sdb3/Website/reduxelite/"
-    a=("include/global.h"
-    "src/data/graphics/pokemon.h"
-    "src/data/pokemon_graphics/front_pic_table.h"
-    "src/data/text/abilities.h"
-    "src/data/text/species_names.h"
-    "src/data/pokemon/base_stats.h"
-    "src/data/pokemon/evolution.h"
-    "src/data/pokemon/egg_moves.h"
-    "src/data/pokemon/level_up_learnsets.h"
-    "src/data/pokemon/level_up_learnset_pointers.h"
-    "src/data/pokemon/tmhm_learnsets.h"
-    "src/data/pokemon/tutor_learnsets.h"
-    "src/data/pokemon/form_species_tables.h"
-    "src/data/pokemon/form_species_table_pointers.h"
-    "src/data/graphics/pokemon.h"
-    "src/data/pokemon_graphics/front_pic_table.h"
-    "src/data/wild_encounters.json"
-    "include/constants/battle_config.h"
-    "src/data/battle_moves.h"
-    "src/data/text/move_descriptions.h"
-    "src/data/text/move_names.h",
-    "src/data/trainer_parties.h")
-    b=()
-    for x in ${a[@]}; do b+=($(du -c ${BASE}${x} | tail -1 | cut -f 1)); done
-    sum=0
-    for x in ${b[@]}; do sum=$((sum + x)) ;done
-    echo "Total size is ${sum} KB"
-*/
+let configuration = Configuration.getConfiguration()
+if (!configuration){
+    configuration = Configuration.writeDefaultConfiguration()
+}
+if (!configuration.verified){
+    Configuration.verifyConfiguration(configuration)
+        .then(()=>{
+            configuration.verified = true
+            Configuration.saveConfigFile(configuration)
+            main(configuration)
+        })
+        .catch(()=>{
+            console.error('Please verify the configuration')
+        })
+} else {
+    main(configuration)
+}
