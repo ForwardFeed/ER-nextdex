@@ -108,6 +108,7 @@ export function activateSearch(){
                 option.innerText = suggestion
                 option.onclick = ()=>{
                     search.suggestionInput.value = suggestion
+                    search.suggestionNode.style.display = "none"
                 }
                 search.suggestionNode.append(option)
             }

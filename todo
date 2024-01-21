@@ -16,6 +16,8 @@
 [x] add additionnal sub pannel controls in bot Info bar for species and probably in moves
 [ ] add code of the different abilities, species related from
 [ ] add list of sSkillSwapBannedAbilities things like that in battle utils
+    [x] as data in another file
+    [ ] in the UI
 [ ] add dex-strategy from 'src/data/dex-strategy.md'
 [x] locations exception for the fishe and rods
 [x] get pre-evolutions
@@ -38,7 +40,9 @@
 [ ] Filters
     [x] by megas :<= Just type "Mega in the name"
     [ ] redux forms
+    [ ] by map
     [x] innates/abilities
     [x] add move flags / effect
     [ ] Add manual of utilisation
 [ ] pressing control or shift allow to not be redicted but add move as filter
+[ ] settings file for the extractor of data
