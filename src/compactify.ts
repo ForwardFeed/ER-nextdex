@@ -4,7 +4,7 @@ import { Xtox } from "./parse_utils";
 import { TrainerPokemon } from "./trainers/teams";
 
 interface CompactedScripted{
-    how: number,
+    how: number, // indexed from CompactGameData.ScriptedEncoutersHowT
     map: string,
 }
 

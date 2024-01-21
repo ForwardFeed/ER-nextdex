@@ -7,10 +7,12 @@ export function updateAbilities(searchQuery){
     const nodeList = $('#abis-list').children()
     const queryMap = {
         "name": (queryData, ability) => {
-            return (AisInB(queryData, ability.name.toLowerCase(), true))
+            return  (AisInB(queryData, ability.name.toLowerCase(), true)) ||
+                    (AisInB(queryData, ability.desc.toLowerCase()))
         },
         "ability": (queryData, ability) => {
-            return (AisInB(queryData, ability.name.toLowerCase()))
+            return (AisInB(queryData, ability.name.toLowerCase(), true)) ||
+                (AisInB(queryData, ability.desc.toLowerCase()))
         }
     }
     if (!searchQuery) return
