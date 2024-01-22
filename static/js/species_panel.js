@@ -322,7 +322,7 @@ function setLocations(locations, SEnc){
     }
     for (const enc of SEnc){
         const node = document.createElement('div')
-        node.className = "specie-locs"
+        node.className = "specie-locs-scripted"
         node.innerHTML = `Can be found at ${enc.map} as a ${gameData.ScriptedEncoutersHowT[enc.how]}`
         frag.append(node)
     }
