@@ -17,13 +17,13 @@ Commands:
 - run: will execute, one argument can be send to the program
     - sprites: see below run command
     - Any%: will change the output of the gamedata files to gamedata{arg}.json, usefull to upload multiple version of the data.
-- sprites: a shortcut to "run sprites", will fetch all sprites and output it in dist/. I advise to use the python script "sprite_add_alpha.py" which will remove the default background color to a transparent color
+- sprites: a shortcut to "run sprites", will fetch all sprites and output it in out/. I advise to use the python script "sprites_utils.py" which will remove the default background color to a transparent color
 
 Quick tip, if you use git on your pokemon project you can get back to a previous version with these bash commands
 `git log  --all --grep='V0.0.1'` where `V0.0.1` is the message of a commit marking the version of the game. Copy the commit sha1 hash and then you can do
 `git checkout 'the sha1 you got'`. Then now you can fetch the data with this software to then `git switch -` to get back to where you where originally.
 
-By default the data is outputed to /dist/, you can change that with the variable OUTPUT in src/main.ts
+By default the data is outputed to out/, you can change that with the variable OUTPUT in src/main.ts
 
 ### 2. The UI that uses this data
 It requires an HTTP server since it uses JS modules. If you code with VSC for example you may uselive-server add-on.
@@ -39,14 +39,14 @@ Fields:
     - "verified": automatic, will set itself to true if you fed a right project_root.
 
 ### src/ 
-holds the gamefile parsing and compactify into a data called gameData.js, outputed to dist/
+holds the gamefile parsing and compactify into a data called gameData.js, outputed to out/
 Althougt it shouldn't, most of the parameters are inside the code and not as environnement variable or configuration files
 You run it with npm or tsc
 
 ### target/
 Build of the src/ application
 
-### dist/
+### out/
 Output dir by default of some files.
 
 ### static/

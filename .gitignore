@@ -1,9 +1,10 @@
 # project related
-dist/
+out/
 target/
 debug.txt
 update_data.sh
 nextdex_config.json
+build
 
 # nodejs related
 node_modules/

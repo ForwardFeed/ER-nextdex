@@ -31,5 +31,5 @@ if (process.argv[2] !== 'view') {
 	
 }
 
-cpdir('static', 'dist/static');
-//cpdir('src/apptest/tests', 'dist/apptest/tests');
+cpdir('static', 'out/static');
+//cpdir('src/apptest/tests', 'out/apptest/tests');

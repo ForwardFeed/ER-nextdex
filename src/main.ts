@@ -36,8 +36,8 @@ const gameData: GameData = {
 function main(configuration: Configuration.Configuration){
     const ROOT_PRJ = configuration.project_root
     const OUTPUT_VERSION = process.argv[2] ? "V" + process.argv[2] : ""
-    const OUTPUT = `./dist/gameData${OUTPUT_VERSION}.json`
-    const OUTPUT_ADDITIONNAL = `./dist/additional${OUTPUT_VERSION}.json`
+    const OUTPUT = `./out/gameData${OUTPUT_VERSION}.json`
+    const OUTPUT_ADDITIONNAL = `./out/additional${OUTPUT_VERSION}.json`
     getFileData(Path.join(ROOT_PRJ, 'include/global.h'), {filterComments: true, filterMacros: true, macros: new Map()})
     .then((global_h) => {
         const optionsGlobal_h = {
@@ -46,8 +46,12 @@ function main(configuration: Configuration.Configuration){
             macros: global_h.macros
         }
         if (process.argv[2] === "sprites"){
-            const OUTPUT_SPRITES = Path.join(__dirname, "sprites/")
-            Sprites.getSprites(ROOT_PRJ, optionsGlobal_h, OUTPUT_SPRITES)
+            const OUTPUT_SPRITES = Path.join("./out", "sprites/")
+            const OUTPUT_PALETTES  = "./out/palettes/"
+            if (!FS.existsSync(OUTPUT_SPRITES))FS.mkdirSync(OUTPUT_SPRITES)
+            if (!FS.existsSync(OUTPUT_PALETTES))FS.mkdirSync(OUTPUT_PALETTES)
+            
+            Sprites.getSprites(ROOT_PRJ, optionsGlobal_h, OUTPUT_SPRITES, OUTPUT_PALETTES)
                 .then(()=>{
                     console.log('Successfully copied the sprites')
                 })

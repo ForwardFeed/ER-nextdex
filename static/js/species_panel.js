@@ -10,6 +10,16 @@ export function feedPanelSpecies(id){
     $('#species-name').text(specie.name)
     updateBaseStats(specie.stats.base)
     $('#species-front').attr('src', getSpritesURL(specie.NAME))
+    $('#species-front')[0].onclick = ()=>{
+        if ($('#species-front')[0].dataset.shiny === "off"){
+            $('#species-front')[0].dataset.shiny = "on"
+            $('#species-front').attr('src', getSpritesShinyURL(specie.NAME))
+        } else {
+            $('#species-front')[0].dataset.shiny = "off"
+            $('#species-front').attr('src', getSpritesURL(specie.NAME))
+        }
+    }
+    $('#species-front')[0].dataset.shiny = "off"
     setAbilities(specie.stats.abis)
     setInnates(specie.stats.inns)
     setTypes(specie.stats.types)
@@ -109,6 +119,10 @@ function updateBaseStats(stats){
 export function getSpritesURL(NAME){
     NAME = NAME.replace(/^SPECIES_/, '')
     return `./sprites/${NAME}.png`
+}
+export function getSpritesShinyURL(NAME){
+    NAME = NAME.replace(/^SPECIES_/, '')
+    return `./sprites/SHINY_${NAME}.png`
 }
 
 function changeBaseStat(node, value, statID){

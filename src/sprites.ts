@@ -1,5 +1,5 @@
 import { copyFileSync, existsSync, mkdirSync } from "fs"
-import { regexGrabNum, regexGrabStr, upperCaseFirst } from "./parse_utils"
+import { regexGrabNum, regexGrabStr } from "./parse_utils"
 import { FileDataOptions, getMulFilesData, autojoinFilePath } from "./utils"
 import { join } from "path"
 
@@ -7,6 +7,8 @@ export interface Result{
     fileIterator: number,
     spritesPath: Map<string, string>
 }
+
+
 
 interface Context {
     sprites: Map<string, string>, // species -> ptr
@@ -61,7 +63,7 @@ export function parse(lines: string[], fileIterator: number): Result{
     }
 }
 
-export function getSprites(ROOT_PRJ: string, optionsGlobal_h: FileDataOptions, output_dir: string){
+export function getSprites(ROOT_PRJ: string, optionsGlobal_h: FileDataOptions, output_dir: string, output_dir_palette: string){
     return new Promise((resolve: (undefined: undefined)=>void, reject)=>{
         if (!existsSync(output_dir)) {
             try {
@@ -84,6 +86,14 @@ export function getSprites(ROOT_PRJ: string, optionsGlobal_h: FileDataOptions, o
                 try{
                     if (existsSync(inFilePath)){
                         copyFileSync(inFilePath, outFilePath)
+                    } else {
+                        throw `${inFilePath} does not exist`
+                    }
+                    // copy the shiny palette too
+                    const paletteFile = inFilePath.replace("front.png", "shiny.pal")
+                    const outPaletteFile = outFileName.replace('png', 'pal')
+                    if (existsSync(paletteFile)){
+                        copyFileSync(paletteFile, join(output_dir_palette, outPaletteFile))
                     } else {
                         throw `${inFilePath} does not exist`
                     }
