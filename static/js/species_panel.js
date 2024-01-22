@@ -28,7 +28,7 @@ export function feedPanelSpecies(id){
     setMoves($('#tutor'), specie.tutor)
     setMoves($('#eggmoves'), specie.eggMoves)
     setEvos(specie.evolutions)
-    setLocations(specie.locations)
+    setLocations(specie.locations, specie.SEnc)
     $('#species-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
     $('#species-list').children().eq(id-1).addClass("sel-active").removeClass("sel-n-active")
 }
@@ -296,7 +296,7 @@ function setEvoReason(kindID, reason){
 }
 
 
-function setLocations(locations){
+function setLocations(locations, SEnc){
     const frag = document.createDocumentFragment()
     for (const [locID,value] of locations){
         const loc = gameData.locations.maps[locID]
@@ -320,9 +320,14 @@ function setLocations(locations){
         }
         frag.append(node)
     }
+    for (const enc of SEnc){
+        const node = document.createElement('div')
+        node.className = "specie-locs"
+        node.innerHTML = `Can be found at ${enc.map} as a ${gameData.ScriptedEncoutersHowT[enc.how]}`
+        frag.append(node)
+    }
     $('#species-locations').empty().append(frag)
 }
-
 
 export function updateSpecies(searchQuery){
     const species = gameData.species
