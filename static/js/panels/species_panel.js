@@ -1,8 +1,8 @@
 import { redirectLocation } from "./locations_panel.js"
 import { redirectMove } from "./moves_panel.js"
-import { addTooltip, capitalizeFirstLetter, AisInB } from "./utils.js"
-import { queryFilter, search } from "./search.js"
-import { gameData } from "./data_version.js"
+import { addTooltip, capitalizeFirstLetter, AisInB } from "../utils.js"
+import { queryFilter, search } from "../search.js"
+import { gameData } from "../data_version.js"
 
 export function feedPanelSpecies(id){
     const specie = gameData.species[id]

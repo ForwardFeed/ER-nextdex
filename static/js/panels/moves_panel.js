@@ -1,6 +1,6 @@
-import { gameData } from "./data_version.js"
-import { queryFilter } from "./search.js"
-import { AisInB } from "./utils.js"
+import { gameData } from "../data_version.js"
+import { queryFilter } from "../search.js"
+import { AisInB } from "../utils.js"
 export function feedPanelMoves(moveID){
     const move = gameData.moves[moveID]
     $('#moves-name').text(move.name)

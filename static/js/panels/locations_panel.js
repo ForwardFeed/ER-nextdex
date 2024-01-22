@@ -1,7 +1,7 @@
 import { createSpeciesBlock, redirectSpecie } from "./species_panel.js"
-import { queryFilter } from "./search.js"
-import { gameData } from "./data_version.js"
-import { AisInB } from "./utils.js"
+import { queryFilter } from "../search.js"
+import { gameData } from "../data_version.js"
+import { AisInB } from "../utils.js"
 
 export function feedPanelLocations(mapID){
     const map = gameData.locations.maps[mapID]

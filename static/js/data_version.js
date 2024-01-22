@@ -29,7 +29,7 @@ export function setAvailableVersion(){
 }
 
 $('#versions').on('change', function(){
-    fetch(`./gameDataV${$(this).val()}.json`)
+    fetch(`js/data/gameDataV${$(this).val()}.json`)
         .then((response) => response.json())
         .then((data) => {
           gameData = data

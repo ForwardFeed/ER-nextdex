@@ -33,18 +33,18 @@
 [ ] btw the dex is up
 [ ] Add pokemon weakness
     [ ] make a team builder
-[ ] Filter moves in species
 [ ] Sort
     [ ] stats
     [ ] Aplhabethically
 [ ] Filters
-    [x] by megas :<= Just type "Mega in the name"
-    [ ] redux forms
+    [x] by megas :<= Just type "Mega" as the name
+    [x] redux forms :<= Just type "Redux" as the name
     [x] by map
     [x] innates/abilities
     [x] add move flags / effect
-    [ ] Add manual of utilisation
+    [ ] Add manual / Guide of utilisation
+    [x] moves in species
 [ ] pressing control or shift allow to not be redicted but add move as filter
 [x] settings file for the extractor of data
 [ ] fix species-mid-stats on 300px size phone
-[ ] hide non-querable fields in function of the pannel
+[x] hide non-querable fields in function of the pannel

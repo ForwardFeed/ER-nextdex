@@ -1,8 +1,8 @@
-import { updateSpecies,queryMapSpecies } from "./species_panel.js"
-import { updateAbilities, queryMapAbilities} from "./abilities_panel.js"
-import { updateMoves, queryMapMoves} from "./moves_panel.js"
-import { updateLocations, queryMapLocations } from "./locations_panel.js"
-import { updateTrainers, queryMapTrainers } from "./trainers_panel.js"
+import { updateSpecies,queryMapSpecies } from "./panels/species_panel.js"
+import { updateAbilities, queryMapAbilities} from "./panels/abilities_panel.js"
+import { updateMoves, queryMapMoves} from "./panels/moves_panel.js"
+import { updateLocations, queryMapLocations } from "./panels/locations_panel.js"
+import { updateTrainers, queryMapTrainers } from "./panels/trainers_panel.js"
 
 
 export const search = {
@@ -330,7 +330,6 @@ export function updateMainSearchKey(queryMap){
             nodes.eq(index).hide()
         }
     })
-    console.log(validID)
     if (validID) {
         $('#search-keys').val(nodes.eq(validID).text())
     }

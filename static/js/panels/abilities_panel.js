@@ -1,6 +1,6 @@
-import { queryFilter, search } from "./search.js"
-import { gameData } from "./data_version.js"
-import { AisInB } from "./utils.js"
+import { queryFilter, search } from "../search.js"
+import { gameData } from "../data_version.js"
+import { AisInB } from "../utils.js"
 
 export const queryMapAbilities = {
     "name": (queryData, ability) => {

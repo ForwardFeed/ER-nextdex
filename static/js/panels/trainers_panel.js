@@ -1,7 +1,7 @@
 import { getSpritesURL, redirectSpecie } from "./species_panel.js"
-import { queryFilter } from "./search.js"
-import { gameData } from "./data_version.js"
-import { AisInB } from "./utils.js"
+import { queryFilter } from "../search.js"
+import { gameData } from "../data_version.js"
+import { AisInB } from "../utils.js"
 
 export function feedPanelTrainers(trainerID){
     $('#trainers-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
