@@ -251,6 +251,9 @@ span{
     min-height: 64px;
     margin: auto;
 }
+#species-front:hover{
+    box-shadow: inset 2px 0px 10px var(--font-color);
+}
 .species-abi-inn{
     display: flex;
     flex-direction: column;
