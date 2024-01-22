@@ -170,21 +170,21 @@ function setPartyPanel(party){
     }
     $('#trainers-team').empty().append(frag)
 }
-
+export const queryMapTrainers = {
+    "name": (queryData, trainer) => {
+        return AisInB(queryData, trainer.name.toLowerCase(), true)
+    }
+}
 export function updateTrainers(searchQuery){
     const trainers = gameData.trainers
     const nodeList = $('#trainers-list').children()
     let validID;
-    const queryMap = {
-        "name": (queryData, trainer) => {
-            return AisInB(queryData, trainer.name.toLowerCase(), true)
-        }
-    }
+    
     for (const i in trainers){
         if (i == 0) continue
         const trainer = trainers[i]
         const node = nodeList.eq(i - 1)
-        if (queryFilter(searchQuery, trainer, queryMap))
+        if (queryFilter(searchQuery, trainer, queryMapTrainers))
         {
                 if (!validID) validID = i
                 node.show()

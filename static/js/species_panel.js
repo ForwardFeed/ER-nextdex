@@ -328,52 +328,51 @@ function setLocations(locations, SEnc){
     }
     $('#species-locations').empty().append(frag)
 }
-
+export const queryMapSpecies = {
+    "name": (queryData, specie) => {
+        return AisInB(queryData, specie.name.toLowerCase(), true)
+    },
+    "type": (queryData, specie) => {
+        const types = specie.stats.types.map((x)=>gameData.typeT[x].toLowerCase())
+        for (const type of types){
+            return AisInB(queryData, type, true)
+        }
+        return false
+    },
+    "ability": (queryData, specie) => {
+        let abilities = specie.stats.abis
+                        .map((x)=>gameData.abilities[x].name.toLowerCase())
+                        .concat(
+                            specie.stats.inns.map((x)=>gameData.abilities[x].name.toLowerCase())
+                        )
+        for (const abi of abilities){
+            if (AisInB(queryData, abi, true)) return true
+        }
+        return false
+    },
+    "move": (queryData, specie) => {
+        let moves = specie.eggMoves.concat(
+            specie.levelUpMoves.map(x=>x.id).concat(
+                specie.TMHMMoves.concat(
+                    specie.tutor
+                )
+            )
+        ).map((x)=>gameData.moves[x].name.toLowerCase())
+        for (const move of moves){
+            if (AisInB(queryData, move, true)) return true
+        }
+        return false
+    },
+}
 export function updateSpecies(searchQuery){
     const species = gameData.species
     const nodeList = $('#species-list').children()
     let validID;
-    const queryMap = {
-        "name": (queryData, specie) => {
-            return AisInB(queryData, specie.name.toLowerCase(), true)
-        },
-        "type": (queryData, specie) => {
-            const types = specie.stats.types.map((x)=>gameData.typeT[x].toLowerCase())
-            for (const type of types){
-                return AisInB(queryData, type, true)
-            }
-            return false
-        },
-        "ability": (queryData, specie) => {
-            let abilities = specie.stats.abis
-                            .map((x)=>gameData.abilities[x].name.toLowerCase())
-                            .concat(
-                                specie.stats.inns.map((x)=>gameData.abilities[x].name.toLowerCase())
-                            )
-            for (const abi of abilities){
-                if (AisInB(queryData, abi, true)) return true
-            }
-            return false
-        },
-        "move": (queryData, specie) => {
-            let moves = specie.eggMoves.concat(
-                specie.levelUpMoves.map(x=>x.id).concat(
-                    specie.TMHMMoves.concat(
-                        specie.tutor
-                    )
-                )
-            ).map((x)=>gameData.moves[x].name.toLowerCase())
-            for (const move of moves){
-                if (AisInB(queryData, move, true)) return true
-            }
-            return false
-        },
-    }
     for (const i in species){
         if (i == 0 ) continue
         const specie = species[i]
         const node = nodeList.eq(i - 1)
-        if (queryFilter(searchQuery, specie, queryMap))
+        if (queryFilter(searchQuery, specie, queryMapSpecies))
         {
                 if (!validID) validID = i
                 node.show()

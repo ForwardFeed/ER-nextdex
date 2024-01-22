@@ -1,4 +1,4 @@
-import { search , activateSearch} from "./search.js"
+import { search , activateSearch, updateMainSearchKey} from "./search.js"
 
 export function setupPanels(){
     // if modified sync it with "search.js > search > panelUpdatesTable" variable
@@ -33,6 +33,7 @@ export function setupPanels(){
                     activateSearch()
                     //and tell this pannel has done the required search
                     search.panelFrozenUpdate[i] = false
+                    updateMainSearchKey(search.queryMapList[i])
                 })
                 
             }

@@ -40,10 +40,11 @@
 [ ] Filters
     [x] by megas :<= Just type "Mega in the name"
     [ ] redux forms
-    [ ] by map
+    [x] by map
     [x] innates/abilities
     [x] add move flags / effect
     [ ] Add manual of utilisation
 [ ] pressing control or shift allow to not be redicted but add move as filter
-[ ] settings file for the extractor of data
+[x] settings file for the extractor of data
 [ ] fix species-mid-stats on 300px size phone
+[ ] hide non-querable fields in function of the pannel

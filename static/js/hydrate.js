@@ -189,6 +189,7 @@ function hydrateLocation(){
     const maps = gameData.locations.maps
     for (const mapID in maps){
         const map = maps[mapID]
+        map.speciesSet = new Set() // new variable that store pokemon names
         // FEED the pokemons location
         for (const locName of xmapTable){
             const mons = map[locName]
@@ -196,7 +197,7 @@ function hydrateLocation(){
             for (const monID of mons){
                 const specieID = monID[2]
                 if (specieID < 1) continue
-
+                map.speciesSet.add(gameData.species[specieID].name.toLowerCase())
                 if(!gameData.species[specieID].locations.get(mapID))
                     gameData.species[specieID].locations.set(mapID,new Set())
                 gameData.species[specieID].locations.get(mapID).add(locName)

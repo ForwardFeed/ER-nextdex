@@ -1,8 +1,9 @@
-import { updateSpecies } from "./species_panel.js"
-import { updateAbilities} from "./abilities_panel.js"
-import { updateMoves } from "./moves_panel.js"
-import { updateLocations } from "./locations_panel.js"
-import { updateTrainers } from "./trainers_panel.js"
+import { updateSpecies,queryMapSpecies } from "./species_panel.js"
+import { updateAbilities, queryMapAbilities} from "./abilities_panel.js"
+import { updateMoves, queryMapMoves} from "./moves_panel.js"
+import { updateLocations, queryMapLocations } from "./locations_panel.js"
+import { updateTrainers, queryMapTrainers } from "./trainers_panel.js"
+
 
 export const search = {
     // the search guard is here to prevent that while the app is searching
@@ -19,7 +20,14 @@ export const search = {
         updateLocations,
         updateTrainers,
     ],
-    // 
+    // !IMPORTANT sync it with search.panelUpdatesTable
+    queryMapList: [
+        queryMapSpecies,
+        queryMapAbilities,
+        queryMapMoves,
+        queryMapLocations,
+        queryMapTrainers
+    ],
     // if modified sync it with "siderbar.js > setupPanels() > panelTable" variable
     panelFrozenUpdate: [
         false,
@@ -37,6 +45,7 @@ export const search = {
         "Ability",
         "Move",
         "Move-effect",
+        "specie",
     ],
     operators: [
         "AND",
@@ -102,6 +111,7 @@ export function activateSearch(){
                 return search.panelUpdatesIndex != index
             })
             executeAllFilters()
+            if (!search.suggestionNode) return
             search.suggestionNode.innerText = "" //remove all previous suggestions
             for (const suggestion of search.suggestions){
                 const option = document.createElement('option')
@@ -166,6 +176,7 @@ export function setupSearch(){
         }
         keyNode.append(option)
     }
+    updateMainSearchKey(search.queryMapList[search.panelUpdatesIndex])
 }
 
 // non-text key that affect the searching bar 
@@ -306,6 +317,24 @@ function appendFilter(){
 }
 
 
+export function updateMainSearchKey(queryMap){
+    const nodes = $('#search-keys-selections').children()
+    let validID = null
+    search.queryKeys.forEach((key, index)=>{
+        key = key.toLowerCase()
+        if (queryMap[key]){
+            if (validID === null) validID = index
+            
+            nodes.eq(index).show()
+        } else {
+            nodes.eq(index).hide()
+        }
+    })
+    console.log(validID)
+    if (validID) {
+        $('#search-keys').val(nodes.eq(validID).text())
+    }
+}
 
 /**
  * @callback searchAssertion

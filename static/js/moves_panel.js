@@ -108,40 +108,41 @@ function setTarget(targetID){
         nodeTarget.css('background-color', colorCode[colorID])
     }
 }
+export const queryMapMoves = {
+    "name": (queryData, move) => {
+        return AisInB(queryData, move.name.toLowerCase(), true)
+    },
+    "move": (queryData, move) => {
+        return AisInB(queryData, move.name.toLowerCase(), true)
+    },
+    "type": (queryData, move) => {
+        const types = move.types.map((x)=>gameData.typeT[x].toLowerCase())
+        for (const type of types){
+            if (AisInB(queryData, type), true) return true
+        }
+        return false
+    },
+    "move-effect": (queryData, move) => {
+        //it's called effect but in the data it's flags not effect
+        //effect in the data might be useless to the calc, at least to short and medium terms
+        const flags = move.flags.map((x)=>gameData.flagsT[x].toLowerCase())
+        for (const flag of flags){
+            if (AisInB(queryData, flag, true)) return true
+        }
+        return false
+    },
+}
 
 export function updateMoves(searchQuery){
     const moves = gameData.moves
     const nodeList = $('#moves-list').children()
-    const queryMap = {
-        "name": (queryData, move) => {
-            return AisInB(queryData, move.name.toLowerCase(), true)
-        },
-        "move": (queryData, move) => {
-            return AisInB(queryData, move.name.toLowerCase(), true)
-        },
-        "type": (queryData, move) => {
-            const types = move.types.map((x)=>gameData.typeT[x].toLowerCase())
-            for (const type of types){
-                if (AisInB(queryData, type), true) return true
-            }
-            return false
-        },
-        "move-effect": (queryData, move) => {
-            //it's called effect but in the data it's flags not effect
-            //effect in the data might be useless to the calc, at least to short and medium terms
-            const flags = move.flags.map((x)=>gameData.flagsT[x].toLowerCase())
-            for (const flag of flags){
-                if (AisInB(queryData, flag, true)) return true
-            }
-            return false
-        },
-    }
+    
     let validID;
     for (const i in moves){
         if (i == 0 ) continue
         const move = moves[i]
         const node = nodeList.eq(i - 1)
-        if (queryFilter(searchQuery, move, queryMap))
+        if (queryFilter(searchQuery, move, queryMapMoves))
         {
                 if (!validID) validID = i
                 node.show()

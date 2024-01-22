@@ -40,22 +40,30 @@ export function redirectLocation(mapId)
 
 }
 
+export const queryMapLocations = {
+    "name": (queryData, map) => {
+        return AisInB(queryData, map.name.toLowerCase(), true)
+    },
+    "specie": (queryData, map) => {
+        for (const specie of map.speciesSet){
+            if (AisInB(queryData, specie, true)) return true
+        }
+        return false
+    }
+}
 export function updateLocations(searchQuery){
     const maps = gameData.locations.maps
     const nodeList = $('#locations-list').children()
     let validID;
-    const queryMap = {
-        "name": (queryData, map) => {
-            return AisInB(queryData, map.name.toLowerCase(), true)
-        }
-    }
+    
     for (const i in maps){
         const map = maps[i]
         const node = nodeList.eq(i)
-        if (queryFilter(searchQuery, map, queryMap))
+        if (queryFilter(searchQuery, map, queryMapLocations))
         {
                 if (!validID) validID = i
                 node.show()
+                
         } else {
                 node.hide()
         }
