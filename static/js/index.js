@@ -4,7 +4,6 @@ import { setAvailableVersion } from "./data_version.js"
 import { setupSearch } from "./search.js"
 import { addTooltip } from "./utils.js"
 import { setupSettings } from "./settings.js"
-
 $(document).ready(function(){
     setupSettings()
     setupPanels()

@@ -156,6 +156,10 @@ export function setupSearch(){
         $(this).closest('.filter-panel').find('.filter-field').remove()
         activateSearch()
     })
+    $('.filter-help-btn').on('click', function(){
+        $('#filter-help').toggle()
+        $('.filter-panel').toggle()
+    })
     for(const operator of search.operators){
         const option = document.createElement('option')
         option.value = operator

@@ -1,0 +1,28 @@
+const typeOrder = [ "Normal",   "Fire",   "Water"]
+const typeChart = 
+[   /* => DEFENDERS*/
+/*| |*/ "???"   , "Normal", "Fire","Water",
+/* V */ "Normal",    1    ,   1   ,   1   ,
+/*   */ "Fire"  ,    1    ,  0.5  ,  0.5  ,
+/* A */ "Water" ,    1    ,   2   ,  0.5  ,
+/* T */
+/* T */
+/* A */
+/* C */
+/* K */
+/* E */
+/* R */
+/* S */
+/*   */
+/*   */    
+]
+export function test(){
+    const typeAtk = "Water"
+    const typeDef = "Water"
+    const typeEffectiveness = typeChart[
+        (typeOrder.length + 1) *
+        (typeOrder.indexOf(typeAtk) + 1) +
+        (typeOrder.indexOf(typeDef) + 1)
+    ]
+    console.log(typeEffectiveness)
+}

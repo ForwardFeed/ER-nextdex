@@ -594,7 +594,7 @@ span{
 
 /* SETTINGS */
 #settings-frame{
-    z-index: 10;
+    z-index: 100;
     width: 80vw;
     height: 80vh;
     margin: 10vh 10vh 10vw 10vw;
@@ -633,20 +633,28 @@ span{
     min-height: 50%;
     width: 100%;
 }
-.filter-title{
+
+.filter-title, .filter-help-title{
     display: flex;
     width: 100%;
     background-color: var(--colorA);
 }
-.filter-title > div:last-child{
+#filter-help > p, #filter-help > li{
+    padding-left: 1em;
+    padding-top: 0.5em;
+    margin: 0;
+    font-size: 0.8em;
+}
+.filter-title > *{
     margin: auto;
+}
+.filter-title > div:last-child{
     margin-right: 2%;
 }
-.filter-title > *:first-child{
-    margin: auto;
+.filter-title > *:first-child, .filter-help-title > *:first-child {
     margin-left: 2%;
 }
-#filter-clear-all:hover {
+.sel:hover {
     background-color: var(--selHover);
     cursor: default;
 }

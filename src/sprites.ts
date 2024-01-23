@@ -89,11 +89,19 @@ export function getSprites(ROOT_PRJ: string, optionsGlobal_h: FileDataOptions, o
                     } else {
                         throw `${inFilePath} does not exist`
                     }
-                    // copy the shiny palette too
-                    const paletteFile = inFilePath.replace("front.png", "shiny.pal")
+                    // copy the normal palette to get the right indices
+                    const paletteFile = inFilePath.replace("front.png", "normal.pal")
                     const outPaletteFile = outFileName.replace('png', 'pal')
                     if (existsSync(paletteFile)){
                         copyFileSync(paletteFile, join(output_dir_palette, outPaletteFile))
+                    } else {
+                        throw `${inFilePath} does not exist`
+                    }
+                    // copy the shiny palette too
+                    const paletteFileShiny = inFilePath.replace("front.png", "shiny.pal")
+                    const outPaletteFileShiny = 'shiny_' + outFileName.replace('png', 'pal')
+                    if (existsSync(paletteFileShiny)){
+                        copyFileSync(paletteFileShiny, join(output_dir_palette, outPaletteFileShiny))
                     } else {
                         throw `${inFilePath} does not exist`
                     }

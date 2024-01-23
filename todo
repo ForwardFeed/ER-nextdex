@@ -21,6 +21,7 @@
 [ ] add dex-strategy from 'src/data/dex-strategy.md'
 [x] locations exception for the fishe and rods
 [x] get pre-evolutions
+    [ ] if possible retroactively
 [ ] add trainers
     [ ] Trainer Locations from /data/maps/scripts.pory or script.inc
     [x] Get Trainer Rematch from RematchTrainer gRematchTable in /src/battle_setup.c
@@ -48,3 +49,6 @@
 [x] settings file for the extractor of data
 [ ] fix species-mid-stats on 300px size phone
 [x] hide non-querable fields in function of the pannel
+[ ] Species Tab
+    [ ] make evo & locations tab instead of two separates
+    [ ] Insert all leftovers data, like exp curve, body color and stuff
