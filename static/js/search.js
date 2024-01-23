@@ -120,6 +120,7 @@ export function activateSearch(){
                     search.suggestionInput.value = suggestion
                     search.suggestionNode.style.display = "none"
                 }
+                search.suggestionNode.style.display = "block"
                 search.suggestionNode.append(option)
             }
         })
@@ -132,6 +133,7 @@ export function activateSearch(){
 export function setupSearch(){
     $('#search-keys').on('change', activateSearch)
     $('#search-bar').on('keyup search', (ev)=>{
+        $('#search-suggestion-off').addClass('fill-space')
         activateSearch()
         search.suggestionNode = $('#search-suggestion')[0]
         search.suggestionInput = $('#search-bar')[0]
@@ -143,11 +145,16 @@ export function setupSearch(){
         search.suggestionSaved = search.suggestionInput.value
         search.clearSuggestion()
     })
+    $('#search-suggestion-off').on('click', ()=>{
+        $('#search-keys-selections, #search-suggestion').hide()
+        $('#search-suggestion-off').removeClass('fill-space')
+    })
     $('#filter-icon').on('click', function(){
         $('#filter-frame').toggle()
     })
     $('#search-keys').on('click', function(){
         $('#search-keys-selections').toggle()
+        $('#search-suggestion-off').addClass('fill-space')
     })
     $('.filter-add').on('click', function(){
         appendFilter()
@@ -176,6 +183,7 @@ export function setupSearch(){
         option.onclick = ()=>{
             $('#search-keys').val(key)
             $('#search-keys-selections').toggle()
+            $('#search-suggestion-off').removeClass('fill-space')
             activateSearch()
         }
         keyNode.append(option)

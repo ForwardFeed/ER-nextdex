@@ -658,6 +658,9 @@ span{
 .filter-title > *:first-child, .filter-help-title > *:first-child {
     margin-left: 2%;
 }
+.filter-help-title{
+    font-size: 2em;
+}
 .sel:hover {
     background-color: var(--selHover);
     cursor: default;

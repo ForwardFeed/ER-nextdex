@@ -1,6 +1,6 @@
 [ ] Add explanations
     [ ] base stats colors are based on the average, not the total
-    [ ] How the project works in the readme
+    [x] How the project works in the readme
 [x] Add tutor moves
 [x] Invert Abilities with species in the side bar
 [x] Add versionning changes
@@ -8,11 +8,8 @@
 [ ] Make a beta version that will autofetch OR having Automated tool that will update the github daily about latest beta changes.
 [x] Change the layout for phone or lateral screen
 [ ] Add a panel to have the global stats, the number of species, abilities and stuff like that
-[ ] Add the filter pannel
+[x] Add the filtering frame
 [ ] Craft moves animation from the gamefile into a gif or webp (is this possible?)
-[ ] Stop with row alternating color in abilities
-[ ] Comment more the code
-[ ] Refractor the UI hydration and pannel filling as well as the CSS
 [x] add additionnal sub pannel controls in bot Info bar for species and probably in moves
 [ ] add code of the different abilities, species related from
 [ ] add list of sSkillSwapBannedAbilities things like that in battle utils
