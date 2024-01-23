@@ -643,7 +643,11 @@ span{
     padding-left: 1em;
     padding-top: 0.5em;
     margin: 0;
-    font-size: 0.8em;
+}
+#filter-help{
+    font-size: 0.6em;
+    height: 100%;
+    overflow-y: scroll;
 }
 .filter-title > *{
     margin: auto;
