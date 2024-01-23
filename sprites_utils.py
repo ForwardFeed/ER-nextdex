@@ -1,8 +1,9 @@
 #!/bin/python3
 from PIL import Image
 from os import listdir, path, makedirs
+import re
 
-def addTransparentBackground(fullpath):
+def addTransparentBackground(fullpath, newPath):
     if not path.exists(fullpath):
         print('couldn\'t find ' + fullpath)
         return
@@ -23,7 +24,7 @@ def addTransparentBackground(fullpath):
             newData.append(item)
 
     img.putdata(newData)
-    img.save(fullpath)
+    img.save(newPath)
 
 
 def getPaletteColors(line):
@@ -55,8 +56,8 @@ def reorderPaletteFromPrecedent(img, colorListExemple, colorList):
     colorListImg = indexImageColor(img)
     linearOrderedColorList = []
     for i in range(len(colorListImg)):
-        #colorListImg[i]
-        #print(colorListImg[i], colorListExemple[i])
+        if colorListImg[i] not in colorListExemple:
+            return colorList # i hope this works
         newIndex = colorListExemple.index(colorListImg[i])
         linearOrderedColorList.append(colorList[newIndex])
     return linearOrderedColorList
@@ -105,16 +106,20 @@ def getShiny(paletteFolder, ImageFolder, imageName):
 # you may uncomment from here, i just commented it because of i didn't needed it at one point
 # but it's functionnal
 
-'''files = listdir("./out/sprites/")
+files = listdir("./out/sprites/")
+shinyRegex = re.compile('SHINY_')
 for name in files:
+    # do not shiny the shynies
+    if shinyRegex.match(name):
+        continue
     name = name.replace('.png', '')
     try:
         getShiny("./out/palettes/", "./out/sprites/", name)
-    except Exception:
-        print("Couldn't get shiny of" + name)
+    except Exception as e: 
+        print("Couldn't get shiny of " + name + ", reason: " + str(e))
         pass
-'''
-files = listdir("./static/sprites/")
+
+files = listdir("./out/sprites/")
 for name in files:
-    addTransparentBackground("./static/sprites/" + name)
+    addTransparentBackground("./out/sprites/" + name, "./static/sprites/" + name)
 

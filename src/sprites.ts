@@ -82,34 +82,65 @@ export function getSprites(ROOT_PRJ: string, optionsGlobal_h: FileDataOptions, o
             spriteResult.spritesPath.forEach((val, key)=>{
                 const inFilePath = join(ROOT_PRJ, val)
                 const outFileName = key.replace(/^SPECIES_/, '') + ".png"
-                const outFilePath = join(output_dir, outFileName)
+                let outFilePath = join(output_dir, outFileName)
                 try{
                     if (existsSync(inFilePath)){
                         copyFileSync(inFilePath, outFilePath)
                     } else {
-                        throw `${inFilePath} does not exist`
-                    }
-                    // copy the normal palette to get the right indices
-                    const paletteFile = inFilePath.replace("front.png", "normal.pal")
-                    const outPaletteFile = outFileName.replace('png', 'pal')
-                    if (existsSync(paletteFile)){
-                        copyFileSync(paletteFile, join(output_dir_palette, outPaletteFile))
-                    } else {
-                        throw `${inFilePath} does not exist`
-                    }
-                    // copy the shiny palette too
-                    const paletteFileShiny = inFilePath.replace("front.png", "shiny.pal")
-                    const outPaletteFileShiny = 'shiny_' + outFileName.replace('png', 'pal')
-                    if (existsSync(paletteFileShiny)){
-                        copyFileSync(paletteFileShiny, join(output_dir_palette, outPaletteFileShiny))
-                    } else {
-                        throw `${inFilePath} does not exist`
-                    }
-                    
+                        throw `${inFilePath} or ${outFilePath} does not exist`
+                    }                    
                 } catch(e){
                     console.warn(`Tried to copy ${inFilePath} to ${outFilePath} error: ${e}`)
                 }
-                
+                // copy the normal palette to get the right indices
+                const paletteFile = inFilePath.replace("front.png", "normal.pal")
+                const outPaletteFile = outFileName.replace('png', 'pal')
+                try{
+                    if (existsSync(paletteFile)){
+                        copyFileSync(paletteFile, join(output_dir_palette, outPaletteFile))
+                    } else {
+                        let end: string|RegExpMatchArray = paletteFile.match(/(?<=pokemon\/).*/)
+                        if (!end){
+                            throw `${paletteFile} does not exist`
+                        } else {
+                            // ugly fix because i was tired
+                            end = end[0]
+                            let pareng = end.replace(/\/[^/]+/, '')
+                            let replacedWithPareng = paletteFile.replace(end, pareng)
+                            if (existsSync(replacedWithPareng)){
+                                copyFileSync(replacedWithPareng, join(output_dir_palette, outPaletteFile))
+                            } else {
+                                throw `${replacedWithPareng} does not exist`
+                            }
+                        }
+                    }
+                } catch(e){
+                    console.warn(`Tried to copy ${paletteFile} to ${outPaletteFile} error: ${e}`)
+                }
+                // copy the shiny palette too
+                const paletteFileShiny = inFilePath.replace("front.png", "shiny.pal")
+                const outPaletteFileShiny = 'shiny_' + outFileName.replace('png', 'pal')
+                try{
+                    if (existsSync(paletteFileShiny)){
+                        copyFileSync(paletteFileShiny, join(output_dir_palette, outPaletteFileShiny))
+                    } else {
+                        let end: string|RegExpMatchArray = paletteFileShiny.match(/(?<=pokemon\/).*/)
+                        if (!end){
+                            throw `${paletteFileShiny} does not exist`
+                        } else {
+                            end = end[0]
+                            let pareng = end.replace(/\/[^/]+/, '')
+                            let replacedWithPareng = paletteFileShiny.replace(end, pareng)
+                            if (existsSync(replacedWithPareng)){
+                                copyFileSync(replacedWithPareng, join(output_dir_palette, outPaletteFileShiny))
+                            } else {
+                                throw `${replacedWithPareng} does not exist`
+                            }
+                        }
+                    }
+                } catch(e){
+                    console.warn(`Tried to copy ${paletteFileShiny} to ${paletteFileShiny} error: ${e}`)
+                }
             })
             resolve(null)
         })
