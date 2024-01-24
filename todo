@@ -29,8 +29,6 @@
     [ ] Sorting abilities by alphabet
 [ ] tooltip for moves
 [ ] btw the dex is up
-[ ] Add pokemon weakness
-    [ ] make a team builder
 [ ] Sort
     [ ] stats
     [ ] Aplhabethically
@@ -44,8 +42,12 @@
     [x] moves in species
 [ ] pressing control or shift allow to not be redicted but add move as filter
 [x] settings file for the extractor of data
-[ ] fix species-mid-stats on 300px size phone
+[x] fix species-mid-stats on 300px size phone <= somewhat fixed
 [x] hide non-querable fields in function of the pannel
+[ ]
 [ ] Species Tab
     [ ] make evo & locations tab instead of two separates
     [ ] Insert all leftovers data, like exp curve, body color and stuff
+    [ ] make a team builder
+[ ] Trainers Tab
+    [ ] Order trainer per route

@@ -81,11 +81,14 @@ export function getSprites(ROOT_PRJ: string, optionsGlobal_h: FileDataOptions, o
             
             spriteResult.spritesPath.forEach((val, key)=>{
                 const inFilePath = join(ROOT_PRJ, val)
+                const inFileSubstitutePath = inFilePath.replace('front.png', 'anim_front.png')
                 const outFileName = key.replace(/^SPECIES_/, '') + ".png"
                 let outFilePath = join(output_dir, outFileName)
                 try{
                     if (existsSync(inFilePath)){
                         copyFileSync(inFilePath, outFilePath)
+                    } else if (existsSync(inFileSubstitutePath)){
+                        copyFileSync(inFileSubstitutePath, outFilePath)
                     } else {
                         throw `${inFilePath} or ${outFilePath} does not exist`
                     }                    
