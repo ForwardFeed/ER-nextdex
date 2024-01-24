@@ -129,11 +129,13 @@ export function activateSearch(){
     }
     search.updateGuard = false    
 }
+/**
+ * will work as long no future event.stop propagation is written in the code
+ */
 
-function clickOutsideToRemoveList(){
-    const clickToHide = (ev)=>{
-        console.log(ev.target)
-        search.suggestionNode.style.display = "none"
+function clickOutsideToRemoveList(htmlNodeToHide){
+    const clickToHide = ()=>{
+        htmlNodeToHide.style.display = "none"
         $(document).off('click', clickToHide)
     }
     $(document).on('click', clickToHide)
@@ -150,14 +152,16 @@ export function setupSearch(){
             // reacted to a non-text key
             return
         }
-        clickOutsideToRemoveList()
+        clickOutsideToRemoveList(search.suggestionNode)
         search.suggestionSaved = search.suggestionInput.value
         search.clearSuggestion()
     })
     $('#filter-icon').on('click', function(){
         $('#filter-frame').toggle()
     })
-    $('#search-keys').on('click', function(){
+    $('#search-keys').on('click', function(ev){
+        ev.stopPropagation()
+        clickOutsideToRemoveList($('#search-keys-selections')[0])
         $('#search-keys-selections').toggle()
     })
     $('.filter-add').on('click', function(){
@@ -270,16 +274,16 @@ function appendFilter(){
         option.innerText = key
         option.onclick = ()=>{
             inputKey.value = key
-            $(divKeySelection).toggle()
-            $(inputKey).toggle()
+            $(divKeySelection).hide()
             activateSearch()
         }
         divKeySelection.append(option)
     }
 
-    inputKey.onclick = () =>{
-        $(divKeySelection).toggle()
-        $(inputKey).toggle()
+    inputKey.onclick = (ev) =>{
+        $(divKeySelection).show()
+        ev.stopPropagation()
+        clickOutsideToRemoveList(divKeySelection)
     }
 
     const divLabel = document.createElement('label')
@@ -312,10 +316,9 @@ function appendFilter(){
             // reacted to a non-text key
             return
         }
+        clickOutsideToRemoveList(search.suggestionNode)
         search.suggestionSaved = search.suggestionInput.value
         search.clearSuggestion()
-        // due to the async nature of activate search
-        // the first letter and the first letters if typed quickly won't have a suggestion
     }
 
     const divRemove = document.createElement('div')
