@@ -716,7 +716,9 @@ span{
 .filter-key-selection > option, .filter-suggestions > option{
     background-color: var(--colorC);
 }
-
+.filter-option-selected{
+    color: var(--selActive);
+}
 .filter-label{
     
 }

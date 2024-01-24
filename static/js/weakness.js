@@ -85,13 +85,7 @@ const typeChart = {
         ["Poison", "Steel"]
     ]
 }
-/*
-console.log(test2("Fire", "Normal"))
-console.log(test2("Fire", "Bug"))
-console.log(test2("Fire", "Fire"))
-console.log(test2("Ghost", "Psychic"))*/
-
-export function test2(attackerT, defT){
+export function getTypeEffectiveness(attackerT, defT){
     let xRange = [0,0.5,2]
     let i = 0
     for (const typeDef of typeChart[defT]){
