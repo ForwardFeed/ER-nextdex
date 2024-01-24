@@ -157,5 +157,5 @@ export function redirectMove(moveId)
 {
     $("#btn-moves").click()
     //Needed for moves like powder, where it have gone poison powder because it's first alphabetically
-    $('#moves-list').children().eq(moveId - 1).click().click()[0].scrollIntoView({behavior:"smooth"})
+    $('#moves-list').children().eq(moveId - 1).click()[0].scrollIntoView({behavior:"smooth"})
 }
