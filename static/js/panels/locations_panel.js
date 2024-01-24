@@ -1,5 +1,5 @@
 import { createSpeciesBlock, redirectSpecie } from "./species_panel.js"
-import { queryFilter } from "../search.js"
+import { queryFilter, search } from "../search.js"
 import { gameData } from "../data_version.js"
 import { AisInB } from "../utils.js"
 
@@ -34,9 +34,12 @@ export function feedPanelLocations(mapID){
 
 export function redirectLocation(mapId)
 {
+    search.callbackAfterFilters = () =>{
+        const location = $('#locations-list').children().eq(mapId)
+        location.click()[0].scrollIntoView({behavior:"smooth"})
+    }
     $("#btn-locations").click()
-    const location = $('#locations-list').children().eq(mapId)
-    location.click()[0].scrollIntoView({behavior:"smooth"})
+   
 
 }
 

@@ -52,6 +52,7 @@ export const search = {
         "OR",
         "XOR",
     ],
+    callbackAfterFilters: null,
     timeoutAutoComplete: null,
     maxSuggestion: 5,
     suggestions: [],
@@ -143,6 +144,14 @@ export function activateSearch(callback){
             executeAllFilters()
             search.showSuggestion()
             if (callback) callback()
+            /** Because the function is async
+             *  I sometimes need to ensure a function is right after the 
+             *  filtering has finished
+             */
+            if (search.callbackAfterFilters) {
+                search.callbackAfterFilters()
+                search.callbackAfterFilters = null
+            }
         })
         if (!search.updateQueue) break
         search.updateQueue = false

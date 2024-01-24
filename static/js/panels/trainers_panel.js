@@ -1,5 +1,5 @@
 import { getSpritesURL, redirectSpecie } from "./species_panel.js"
-import { queryFilter } from "../search.js"
+import { queryFilter, search} from "../search.js"
 import { gameData } from "../data_version.js"
 import { AisInB } from "../utils.js"
 

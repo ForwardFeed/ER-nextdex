@@ -1,5 +1,5 @@
 import { gameData } from "../data_version.js"
-import { queryFilter } from "../search.js"
+import { queryFilter, search } from "../search.js"
 import { AisInB } from "../utils.js"
 export function feedPanelMoves(moveID){
     const move = gameData.moves[moveID]
@@ -108,6 +108,16 @@ function setTarget(targetID){
         nodeTarget.css('background-color', colorCode[colorID])
     }
 }
+
+export function redirectMove(moveId)
+{
+    search.callbackAfterFilters = () =>{
+        $('#moves-list').children().eq(moveId - 1).click()[0].scrollIntoView({behavior:"smooth"})
+    }
+    $("#btn-moves").click()
+    
+}
+
 export const queryMapMoves = {
     "name": (queryData, move) => {
         if (AisInB(queryData, move.name.toLowerCase())) return move.name
@@ -153,11 +163,4 @@ export function updateMoves(searchQuery){
         }
     }
     if (validID) feedPanelMoves(validID)
-}
-
-export function redirectMove(moveId)
-{
-    $("#btn-moves").click()
-    //Needed for moves like powder, where it have gone poison powder because it's first alphabetically
-    $('#moves-list').children().eq(moveId - 1).click()[0].scrollIntoView({behavior:"smooth"})
 }
