@@ -335,7 +335,7 @@ export const queryMapSpecies = {
     "type": (queryData, specie) => {
         const types = specie.stats.types.map((x)=>gameData.typeT[x].toLowerCase())
         for (const type of types){
-            return AisInB(queryData, type, true)
+            if (AisInB(queryData, type, true)) return true
         }
         return false
     },
