@@ -4,12 +4,20 @@ import { AisInB } from "../utils.js"
 
 export const queryMapAbilities = {
     "name": (queryData, ability) => {
-        return  (AisInB(queryData, ability.name.toLowerCase(), true)) ||
-                (AisInB(queryData, ability.desc.toLowerCase()))
+        if ((AisInB(queryData, ability.name.toLowerCase())) ||
+        (AisInB(queryData, ability.desc.toLowerCase()))){
+            return ability.name
+        }  else {
+            return false
+        }
     },
     "ability": (queryData, ability) => {
-        return (AisInB(queryData, ability.name.toLowerCase(), true)) ||
-            (AisInB(queryData, ability.desc.toLowerCase()))
+        if ((AisInB(queryData, ability.name.toLowerCase())) ||
+        (AisInB(queryData, ability.desc.toLowerCase()))){
+            return ability.name
+        }  else {
+            return false
+        }
     }
 }
 

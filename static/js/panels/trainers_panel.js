@@ -172,7 +172,8 @@ function setPartyPanel(party){
 }
 export const queryMapTrainers = {
     "name": (queryData, trainer) => {
-        return AisInB(queryData, trainer.name.toLowerCase(), true)
+        if (AisInB(queryData, trainer.name.toLowerCase())) return trainer.name
+        return false
     }
 }
 export function updateTrainers(searchQuery){

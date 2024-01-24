@@ -27,9 +27,8 @@ export function capitalizeFirstLetter(string) {
  * @param {boolean} addToSuggestion if it includes, add b to the suggestion list?
  * @returns {boolean}
  */
-export function AisInB(a, b, addToSuggestion=false){
+export function AisInB(a, b){
 	if (b.indexOf(a) != -1){
-		if (addToSuggestion) search.addSuggestion(b)
 		return true
 	} 
 	return false

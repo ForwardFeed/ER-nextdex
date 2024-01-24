@@ -110,15 +110,17 @@ function setTarget(targetID){
 }
 export const queryMapMoves = {
     "name": (queryData, move) => {
-        return AisInB(queryData, move.name.toLowerCase(), true)
+        if (AisInB(queryData, move.name.toLowerCase())) return move.name
+        return false
     },
     "move": (queryData, move) => {
-        return AisInB(queryData, move.name.toLowerCase(), true)
+        if (AisInB(queryData, move.name.toLowerCase())) return move.name
+        return false
     },
     "type": (queryData, move) => {
         const types = move.types.map((x)=>gameData.typeT[x].toLowerCase())
         for (const type of types){
-            if (AisInB(queryData, type), true) return true
+            if (AisInB(queryData, type)) return type
         }
         return false
     },
@@ -127,7 +129,7 @@ export const queryMapMoves = {
         //effect in the data might be useless to the calc, at least to short and medium terms
         const flags = move.flags.map((x)=>gameData.flagsT[x].toLowerCase())
         for (const flag of flags){
-            if (AisInB(queryData, flag, true)) return true
+            if (AisInB(queryData, flag)) return flag
         }
         return false
     },

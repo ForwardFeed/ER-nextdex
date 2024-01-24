@@ -330,12 +330,12 @@ function setLocations(locations, SEnc){
 }
 export const queryMapSpecies = {
     "name": (queryData, specie) => {
-        return AisInB(queryData, specie.name.toLowerCase(), true)
+        if (AisInB(queryData, specie.name.toLowerCase())) return specie.name
     },
     "type": (queryData, specie) => {
         const types = specie.stats.types.map((x)=>gameData.typeT[x].toLowerCase())
         for (const type of types){
-            if (AisInB(queryData, type, true)) return true
+            if (AisInB(queryData, type)) return type
         }
         return false
     },
@@ -346,7 +346,7 @@ export const queryMapSpecies = {
                             specie.stats.inns.map((x)=>gameData.abilities[x].name.toLowerCase())
                         )
         for (const abi of abilities){
-            if (AisInB(queryData, abi, true)) return true
+            if (AisInB(queryData, abi)) return abi
         }
         return false
     },
@@ -359,7 +359,7 @@ export const queryMapSpecies = {
             )
         ).map((x)=>gameData.moves[x].name.toLowerCase())
         for (const move of moves){
-            if (AisInB(queryData, move, true)) return true
+            if (AisInB(queryData, move)) return move
         }
         return false
     },

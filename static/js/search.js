@@ -59,9 +59,11 @@ export const search = {
     suggestionInput: null,
     suggestionSaved: "",
     suggestionData: "",
+    suggestionPreviousNode: null,
     addSuggestion : function(suggestion){
         if (this.suggestions.length == this.maxSuggestion) return
         if (this.suggestions.includes(suggestion)) return
+        if (this.suggestionInput.value === suggestion) return
         this.suggestions.push(suggestion)
     },
     clearSuggestion: function(){
@@ -88,31 +90,41 @@ export const search = {
  * Will execute all filters query so far
  */
 function executeAllFilters(){
-    const allQueries = [{ //this is the top bar search
+    let allQueries = [{ //this is the top bar search
         op:"AND",
         not: false, //not yet implemented
         k: $('#search-keys').val().toLowerCase(),
-        data: $('#search-bar').val().toLowerCase()
+        data: $('#search-bar').val().toLowerCase(),
+        suggestion: $('#search-bar')[0] === search.suggestionInput
     }]
-    $('.filter-field').each(function(){ 
+    
+    $('.filter-field').map(function(){
         allQueries.push({
             op:"AND",
             //if you use data('state') jquery util here you're fucked for no acceptable reason
             not: $(this).find('.filter-not')[0].dataset.state === "on" ? true : false,
             k: $(this).find('.filter-key').val().toLowerCase(),
-            data: $(this).find('.filter-search').val().toLowerCase()
+            data: $(this).find('.filter-search').val().toLowerCase(),
+            suggestion: $(this).find('.filter-search')[0] === search.suggestionInput
         })
     })
-    // set everything into a big AND //TODO implement the UI change for that
-    const megaQuery = {
-        op: $('#filter-main-operator').val(),
-        not: false,
-        k: "",
-        data: allQueries.filter((x)=> x.data) //filters the empty query 
+    //filters the empty queries
+    allQueries = allQueries.filter((x)=> x.data)
+    let finalQuery
+    if (allQueries.length == 1){
+        // don't wrap the query
+        finalQuery = allQueries[0]
+    } else {
+        // wrap the query
+        finalQuery = {
+            op: $('#filter-main-operator').val(),
+            not: false,
+            k: "",
+            data: allQueries, 
+        }
     }
-    if(megaQuery.data.length<1) megaQuery.op="AND"
     //execute the update of the active panel
-    search.panelUpdatesTable[search.panelUpdatesIndex](megaQuery)
+    search.panelUpdatesTable[search.panelUpdatesIndex](finalQuery)
 }
 
 export function activateSearch(callback){
@@ -141,8 +153,9 @@ export function activateSearch(callback){
  * will work as long no future event.stop propagation is written in the code
  */
 
-function clickOutsideToRemoveList(htmlNodeToHide){
-    const clickToHide = ()=>{
+function clickOutsideToRemoveList(htmlNodeToHide, htmlNodeClickedOn){
+    const clickToHide = (ev)=>{
+        if (htmlNodeClickedOn == ev.target) return 
         htmlNodeToHide.style.display = "none"
         $(document).off('click', clickToHide)
     }
@@ -160,6 +173,7 @@ const evKeymap = {
         }
     },*/
     "Enter": ()=>{
+        search.suggestionNode.style.display = "none"
         if (search.suggestionData) search.suggestionInput.value = search.suggestionData
     },
     "ArrowUp": ()=>{
@@ -167,12 +181,13 @@ const evKeymap = {
         if (isNaN(preValue)) preValue = 0
         const value = (preValue ? preValue : search.maxSuggestion ) -1
         const suggestionSelected = search.suggestions[value]
-        //if (suggestionSelected) search.suggestionInput.value = suggestionSelected
-        if (suggestionSelected){
+        if (suggestionSelected && search.suggestionNode.children.length > value) {
             search.suggestionData = suggestionSelected
-            search.suggestionNode.children[preValue].className = ""
-            search.suggestionNode.children[value].className = "filter-option-selected"
+            if (search.suggestionPreviousNode) search.suggestionPreviousNode.className = ""
+            const node = search.suggestionNode.children[value]
+            node.className = "filter-option-selected"
             search.suggestionNode.dataset.suggestion = value
+            search.suggestionPreviousNode = node
         }
         return true
     },  
@@ -181,12 +196,13 @@ const evKeymap = {
         if (isNaN(preValue)) preValue = search.maxSuggestion - 1
         const value = (preValue + 1) % search.maxSuggestion
         const suggestionSelected = search.suggestions[value]
-        //if (suggestionSelected) search.suggestionInput.value = suggestionSelected
-        if (suggestionSelected && search.suggestionNode.children.length > preValue) {
+        if (suggestionSelected && search.suggestionNode.children.length > value) {
             search.suggestionData = suggestionSelected
-            search.suggestionNode.children[preValue].className = ""
-            search.suggestionNode.children[value].className = "filter-option-selected"
+            if (search.suggestionPreviousNode) search.suggestionPreviousNode.className = ""
+            const node = search.suggestionNode.children[value]
+            node.className = "filter-option-selected"
             search.suggestionNode.dataset.suggestion = value
+            search.suggestionPreviousNode = node
         }
         return true //means don't activate the search
     },
@@ -228,7 +244,7 @@ export function setupSearch(){
     })
     $('#search-keys').on('click', function(ev){
         ev.stopPropagation()
-        clickOutsideToRemoveList($('#search-keys-selections')[0])
+        clickOutsideToRemoveList($('#search-keys-selections')[0], $('#search-keys')[0])
         $('#search-keys-selections').toggle()
     })
     $('.filter-add').on('click', function(){
@@ -317,8 +333,8 @@ function appendFilter(){
 
     inputKey.onclick = (ev) =>{
         $(divKeySelection).show()
-        ev.stopPropagation()
-        clickOutsideToRemoveList(divKeySelection)
+        //ev.stopPropagation()
+        clickOutsideToRemoveList(divKeySelection, inputKey)
     }
 
     const divLabel = document.createElement('label')
@@ -329,6 +345,7 @@ function appendFilter(){
     inputSearch.className = "filter-search"
     inputSearch.type = "search"
     inputSearch.onclick = ()=>{
+        if (search.suggestionNode) search.suggestionNode.style.display = "none"
         search.suggestionNode = divSuggestions
     }
     divLabel.append(inputSearch)
@@ -361,7 +378,6 @@ export function updateMainSearchKey(queryMap){
         key = key.toLowerCase()
         if (queryMap[key]){
             if (validID === null) validID = index
-            
             nodes.eq(index).show()
         } else {
             nodes.eq(index).hide()
@@ -377,7 +393,7 @@ export function updateMainSearchKey(queryMap){
  * @param {unknow} data
  * @param {string} queryData
  *  
- * @returns {boolean} did it matched?
+ * @returns {string} what did it matched
  * 
  * @typedef {Object.<string, searchAssertion>} SearchMap
  * 
@@ -387,6 +403,7 @@ export function updateMainSearchKey(queryMap){
  * @property {string} op - Operation to do to all direct sub element
  * @property {keyof SearchMap} k - a key for the searchmap
  * @property {Query} queryData - data of the query
+ * @property {boolean} suggestion - should it add to suggestions?
  * @param {boolean} [not=false] - should it not match
  * 
  * @property {string} queryData - string to compare it to the data
@@ -404,6 +421,10 @@ export function queryFilter(query, data, keymap){
         //'break it down until it is no longer an array and solve using the parent op'
         const subQueriesAnswer = []
         for (const subQuery of query.data){
+            const answer = queryFilter(subQuery, data, keymap)
+            if (query.suggestion && answer) {
+                search.addSuggestion(answer)
+            }
             subQueriesAnswer.push(queryFilter(subQuery, data, keymap))
         }
         if (query.op === "XOR"){
@@ -425,10 +446,15 @@ export function queryFilter(query, data, keymap){
             return queryNot(query.not, true)
         }
     } else {
-        //we can break this one down'
         const execFn = keymap[query.k]
         if (execFn) {
-            return query.not ? !execFn(query.data, data) : execFn(query.data, data)
+            const answer = execFn(query.data, data)
+            const isValid = queryNot(query.not, answer)
+            if (query.suggestion && isValid) {
+                search.addSuggestion(answer)
+            }
+            return isValid
+
         }
         else return true // true i suppose?
     }

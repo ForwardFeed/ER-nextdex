@@ -42,11 +42,14 @@ export function redirectLocation(mapId)
 
 export const queryMapLocations = {
     "name": (queryData, map) => {
-        return AisInB(queryData, map.name.toLowerCase(), true)
+        if (AisInB(queryData, map.name.toLowerCase())){
+            return map.name
+        }
+        return false
     },
     "specie": (queryData, map) => {
         for (const specie of map.speciesSet){
-            if (AisInB(queryData, specie, true)) return true
+            if (AisInB(queryData, specie)) return specie
         }
         return false
     }
