@@ -35,7 +35,9 @@ export function setupPanels(){
                     search.panelFrozenUpdate[i] = false
                     updateMainSearchKey(search.queryMapList[i])
                 })
-                
+            } else if (search.callbackAfterFilters) {
+                search.callbackAfterFilters()
+                search.callbackAfterFilters = null
             }
             
         })
