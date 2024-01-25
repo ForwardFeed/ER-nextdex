@@ -26,7 +26,6 @@
     [x] Get Trainer Team from src/data/trainer_parties.h
 [ ] Settings pannel
     [x] Supports multiple color theme
-    [ ] Sorting abilities by alphabet
 [ ] tooltip for moves
 [ ] btw the dex is up
 [ ] Sort
@@ -44,7 +43,6 @@
 [x] settings file for the extractor of data
 [x] fix species-mid-stats on 300px size phone <= somewhat fixed
 [x] hide non-querable fields in function of the pannel
-[ ]
 [ ] Species Tab
     [ ] make evo & locations tab instead of two separates
     [ ] Insert all leftovers data, like exp curve, body color and stuff

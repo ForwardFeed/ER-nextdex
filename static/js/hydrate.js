@@ -131,6 +131,11 @@ function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo){
 }
 
 function hydrateSpecies(){
+    const regionOfOriginMapIndexed = {
+        "0": "Kanto",
+        "151": "Jhoto",
+    }
+    let currentRegion = regionOfOriginMapIndexed[0]
     const fragment = document.createDocumentFragment();
     const species = gameData.species
     for (const i in species){

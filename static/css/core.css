@@ -47,7 +47,7 @@ body {
 }
 
 .search-wrapper{
-    width: 35vw;
+    width: 100vw;
     display: flex;
 }
 
@@ -132,11 +132,14 @@ body {
 }
 
 @media (orientation: portrait) {
-    .search-keys-wrapper, .main-search-label{
-        width: 100%;
+    .search-keys-wrapper{
+        width: 30%;
+    }
+    .main-search-label{
+        width: 70%;
     }
     .search-wrapper{
-        flex-direction: column;
+        flex-direction: row;
     }
     #search-bar, #search-keys{
         border-radius: 0;
@@ -187,7 +190,8 @@ aside>div {
 }
 
 .side-btn>span {
-    flex-grow: 2;
+    flex-grow: 1;
+    margin: 1vw;
 }
 
 .btn-n-active {
