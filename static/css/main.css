@@ -211,7 +211,6 @@ span{
 .species-mid-stats{
     display: flex;
 }
-
 @media (orientation: landscape) {
     .moves-top{
         width: 100%;
@@ -219,6 +218,10 @@ span{
     }
     .species-mid{
         flex-direction: row;
+    }
+    .species-mid > :last-child{
+        margin: auto;
+        margin-right: 0;
     }
 }
 @media (orientation: portrait) {
@@ -236,8 +239,8 @@ span{
     .species-mid{
         flex-direction: column;
     }
-    .species-mid-stats{
-        flex-direction: column;
+    .species-mid > :last-child, .species-mid-stats > *{
+        margin: auto;
     }
 }
 /* SPECIES */
@@ -341,16 +344,16 @@ span{
 }
 #species-types{
     display: flex;
-    
+    padding-right: 2vw;
+    padding-left: 2vw;
 }
 .species-type{
-    padding-left: 2%;
-    padding-right: 2%;
-    margin-left: 2%;
     border-radius: 5px;
 }
+.species-type:last-child{
+    margin-left: 2vw;
+}
 .species-switch{
-    position: absolute;
     display: flex;
     flex-direction: row;
     right: 0;

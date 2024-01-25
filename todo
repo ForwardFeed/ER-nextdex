@@ -31,6 +31,7 @@
 [ ] Sort
     [ ] stats
     [ ] Aplhabethically
+    [ ] Maybe add the sort to the list as cliqueable case, for example in species top of bulbasaur
 [ ] Filters
     [x] by megas :<= Just type "Mega" as the name
     [x] redux forms :<= Just type "Redux" as the name
@@ -39,6 +40,10 @@
     [x] add move flags / effect
     [ ] Add manual / Guide of utilisation
     [x] moves in species
+    [ ] click on type to filter by type
+    [ ] add an arrow to put the selection as a filter
+    [ ] Filters moves available in the pokemon
+    [ ] Maybe on click of a pokemon move replace the pannel on the top by the recap of the move instead of the pokemon img and stats
 [ ] pressing control or shift allow to not be redicted but add move as filter
 [x] settings file for the extractor of data
 [x] fix species-mid-stats on 300px size phone <= somewhat fixed
