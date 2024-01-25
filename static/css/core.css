@@ -107,11 +107,12 @@ body {
     position: absolute;
     z-index: 3;
     width: 100%;
+    font-size: 2vmax;
 }
 #search-suggestion > div{
     background-color: var(--selNActive);
     text-align: center;
-    font-size: 1.5em;
+    font-size: 1em;
 }
 @media (orientation: landscape) {
     .search-keys-wrapper{

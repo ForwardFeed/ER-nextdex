@@ -8,7 +8,7 @@ export function regexGrabNum(line: string, regex: RegExp | string, byDefault = 0
     if (!grabbed){
         return byDefault
     }
-    return isNaN(+grabbed) ? -1 : +grabbed
+    return isNaN(+grabbed) ? byDefault : +grabbed
 }
 
 export function upperCaseFirst(word: string): string{

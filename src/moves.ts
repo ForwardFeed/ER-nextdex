@@ -107,7 +107,7 @@ const stageBattleMovesExecutionMap: {[key: string]: (line: string, context: Cont
         } else if (line.match('.target')){
             context.currMove.target = regexGrabStr(line, /(?<==)\w+/).replace(/^MOVE_TARGET_/, '')
         } else if (line.match('.priority')){
-            context.currMove.priority = regexGrabNum(line, /(?<==)\d+/, 0)
+            context.currMove.priority = regexGrabNum(line, /(?<==)[\d-]+/, 0)
         } else if (line.match('.flags')){
             context.currMove.flags = regexGrabStr(line, /(?<==)[^,]+/)
                 .split("|")
