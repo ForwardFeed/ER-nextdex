@@ -31,10 +31,10 @@ export const search = {
     // if modified sync it with "siderbar.js > setupPanels() > panelTable" variable
     panelFrozenUpdate: [
         false,
-        false,
-        false,
-        false,
-        false,
+        true,
+        true,
+        true,
+        true,
     ],
     // if modified sync it with "siderbar.js > setupPanels() > defaultShow" variable
     panelUpdatesIndex: 0,
@@ -46,6 +46,7 @@ export const search = {
         "Move",
         "Move-effect",
         "specie",
+        "map",
     ],
     operators: [
         "AND",

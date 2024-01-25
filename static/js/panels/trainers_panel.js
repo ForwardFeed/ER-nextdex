@@ -5,7 +5,7 @@ import { AisInB } from "../utils.js"
 
 export function feedPanelTrainers(trainerID){
     $('#trainers-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
-    $('#trainers-list').children().eq(trainerID - 1).addClass("sel-active").removeClass("sel-n-active")
+    $('#trainers-list > .btn').eq(trainerID - 1).addClass("sel-active").removeClass("sel-n-active")
 
     const trainer = gameData.trainers[trainerID]
     $('#trainers-name').text(trainer.name)
@@ -206,11 +206,16 @@ export const queryMapTrainers = {
     "name": (queryData, trainer) => {
         if (AisInB(queryData, trainer.name.toLowerCase())) return trainer.name
         return false
-    }
+    },
+    "map": (queryData, trainer) => {
+        const map = gameData.mapsT[trainer.map]?.toLowerCase()
+        if (map && AisInB(queryData, map)) return map
+        return false
+    },
 }
 export function updateTrainers(searchQuery){
     const trainers = gameData.trainers
-    const nodeList = $('#trainers-list').children()
+    const nodeList = $('#trainers-list > .btn')
     let validID;
     
     for (const i in trainers){
@@ -223,6 +228,7 @@ export function updateTrainers(searchQuery){
                 node.show()
         } else {
                 node.hide()
+
         }
     }
     if (validID) feedPanelTrainers(validID)

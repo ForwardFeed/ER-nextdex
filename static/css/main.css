@@ -592,6 +592,9 @@ span{
 .trainers-poke-move{
 
 }
+.trainer-map-list-name{
+    background-color: var(--colorA);
+}
 @media (orientation: landscape) {
     
 }

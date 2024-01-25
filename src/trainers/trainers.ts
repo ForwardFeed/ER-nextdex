@@ -20,7 +20,7 @@ export interface RematchTrainer{
     party: TrainersTeam.TrainerPokemon[]
 }
 
-function parse(fileData: string): Trainer[]{
+function parse(fileData: string): Map<string, Trainer>{
     const lines = fileData.split('\n')
     const TrainerNamesResult = TrainerNames.parse(lines,0)
     //const RematchesResult = Rematches.parse(lines, TrainerNamesResult.fileIterator)
@@ -28,9 +28,9 @@ function parse(fileData: string): Trainer[]{
     // put all rematches right
     const rematchIntegratedTrainers: Map<string, TrainerNames.BaseTrainer> = new Map()
 
-    const trainers: Trainer[] = []
+    const trainers: Map<string, Trainer> = new Map()
     TrainerNamesResult.trainers.forEach((value, key)=>{
-        trainers.push({
+        trainers.set(value.NAME, {
             name: key,
             category: value.category,
             double: value.double,

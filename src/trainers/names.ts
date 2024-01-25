@@ -10,6 +10,7 @@ export interface Result{
 
 
 export interface BaseTrainer {
+    NAME: string,
     category: string,
     double: boolean,
     partyPtr: string,
@@ -19,6 +20,7 @@ export interface BaseTrainer {
 
 function initBaseTrainer(): BaseTrainer{
     return {
+        NAME: "",
         category: "",
         double: false,
         partyPtr: "",
@@ -48,6 +50,7 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
     "main" : (line, context) =>{
         if (line.match(/\[TRAINER_/)){
             if (context.key){
+                context.current.NAME = context.key
                 // now we need to integrate the rematches in function of the id
                 const trainerNumber = regexGrabNum(context.key, /(?<=_)\d+$/, 0)
                 context.key = Xtox('TRAINER_', context.key.replace(/_\d+$/g, ''))

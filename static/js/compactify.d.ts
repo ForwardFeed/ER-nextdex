@@ -1,3 +1,7 @@
+interface CompactedScripted {
+    how: number;
+    map: number;
+}
 interface CompactLocations {
     maps: CompactLocation[];
     landRate: number[];
@@ -82,6 +86,7 @@ export interface CompactSpecie {
     TMHMMoves: number[];
     tutor: number[];
     forms: number[];
+    SEnc: CompactedScripted[];
 }
 export interface CompactTrainers {
     name: string;
@@ -89,6 +94,7 @@ export interface CompactTrainers {
     party: CompactTrainerPokemon[];
     insane: CompactTrainerPokemon[];
     rem: CompactTrainerRematch[];
+    map: number;
 }
 interface CompactTrainerPokemon {
     spc: number;
@@ -120,7 +126,11 @@ export interface CompactGameData {
     evoKindT: string[];
     itemT: string[];
     natureT: string[];
+    scriptedEncoutersHowT: string[];
+    mapsT: string[];
 }
+
+
 interface Ability {
     name: string,
     desc: string,

@@ -8,7 +8,7 @@ import * as Abilities from './abilities'
 import * as Sprites from './sprites'
 import * as Locations from './locations'
 import * as Trainers from './trainers/trainers'
-import * as SpeciesScripted from './species_scripted'
+import * as ScriptedData from './scripted_data'
 
 import * as Additionnal from './additional_data/additional'
 
@@ -20,8 +20,10 @@ export interface GameData {
     abilities: Map<string, Abilities.Ability>
     moves:Map<string, Moves.Move>,
     locations: Locations.Locations
-    trainers: Trainers.Trainer[]
-    speciesScripted: SpeciesScripted.SpeciesScripted[]
+    trainers: Map<string, Trainers.Trainer>
+    speciesScripted: Map<string, ScriptedData.SpeciesScripted[]>
+    trainersScripted: Map<string, ScriptedData.TrainersScriped>
+    mapTable: string[], 
 }
 
 const gameData: GameData = {
@@ -29,8 +31,10 @@ const gameData: GameData = {
     abilities: new Map(),
     moves: new Map(),
     locations: {} as Locations.Locations,
-    trainers: [] as Trainers.Trainer[],
-    speciesScripted: [] as SpeciesScripted.SpeciesScripted[],
+    trainers: new Map(),
+    speciesScripted: new Map(),
+    trainersScripted: new Map(),
+    mapTable: [],
 }
 
 function main(configuration: Configuration.Configuration){
@@ -65,7 +69,7 @@ function main(configuration: Configuration.Configuration){
             promiseArray.push(Abilities.getAbilities(ROOT_PRJ, optionsGlobal_h, gameData))
             promiseArray.push(Locations.getLocations(ROOT_PRJ, gameData))
             promiseArray.push(Trainers.getTrainers(ROOT_PRJ, gameData))
-            promiseArray.push(SpeciesScripted.parse(ROOT_PRJ, gameData))
+            promiseArray.push(ScriptedData.parse(ROOT_PRJ, gameData))
             //promiseArray.push()
             Promise.allSettled(promiseArray)
                 .then((values)=>{

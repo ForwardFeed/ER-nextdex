@@ -5,7 +5,7 @@ import { TrainerPokemon } from "./trainers/teams";
 
 interface CompactedScripted{
     how: number, // indexed from CompactGameData.ScriptedEncoutersHowT
-    map: string,
+    map: number, // index from CompactGameData.maps.
 }
 
 interface CompactLocations{
@@ -107,6 +107,7 @@ export interface CompactTrainers{
     party: CompactTrainerPokemon[],
     insane: CompactTrainerPokemon[],
     rem: CompactTrainerRematch[],
+    map: number,
 }
 
 interface CompactTrainerPokemon{
@@ -141,7 +142,8 @@ export interface CompactGameData{
     evoKindT: string[],
     itemT: string[],
     natureT: string[],
-    ScriptedEncoutersHowT: string[],
+    scriptedEncoutersHowT: string[],
+    mapsT: string[],
 }
 function initCompactGameData(): CompactGameData{
     return {
@@ -161,7 +163,8 @@ function initCompactGameData(): CompactGameData{
         evoKindT: [],
         itemT: [],
         natureT: [],
-        ScriptedEncoutersHowT: [],
+        scriptedEncoutersHowT: [],
+        mapsT: []
     }
 }
 
@@ -208,9 +211,18 @@ export function compactify(gameData: GameData): CompactGameData{
         NAMET.push(val.NAME)
     })
     const nameT: string[] = []
-
+    compacted.mapsT = gameData.mapTable
     gameData.species.forEach((val)=>{
         const bs = val.baseStats
+        let sEnc: CompactedScripted[] = []
+        if (gameData.speciesScripted.has(val.NAME)){
+            gameData.speciesScripted.get(val.NAME).forEach((value)=>{
+                sEnc.push({
+                    how: tablize(value.how, compacted.scriptedEncoutersHowT),
+                    map: tablize(value.map, compacted.mapsT)
+                })
+            })
+        }
         compacted.species.push({
             name: ((x, X)=>{
                 if (nameT.includes(x)){ // because megas are the same names as the non-megas
@@ -299,7 +311,7 @@ export function compactify(gameData: GameData): CompactGameData{
             forms: val.forms.map((x)=>{
                 return NAMET.indexOf(x)
             }),
-            SEnc: [],
+            SEnc: sEnc,
         })
     })
     compacted.locations = {
@@ -361,8 +373,15 @@ export function compactify(gameData: GameData): CompactGameData{
             })
         }
     }
-    for (const trainer of gameData.trainers){
+    gameData.trainers.forEach((trainer, key)=>{
         let category = Xtox('TRAINER_CLASS_', trainer.category)
+        let mapName
+        if (gameData.trainersScripted.has(key)){
+            mapName = gameData.trainersScripted.get(key).map
+        }
+        if (!trainer.party.length){
+            return
+        }
         compacted.trainers.push({
             name: `${category} ${trainer.name}`,
             db: trainer.double,
@@ -373,16 +392,17 @@ export function compactify(gameData: GameData): CompactGameData{
                     db: rem.double,
                     party: rem.party.map(compactPoke)
                 }
-            })
+            }),
+            map: tablize(mapName, compacted.mapsT)
         })
-    }
-    // now add all scripted encouters
-    for (const scriptedEncouter of gameData.speciesScripted){
-        const id = NAMET.indexOf(scriptedEncouter.specie)
-        compacted.species[id].SEnc.push({
-            how: tablize(scriptedEncouter.how, compacted.ScriptedEncoutersHowT),
-            map: scriptedEncouter.map
-        })
-    }
+    })
+    compacted.trainers = compacted.trainers.sort((a, b)=>{
+        if (a.map < b.map){
+            return -1
+        } else if (a.map > b.map){
+            return 1
+        }
+        return 0
+    })
     return compacted
 }
