@@ -148,7 +148,7 @@ function setPartyPanel(party){
 
         const pokeNature = document.createElement('div')
         pokeNature.className = "trainers-poke-nature"
-        pokeNature.innerText = nature
+        pokeNature.innerText = getTextNature(nature)
         
 
         const pokeIVs = document.createElement('div')
@@ -170,6 +170,38 @@ function setPartyPanel(party){
     }
     $('#trainers-team').empty().append(frag)
 }
+
+const natureMap = {
+    "Impish": "+Def -SpA",
+    "Adamant": "+Atk -SpA",
+    "Bold": "+Def -Atk",
+    "Bashful": "--",
+    "Jolly": "+Spe -SpA",
+    "Gentle ": "+SpD -Def",
+    "Calm": "+SpD -Atk",
+    "Quiet": "+SpA -Spe",
+    "Modest": "+SpA -Atk",
+    "Timid": "+Spe -Atk",
+    "Careful": "+SpD -SpA",
+    "Hasty": "--",
+    "Naughty": "+Atk -SpD",
+    "Sassy": "+SpD -Spe",
+    "Naive": "+Spe -SpD",
+    "Brave": "+Atk -Spe",
+    "Lonely": "+Atk -Def",
+    "Relaxed": "+Def -Spe",
+    "Lax": "+Def -SpD",
+    "Hardy": "--",
+    "Rash": "+SpA -SpD",
+    "Mild": "+SpA -Def",
+    "Quirky": "--",
+    "Serious": "--",
+  }
+
+function getTextNature(nature){
+    return `${nature} (${natureMap[nature]})`
+}
+
 export const queryMapTrainers = {
     "name": (queryData, trainer) => {
         if (AisInB(queryData, trainer.name.toLowerCase())) return trainer.name
