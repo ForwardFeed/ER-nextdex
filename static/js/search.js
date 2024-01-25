@@ -75,7 +75,7 @@ export const search = {
         if (!this.suggestionNode) return
         this.suggestionNode.innerText = "" //remove all previous suggestions
         for (const suggestion of this.suggestions){
-            const option = document.createElement('option')
+            const option = document.createElement('div')
             option.innerText = suggestion
             option.onclick = ()=>{
                 this.suggestionInput.value = suggestion
@@ -278,7 +278,7 @@ export function setupSearch(){
     })
     const keyNode = $('#search-keys-selections')
     for (const key of search.queryKeys){
-        const option = document.createElement('option')
+        const option = document.createElement('div')
         option.innerText = key
         option.onclick = ()=>{
             $('#search-keys').val(key)
@@ -330,7 +330,7 @@ function appendFilter(){
     divKeySelection.style.display = "none"
     divKeyWrapper.append(divKeySelection)
     for (const key of search.queryKeys){
-        const option = document.createElement('option')
+        const option = document.createElement('div')
         option.innerText = key
         option.onclick = ()=>{
             inputKey.value = key

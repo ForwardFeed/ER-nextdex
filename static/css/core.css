@@ -81,13 +81,13 @@ body {
     text-align: center;
 }
 
-#search-keys-selections>option {
+#search-keys-selections>div {
     cursor: pointer;
     background-color: var(--selNActive);
     text-align: center;
 }
 
-#search-keys-selections>option:hover {
+#search-keys-selections>div:hover {
     background-color: var(--selHover);
 }
 
@@ -108,7 +108,7 @@ body {
     z-index: 3;
     width: 100%;
 }
-#search-suggestion > option{
+#search-suggestion > div{
     background-color: var(--selNActive);
     text-align: center;
     font-size: 1.5em;
@@ -126,7 +126,7 @@ body {
     #search-keys, #search-bar{
         font-size: 1.5vmax;
     }
-    #search-keys-selections > option{
+    #search-keys-selections > div{
         font-size: 1.5em;
     }
 }

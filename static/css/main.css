@@ -714,10 +714,10 @@ span{
     position: absolute;
     z-index: 12;
 }
-.filter-key-selection > option:hover, .filter-suggestions > option:hover{
+.filter-key-selection > div:hover, .filter-suggestions > div:hover{
     background-color: var(--selHover);
 }
-.filter-key-selection > option, .filter-suggestions > option{
+.filter-key-selection > div, .filter-suggestions > div{
     background-color: var(--colorC);
 }
 .filter-option-selected{
