@@ -212,6 +212,21 @@ export const queryMapTrainers = {
         if (map && AisInB(queryData, map)) return map
         return false
     },
+    "specie": (queryData, trainer) => {
+        const trainerMons = [].concat.apply(
+            [], [
+                    trainer.party,
+                    [].concat.apply([], trainer.rem.map(x => x.party)),
+                    trainer.insane
+                ]
+            )
+        for (const mon of trainerMons){
+            const pokemon = gameData.species[mon.spc].name.toLowerCase() 
+            if (AisInB(queryData, pokemon))  return pokemon
+        }
+        
+        return false
+    },
 }
 export function updateTrainers(searchQuery){
     const trainers = gameData.trainers
