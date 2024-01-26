@@ -58,6 +58,56 @@ function setTypes(types){
     nodeType2.text(type2)
 }
 
+/**
+ * 
+ * @param {Object} move 
+ * @returns an HTML node
+ */
+function setSplitMove(move){
+    const splitMap = {
+        "PHYSICAL": ["#", "phy"], //text, css-class
+        "SPECIAL": ["O", "spe"],
+        "STATUS": ["~", "sta"],
+    }
+    const split = gameData.splitT[move.split]
+    const nodeMoveSplit = document.createElement('div')
+    nodeMoveSplit.innerText = splitMap[split][0]
+    nodeMoveSplit.className = splitMap[split][1]
+    return nodeMoveSplit
+}
+/**
+ * 
+ * @param {Object} move
+ * @param {number} moveID
+ * @returns an HTML node
+ */
+function setMoveName(move, moveID){
+    const type1 = gameData.typeT[move.types[0]].toLowerCase()
+    const nodeMoveName = document.createElement('div')
+    nodeMoveName.onclick=() => {redirectMove(moveID)}
+    nodeMoveName.innerText = move.name
+    nodeMoveName.className = `species-move-name ${type1}-t`
+    return nodeMoveName
+}
+/**
+ * 
+ * @returns an HTML node
+ */
+function setMoveRow(){
+    const row = document.createElement('div')
+    row.className="species-move-row"
+    /*let mouseHoverTimer
+    row.onmouseenter= ()=>{
+        mouseHoverTimer = setTimeout(()=>{
+            console.log("hovered for more than one second")
+        }, 1000) // one second
+    }
+    row.onmouseout = ()=>{
+        clearTimeout(mouseHoverTimer)
+    }*/
+    return row
+}
+
 function setMoves(core, moves){
     core.empty()
     const frag = document.createDocumentFragment()
@@ -67,28 +117,9 @@ function setMoves(core, moves){
             console.warn(`unable to find move with ID ${moveID}`)
             continue
         }
-
-        const row = document.createElement('div')
-        row.className="species-move-row"
-
-        const splitMap = {
-            "PHYSICAL": ["#", "phy"], //text, css-class
-            "SPECIAL": ["O", "spe"],
-            "STATUS": ["~", "sta"],
-        }
-        const split = gameData.splitT[move.split]
-        const nodeMoveSplit = document.createElement('div')
-        nodeMoveSplit.innerText = splitMap[split][0]
-        nodeMoveSplit.className = splitMap[split][1]
-        row.append(nodeMoveSplit)
-        
-        const type1 = gameData.typeT[move.types[0]].toLowerCase()
-        const node = document.createElement('div')
-        node.className = `species-move-name ${type1}-t`
-        node.innerText = move.name
-        node.onclick=() => {redirectMove(moveID)}
-        row.append(node)
-
+        const row = setMoveRow()
+        row.append(setSplitMove(move, moveID))
+        row.append(setMoveName(move, moveID))
         frag.append(row)
     }
     core.append(frag)
@@ -102,31 +133,16 @@ function setLevelUpMoves(core, moves){
             console.warn(`unable to find move with ID ${id}`)
             continue
         }
-        const row = document.createElement('div')
-        row.className="species-move-row"
+        const row = setMoveRow()
+
         const nodeMoveLvl = document.createElement('div')
         nodeMoveLvl.innerText = +lvl || "Ev"
         nodeMoveLvl.className = "species-levelup-lvl"
         row.append(nodeMoveLvl)
+        row.append(setSplitMove(move))
 
-        const splitMap = {
-            "PHYSICAL": ["#", "phy"], //text, css-class
-            "SPECIAL": ["O", "spe"],
-            "STATUS": ["~", "sta"],
-        }
-
-        const split = gameData.splitT[move.split]
-        const nodeMoveSplit = document.createElement('div')
-        nodeMoveSplit.innerText = splitMap[split][0]
-        nodeMoveSplit.className = splitMap[split][1]
-        row.append(nodeMoveSplit)
-
-        const type1 = gameData.typeT[move.types[0]].toLowerCase()
-        const nodeMoveName = document.createElement('div')
-        nodeMoveName.onclick=() => {redirectMove(id)}
-        nodeMoveName.innerText = move.name
-        nodeMoveName.className = `species-move-name ${type1}-t`
-        row.append(nodeMoveName)
+       
+        row.append(setMoveName(move, id))
         frag.append(row)
     }
     core.append(frag)
