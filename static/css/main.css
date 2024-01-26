@@ -374,6 +374,13 @@ span{
     flex-grow: 1;
     text-align: center;
 }
+.species-sub-half-pannel{
+    display: flex;
+    flex-flow: wrap;
+    height: 50%;
+    width: 100%;
+    overflow: scroll;
+}
 .species-bot-row{
     text-align: center;
 }

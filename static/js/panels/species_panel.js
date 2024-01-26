@@ -201,8 +201,7 @@ function setInnates(innates){
 export function setupSpeciesSubPanel(){
     const subPanelsAndBtns = [
         ["#switch-moves", "#species-moves"],
-        ["#switch-evos", "#species-evos"],
-        ["#switch-locations", "#species-locations"]
+        ["#switch-evos-locs", "#species-evos-locs"],
     ]
     subPanelsAndBtns.forEach((x)=>{
         $(x[0]).on('click', ()=>{
