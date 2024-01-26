@@ -39,6 +39,15 @@
 .steel-t{color: #aab;}
 .fairy-t{color: #e9e;}
 
+.phy{
+    color: rgb(189, 83, 21);
+}
+.spe{
+    color: rgb(15, 41, 158);
+}
+.sta{
+    color: rgb(71, 71, 73);
+}
 
 .colorA{
     background-color: var(--colorA);
@@ -398,7 +407,7 @@ span{
     border-bottom-style: dashed;
     border-bottom-width: 1px;
 }
-.species-levelup-row{
+.species-move-row{
     display: flex;
     cursor: pointer;
 }
@@ -422,7 +431,7 @@ span{
     width: 1.5em;
     background-color: var(--colorC);
 }
-.species-levelup-name{
+.species-move-name{
     width: 100%;
 }
 

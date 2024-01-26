@@ -67,12 +67,29 @@ function setMoves(core, moves){
             console.warn(`unable to find move with ID ${moveID}`)
             continue
         }
+
+        const row = document.createElement('div')
+        row.className="species-move-row"
+
+        const splitMap = {
+            "PHYSICAL": ["#", "phy"], //text, css-class
+            "SPECIAL": ["O", "spe"],
+            "STATUS": ["~", "sta"],
+        }
+        const split = gameData.splitT[move.split]
+        const nodeMoveSplit = document.createElement('div')
+        nodeMoveSplit.innerText = splitMap[split][0]
+        nodeMoveSplit.className = splitMap[split][1]
+        row.append(nodeMoveSplit)
+        
         const type1 = gameData.typeT[move.types[0]].toLowerCase()
         const node = document.createElement('div')
-        node.className = `species-move ${type1}-t`
+        node.className = `species-move-name ${type1}-t`
         node.innerText = move.name
         node.onclick=() => {redirectMove(moveID)}
-        frag.append(node)
+        row.append(node)
+
+        frag.append(row)
     }
     core.append(frag)
 }
@@ -86,18 +103,29 @@ function setLevelUpMoves(core, moves){
             continue
         }
         const row = document.createElement('div')
-        row.className="species-levelup-row"
+        row.className="species-move-row"
         const nodeMoveLvl = document.createElement('div')
         nodeMoveLvl.innerText = +lvl || "Ev"
         nodeMoveLvl.className = "species-levelup-lvl"
         row.append(nodeMoveLvl)
-        if(!gameData.typeT[move.types[0]]) //the spike cannon bug, to be removed later
-            gameData.typeT[move.types[0]] = "normal"
+
+        const splitMap = {
+            "PHYSICAL": ["#", "phy"], //text, css-class
+            "SPECIAL": ["O", "spe"],
+            "STATUS": ["~", "sta"],
+        }
+
+        const split = gameData.splitT[move.split]
+        const nodeMoveSplit = document.createElement('div')
+        nodeMoveSplit.innerText = splitMap[split][0]
+        nodeMoveSplit.className = splitMap[split][1]
+        row.append(nodeMoveSplit)
+
         const type1 = gameData.typeT[move.types[0]].toLowerCase()
         const nodeMoveName = document.createElement('div')
         nodeMoveName.onclick=() => {redirectMove(id)}
         nodeMoveName.innerText = move.name
-        nodeMoveName.className = `species-levelup-name ${type1}-t`
+        nodeMoveName.className = `species-move-name ${type1}-t`
         row.append(nodeMoveName)
         frag.append(row)
     }
@@ -169,7 +197,7 @@ function setAbilities(abilities){
     node.empty()
     const fragment = document.createDocumentFragment()
     for (const i in abilities){
-        if (abilities[i] == abilities[i -1]) {    
+        if (abilities[i] == abilities[i -1] || abilities[i] === 0) {    
             continue
         }
         const abi = gameData.abilities[abilities[i]]
@@ -187,6 +215,9 @@ function setInnates(innates){
     node.empty()
     const fragment = document.createDocumentFragment()
     for (const i in innates){
+        if (innates[i] == innates[i -1] || innates[i] === 0) {    
+            continue
+        }
         const inn = gameData.abilities[innates[i]]
         const name = document.createElement('div')
         name.className = "species-innate"
