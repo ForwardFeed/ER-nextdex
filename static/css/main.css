@@ -214,20 +214,12 @@ span{
 #moves-desc{
     
 }
-
-.species-list-sprite{
-    height:70%;
-    left: 0%;
-    margin: 5px;
-}
-
-.species-name{
-    width: min-content;
-}
-
-.species-mid-stats{
+#moves-flags{
     display: flex;
+    flex-direction: column;
 }
+
+
 @media (orientation: landscape) {
     .moves-top{
         width: 100%;
@@ -303,6 +295,21 @@ span{
     padding-top: 0
 }
 /* SPECIES */
+
+.species-list-sprite{
+    height:70%;
+    left: 0%;
+    margin: 5px;
+}
+
+.species-name{
+    width: min-content;
+}
+
+.species-mid-stats{
+    display: flex;
+}
+
 .species-top{
     display: flex;
     width: 100%;
