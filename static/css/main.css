@@ -84,7 +84,7 @@
     text-align: center;
     width: 9em;
     height: 100%;
-    display: flex;
+    display: flex; 
 }
 .data-list-row{
     display: inline-flex;
@@ -410,6 +410,7 @@ span{
 .species-move-row{
     display: flex;
     cursor: pointer;
+    align-items: center;
 }
 
 #species-evos{
@@ -465,6 +466,10 @@ span{
     height: 30px;
 }
 
+.species-move-sprite{
+    height: 15px;
+}
+
 @media (orientation: landscape) {
     .data-list{
         height: 90vh;
@@ -505,7 +510,7 @@ span{
         margin-bottom: auto;
     }
     .data-list-row{
-        min-width: 6em;
+        padding: 0 10px;
     }
     .data-data{
         height: 72vh;
@@ -739,9 +744,12 @@ span{
 }
 .filter-key-selection > div:hover, .filter-suggestions > div:hover{
     background-color: var(--selHover);
+    cursor: pointer;
+
 }
 .filter-key-selection > div, .filter-suggestions > div{
     background-color: var(--colorC);
+    padding:0 10px; 
 }
 .filter-option-selected{
     color: var(--selActive);
@@ -752,6 +760,7 @@ span{
 .filter-suggestions{
     position: absolute;
     z-index: 12;
+
 }
 .filter-search{
     font-size: 1.6vmax;

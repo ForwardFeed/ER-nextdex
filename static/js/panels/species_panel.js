@@ -64,15 +64,9 @@ function setTypes(types){
  * @returns an HTML node
  */
 function setSplitMove(move){
-    const splitMap = {
-        "PHYSICAL": ["#", "phy"], //text, css-class
-        "SPECIAL": ["O", "spe"],
-        "STATUS": ["~", "sta"],
-    }
-    const split = gameData.splitT[move.split]
-    const nodeMoveSplit = document.createElement('div')
-    nodeMoveSplit.innerText = splitMap[split][0]
-    nodeMoveSplit.className = splitMap[split][1]
+    const nodeMoveSplit = document.createElement('img')
+    nodeMoveSplit.src = `./icons/${gameData.splitT[move.split]}.png`
+    nodeMoveSplit.className = "species-move-sprite"
     return nodeMoveSplit
 }
 /**

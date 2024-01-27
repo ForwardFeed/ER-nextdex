@@ -66,6 +66,7 @@ body {
     border-style: solid;
     color: var(--font-color);
     user-select: none;
+    cursor: pointer;
 }
 
 .search-keys-wrapper {
@@ -109,10 +110,15 @@ body {
     width: 100%;
     font-size: 2vmax;
 }
+
+#search-suggestion >div:hover{
+    background-color: var(--selHover);
+}
 #search-suggestion > div{
     background-color: var(--selNActive);
     text-align: center;
     font-size: 1em;
+    cursor: pointer;
 }
 @media (orientation: landscape) {
     .search-keys-wrapper{
