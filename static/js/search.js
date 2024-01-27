@@ -81,6 +81,7 @@ export const search = {
             option.onclick = ()=>{
                 this.suggestionInput.value = suggestion
                 this.suggestionNode.style.display = "none"
+                activateSearch()
             }
             this.suggestionNode.style.display = "block"
             this.suggestionNode.append(option)

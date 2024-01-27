@@ -356,8 +356,9 @@ span{
     padding-right: 2vw;
     padding-left: 2vw;
 }
-.species-type{
+.type{
     border-radius: 5px;
+    padding: 0 10px;
 }
 .species-type:last-child{
     margin-left: 2vw;

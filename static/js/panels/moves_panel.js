@@ -14,10 +14,10 @@ export function feedPanelMoves(moveID){
     $('#moves-split').attr("src",`./icons/${gameData.splitT[move.split]}.png`);
     $('#moves-types').text('' + move.types.map((x)=>gameData.typeT[x]).join(' '))
     const type1 = gameData.typeT[move.types[0]]
-    $('#moves-types1').text(type1).attr("class", type1.toLowerCase())
+    $('#moves-types1').text(type1).attr("class", type1.toLowerCase()).addClass("type")
     if (typeof move.types[1] === "number") {
         const type2 = gameData.typeT[move.types[1]]
-        $('#moves-types2').text(type2).attr("class", type2.toLowerCase())
+        $('#moves-types2').text(type2).attr("class", type2.toLowerCase()).addClass("type")
     }
     $('#moves-desc').text(move.lDesc) //TODO fix the width of this
     listMoveFlags(move.flags.map((x)=>gameData.flagsT[x]))
