@@ -225,13 +225,6 @@ span{
         width: 100%;
         height: 10vw;
     }
-    .species-mid{
-        flex-direction: row;
-    }
-    .species-mid > :last-child{
-        margin: auto;
-        margin-right: 0;
-    }
 }
 @media (orientation: portrait) {
     .moves-top{
@@ -244,12 +237,6 @@ span{
     .moves-xlarge{
         width: auto;
         flex-grow: 1;
-    }
-    .species-mid{
-        flex-direction: column;
-    }
-    .species-mid > :last-child, .species-mid-stats > *{
-        margin: auto;
     }
 }
 
@@ -346,7 +333,8 @@ span{
 
 }
 .species-innate,.species-ability{
-}
+    width: 6em;
+}   
 
 .tooltip{
     display: none;
@@ -357,7 +345,7 @@ span{
     padding: 10px;
     z-index: 1;
 }
-#species-basestats{
+#species-basestats, #species-coverage{
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -392,6 +380,34 @@ span{
     margin-top: 0.2em;
 }
 
+.species-coverage-row{
+    text-align: center;
+    width: 100%;
+    display: flex;
+    flex-grow: 1;
+    overflow-wrap: break-word;
+}
+.species-coverage-mul{
+    width: 3em;
+    min-width: 3em;
+    background-color: var(--colorA);
+    box-shadow: inset 0 0 1vmax var(--shadow);
+    display: flex;
+}
+.species-coverage-list{
+    flex-grow: 1;
+    display: flex;
+    font-size: 1.3vmax;
+    flex-wrap: wrap;
+    max-width: 22em;
+}
+.species-coverage-list > div{
+    display: flex;
+    width: 3em;
+}
+.span-align{
+    flex-grow: 1;
+}
 .species-bot{
     display: flex;
     flex-direction: column;
@@ -552,6 +568,13 @@ span{
         height: 15vw;
         width: 15vw;
     }
+    .species-mid{
+        flex-direction: row;
+    }
+    .species-mid > :last-child{
+        margin: auto;
+        margin-right: 0;
+    }
 }
 
 @media (orientation: portrait) {
@@ -580,7 +603,12 @@ span{
         height: 15vh;
         width: 15vh;
     }
-    
+    .species-mid{
+        flex-direction: column;
+    }
+    .species-mid > :last-child, .species-mid-stats > *{
+        margin: auto;
+    }
 }
 
 /* LOCATIONS */

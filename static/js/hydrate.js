@@ -3,7 +3,6 @@ import { feedPanelMoves } from "./panels/moves_panel.js"
 import { feedPanelLocations } from "./panels/locations_panel.js"
 import { feedPanelTrainers } from "./panels/trainers_panel.js"
 import { gameData } from "./data_version.js"
-import { checkTypo } from "./weakness.js"
 
 export function hydrate(){
     if (!gameData){

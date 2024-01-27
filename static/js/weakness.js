@@ -2,6 +2,9 @@
  * this file will be to calculate the weaknesses of pokemon
  * I need to add this before i create the team builder tab (I will create a behind the back tab with the species)
  */
+
+import { gameData } from "./data_version.js"
+
 /**
  * {
  * "Type": [
@@ -95,7 +98,7 @@ export function getTypeEffectiveness(attackerT, defT){
     return 1
 }
 
-export function checkTypo(types){
+export function checkTypos(types){
     const keys = Object.keys(typeChart)
     for (const key of keys){
         for (const weaknesses of typeChart[key]){
@@ -106,4 +109,73 @@ export function checkTypo(types){
             }
         }
     }
+}
+const abilityToTypeAdded = {
+    "Phantom": "Ghost",
+}
+
+const abiltyModifyTypeChart = {
+    "Gifted Mind" : (atkT, defT) => {
+        if (defT === "Psychic"  && typeChart[Psychic][2].indexOf(atkT) !== 1){
+            return 1
+        }
+    },
+    "Flash Fire": (atkT, defT) => {
+        if (atkT === "Fire") return 0
+    },
+    "Sea Weed": (atkT, defT) => {
+        if (atkT === "Fire") return 0.5
+    },
+    /*
+    "Overwhelm": (atkT, defT) => {
+        if (atkT === "Dragon") return 0.5
+    },*/
+    /*
+    "Raw Wood": (atkT, defT) => {
+        if (atkT === "Grass") return 0.5
+    },*/
+    /*"Molten Down": (atkT, defT) => {
+        if (defT)
+    }*/
+}
+
+/**
+ * 
+ * @param {string[]} defTypes 
+ * @param {string[]} abilities 
+ */
+export function getDefensiveCoverage(defTypes, abilities){
+    /*for (const ability of abilities){
+        if (abilityToTypeAdded[ability]){
+            defTypes.push(abilityToTypeAdded[ability])
+        }
+    }*/
+    const defensiveCoverage = []
+    for (const AtkT of gameData.typeT){
+        let typeEffectiveness = 1
+        for (const defT of defTypes){
+            typeEffectiveness *= getTypeEffectiveness(AtkT, defT)
+        }
+        defensiveCoverage.push(typeEffectiveness)
+    }
+    
+    const defensiveCoverageSorted = {}
+
+    gameData.typeT.forEach((type, index)=>{
+        //console.log(`${type} has effectiveness : ${defensiveCoverage[index]}`)
+        const eff = defensiveCoverage[index]
+        if (defensiveCoverageSorted[eff]){
+            defensiveCoverageSorted[eff].push(type)
+        } else {
+            defensiveCoverageSorted[eff] = [type]
+        }
+    })
+    return defensiveCoverageSorted
+}
+
+/**
+ * 
+ */
+export function getOffensiveCoverage(){
+
 }

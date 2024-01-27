@@ -1,10 +1,10 @@
 import { redirectLocation } from "./locations_panel.js"
 import { redirectMove, moveOverlay } from "./moves_panel.js"
-import { addTooltip, capitalizeFirstLetter, AisInB } from "../utils.js"
+import { addTooltip, capitalizeFirstLetter, AisInB, JSUH } from "../utils.js"
 import { queryFilter, search } from "../search.js"
 import { gameData } from "../data_version.js"
 import { createInformationWindow } from "../window.js"
-
+import { getDefensiveCoverage } from "../weakness.js"
 
 export function feedPanelSpecies(id){
     const specie = gameData.species[id]
@@ -33,6 +33,13 @@ export function feedPanelSpecies(id){
     setLocations(specie.locations, specie.SEnc)
     $('#species-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
     $('#species-list').children().eq(id-1).addClass("sel-active").removeClass("sel-n-active")
+    //need to make a selection for the type coverage
+    const abilities = specie.stats.abis
+        .map(x => gameData.abilities[x].name)
+        .concat(specie.stats.inns
+                .map(x=> gameData.abilities[x].name))
+    const types = specie.stats.types.map(x => gameData.typeT[x])
+    setDefensiveCoverage(getDefensiveCoverage(types, abilities))
 }
 
 export function redirectSpecie(specieId) {
@@ -41,6 +48,32 @@ export function redirectSpecie(specieId) {
     }
     $("#btn-species").click()
    
+}
+
+function setDefensiveCoverage(coverage){
+    const frag = document.createDocumentFragment()
+    const multiplicators = Object.keys(coverage).sort()
+    for (const mult of multiplicators){
+        const row = JSUH("div", "species-coverage-row")
+        const mulDiv = JSUH("div", "species-coverage-mul")
+        const mulSpan = JSUH("span", "span-align", mult)
+        mulDiv.append(mulSpan)
+        row.append(mulDiv)
+        const typeNodeList = JSUH("div", "species-coverage-list")
+        const types = coverage[mult]
+        for (const type of types){
+            const colorDiv = JSUH("div", type.toLowerCase())
+            const divText = JSUH("span", "span-align", type.substr(0, 4))
+            colorDiv.append(divText)
+            typeNodeList.append(colorDiv)
+        }
+        row.append(typeNodeList)
+        frag.append(row)
+    }
+
+    const core = $('#species-coverage')
+    core.empty()
+    core.append(frag)
 }
 
 function setTypes(types){
@@ -246,7 +279,7 @@ function setInnates(innates){
 }
 
 
-export function setupSpeciesSubPanel(){
+export function setupSpeciesPanel(){
     const subPanelsAndBtns = [
         ["#switch-moves", "#species-moves"],
         ["#switch-evos-locs", "#species-evos-locs"],
@@ -258,6 +291,9 @@ export function setupSpeciesSubPanel(){
             $("#species-bot").find('.active-sub-panel').removeClass('active-sub-panel').hide()
             $(x[1]).addClass('active-sub-panel').show()
         })
+    })
+    $('#species-basestats, #species-coverage').on('click', function(){
+        $('#species-basestats, #species-coverage').toggle()
     })
 }
 function toLowerButFirstCase(word){
