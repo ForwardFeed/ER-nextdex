@@ -29,12 +29,14 @@ export function setupPanels(){
             search.panelUpdatesIndex = i
             //if an update was caused when this pannel was frozen
             if (search.panelFrozenUpdate[i]){
+                search.defrosting = false
                 fastdom.mutate(() => {
                     //then refresh in the next frame
                     activateSearch()
                     //and tell this pannel has done the required search
                     search.panelFrozenUpdate[i] = false
                     updateMainSearchKey(search.queryMapList[i])
+                    search.defrosting = true
                 })
             } else if (search.callbackAfterFilters) {
                 search.callbackAfterFilters()

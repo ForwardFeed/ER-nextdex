@@ -31,10 +31,10 @@ export const search = {
     // if modified sync it with "siderbar.js > setupPanels() > panelTable" variable
     panelFrozenUpdate: [
         false,
-        true,
-        true,
-        true,
-        true,
+        false,
+        false,
+        false,
+        false,
     ],
     // if modified sync it with "siderbar.js > setupPanels() > defaultShow" variable
     panelUpdatesIndex: 0,
@@ -53,6 +53,7 @@ export const search = {
         "OR",
         "XOR",
     ],
+    defrosting: true,
     callbackAfterFilters: null,
     timeoutAutoComplete: null,
     maxSuggestion: 5,
@@ -85,6 +86,12 @@ export const search = {
             this.suggestionNode.style.display = "block"
             this.suggestionNode.append(option)
         }
+    },
+    defrostFuturePanel: function(){
+        //tells all panels that once they get to switch in they have to do an update
+        search.panelFrozenUpdate = search.panelFrozenUpdate.map((x, index)=>{
+            return search.panelUpdatesIndex != index
+        })
     }
 
 }
@@ -130,6 +137,7 @@ function executeAllFilters(){
 }
 
 export function activateSearch(callback){
+    if (search.defrosting) search.defrostFuturePanel()
     if (search.updateGuard) {
         search.updateQueue = true
         return
@@ -137,10 +145,6 @@ export function activateSearch(callback){
     search.updateGuard = true
     while(true){
         fastdom.mutate(() => {
-            //tells all panels that once they get to switch in they have to do an update
-            search.panelFrozenUpdate = search.panelFrozenUpdate.map((x, index)=>{
-                return search.panelUpdatesIndex != index
-            })
             search.clearSuggestion()
             executeAllFilters()
             search.showSuggestion()
