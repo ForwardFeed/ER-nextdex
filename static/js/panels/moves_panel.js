@@ -1,6 +1,7 @@
 import { gameData } from "../data_version.js"
 import { queryFilter, search } from "../search.js"
-import { AisInB } from "../utils.js"
+import { AisInB, JSUH, JSHAC } from "../utils.js"
+
 export function feedPanelMoves(moveID){
     const move = gameData.moves[moveID]
     $('#moves-name').text(move.name)
@@ -9,7 +10,6 @@ export function feedPanelMoves(moveID){
     $('#moves-chance').text(move.chance)
     $('#moves-pp').text(move.pp)
     $('#moves-prio').text(move.prio)
-    //$('#moves-target').text('TARGET :' + gameData.targetT[move.target])
     setTarget(move.target)
     $('#moves-split').attr("src",`./icons/${gameData.splitT[move.split]}.png`);
     $('#moves-types').text('' + move.types.map((x)=>gameData.typeT[x]).join(' '))
@@ -20,13 +20,13 @@ export function feedPanelMoves(moveID){
         $('#moves-types2').text(type2).attr("class", type2.toLowerCase())
     }
     $('#moves-desc').text(move.lDesc) //TODO fix the width of this
-    listMoveFlags(move.flags.map((x)=>gameData.flagsT[x]))
+    listMoveFlags(move.flags.map((x)=>gameData.flagsT[x]), $('#moves-flags'))
 
     $('#moves-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
     $('#moves-list').children().eq(moveID - 1).addClass("sel-active").removeClass("sel-n-active")
 }
 
-function listMoveFlags(flags){
+function listMoveFlags(flags, core){
     const flagMap = {
         "Makes Contact": "Has contact and Big Pecks boost",
         "Kings Rock Affected": "Triggers King's rock",
@@ -66,8 +66,6 @@ function listMoveFlags(flags){
         "Protect Affected": "Isn't affected by protect",
         "Mirror Move Affected": "Cannot be mirrored",
     }
-    const core = $('#moves-flags')
-    core.empty()
     const frag = document.createDocumentFragment()
     for (const flag of flags){
         const descFlag = flagMap[flag]
@@ -84,6 +82,7 @@ function listMoveFlags(flags){
         node.innerText = descFlag
         frag.append(node)
     }
+    core.empty()
     core.append(frag)
 }
 
@@ -116,6 +115,57 @@ export function redirectMove(moveId)
     }
     $("#btn-moves").click()
     
+}
+
+
+export function moveOverlay(moveId){
+    const move = gameData.moves[moveId]
+    
+    const core = JSUH("div", "move-overlay")
+    const power = JSUH("div", "move-overlay-power")
+    const powerTitle = JSUH("div", "move-overlay-top", move.name)
+    powerTitle.onclick = () => {
+        redirectMove(moveId)
+    }
+    const powerNumber = JSUH("div", "move-overlay-fill", move.pwr || "?")
+    const stats = JSUH("div", "move-overlay-stats")
+    const statsAcc = JSUH("div", "move-overlay-acc", `Acc: ${move.acc || "--"}`)
+    const statsPP = JSUH("div", "move-overlay-pp", `PP: ${move.pp}`)
+    const statsPrio = JSUH("div", "move-overlay-prio", `Prio: ${move.prio}`)
+    const statsChance = JSUH("div", "move-overlay-chance", `Chance: ${move.chance}`)
+    const otherInfos = JSUH("div", "move-overlay-other")
+    const typeDiv = JSUH("div", "move-overlay-types")
+    const type1 = gameData.typeT[move.types[0]]
+    const type1Div = JSUH("div", `move-overlay-type ${type1.toLowerCase()}`, type1)
+    const type2 = move.types[1] ? gameData.typeT[move.types[1]] : ""
+    const type2Div = JSUH("div", `move-overlay-type ${type2.toLowerCase()}`, type2)
+    const split = JSUH("img", "move-overlay-img pixelated")
+    split.src = `./icons/${gameData.splitT[move.split]}.png`
+    const effectsDiv = JSUH("div", "move-overlay-effects")
+    listMoveFlags(move.flags.map((x)=>gameData.flagsT[x]), $(effectsDiv))
+
+    return JSHAC([
+        core, [
+            power, [
+                powerTitle,
+                powerNumber,
+            ],
+            stats, [
+                statsAcc,
+                statsPP,
+                statsPrio,
+                statsChance
+            ],
+            otherInfos, [
+                typeDiv, [
+                    type1Div,
+                    type2Div,
+                ],
+                split
+            ],
+            effectsDiv
+        ]
+    ])
 }
 
 export const queryMapMoves = {

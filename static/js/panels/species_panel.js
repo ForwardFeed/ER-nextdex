@@ -1,8 +1,10 @@
 import { redirectLocation } from "./locations_panel.js"
-import { redirectMove } from "./moves_panel.js"
+import { redirectMove, moveOverlay } from "./moves_panel.js"
 import { addTooltip, capitalizeFirstLetter, AisInB } from "../utils.js"
 import { queryFilter, search } from "../search.js"
 import { gameData } from "../data_version.js"
+import { createInformationWindow } from "../window.js"
+
 
 export function feedPanelSpecies(id){
     const specie = gameData.species[id]
@@ -75,10 +77,9 @@ function setSplitMove(move){
  * @param {number} moveID
  * @returns an HTML node
  */
-function setMoveName(move, moveID){
+function setMoveName(move){
     const type1 = gameData.typeT[move.types[0]].toLowerCase()
     const nodeMoveName = document.createElement('div')
-    nodeMoveName.onclick=() => {redirectMove(moveID)}
     nodeMoveName.innerText = move.name
     nodeMoveName.className = `species-move-name ${type1}-t`
     return nodeMoveName
@@ -87,14 +88,20 @@ function setMoveName(move, moveID){
  * 
  * @returns an HTML node
  */
-function setMoveRow(){
+function setMoveRow(moveID){
     const row = document.createElement('div')
     row.className="species-move-row"
-    /*let mouseHoverTimer
-    row.onmouseenter= ()=>{
+    row.onclick=(ev) => {
+        fastdom.mutate(() => {
+            createInformationWindow(moveOverlay(moveID), {x: ev.clientX, y: ev.clientY})
+        });
+    }
+    /*row.onmouseenter= (ev)=>{
         mouseHoverTimer = setTimeout(()=>{
-            console.log("hovered for more than one second")
-        }, 1000) // one second
+            fastdom.mutate(() => {
+                createInformationWindow(moveOverlay(moveID), {x: ev.clientX, y: ev.clientY})
+            });
+        }, 500) // Half of second
     }
     row.onmouseout = ()=>{
         clearTimeout(mouseHoverTimer)
@@ -111,9 +118,9 @@ function setMoves(core, moves){
             console.warn(`unable to find move with ID ${moveID}`)
             continue
         }
-        const row = setMoveRow()
+        const row = setMoveRow(moveID)
         row.append(setSplitMove(move, moveID))
-        row.append(setMoveName(move, moveID))
+        row.append(setMoveName(move))
         frag.append(row)
     }
     core.append(frag)
@@ -127,8 +134,8 @@ function setLevelUpMoves(core, moves){
             console.warn(`unable to find move with ID ${id}`)
             continue
         }
-        const row = setMoveRow()
-
+        const row = setMoveRow(id)
+        
         const nodeMoveLvl = document.createElement('div')
         nodeMoveLvl.innerText = +lvl || "Ev"
         nodeMoveLvl.className = "species-levelup-lvl"
@@ -136,7 +143,7 @@ function setLevelUpMoves(core, moves){
         row.append(setSplitMove(move))
 
        
-        row.append(setMoveName(move, id))
+        row.append(setMoveName(move))
         frag.append(row)
     }
     core.append(frag)
