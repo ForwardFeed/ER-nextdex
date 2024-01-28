@@ -83,11 +83,10 @@
 .data-list{
     text-align: center;
     width: 9em;
-    height: 100%;
     display: flex; 
 }
 .data-list-row{
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -426,14 +425,15 @@ span{
 }
 #species-types{
     display: flex;
-    padding-right: 2vw;
-    padding-left: 2vw;
+    gap: 4px;
+    margin-left: 2vw;
 }
-.species-type{
+.type{
     border-radius: 5px;
+    padding: 0 10px;
 }
 .species-type:last-child{
-    margin-left: 2vw;
+    
 }
 .species-switch{
     display: flex;
@@ -451,6 +451,7 @@ span{
     flex-grow: 1;
     font-size: 1.5vmax;
     flex-flow: wrap;
+    overflow-y: scroll;
 }
 .species-sub-pannel > * {
     flex-grow: 1;
@@ -544,22 +545,18 @@ span{
 }
 
 @media (orientation: landscape) {
-    .data-list{
-        height: 90vh;
-        overflow-y: scroll;
+    .data-list{ 
+        overflow-y: auto;
         flex-direction: column;
         background-color: var(--selNActive);
-        width: 15vw;
     }
     .data-list-row{
-        min-height: 2em;
-        overflow-y: scroll;
         padding: 10px;
-        overflow: hidden;
+        height: fit-content;
     }
     .data-data{
         height: 100%;
-        width: 70vw;
+        flex-grow: 1;
     }
     .species-top{
         height: 15vw;
@@ -583,17 +580,16 @@ span{
     }
     .data-list{
         width: 100%;
-        height: 8vh;
-        overflow-x: scroll;
+        overflow-x: auto;
         overflow-y: hidden;
         flex-direction: row;
-        margin-bottom: auto;
+        min-height: 8vh;
     }
     .data-list-row{
         padding: 0 10px;
+
     }
     .data-data{
-        height: 72vh;
         width: 100%;
     }
     .species-top{
@@ -882,8 +878,8 @@ span{
 
 @media (orientation: portrait) {
     #filter-frame{
-        top: 18vh;
-        height: 82vh;
+        top: 20vh;
+        height: 72vh;
         width: 100vw;
     }
 }
