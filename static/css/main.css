@@ -83,6 +83,7 @@
 .data-list{
     text-align: center;
     width: 9em;
+    min-width: 9em;
     display: flex; 
 }
 .data-list-row{
