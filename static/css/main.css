@@ -316,6 +316,7 @@ span{
     align-items: center;
     text-align: center;
     user-select: none;
+    max-width: 5em;
 }
 .abi-inn-info{
     width: 100%;
@@ -395,7 +396,6 @@ span{
     display: flex;
 }
 .species-coverage-list{
-    flex-grow: 1;
     display: flex;
     font-size: 1.3vmax;
     flex-wrap: wrap;

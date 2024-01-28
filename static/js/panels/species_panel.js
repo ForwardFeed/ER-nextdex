@@ -63,7 +63,7 @@ function setDefensiveCoverage(coverage){
         const types = coverage[mult]
         for (const type of types){
             const colorDiv = JSUH("div", type.toLowerCase())
-            const divText = JSUH("span", "span-align", type.substr(0, 4))
+            const divText = JSUH("span", "span-align type", type.substr(0, 4))
             colorDiv.append(divText)
             typeNodeList.append(colorDiv)
         }
