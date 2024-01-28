@@ -128,6 +128,7 @@ function setPartyPanel(party){
         const pokeMoves = document.createElement('div')
         pokeMoves.className = "trainers-poke-moves"
         for (const move of moves){
+            if (!move) continue
             const type1 = gameData.typeT[move.types[0]].toLowerCase()
             const moveNode = document.createElement('div')
             moveNode.className = `trainers-poke-move ${type1}-t`

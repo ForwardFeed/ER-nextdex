@@ -24,9 +24,9 @@
     [x] Get Trainer Rematch from RematchTrainer gRematchTable in /src/battle_setup.c
     [x] Get Trainer info from /src/data/trainers.h
     [x] Get Trainer Team from src/data/trainer_parties.h
-[ ] Settings pannel
+[x] Settings pannel
     [x] Supports multiple color theme
-[ ] tooltip for moves
+[x] tooltip for moves
 [ ] btw the dex is up
 [ ] Sort
     [ ] stats
@@ -38,19 +38,20 @@
     [x] by map
     [x] innates/abilities
     [x] add move flags / effect
-    [ ] Add manual / Guide of utilisation
+    [x] Add manual / Guide of utilisation
     [x] moves in species
     [ ] click on type to filter by type
     [ ] add an arrow to put the selection as a filter
     [ ] Filters moves available in the pokemon
-    [ ] Maybe on click of a pokemon move replace the pannel on the top by the recap of the move instead of the pokemon img and stats
 [ ] pressing control or shift allow to not be redicted but add move as filter
 [x] settings file for the extractor of data
 [x] fix species-mid-stats on 300px size phone <= somewhat fixed
 [x] hide non-querable fields in function of the pannel
 [ ] Species Tab
-    [ ] make evo & locations tab instead of two separates
+    [x] make evo & locations tab instead of two separates
     [ ] Insert all leftovers data, like exp curve, body color and stuff
     [ ] make a team builder
 [ ] Trainers Tab
-    [ ] Order trainer per route
+    [x] Order trainer per route
+[ ] Add a welcome menu?
+[ ] Add a manual as a iframe or another webpage

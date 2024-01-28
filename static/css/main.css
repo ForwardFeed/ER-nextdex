@@ -109,7 +109,15 @@ span{
     height: 10px;
     width: 7px;
 }
-
+/* Window */
+.window-frame{
+    position: absolute;
+    z-index: 3;
+    background-color: var(--colorB);
+    top: 25vh;
+    left: 25vw;
+    font-size: 2vmax;
+}
 /* ABILITIES */
 #abis-list{
     display: flex;
@@ -164,7 +172,7 @@ span{
 .xlarge-row > span{
     padding-right: 0.5em;
 }
-#moves-split, #species-front{
+#moves-split, #species-front, .pixelated{
     image-rendering:optimizeSpeed;             /* Legal fallback */
     image-rendering:-moz-crisp-edges;          /* Firefox        */
     image-rendering:-o-crisp-edges;            /* Opera          */
@@ -205,31 +213,16 @@ span{
 #moves-desc{
     
 }
-
-.species-list-sprite{
-    height:70%;
-    left: 0%;
-    margin: 5px;
-}
-
-.species-name{
-    width: min-content;
-}
-
-.species-mid-stats{
+#moves-flags{
     display: flex;
+    flex-direction: column;
 }
+
+
 @media (orientation: landscape) {
     .moves-top{
         width: 100%;
         height: 10vw;
-    }
-    .species-mid{
-        flex-direction: row;
-    }
-    .species-mid > :last-child{
-        margin: auto;
-        margin-right: 0;
     }
 }
 @media (orientation: portrait) {
@@ -244,14 +237,65 @@ span{
         width: auto;
         flex-grow: 1;
     }
-    .species-mid{
-        flex-direction: column;
-    }
-    .species-mid > :last-child, .species-mid-stats > *{
-        margin: auto;
-    }
+}
+
+/* MOVES OVERLAY*/
+
+.move-overlay{
+    display: flex;
+    margin: 1%;
+    background-color: var(--colorE);
+    text-align: center;
+}
+.move-overlay-power{
+    width: 6em;
+}
+.move-overlay-top:hover{
+    background-color: var(--selHover);
+    cursor: pointer;
+}
+.move-overlay-fill{
+    font-size: 3em;
+}
+.move-overlay-stats{
+    width: 6em;
+    text-align: end;
+    padding-right: 0.5em;
+}
+.move-overlay-types{
+    width: 4em;
+}
+.move-overlay-img{
+    width: 100%;
+}
+.move-overlay-effects{
+    text-align: left;
+    padding-left: 0.5em;
+    font-size: 1.3vmax;
+    overflow: scroll;
+}
+.move-overlay-effects div{
+    padding-top: 0.2em;
+}
+.move-overlay-effects :first-child{
+    padding-top: 0
 }
 /* SPECIES */
+
+.species-list-sprite{
+    height:70%;
+    left: 0%;
+    margin: 5px;
+}
+
+.species-name{
+    width: min-content;
+}
+
+.species-mid-stats{
+    display: flex;
+}
+
 .species-top{
     display: flex;
     width: 100%;
@@ -288,7 +332,8 @@ span{
 
 }
 .species-innate,.species-ability{
-}
+    width: 6em;
+}   
 
 .tooltip{
     display: none;
@@ -299,7 +344,7 @@ span{
     padding: 10px;
     z-index: 1;
 }
-#species-basestats{
+#species-basestats, #species-coverage{
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -334,6 +379,34 @@ span{
     margin-top: 0.2em;
 }
 
+.species-coverage-row{
+    text-align: center;
+    width: 100%;
+    display: flex;
+    flex-grow: 1;
+    overflow-wrap: break-word;
+}
+.species-coverage-mul{
+    width: 3em;
+    min-width: 3em;
+    background-color: var(--colorA);
+    box-shadow: inset 0 0 1vmax var(--shadow);
+    display: flex;
+}
+.species-coverage-list{
+    flex-grow: 1;
+    display: flex;
+    font-size: 1.3vmax;
+    flex-wrap: wrap;
+    max-width: 22em;
+}
+.species-coverage-list > div{
+    display: flex;
+    width: 3em;
+}
+.span-align{
+    flex-grow: 1;
+}
 .species-bot{
     display: flex;
     flex-direction: column;
@@ -492,6 +565,13 @@ span{
         height: 15vw;
         width: 15vw;
     }
+    .species-mid{
+        flex-direction: row;
+    }
+    .species-mid > :last-child{
+        margin: auto;
+        margin-right: 0;
+    }
 }
 
 @media (orientation: portrait) {
@@ -519,7 +599,12 @@ span{
         height: 15vh;
         width: 15vh;
     }
-    
+    .species-mid{
+        flex-direction: column;
+    }
+    .species-mid > :last-child, .species-mid-stats > *{
+        margin: auto;
+    }
 }
 
 /* LOCATIONS */
