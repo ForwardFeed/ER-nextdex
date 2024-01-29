@@ -1,6 +1,6 @@
 import { search, updateMainSearchKey} from "./search.js"
 import { activateSearch } from "./filters.js"
-//import { capitalizeFirstLetter } from "./utils.js"
+import { capitalizeFirstLetter } from "./utils.js"
 
 export function setupPanels(){
     // if modified sync it with "search.js > search > panelUpdatesTable" variable
@@ -62,8 +62,10 @@ export function setupPanels(){
                 search.callbackAfterFilters = null
             }
             // adapt the query key to the first available
-            /*const defaultKey = capitalizeFirstLetter(Object.keys(search.queryMapList[i])[0])
-            $('#search-keys').val(defaultKey)*/
+            if (!$('#search-bar').val()){
+                updateMainSearchKey(search.queryMapList[i])
+            }
+            
         })
         $(btnPanel[1]).toggle()
     }

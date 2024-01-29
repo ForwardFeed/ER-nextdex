@@ -191,8 +191,23 @@ export function setupSearch(){
         $('#search-keys-selections').toggle()
     })
     $('#to-filter').on('click', ()=>{
-
+        const data = $('#search-bar').val()
+        if (!data) return
+        appendFilter($('#search-keys').val(), data)
+        $('#search-bar').val("")
     })
+   /* $('#search-wrapper').on('dragover', function(ev){
+        ev.preventDefault()
+        console.log(ev)
+        const key = ev.originalEvent.dataTransfer.getData("key");
+        const data = ev.originalEvent.dataTransfer.getData("data");
+        if (!key || !data) return
+        $('#search-keys').val(key)
+        $('#search-bar').val(data)
+        activateSearch()
+    })*/
+    /*$('#search-wrapper').on('drop', function(ev){
+    })*/
     for(const operator of search.operators){
         const option = document.createElement('option')
         option.value = operator

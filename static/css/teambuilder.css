@@ -1,9 +1,65 @@
-/*#builder-data{}*/
+#builder-data{
+    overflow: scroll;
+}
 
 .builder-top{
     background-color:  var(--colorA);
+    height: 30%;
 }
 
 .builder-bot{
     background-color:  var(--colorB);
+    height: 70%;
+    overflow: scroll;
+    display: flex;
+    flex-wrap: wrap;
 }
+
+.builder-mon{
+    border-radius: 10px;
+    border-style: dashed;
+    border-width: 2px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 3.5em;
+}
+.builder-placeholder{
+    border-radius: 10px;
+    border-style: dotted;
+    border-width: 2px;
+    margin: auto;
+}
+.builder-placeholder:hover{
+    cursor: pointer;
+    background-color: var(--selHover);
+}
+/*
+@media (orientation: landscape) {
+    
+    .builder-mon{
+        
+    }
+}
+
+@media (orientation: portrait) {
+    .builder-mon{
+        
+    }
+}
+
+
+.rotate {
+    animation: rotate 2s infinite;
+}
+@keyframes rotate {
+    0% {
+      transform: rotate(-45deg)
+    }
+    100% {
+      transform: rotate(45deg)
+    }
+  }
+
+*/

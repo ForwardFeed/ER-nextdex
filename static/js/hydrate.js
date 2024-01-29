@@ -155,6 +155,10 @@ function hydrateSpecies(){
         // add to the html list 
         const core = document.createElement('div')
         core.className = "btn data-list-row sel-n-active"
+        core.setAttribute('draggable', true);
+        core.ondragstart = (ev)=>{
+            ev.dataTransfer.setData("id", i)
+        }
         const image = document.createElement('img')
         image.className = 'species-list-sprite'
         image.src = getSpritesURL(spec.NAME)

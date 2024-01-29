@@ -71,8 +71,7 @@ export function activateSearch(callback){
 }
 
 
-export function appendFilter(key = "", data = ""){  
-
+export function appendFilter(initKey = "", initData = ""){  
     const divField = e("div", "filter-field")
 
     const divNot = e("div", "filter-not", "¿?")
@@ -83,7 +82,7 @@ export function appendFilter(key = "", data = ""){
 
     const inputKey = e('input', "filter-key")
     inputKey.type = "button"
-    inputKey.value = search.queryKeys[0] || "Name"
+    inputKey.value = initKey || search.queryKeys[0] || "Name"
     inputKey.onchange = activateSearch
 
     const divKeySelection = e('div', "filter-key-selection")
@@ -103,6 +102,7 @@ export function appendFilter(key = "", data = ""){
 
     const inputSearch = e('input', "filter-search")
     inputSearch.type = "search"
+    inputSearch.value = initData
 
     const divSuggestions = e('div', "filter-suggestions")
     divSuggestions.style.display = "none"
@@ -139,7 +139,7 @@ export function appendFilter(key = "", data = ""){
         activateSearch()
     }
 
-    inputKey.onclick = (ev) =>{
+    inputKey.onclick = () =>{
         $(divKeySelection).show()
         //ev.stopPropagation()
         clickOutsideToRemove(divKeySelection, inputKey)
@@ -156,7 +156,6 @@ export function appendFilter(key = "", data = ""){
         divField.remove()
         activateSearch()
     }
-    
     
     $('#filter-data').find('.filter-add').before(frag)
 }
