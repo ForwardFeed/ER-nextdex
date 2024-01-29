@@ -1,7 +1,8 @@
 import { redirectLocation } from "./locations_panel.js"
 import { redirectMove, moveOverlay } from "./moves_panel.js"
-import { addTooltip, capitalizeFirstLetter, AisInB, JSUH } from "../utils.js"
-import { queryFilter, search } from "../search.js"
+import { addTooltip, capitalizeFirstLetter, AisInB, e } from "../utils.js"
+import { search } from "../search.js"
+import { queryFilter} from "../filters.js"
 import { gameData } from "../data_version.js"
 import { createInformationWindow } from "../window.js"
 import { getDefensiveCoverage } from "../weakness.js"
@@ -54,16 +55,16 @@ function setDefensiveCoverage(coverage){
     const frag = document.createDocumentFragment()
     const multiplicators = Object.keys(coverage).sort()
     for (const mult of multiplicators){
-        const row = JSUH("div", "species-coverage-row")
-        const mulDiv = JSUH("div", "species-coverage-mul")
-        const mulSpan = JSUH("span", "span-align", mult)
+        const row = e("div", "species-coverage-row")
+        const mulDiv = e("div", "species-coverage-mul")
+        const mulSpan = e("span", "span-align", mult)
         mulDiv.append(mulSpan)
         row.append(mulDiv)
-        const typeNodeList = JSUH("div", "species-coverage-list")
+        const typeNodeList = e("div", "species-coverage-list")
         const types = coverage[mult]
         for (const type of types){
-            const colorDiv = JSUH("div", `${type.toLowerCase()} type`)
-            const divText = JSUH("span", "span-align", type.substr(0, 5))
+            const colorDiv = e("div", `${type.toLowerCase()} type`)
+            const divText = e("span", "span-align", type.substr(0, 5))
             colorDiv.append(divText)
             typeNodeList.append(colorDiv)
         }

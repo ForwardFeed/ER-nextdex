@@ -3,7 +3,8 @@ import { updateAbilities, queryMapAbilities} from "./panels/abilities_panel.js"
 import { updateMoves, queryMapMoves} from "./panels/moves_panel.js"
 import { updateLocations, queryMapLocations } from "./panels/locations_panel.js"
 import { updateTrainers, queryMapTrainers } from "./panels/trainers_panel.js"
-
+import { activateSearch, appendFilter} from "./filters.js"
+import { clickOutsideToRemove } from "./utils.js"
 
 export const search = {
     // the search guard is here to prevent that while the app is searching
@@ -103,85 +104,21 @@ export const search = {
     }
 
 }
-/**
- * Will execute all filters query so far
- */
-function executeAllFilters(){
-    let allQueries = [{ //this is the top bar search
-        op:"AND",
-        not: false, //not yet implemented
-        k: $('#search-keys').val().toLowerCase(),
-        data: $('#search-bar').val().toLowerCase(),
-        suggestion: $('#search-bar')[0] === search.suggestionInput
-    }]
-    
-    $('.filter-field').map(function(){
-        allQueries.push({
-            op:"AND",
-            //if you use data('state') jquery util here you're fucked for no acceptable reason
-            not: $(this).find('.filter-not')[0].dataset.state === "on" ? true : false,
-            k: $(this).find('.filter-key').val().toLowerCase(),
-            data: $(this).find('.filter-search').val().toLowerCase(),
-            suggestion: $(this).find('.filter-search')[0] === search.suggestionInput
-        })
-    })
-    //filters the empty queries
-    allQueries = allQueries.filter((x)=> x.data)
-    let finalQuery
-    if (allQueries.length == 1){
-        // don't wrap the query
-        finalQuery = allQueries[0]
-    } else {
-        // wrap the query
-        finalQuery = {
-            op: $('#filter-main-operator').val(),
-            not: false,
-            k: "",
-            data: allQueries, 
-        }
-    }
-    //execute the update of the active panel
-    search.panelUpdatesTable[search.panelUpdatesIndex](finalQuery)
-}
 
-export function activateSearch(callback){
-    if (search.defrosting) search.defrostFuturePanel()
-    if (search.updateGuard) {
-        search.updateQueue = true
-        return
+export function onkeySearchFilter(ev, divSuggestions, inputSearch){
+    search.suggestionNode = divSuggestions
+    search.suggestionInput = inputSearch
+    divSuggestions.style.display = "block"
+    if (search.timeoutAutoComplete) clearTimeout(search.timeoutAutoComplete)
+    search.timeoutAutoComplete = setTimeout(()=>{
+        divSuggestions.style.display = "none"
+    }, 3000) // 3 secs
+    if (evKeymap[ev.key] && evKeymap[ev.key]()) return
+    const callback = ()=>{
+        clickOutsideToRemove(search.suggestionNode)
+        search.suggestionSaved = search.suggestionInput.value
     }
-    search.updateGuard = true
-    while(true){
-        fastdom.mutate(() => {
-            search.clearSuggestion()
-            executeAllFilters()
-            search.showSuggestion()
-            if (callback) callback()
-            /** Because the function is async
-             *  I sometimes need to ensure a function is right after the 
-             *  filtering has finished
-             */
-            if (search.callbackAfterFilters) {
-                search.callbackAfterFilters()
-                search.callbackAfterFilters = null
-            }
-        })
-        if (!search.updateQueue) break
-        search.updateQueue = false
-    }
-    search.updateGuard = false    
-}
-/**
- * will work as long no future event.stop propagation is written in the code
- */
-
-function clickOutsideToRemoveList(htmlNodeToHide, htmlNodeClickedOn){
-    const clickToHide = (ev)=>{
-        if (htmlNodeClickedOn == ev.target) return 
-        htmlNodeToHide.style.display = "none"
-        $(document).off('click', clickToHide)
-    }
-    $(document).on('click', clickToHide)
+    activateSearch(callback)
 }
 
 // non-text key that affect the searching bar 
@@ -240,22 +177,6 @@ const evKeymap = {
     },
 }
 
-function onkeySearchFilter(ev, divSuggestions, inputSearch){
-    search.suggestionNode = divSuggestions
-    search.suggestionInput = inputSearch
-    divSuggestions.style.display = "block"
-    if (search.timeoutAutoComplete) clearTimeout(search.timeoutAutoComplete)
-    search.timeoutAutoComplete = setTimeout(()=>{
-        divSuggestions.style.display = "none"
-    }, 3000) // 3 secs
-    if (evKeymap[ev.key] && evKeymap[ev.key]()) return
-    const callback = ()=>{
-        clickOutsideToRemoveList(search.suggestionNode)
-        search.suggestionSaved = search.suggestionInput.value
-    }
-    activateSearch(callback)
-}
-
 export function setupSearch(){
     $('#search-keys').on('change', activateSearch)
     $('#search-bar').on('keyup search', (ev)=>{
@@ -266,19 +187,11 @@ export function setupSearch(){
     })
     $('#search-keys').on('click', function(ev){
         ev.stopPropagation()
-        clickOutsideToRemoveList($('#search-keys-selections')[0], $('#search-keys')[0])
+        clickOutsideToRemove($('#search-keys-selections')[0], $('#search-keys')[0])
         $('#search-keys-selections').toggle()
     })
-    $('.filter-add').on('click', function(){
-        appendFilter()
-    })
-    $('#filter-clear-all').on('click', function(){
-        $(this).closest('.filter-panel').find('.filter-field').remove()
-        activateSearch()
-    })
-    $('.filter-help-btn').on('click', function(){
-        $('#filter-help').toggle()
-        $('.filter-panel').toggle()
+    $('#to-filter').on('click', ()=>{
+
     })
     for(const operator of search.operators){
         const option = document.createElement('option')
@@ -286,9 +199,7 @@ export function setupSearch(){
         option.innerText =  operator
         $('#filter-main-operator').append(option)
     }
-    $('#filter-main-operator').on('change', function(){
-        activateSearch()
-    })
+    
     const keyNode = $('#search-keys-selections')
     for (const key of search.queryKeys){
         const option = document.createElement('div')
@@ -302,96 +213,6 @@ export function setupSearch(){
     }
     updateMainSearchKey(search.queryMapList[search.panelUpdatesIndex])
 }
-
-function appendFilter(){    
-    const divField = document.createElement('div')
-    divField.className = "filter-field"
-
-    const divNot = document.createElement('div')
-    divNot.className = "filter-not"
-    divNot.innerText = "¿?"
-    divNot.type = "button"
-    divNot.dataset.state = "off"
-    divField.append(divNot)
-
-    const divKeyWrapper = document.createElement('div')
-    divKeyWrapper.className = "filter-key-wrapper"
-    divField.append(divKeyWrapper)
-
-    const inputKey = document.createElement('input')
-    inputKey.className = "filter-key"
-    inputKey.type = "button"
-    inputKey.value = search.queryKeys[0] || "Name"
-    inputKey.onchange = activateSearch
-    divKeyWrapper.append(inputKey)
-
-    divNot.onclick = ()=>{
-        if (divNot.dataset.state === "off"){
-            divNot.dataset.state = "on"
-            divNot.classList.add('filter-not-not')
-            inputKey.classList.add('filter-not-not')
-        } else {
-            divNot.dataset.state = "off"
-            divNot.classList.remove('filter-not-not')
-            inputKey.classList.remove('filter-not-not')
-        }
-        activateSearch()
-    }
-
-    const divKeySelection = document.createElement('div')
-    divKeySelection.className = "filter-key-selection"
-    divKeySelection.style.display = "none"
-    divKeyWrapper.append(divKeySelection)
-    for (const key of search.queryKeys){
-        const option = document.createElement('div')
-        option.innerText = key
-        option.onclick = ()=>{
-            inputKey.value = key
-            $(divKeySelection).hide()
-            activateSearch()
-        }
-        divKeySelection.append(option)
-    }
-
-    inputKey.onclick = (ev) =>{
-        $(divKeySelection).show()
-        //ev.stopPropagation()
-        clickOutsideToRemoveList(divKeySelection, inputKey)
-    }
-
-    const divLabel = document.createElement('label')
-    divLabel.className = "filter-label"
-    divField.append(divLabel)
-
-    const inputSearch = document.createElement('input')
-    inputSearch.className = "filter-search"
-    inputSearch.type = "search"
-    inputSearch.onclick = ()=>{
-        if (search.suggestionNode) search.suggestionNode.style.display = "none"
-        search.suggestionNode = divSuggestions
-    }
-    divLabel.append(inputSearch)
-
-    const divSuggestions = document.createElement('div')
-    divSuggestions.style.display = "none"
-    divSuggestions.className = "filter-suggestions"
-    divLabel.append(divSuggestions)
-
-    inputSearch.onkeyup = (ev)=>{onkeySearchFilter(ev, divSuggestions, inputSearch)}
-
-    const divRemove = document.createElement('div')
-    divRemove.className = "filter-remove"
-    divRemove.innerText = "X"
-    divRemove.style.color = "red"
-    divRemove.onclick = ()=>{
-        divField.remove()
-        activateSearch()
-    }
-    divField.append(divRemove)
-
-    $('#filter-data').find('.filter-add').before(divField)
-}
-
 
 export function updateMainSearchKey(queryMap){
     const nodes = $('#search-keys-selections').children()
@@ -407,77 +228,5 @@ export function updateMainSearchKey(queryMap){
     })
     if (validID) {
         $('#search-keys').val(nodes.eq(validID).text())
-    }
-}
-
-/**
- * @callback searchAssertion
- * @param {unknow} data
- * @param {string} queryData
- *  
- * @returns {string} what did it matched
- * 
- * @typedef {Object.<string, searchAssertion>} SearchMap
- * 
- * @typedef {Object} QueryElements
- * 
- * @typedef {Object} Query - a query
- * @property {string} op - Operation to do to all direct sub element
- * @property {keyof SearchMap} k - a key for the searchmap
- * @property {Query} queryData - data of the query
- * @property {boolean} suggestion - should it add to suggestions?
- * @param {boolean} [not=false] - should it not match
- * 
- * @property {string} queryData - string to compare it to the data
- * 
- * @param {Query|Query[]} query - a query or multiple to resolve against the data thanks to the keymap
- * @param {Object} data - the data to query on
- * @param {SearchMap} keymap - a map with key (k) which points to a function return a function
- * @returns {boolean} - did the object matched?
- */
-export function queryFilter(query, data, keymap){
-    const queryNot = (notFlag, value) => {
-        return notFlag ? !value : value
-    }
-    if (query.data.constructor === Array){
-        //'break it down until it is no longer an array and solve using the parent op'
-        const subQueriesAnswer = []
-        for (const subQuery of query.data){
-            const answer = queryFilter(subQuery, data, keymap)
-            if (query.suggestion && answer) {
-                search.addSuggestion(answer)
-            }
-            subQueriesAnswer.push(queryFilter(subQuery, data, keymap))
-        }
-        if (query.op === "XOR"){
-            let flag = false
-            for (const answer of subQueriesAnswer){
-                if (flag == true && answer) return queryNot(query.not, false)
-                if (answer) flag = true
-            }
-            return queryNot(query.not, flag)
-        } else if (query.op === "OR"){
-            for (const answer of subQueriesAnswer){
-                if (answer) return queryNot(query.not, true)
-            }
-            return queryNot(query.not, false)
-        } else { //Default ANDk
-            for (const answer of subQueriesAnswer){
-                if (!answer) return queryNot(query.not, false)
-            }
-            return queryNot(query.not, true)
-        }
-    } else {
-        const execFn = keymap[query.k]
-        if (execFn) {
-            const answer = execFn(query.data, data)
-            const isValid = queryNot(query.not, answer)
-            if (query.suggestion && isValid) {
-                search.addSuggestion(answer)
-            }
-            return isValid
-
-        }
-        else return true // true i suppose?
     }
 }

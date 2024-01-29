@@ -1,5 +1,6 @@
 import { createSpeciesBlock, redirectSpecie } from "./species_panel.js"
-import { queryFilter, search } from "../search.js"
+import { search } from "../search.js"
+import { queryFilter} from "../filters.js"
 import { gameData } from "../data_version.js"
 import { AisInB } from "../utils.js"
 

@@ -9,6 +9,7 @@
     <!--load css themes-->
     <link rel="stylesheet" href="./css/themes/blueish.css" id="styles-blueish">
     <link rel="stylesheet" href="./css/themes/rushed.css" id="styles-rushed">
+    <link rel="icon" type="image/x-icon" href="./icons/favicon.webp">
     <script type="module" src="./js/settings.js"></script>
     <script type="module">
         import { initAppSettings } from './js/settings.js'
@@ -34,71 +35,10 @@
             <input type="search" name="" id="search-bar" autocomplete="off">
             <div id="search-suggestion" data-suggestion="0"></div>
         </label>
+        <img id="to-filter" src="./icons/to-filter.png" alt="">
     </div>
     <div id="non-header">
         <main>
-            <div id="panel-abis" class="panel">
-                <div id="abis-list">
-
-                </div>
-            </div>
-            <div id="panel-moves" class="panel">
-                <div id="moves-list" class="data-list">
-                </div>
-                <div id="moves-data" class="data-data">
-                    <div class="moves-top">
-                        <div class="moves-top-sub">
-                            <div class="moves-large">
-                                <span>Power</span>
-                                <div id="moves-pwr"></div>
-                            </div>
-                            <div class="moves-xlarge">
-                                <div class="xlarge-row">
-                                    <span>acc</span>
-                                    <div id="moves-acc"></div>
-                                </div>
-                                <div class="xlarge-row">
-                                    <span>pp</span>
-                                    <div id="moves-pp"></div>
-                                </div>
-                                <div class="xlarge-row">
-                                    <span>Priority</span>
-                                    <div id="moves-prio"></div>
-                                </div>
-                                <div class="xlarge-row">
-                                    <span>Eff. Chance</span>
-                                    <div id="moves-chance"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="moves-top-sub">
-                            <img id="moves-split">
-                            <div id="moves-target">
-                                <div class="target-row">
-                                    <div id="foe1" class="foe">Foe</div>
-                                    <div id="foe2" class="foe">Foe</div>
-                                    <div id="foe3" class="foe">Foe</div>
-                                </div>
-                                <div class="target-row">
-                                    <div id="ally1" class="ally">ally</div>
-                                    <div id="allySelf" class="self">self</div>
-                                    <div id="ally2" class="ally">ally</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="moves-bot">
-                        <div class="moves-bot-info">
-                            <div id="moves-name"></div>
-                            <div id="moves-types1"></div>
-                            <div id="moves-types2"></div>
-                        </div>
-                        <div id="moves-desc"></div>
-                        <div id="moves-flags"></div>
-                    </div>
-
-                </div>
-            </div>
             <div id="panel-species" class="panel">
                 <div id="species-list" class="data-list">
                 </div>
@@ -220,6 +160,76 @@
 
                     </div>
                 </div>
+                <div id="builder-data" class="data-data" style="display: none;">
+                <div class="builder-top">
+
+                </div>
+                <div class="builder-bot">
+
+                </div>
+                </div>
+            </div>
+            <div id="panel-abis" class="panel">
+                <div id="abis-list">
+
+                </div>
+            </div>
+            <div id="panel-moves" class="panel">
+                <div id="moves-list" class="data-list">
+                </div>
+                <div id="moves-data" class="data-data">
+                    <div class="moves-top">
+                        <div class="moves-top-sub">
+                            <div class="moves-large">
+                                <span>Power</span>
+                                <div id="moves-pwr"></div>
+                            </div>
+                            <div class="moves-xlarge">
+                                <div class="xlarge-row">
+                                    <span>acc</span>
+                                    <div id="moves-acc"></div>
+                                </div>
+                                <div class="xlarge-row">
+                                    <span>pp</span>
+                                    <div id="moves-pp"></div>
+                                </div>
+                                <div class="xlarge-row">
+                                    <span>Priority</span>
+                                    <div id="moves-prio"></div>
+                                </div>
+                                <div class="xlarge-row">
+                                    <span>Eff. Chance</span>
+                                    <div id="moves-chance"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="moves-top-sub">
+                            <img id="moves-split">
+                            <div id="moves-target">
+                                <div class="target-row">
+                                    <div id="foe1" class="foe">Foe</div>
+                                    <div id="foe2" class="foe">Foe</div>
+                                    <div id="foe3" class="foe">Foe</div>
+                                </div>
+                                <div class="target-row">
+                                    <div id="ally1" class="ally">ally</div>
+                                    <div id="allySelf" class="self">self</div>
+                                    <div id="ally2" class="ally">ally</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="moves-bot">
+                        <div class="moves-bot-info">
+                            <div id="moves-name"></div>
+                            <div id="moves-types1"></div>
+                            <div id="moves-types2"></div>
+                        </div>
+                        <div id="moves-desc"></div>
+                        <div id="moves-flags"></div>
+                    </div>
+
+                </div>
             </div>
             <div id="panel-locations" class="panel">
                 <div id="locations-list" class="data-list">
@@ -271,7 +281,8 @@
         </main>
         <aside>
             <div class="side-btn btn-active" id="btn-species">
-                <span>Species</span>
+                <span class="big-select">Species</span>
+                <span class="small-select">Builder</span>
             </div>
             <div class="side-btn btn-n-active" id="btn-abis">
                 <span>

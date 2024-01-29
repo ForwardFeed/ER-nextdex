@@ -211,9 +211,7 @@ span{
 .moves-bot-info > *{
     margin-left: 2%;
 }
-#moves-desc{
-    
-}
+/*#moves-desc{}*/
 #moves-flags{
     display: flex;
     flex-direction: column;
@@ -433,9 +431,7 @@ span{
     border-radius: 5px;
     padding: 0 10px;
 }
-.species-type:last-child{
-    
-}
+/*.species-type:last-child{}*/
 .species-switch{
     display: flex;
     flex-direction: row;
@@ -692,9 +688,7 @@ span{
     text-align: left;
     padding-left: 0.3em;
 }
-.trainers-poke-move{
-
-}
+/* .trainers-poke-move{} */
 .trainer-map-list-name{
     background-color: var(--colorA);
 }
@@ -722,9 +716,7 @@ span{
     margin-top: -1px;
     vertical-align: middle;
 }
-.settings-row{
-    
-}
+/*.settings-row{}*/
 .settings-row > input[type='radio'] { 
     transform: scale(2); 
     margin-top: -1px;
@@ -836,9 +828,7 @@ span{
 .filter-option-selected{
     color: var(--selActive);
 }
-.filter-label{
-    
-}
+/*.filter-label{}*/
 .filter-suggestions{
     position: absolute;
     z-index: 12;
@@ -854,6 +844,7 @@ span{
 
 .filter-remove{
     padding-right: 0.1em;
+    color: red;
 }
 .filter-add{
     border-radius: 10px;

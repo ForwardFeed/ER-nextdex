@@ -1,0 +1,9 @@
+/*#builder-data{}*/
+
+.builder-top{
+    background-color:  var(--colorA);
+}
+
+.builder-bot{
+    background-color:  var(--colorB);
+}
