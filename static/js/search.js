@@ -12,6 +12,7 @@ export const search = {
     // if a request is done in the mean time, this flag will tell that once it's finished,
     // another request should be scheduled
     updateQueue: false,
+    searchIsActive:true,
     // if modified sync it with "siderbar.js > setupPanels() > panelTable" variable
     panelUpdatesTable: [
         updateSpecies,
@@ -75,13 +76,19 @@ export const search = {
     },
     showSuggestion: function(){
         if (!this.suggestionNode) return
+
+        if(!this.searchIsActive) {
+            this.searchIsActive=true
+            this.suggestionInput.blur()
+            return
+        }
         this.suggestionNode.innerText = "" //remove all previous suggestions
         for (const suggestion of this.suggestions){
             const option = document.createElement('div')
             option.innerText = suggestion
             option.onclick = ()=>{
                 this.suggestionInput.value = suggestion
-                this.suggestionNode.style.display = "none"
+                this.searchIsActive=false
                 activateSearch()
             }
             this.suggestionNode.style.display = "block"

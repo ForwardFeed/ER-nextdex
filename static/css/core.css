@@ -31,6 +31,10 @@ main{
     display: none;
 }
 
+*{
+    user-select: none;
+}
+
 #top-header {
     height: 8vh;
     display: flex;
