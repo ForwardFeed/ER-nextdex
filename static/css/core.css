@@ -32,7 +32,7 @@ main{
 }
 
 #top-header {
-    height: 10vh;
+    height: 8vh;
     display: flex;
     align-items: center;
     box-shadow: inset 0 0 1vmax var(--shadow);
@@ -131,9 +131,9 @@ main{
     cursor: pointer;
 }
 
-#filter-icon {
-    width: 7vh;
-    height: 7vh;
+#filter-icon, #settings-btn {
+    width: 5vh;
+    height: 5vh;
     padding: 2vh;
 }
 
@@ -148,11 +148,6 @@ main{
     background-color: var(--btnHover);
 }
 
-#settings-btn {
-    width: 7vh;
-    height: 7vh;
-    padding: 2vh;
-}
 
 #non-header{
     flex-grow: 1;
@@ -253,9 +248,5 @@ input[type="text"] {
         flex-direction: row;
         min-height: 8vh;
         overflow: auto;
-    }
-
-    .filter {
-        
     }
 }

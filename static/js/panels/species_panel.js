@@ -62,8 +62,8 @@ function setDefensiveCoverage(coverage){
         const typeNodeList = JSUH("div", "species-coverage-list")
         const types = coverage[mult]
         for (const type of types){
-            const colorDiv = JSUH("div", type.toLowerCase())
-            const divText = JSUH("span", "span-align", type.substr(0, 4))
+            const colorDiv = JSUH("div", `${type.toLowerCase()} type`)
+            const divText = JSUH("span", "span-align", type.substr(0, 5))
             colorDiv.append(divText)
             typeNodeList.append(colorDiv)
         }

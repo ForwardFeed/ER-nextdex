@@ -151,6 +151,8 @@ export function getDefensiveCoverage(defTypes, abilities){
         }
     }*/
     const defensiveCoverage = []
+    // remove duplicates
+    defTypes = defTypes[0] === defTypes [1] ? [defTypes[0]] : defTypes
     for (const AtkT of gameData.typeT){
         let typeEffectiveness = 1
         for (const defT of defTypes){

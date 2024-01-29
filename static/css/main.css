@@ -1,23 +1,23 @@
 /* GENERAL */
 
-.normal{background-color: #aa9;}
-.fire{background-color: #f42;}
-.water{background-color: #39f;}
-.electric{background-color: #fc3;}
-.grass{background-color: #7c5;}
-.ice{  background-color: #6cf;}
-.fighting{background-color: #b54;}
-.poison{background-color: #a59;}
-.ground{background-color: #db5;}
-.flying{background-color: #89f}
-.psychic{background-color: #f59;}
-.bug{background-color: #ab2;}
-.rock{background-color: #ba6;}
-.ghost{background-color: #66b;}
-.dragon{background-color: #76e;}
-.dark{background-color: #754;}
-.steel{background-color: #aab;}
-.fairy{background-color: #e9e;}
+.normal{background-color: #aa9; color:rgb(44, 44, 39);}
+.fire{background-color: #f42; color:rgb(73, 23, 14);}
+.water{background-color: #39f; color:rgb(14, 32, 49);}
+.electric{background-color: #fc3; color:rgb(49, 40, 11);}
+.grass{background-color: #7c5; color: rgb(22, 51, 10);}
+.ice{  background-color: #6cf; color: rgb(20, 63, 85);}
+.fighting{background-color: #b54; color:rgb(54, 25, 20);}
+.poison{background-color: #a59; color:rgb(43, 21, 38); }
+.ground{background-color: #db5; color:rgb(48, 40, 19); }
+.flying{background-color: #89f; color:rgb(22, 26, 44);}
+.psychic{background-color: #f59; color:rgb(49, 16, 29);}
+.bug{background-color: #ab2; color:rgb(42, 46, 9);}
+.rock{background-color: #ba6; color:rgb(37, 34, 21);}
+.ghost{background-color: #66b; color:rgb(23, 23, 41);}
+.dragon{background-color: #76e; color:rgb(15, 13, 31);}
+.dark{background-color: #754; color:rgb(37, 27, 21);}
+.steel{background-color: #aab; color:rgb(27, 27, 31);}
+.fairy{background-color: #e9e; color:rgb(32, 21, 32);}
 
 
 .normal-t{color: #aa9;}
@@ -83,6 +83,7 @@
 .data-list{
     text-align: center;
     width: 9em;
+    min-width: 9em;
     display: flex; 
 }
 .data-list-row{
@@ -315,6 +316,7 @@ span{
     align-items: center;
     text-align: center;
     user-select: none;
+    max-width: 5em;
 }
 .abi-inn-info{
     width: 100%;
@@ -387,14 +389,13 @@ span{
     overflow-wrap: break-word;
 }
 .species-coverage-mul{
-    width: 3em;
-    min-width: 3em;
+    width: 2em;
+    min-width: 2em;
     background-color: var(--colorA);
     box-shadow: inset 0 0 1vmax var(--shadow);
     display: flex;
 }
 .species-coverage-list{
-    flex-grow: 1;
     display: flex;
     font-size: 1.3vmax;
     flex-wrap: wrap;
