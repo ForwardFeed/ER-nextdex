@@ -15,7 +15,7 @@ export function setupPanels(){
     for (const i in panelTable){
         const btnPanel = panelTable[i]
         $(btnPanel[0]).on('click', ()=>{
-            const curBtn = $('.btn-active')
+            const curBtn = $('aside .btn-active')
             const btn = $(btnPanel[0])
             const panel = $(btnPanel[1])
             if (curBtn[0] === btn[0]){

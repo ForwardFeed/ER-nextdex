@@ -5,8 +5,24 @@
 .builder-top{
     background-color:  var(--colorA);
     height: 30%;
+    display: flex;
 }
-
+.builder-select{
+    width: 2em;
+    display: flex;
+    flex-direction: column;
+}
+.builder-select > div{
+    flex-grow: 1;
+    display: flex;
+    text-align: center;
+}
+.builder-select > div > span{
+    width: 100%;
+}
+.builder-top-data{
+    flex-grow: 1;
+}
 .builder-bot{
     background-color:  var(--colorB);
     height: 70%;
@@ -16,6 +32,7 @@
 }
 
 .builder-mon{
+    position: relative;
     border-radius: 10px;
     border-style: dashed;
     border-width: 2px;
@@ -34,6 +51,41 @@
 .builder-placeholder:hover{
     cursor: pointer;
     background-color: var(--selHover);
+}
+.builder-mon-delete{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: red;
+    color: black;
+    display: none;
+}
+
+.builder-editor-left{
+    width: 6.5em;
+    height: 100%;
+}
+.builder-editor-left *{
+    margin: auto;
+}
+.builder-editor-specie{
+    max-width: 6em;
+}
+.builder-editor-sprite{
+    width: 100%;
+}
+.builder-editor-ability{
+    width: 100%;
+}
+
+.builder-editor-mid{
+    display: flex;
+}
+.builder-editor-move{
+    width: 2em;
+}
+.builder-editor-right{
+
 }
 /*
 @media (orientation: landscape) {
