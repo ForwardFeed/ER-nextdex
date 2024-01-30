@@ -6,11 +6,13 @@ import { getSpritesURL, getSpritesShinyURL } from "./species_panel.js";
 class Pokemon{
     constructor(){
         this.node = null
-        this.spc = null
+        this.baseSpc = null
+        this.spc = null // specie id
         this.spcName = ""
-        this.sprite = null
+        this.isShiny = false
         this.abi = null
         this.abiName = ""
+        this.inns = Array(3)
         this.moves = [
             null,
             null,
@@ -22,18 +24,29 @@ class Pokemon{
         this.ivs = Array(6)
         this.evs = Array(6)
     }
+    getSpritesURL(){
+        if (this.isShiny){
+            return getSpritesShinyURL(this.baseSpc.NAME)
+        } else {
+            return getSpritesURL(this.baseSpc.NAME)
+        }
+        
+    }
     init(pokeID){
-        const baseSpc = gameData.species[pokeID]
-        const first4Moves = [...Array(4).keys()].map(x => baseSpc.levelUpMoves[x].id || 0)
-        this.spc= pokeID,
-        this.spcName = baseSpc.name
-        this.sprite = getSpritesURL(baseSpc.NAME)
-        this.abi= 0,
-        this.abiName = gameData.abilities[this.abi].name
+        this.baseSpc = gameData.species[pokeID]
+        const first4Moves = [...Array(4).keys()].map(x => this.baseSpc.levelUpMoves[x].id || 0)
+        this.spc= pokeID
+        this.spcName = this.baseSpc.name
+        this.isShiny = false
+        this.abi = 0
+        this.ability = this.baseSpc.stats.abis[0]
+        this.abiName = gameData.abilities[this.ability].name
+        this.inns = this.baseSpc.stats.inns
+        this.innsNames = this.inns.map(x => gameData.abilities[x].name)
         this.moves= first4Moves,
-        this.item= 0,
-        this.nature= 0,
-        this.ivs= [31,31,31,31,31,31],
+        this.item= 0
+        this.nature= 0
+        this.ivs= [31,31,31,31,31,31]
         this.evs= [0,0,0,0,0,0]
     }
 }
@@ -41,28 +54,20 @@ class Pokemon{
 class PokeNodeView{
     constructor(node){
         this.node = node
-        this.spc = node.find('.trainers-pokemon-specie')
-        this.sprite = node.find('.trainer-pokemon-sprite')
-        this.abi = node.find('.trainers-pokemon-ability')
-        this.sprite = node.find('.trainer-pokemon-sprite')
-        this.moves = node.find('.trainers-poke-move')
-        this.item = node.find('.trainers-poke-item')
-        this.nature = node.find('.trainers-poke-nature')
-        this.ivs = node.find('.trainers-poke-ivs')
-        this.evs = node.find('.trainers-poke-evs')
         return this
+    }
+    init(){
+        this.spc = this.node.find('.trainers-pokemon-specie')
+        this.sprite = this.node.find('.trainer-pokemon-sprite')
+        this.abi = this.node.find('.trainers-pokemon-ability')
+        this.moves = this.node.find('.trainers-poke-move')
+        this.item = this.node.find('.trainers-poke-item')
+        this.nature = this.node.find('.trainers-poke-nature')
+        this.ivs = this.node.find('.trainers-poke-ivs')
+        this.evs = this.node.find('.trainers-poke-evs')
     }
 }
 
-function createProxyPokemon(pokeData, pokeNodeEditor, pokeNodeBuilder){
-    return {
-        specie(specie){
-            if (!specie) return pokeData.spc
-            pokeData.spc = specie,
-            pokeNodeBuilder.spc.text(specie)
-        }   
-    }
-}
 const teamView = []
 
 const teamData = [...Array(6).keys()].map((_) => {
@@ -86,7 +91,6 @@ export function setupTeamBuilder(){
         const btn = $(selection[0])
         const dataTop = $(selection[1])
         btn.on('click', ()=>{
-            console.log('click')
             $(selectionArray[selected][0]).removeClass("btn-active").addClass("btn-n-active")
             btn.removeClass("btn-n-active").addClass("btn-active")
             $(selectionArray[selected][1]).hide()
@@ -143,6 +147,7 @@ function setupPokeView(jNode, viewID){
     jNode[0].onclick = ()=>{
         feedPokemonEdition(viewID)
     }
+    teamView[viewID].init()
 }
 
 function deletePokemon(jNode, viewID){
@@ -172,29 +177,38 @@ function feedPokemonEdition(viewID){
     const poke = teamData[viewID]
     const view = teamView[viewID]
 
-    const core = e()
     const leftDiv = e("div", "builder-editor-left")
-    const specieDiv = e("div", "builder-editor-specie", poke.spcName)
-    const spriteDiv = e("img", "builder-editor-sprite")
-    spriteDiv.src = poke.sprite
-    const abilityDiv = e("div", "builder-editor-ability", poke.abiName)
+    //const specieDiv = e("div", "builder-editor-specie", poke.spcName)
+    const spriteDiv = e("img", "builder-editor-sprite pixelated")
+    spriteDiv.src = poke.getSpritesURL()
 
+    const leftMidDiv = e('div', "builder-editor-left-mid")
+    const abilityDiv = e("div", "builder-editor-ability", poke.abiName)
+    const innateDivs = poke.innsNames.map(x=>  e("div", "builder-editor-ability", x)) 
     const midDiv = e("div", "builder-editor-mid")
     const moveDivs = poke.moves.map((x)=>{
         return e("div", "builder-editor-move", gameData.moves[x].name)
     })
-    console.log(moveDivs)
     const rightDiv = e("div", "builder-editor-right")
 
-    $('#builder-editor').empty().append(JSHAC([
-        core, [
-            leftDiv, [
-                specieDiv,
-                spriteDiv,
-                abilityDiv
-            ],
+    spriteDiv.onclick = () => {
+        poke.isShiny = !poke.isShiny
+        spriteDiv.src = view.sprite[0].src = poke.getSpritesURL()
+    }
 
-            rightDiv,
-        ]
+    $('#builder-editor').empty().append(JSHAC([
+        leftDiv, [
+            //specieDiv,
+            spriteDiv,
+            abilityDiv
+        ],
+        leftMidDiv, [
+            abilityDiv,
+            //innates
+        ].concat(innateDivs),
+        midDiv, [
+            //moves
+        ].concat(moveDivs),
+        rightDiv,
     ]))
 }

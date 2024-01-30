@@ -61,28 +61,46 @@
     display: none;
 }
 
+#builder-editor{
+    display: flex;
+    font-size: 1.7vmax;
+}
 .builder-editor-left{
     width: 6.5em;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
 }
 .builder-editor-left *{
     margin: auto;
 }
 .builder-editor-specie{
     max-width: 6em;
+    height: 1em;
 }
 .builder-editor-sprite{
-    width: 100%;
+    /*height: calc(100% - 1em); this is if there the name of the specie*/
+    width: 6em;
+}
+.builder-editor-left-mid{
+    width: 6em;
+    display: flex;
+    flex-direction: column;
 }
 .builder-editor-ability{
     width: 100%;
+    margin: auto;
 }
 
 .builder-editor-mid{
     display: flex;
+    flex-direction: column;
+    width: 6em;
 }
 .builder-editor-move{
-    width: 2em;
+    width: 100%;
+    margin: auto;
 }
 .builder-editor-right{
 
