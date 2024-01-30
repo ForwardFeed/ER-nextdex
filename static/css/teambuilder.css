@@ -65,11 +65,12 @@
     display: flex;
     font-size: 1.7vmax;
 }
+#builder-editor > div{
+    margin: auto;
+}
 .builder-editor-left{
-    width: 6.5em;
     height: 100%;
     display: flex;
-    flex-direction: column;
     text-align: center;
 }
 .builder-editor-left *{
@@ -83,43 +84,65 @@
     /*height: calc(100% - 1em); this is if there the name of the specie*/
     width: 6em;
 }
-.builder-editor-left-mid{
-    width: 6em;
+.builder-editor-abilities, .builder-overlay-abilities{
     display: flex;
+    text-align: left;
     flex-direction: column;
+    margin: auto;
 }
-.builder-editor-ability{
+.builder-overlay-abilities{
+    height: 6em;
+}
+.builder-editor-ability, .builder-overlay-ability{
     width: 100%;
     margin: auto;
 }
-
+.builder-overlay-ability:hover{
+    background-color: var(--selHover);
+}
 .builder-editor-mid{
     display: flex;
     flex-direction: column;
-    width: 6em;
 }
 .builder-editor-move{
     width: 100%;
     margin: auto;
 }
 .builder-editor-right{
-
+    width: 10em;
 }
-/*
+.builder-editor-statsrow{
+    display: flex;
+}
+.builder-editor-statsrow > div{
+    margin: auto;
+}
 @media (orientation: landscape) {
-    
-    .builder-mon{
-        
+    .builder-editor-left{
+        flex-direction: row;
+    }
+    .builder-editor-left{
+        width: 12em;
+    }
+    .builder-editor-mid{
+        width: 6em;
     }
 }
 
 @media (orientation: portrait) {
-    .builder-mon{
-        
+    .builder-editor-left{
+        flex-direction: column;
+        font-size: 0.7em;
+    }
+    .builder-editor-left{
+        width: 6.5em;
+    }
+    .builder-editor-mid{
+        width: 8em;
     }
 }
 
-
+/*
 .rotate {
     animation: rotate 2s infinite;
 }

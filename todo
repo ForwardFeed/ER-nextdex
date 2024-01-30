@@ -2,6 +2,7 @@
     [ ] base stats colors are based on the average, not the total
     [x] How the project works in the readme
 [x] Add tutor moves
+[ ] Add in-game items
 [x] Invert Abilities with species in the side bar
 [x] Add versionning changes
     [x] Dynamic js file loading for gameVersion

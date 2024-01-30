@@ -111,8 +111,8 @@ export function createPokemon(poke){
 
     const core = e('div', "trainers-pokemon")
     const leftPanel = e('div', "trainers-pokemon-left")
-    const pokeName = e('div', "trainers-pokemon-specie", specie.name)
-    const pokeImg = e('img', "trainer-pokemon-sprite")
+    const pokeName = e('div', "trainers-poke-specie", specie.name)
+    const pokeImg = e('img', "trainer-poke-sprite")
     pokeImg.src = getSpritesURL(specie.NAME)
 
     const pokeAbility = e('div', "trainers-poke-ability", ability.name)

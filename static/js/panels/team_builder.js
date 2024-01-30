@@ -1,7 +1,8 @@
 import { gameData } from "../data_version.js";
-import { e, JSHAC } from "../utils.js"
+import { e, JSHAC } from "../utils.js";
 import { createPokemon } from "./trainers_panel.js";
 import { getSpritesURL, getSpritesShinyURL } from "./species_panel.js";
+import { createInformationWindow } from "../window.js";
 
 class Pokemon{
     constructor(){
@@ -57,9 +58,9 @@ class PokeNodeView{
         return this
     }
     init(){
-        this.spc = this.node.find('.trainers-pokemon-specie')
-        this.sprite = this.node.find('.trainer-pokemon-sprite')
-        this.abi = this.node.find('.trainers-pokemon-ability')
+        this.spc = this.node.find('.trainers-poke-specie')
+        this.sprite = this.node.find('.trainer-poke-sprite')
+        this.abi = this.node.find('.trainers-poke-ability')
         this.moves = this.node.find('.trainers-poke-move')
         this.item = this.node.find('.trainers-poke-item')
         this.nature = this.node.find('.trainers-poke-nature')
@@ -118,7 +119,8 @@ export function setupTeamBuilder(){
 
 function setupPokeView(jNode, viewID){
     const deleteBtn = e("div", "builder-mon-delete", "Delete")
-    deleteBtn.onclick = ()=>{
+    deleteBtn.onclick = (ev)=>{
+        ev.stopPropagation()
         deletePokemon(jNode, viewID)
     }
     jNode.empty().append(createPokemon(teamData[viewID])).append(deleteBtn)
@@ -182,33 +184,76 @@ function feedPokemonEdition(viewID){
     const spriteDiv = e("img", "builder-editor-sprite pixelated")
     spriteDiv.src = poke.getSpritesURL()
 
-    const leftMidDiv = e('div', "builder-editor-left-mid")
+    const leftMidDiv = e('div', "builder-editor-abilities")
     const abilityDiv = e("div", "builder-editor-ability", poke.abiName)
     const innateDivs = poke.innsNames.map(x=>  e("div", "builder-editor-ability", x)) 
     const midDiv = e("div", "builder-editor-mid")
     const moveDivs = poke.moves.map((x)=>{
         return e("div", "builder-editor-move", gameData.moves[x].name)
     })
+
     const rightDiv = e("div", "builder-editor-right")
+    const itemDiv = e("div", "builder-editor-right", gameData.itemT[poke.item])
+    const natureDiv = e("div", "builder-editor-nature", gameData.natureT[poke.nature])
+    const EVsRow = e("div", "builder-editor-statsrow")
+    const EVs = poke.evs.map((x)=>{
+        return e("div","",x)
+    })
+    const IVsRow = e("div", "builder-editor-statsrow")
+    const IVs = poke.ivs.map((x)=>{
+        return e("div","",x)
+    })
 
     spriteDiv.onclick = () => {
         poke.isShiny = !poke.isShiny
         spriteDiv.src = view.sprite[0].src = poke.getSpritesURL()
     }
-
+    leftMidDiv.onclick = (ev) => {
+        ev.stopPropagation() //if you forget this the window will instantly close
+        const overlayNode = overlayEditorAbilities(viewID, (abiID)=>{
+            poke.abi = abiID
+            poke.abiName = gameData.abilities[abiID].name
+            view.abi.text(poke.abiName)
+            abilityDiv.innerText = poke.abiName
+        })
+        createInformationWindow(overlayNode, {x: ev.clientX, y: ev.clientY})
+    }
     $('#builder-editor').empty().append(JSHAC([
         leftDiv, [
             //specieDiv,
             spriteDiv,
-            abilityDiv
+            leftMidDiv, [
+                abilityDiv
+                //innateDiv vv
+            ].concat(innateDivs),
         ],
-        leftMidDiv, [
-            abilityDiv,
-            //innates
-        ].concat(innateDivs),
         midDiv, [
-            //moves
+            //moves vv
         ].concat(moveDivs),
-        rightDiv,
+        rightDiv, [
+            itemDiv,
+            natureDiv,
+            EVsRow,
+            EVs,
+            IVsRow,
+            IVs
+        ]
     ]))
+}
+
+function overlayEditorAbilities(viewID, callbackOnclick){
+    const core = e('div', 'builder-overlay-abilities')
+    const abilities = [...new Set(teamData[viewID].baseSpc.stats.abis)] //remove duplicates
+        .map((x)=>{
+            const abilityNode = e('div', 'builder-overlay-ability', gameData.abilities[x].name)
+            abilityNode.onclick = (ev)=>{
+                ev.stopPropagation() // not to trigger the window to close
+                callbackOnclick(x)
+            }
+            return abilityNode
+        })
+    return JSHAC([
+        core,
+        abilities
+    ])
 }
