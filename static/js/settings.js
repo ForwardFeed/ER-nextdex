@@ -4,12 +4,12 @@ const appSettings = appName + "_settings"
 const settingsVersion = "1"
 const themesList =  [
     "blueish",
-    "rushed"
+    "rushed",
+    "wood",
 ]
 export const settings = {
 
 }
-
 export function initAppSettings(){
     if (!localStorage.getItem(appSettings)){
         //default settings
@@ -41,7 +41,8 @@ export function fetchFromLocalstorage(key){
 }
 
 function changeTheme(){
-    const settingsTheme = settings.theme
+    let settingsTheme = settings.theme
+    if (themesList.indexOf(settingsTheme) == -1) settingsTheme = themesList[0]
     for (const theme of themesList){
         document.getElementById(`styles-${theme}`).disabled = theme !== settingsTheme
     }
