@@ -28,6 +28,17 @@ export function saveSettings(){
     localStorage.setItem(appSettings, JSON.stringify(settings))
 }
 
+export function saveToLocalstorage(key, value){
+    if (typeof value === "object"){
+        localStorage.setItem(appName + key, JSON.stringify(value))
+    } else {
+        localStorage.setItem(appName + key, value)
+    }
+}
+
+export function fetchFromLocalstorage(key){
+    return localStorage.getItem(appName + key)
+}
 
 function changeTheme(){
     const settingsTheme = settings.theme

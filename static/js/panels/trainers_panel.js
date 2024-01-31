@@ -1,4 +1,4 @@
-import { getSpritesURL, redirectSpecie } from "./species_panel.js"
+import { getSpritesURL, redirectSpecie, getSpritesShinyURL } from "./species_panel.js"
 import { queryFilter} from "../filters.js"
 import { gameData } from "../data_version.js"
 import { AisInB, e, JSHAC } from "../utils.js"
@@ -113,7 +113,12 @@ export function createPokemon(poke){
     const leftPanel = e('div', "trainers-pokemon-left")
     const pokeName = e('div', "trainers-poke-specie", specie.name)
     const pokeImg = e('img', "trainer-poke-sprite")
-    pokeImg.src = getSpritesURL(specie.NAME)
+    if (poke.isShiny){
+        pokeImg.src = getSpritesShinyURL(specie.NAME)
+    } else {
+        pokeImg.src = getSpritesURL(specie.NAME)
+        
+    }
 
     const pokeAbility = e('div', "trainers-poke-ability", ability.name)
     const midPanel = e('div', "trainers-pokemon-mid")

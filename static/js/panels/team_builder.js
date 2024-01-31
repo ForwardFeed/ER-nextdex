@@ -4,6 +4,18 @@ import { createPokemon, getTextNature } from "./trainers_panel.js";
 import { getSpritesURL, getSpritesShinyURL } from "./species_panel.js";
 import { createInformationWindow } from "../window.js";
 import { quadriRadial } from "../radial.js";
+import { saveToLocalstorage, fetchFromLocalstorage } from "../settings.js";
+
+const saveKeysPokemon = [
+    "spc",
+    "isShiny",
+    "abi",
+    "moves",
+    "item",
+    "ivs",
+    "evs",
+    "nature",
+]
 
 class Pokemon {
     constructor() {
@@ -53,6 +65,19 @@ class Pokemon {
         this.ivs = [31, 31, 31, 31, 31, 31]
         this.evs = [0, 0, 0, 0, 0, 0]
     }
+    fromSave(saveObj){
+        this.init(saveObj.spc)
+        saveKeysPokemon.forEach((val)=>{
+            this[val] = saveObj[val]
+        })
+    }
+    save(){
+        const saveObj = {}
+        saveKeysPokemon.forEach((val)=>{
+            saveObj[val] = this[val]
+        })
+        return saveObj
+    }
 }
 
 class PokeNodeView {
@@ -77,12 +102,20 @@ const teamView = []
 const teamData = [...Array(6).keys()].map((_) => {
     return new Pokemon()
 })
-
-const currentTeam = {
-    activeMon: null,
-    setActive: function (id) {
-        this.activeMon = id
-    }
+// this can be called only when gamedata is loaded
+export function restoreSave(){
+    const savedString = fetchFromLocalstorage("team-builder")
+    if (!savedString) return
+    const saveObj = JSON.parse(savedString)
+    saveObj.forEach((val, index)=>{
+        if (!val.spc) return
+        teamData[index].fromSave(val)
+        createPokeView($('#builder-data').find('.builder-mon').eq(index), index)
+    })
+}
+function save(){
+    const saveObj = teamData.map(x=>x.save())
+    saveToLocalstorage("team-builder", saveObj)
 }
 
 export function setupTeamBuilder() {
@@ -102,9 +135,12 @@ export function setupTeamBuilder() {
             selected = index
         })
     })
-
     $('#builder-data').find('.builder-mon').each(function (index, value) {
-        addPlaceholder($(this), index)
+        if (teamData[index].spc){
+            createPokeView($(this), index)
+        } else {
+            addPlaceholder($(this), index)
+        }
         $(this)[0].ondragover = function (ev) {
             ev.preventDefault();
         }
@@ -112,7 +148,7 @@ export function setupTeamBuilder() {
             ev.preventDefault()
             const pokeID = ev.dataTransfer.getData("id");
             teamData[index].init(pokeID)
-            setupPokeView($(this), index)
+            createPokeView($(this), index)
             setupTeamBuilder
 
         }
@@ -120,7 +156,7 @@ export function setupTeamBuilder() {
     })
 }
 
-function setupPokeView(jNode, viewID) {
+function createPokeView(jNode, viewID) {
     const deleteBtn = e("div", "builder-mon-delete", "Delete")
     deleteBtn.onclick = (ev) => {
         ev.stopPropagation()
@@ -153,6 +189,7 @@ function setupPokeView(jNode, viewID) {
         feedPokemonEdition(viewID)
     }
     teamView[viewID].init()
+    save()
 }
 
 function deletePokemon(jNode, viewID) {
@@ -173,7 +210,7 @@ function addPlaceholder(jNode, viewID) {
     placeholder.onclick = () => {
         const pokeID = $('#species-list .sel-active')[0].dataset.id
         teamData[viewID].init(pokeID)
-        setupPokeView(jNode, viewID)
+        createPokeView(jNode, viewID)
     }
     jNode.append(placeholder)
 }
@@ -210,6 +247,7 @@ function feedPokemonEdition(viewID) {
     spriteDiv.onclick = () => {
         poke.isShiny = !poke.isShiny
         spriteDiv.src = view.sprite[0].src = poke.getSpritesURL()
+        save()
     }
     leftMidDiv.onclick = (ev) => {
         ev.stopPropagation() //if you forget this the window will instantly close
@@ -218,6 +256,7 @@ function feedPokemonEdition(viewID) {
             poke.abiName = gameData.abilities[abiID].name
             view.abi.text(poke.abiName)
             abilityDiv.innerText = poke.abiName
+            save()
         })
         createInformationWindow(overlayNode, { x: ev.clientX, y: ev.clientY })
     }
@@ -232,6 +271,7 @@ function feedPokemonEdition(viewID) {
                             poke.moves[index] = poke.allMoves[moveID]
                             const moveName = poke.allMovesName[moveID]
                             view.moves.eq(index).text(moveDivs[index].innerText = moveName)
+                            save()
                         }
                         createInformationWindow(
                                 overlayList(moveCallback, poke.allMovesName),
@@ -246,10 +286,12 @@ function feedPokemonEdition(viewID) {
     const itemCallback = (itemID) => {
         poke.item = itemID
         view.item.text(itemDiv.innerText = gameData.itemT[itemID])
+        save()
     }
     const natureCallback = (natureID) => {
         poke.nature = natureID
         view.nature.text(natureDiv.innerText = getTextNature(gameData.natureT[natureID]))
+        save()
     }
     const statsCallback = (field, index, value) => {
         poke[field][index] = value
@@ -263,6 +305,7 @@ function feedPokemonEdition(viewID) {
         }
         view[field].text(text)
         div[index].innerText = value
+        save()
     }
     rightDiv.onclick = (ev) => {
         ev.stopPropagation()

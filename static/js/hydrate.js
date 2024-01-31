@@ -3,6 +3,7 @@ import { feedPanelMoves } from "./panels/moves_panel.js"
 import { feedPanelLocations } from "./panels/locations_panel.js"
 import { feedPanelTrainers } from "./panels/trainers_panel.js"
 import { gameData } from "./data_version.js"
+import { restoreSave } from "./panels/team_builder.js"
 
 export function hydrate(){
     if (!gameData){
@@ -41,6 +42,7 @@ export function hydrate(){
     hydrateSpecies()
     hydrateLocation()
     hydrateTrainers()
+    restoreSave() // also restore the save of the team builder
 }
 
 function feedBaseStatsStats(statID, value){
