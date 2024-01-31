@@ -1,29 +1,48 @@
-import { search , activateSearch, updateMainSearchKey} from "./search.js"
-//import { capitalizeFirstLetter } from "./utils.js"
+import { search, updateMainSearchKey} from "./search.js"
+import { activateSearch } from "./filters.js"
+import { capitalizeFirstLetter } from "./utils.js"
 
 export function setupPanels(){
     // if modified sync it with "search.js > search > panelUpdatesTable" variable
     const panelTable = [
-        ["#btn-species", "#panel-species"],
+        ["#btn-species", "#panel-species", "#species-data", "#builder-data"],
         ["#btn-abis", "#panel-abis"],
         ["#btn-moves", "#panel-moves"],
         ["#btn-locations", "#panel-locations"],
         ["#btn-trainers", "#panel-trainers"]
     ]
+    
     for (const i in panelTable){
         const btnPanel = panelTable[i]
         $(btnPanel[0]).on('click', ()=>{
-            const curBtn = $('.btn-active')
+            const curBtn = $('aside .btn-active')
+            const btn = $(btnPanel[0])
+            const panel = $(btnPanel[1])
+            if (curBtn[0] === btn[0]){
+                if (!btnPanel[2]) return
+                // modify the button inner text
+                const small = btn.find('.small-select')
+                const big = btn.find('.big-select')
+                small[0].className = "big-select"
+                big[0].className = "small-select"
+                small.insertBefore(big)
+                // changes the data panel
+                $(btnPanel[2]).toggle()
+                $(btnPanel[3]).toggle()
+                return
+            }
+
             curBtn.addClass('btn-n-active')
             curBtn.removeClass('btn-active')
-            $(btnPanel[0]).removeClass('btn-n-active')
-            $(btnPanel[0]).addClass('btn-active')
+            
+            btn.removeClass('btn-n-active')
+            btn.addClass('btn-active')
 
             const curPan = $('.active-panel')
             curPan.removeClass('active-panel')
             curPan.toggle()
-            $(btnPanel[1]).addClass('active-panel')
-            $(btnPanel[1]).toggle()
+            panel.addClass('active-panel')
+            panel.toggle()
             
             // tell the search only to update this
             search.panelUpdatesIndex = i
@@ -43,8 +62,10 @@ export function setupPanels(){
                 search.callbackAfterFilters = null
             }
             // adapt the query key to the first available
-            /*const defaultKey = capitalizeFirstLetter(Object.keys(search.queryMapList[i])[0])
-            $('#search-keys').val(defaultKey)*/
+            if (!$('#search-bar').val()){
+                updateMainSearchKey(search.queryMapList[i])
+            }
+            
         })
         $(btnPanel[1]).toggle()
     }

@@ -34,6 +34,20 @@ export function AisInB(a, b){
 	return false
 }
 
+
+/**
+ * will work as long no future event.stop propagation is written in the code
+ */
+
+export function clickOutsideToRemove(htmlNodeToHide, htmlNodeClickedOn){
+    const clickToHide = (ev)=>{
+        if (htmlNodeClickedOn == ev.target) return 
+        htmlNodeToHide.style.display = "none"
+        $(document).off('click', clickToHide)
+    }
+    $(document).on('click', clickToHide)
+}
+
 /** JS Util to HTML */
 /**
  * 
@@ -42,7 +56,7 @@ export function AisInB(a, b){
  * @param {string | undefined} innerText 
  * @returns {HTMLDivElement}
  */
-export function JSUH(tag = "div", classname = "", innerText ="" ){
+export function e(tag = "div", classname = "", innerText ="" ){
     const htmlTag = document.createElement(tag)
     htmlTag.className = classname
     htmlTag.innerText = innerText
@@ -68,4 +82,28 @@ export function JSHAC(htmlArray){
         }
     }
     return frag
+}
+
+
+export class Selectable {
+    constructor(list) {
+        this.wrapper = e("div", "selectable-wrapper");
+        this.input = e("input", "selectable-input");
+        this.input.type = "button";
+        this.selections = e("div", "selectable-selections");
+        this.list = list
+        this.nodelist = list && 
+                        list.constructor.name === "Array" &&
+                        list.map(x=> e("div", "", x)) ||
+                        []
+        return JSHAC([
+            this.wrapper, [
+                this.input,
+                this.selections, [
+                    this.nodelist
+                ]
+            ]
+        ])
+
+    }
 }

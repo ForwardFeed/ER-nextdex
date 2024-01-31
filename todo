@@ -2,6 +2,7 @@
     [ ] base stats colors are based on the average, not the total
     [x] How the project works in the readme
 [x] Add tutor moves
+[ ] Add in-game items
 [x] Invert Abilities with species in the side bar
 [x] Add versionning changes
     [x] Dynamic js file loading for gameVersion
@@ -41,7 +42,7 @@
     [x] Add manual / Guide of utilisation
     [x] moves in species
     [ ] click on type to filter by type
-    [ ] add an arrow to put the selection as a filter
+    [x] add an arrow to put the selection as a filter
     [ ] Filters moves available in the pokemon
 [ ] pressing control or shift allow to not be redicted but add move as filter
 [x] settings file for the extractor of data
@@ -54,4 +55,5 @@
 [ ] Trainers Tab
     [x] Order trainer per route
 [ ] Add a welcome menu?
+    [ ] add a wait icon, the time everything loads
 [ ] Add a manual as a iframe or another webpage

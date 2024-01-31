@@ -152,9 +152,22 @@ function hydrateSpecies(){
         }
         // prepare to be appended a list of location where this pokemon appear
         spec.locations = new Map();
+        // concatenate all moves into a new variable
+        // also remove all duplicates
+        spec.allMoves = [...new Set(spec.eggMoves.concat(
+            spec.levelUpMoves.map(x=>x.id).concat(
+                spec.TMHMMoves.concat(
+                    spec.tutor
+                )
+            )
+        ))]
         // add to the html list 
         const core = document.createElement('div')
         core.className = "btn data-list-row sel-n-active"
+        core.setAttribute('draggable', true);
+        core.ondragstart = (ev)=>{
+            ev.dataTransfer.setData("id", i)
+        }
         const image = document.createElement('img')
         image.className = 'species-list-sprite'
         image.src = getSpritesURL(spec.NAME)

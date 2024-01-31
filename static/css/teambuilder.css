@@ -1,0 +1,180 @@
+#builder-data{
+    overflow: scroll;
+}
+
+.builder-top{
+    background-color:  var(--colorA);
+    height: 30%;
+    display: flex;
+}
+.builder-select{
+    width: 2em;
+    display: flex;
+    flex-direction: column;
+}
+.builder-select > div{
+    flex-grow: 1;
+    display: flex;
+    text-align: center;
+}
+.builder-select > div > span{
+    width: 100%;
+}
+.builder-top-data{
+    flex-grow: 1;
+}
+.builder-bot{
+    background-color:  var(--colorB);
+    height: 70%;
+    overflow: scroll;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.builder-mon{
+    position: relative;
+    border-radius: 10px;
+    border-style: dashed;
+    border-width: 2px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 3.5em;
+}
+.builder-placeholder{
+    border-radius: 10px;
+    border-style: dotted;
+    border-width: 2px;
+    margin: auto;
+}
+.builder-placeholder:hover{
+    cursor: pointer;
+    background-color: var(--selHover);
+}
+.builder-mon-delete{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: red;
+    color: black;
+    display: none;
+}
+
+#builder-editor{
+    display: flex;
+    font-size: 1.7vmax;
+}
+#builder-editor > div{
+    margin: auto;
+}
+.builder-editor-left{
+    height: 100%;
+    display: flex;
+    text-align: center;
+}
+.builder-editor-left *{
+    margin: auto;
+}
+.builder-editor-specie{
+    max-width: 6em;
+    height: 1em;
+}
+.builder-editor-sprite{
+    /*height: calc(100% - 1em); this is if there the name of the specie*/
+    width: 6em;
+}
+.builder-editor-abilities, .builder-overlay-abilities{
+    display: flex;
+    text-align: left;
+    flex-direction: column;
+    margin: auto;
+}
+.builder-overlay-abilities{
+    height: 6em;
+}
+.builder-editor-ability, .builder-overlay-ability{
+    width: 100%;
+    margin: auto;
+}
+.builder-overlay-ability:hover{
+    background-color: var(--selHover);
+}
+.builder-editor-mid{
+    display: flex;
+    flex-direction: column;
+}
+.builder-editor-move{
+    width: 100%;
+    margin: auto;
+}
+.builder-editor-right{
+    width: 10em;
+}
+.builder-overlay-list{
+    font-size: 1em;
+}
+.builder-editor-statsrow{
+    display: flex;
+}
+.builder-editor-statsrow > div{
+    margin: auto;
+}
+.overlay-stats-row{
+    display: flex;
+    text-align: center;
+}
+.overlay-stats-column{
+    display: flex;
+    flex-direction: column;
+}
+.overlay-stats-label{
+    font-size: 1.5em;
+}
+.overlay-stats-edit{ 
+    font-size: 1em;
+    flex-grow: 1;
+    width: 3em;
+    text-align: center;
+}
+@media (orientation: landscape) {
+    .builder-editor-left{
+        flex-direction: row;
+    }
+    .builder-editor-left{
+        width: 12em;
+    }
+    .builder-editor-mid{
+        width: 6em;
+    }
+}
+
+@media (orientation: portrait) {
+    .builder-editor-left{
+        flex-direction: column;
+        font-size: 0.7em;
+    }
+    .builder-editor-left{
+        width: 6.5em;
+    }
+    .builder-editor-mid{
+        width: 8em;
+    }
+}
+
+
+
+/*
+.rotate {
+    animation: rotate 2s infinite;
+}
+@keyframes rotate {
+    0% {
+      transform: rotate(-45deg)
+    }
+    100% {
+      transform: rotate(45deg)
+    }
+  }
+
+*/

@@ -1,6 +1,7 @@
 import { gameData } from "../data_version.js"
-import { queryFilter, search } from "../search.js"
-import { AisInB, JSUH, JSHAC } from "../utils.js"
+import { search } from "../search.js"
+import { queryFilter} from "../filters.js"
+import { AisInB, e, JSHAC } from "../utils.js"
 
 export function feedPanelMoves(moveID){
     const move = gameData.moves[moveID]
@@ -12,18 +13,20 @@ export function feedPanelMoves(moveID){
     $('#moves-prio').text(move.prio)
     setTarget(move.target)
     $('#moves-split').attr("src",`./icons/${gameData.splitT[move.split]}.png`);
-    $('#moves-types').text('' + move.types.map((x)=>gameData.typeT[x]).join(' '))
-    const type1 = gameData.typeT[move.types[0]]
-    $('#moves-types1').text(type1).attr("class", type1.toLowerCase()).addClass("type")
-    if (typeof move.types[1] === "number") {
-        const type2 = gameData.typeT[move.types[1]]
-        $('#moves-types2').text(type2).attr("class", type2.toLowerCase()).addClass("type")
-    }
+    //$('#moves-types').text('' + move.types.map((x)=>gameData.typeT[x]).join(' '))
+    setTypes(move.types)
     $('#moves-desc').text(move.lDesc) //TODO fix the width of this
     listMoveFlags(move.flags.map((x)=>gameData.flagsT[x]), $('#moves-flags'))
 
     $('#moves-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
     $('#moves-list').children().eq(moveID - 1).addClass("sel-active").removeClass("sel-n-active")
+}
+
+function setTypes(types){
+    for (let i = 0; i < 2; i++){
+        const type = gameData.typeT[types[i]] || ""
+        $(`#moves-types${i + 1}`).text(type).attr("class", `type ${type.toLowerCase()}`)
+    } 
 }
 
 function listMoveFlags(flags, core){
@@ -121,27 +124,27 @@ export function redirectMove(moveId)
 export function moveOverlay(moveId){
     const move = gameData.moves[moveId]
     
-    const core = JSUH("div", "move-overlay")
-    const power = JSUH("div", "move-overlay-power")
-    const powerTitle = JSUH("div", "move-overlay-top", move.name)
+    const core = e("div", "move-overlay")
+    const power = e("div", "move-overlay-power")
+    const powerTitle = e("div", "move-overlay-top", move.name)
     powerTitle.onclick = () => {
         redirectMove(moveId)
     }
-    const powerNumber = JSUH("div", "move-overlay-fill", move.pwr || "?")
-    const stats = JSUH("div", "move-overlay-stats")
-    const statsAcc = JSUH("div", "move-overlay-acc", `Acc: ${move.acc || "--"}`)
-    const statsPP = JSUH("div", "move-overlay-pp", `PP: ${move.pp}`)
-    const statsPrio = JSUH("div", "move-overlay-prio", `Prio: ${move.prio}`)
-    const statsChance = JSUH("div", "move-overlay-chance", `Chance: ${move.chance}`)
-    const otherInfos = JSUH("div", "move-overlay-other")
-    const typeDiv = JSUH("div", "move-overlay-types")
+    const powerNumber = e("div", "move-overlay-fill", move.pwr || "?")
+    const stats = e("div", "move-overlay-stats")
+    const statsAcc = e("div", "move-overlay-acc", `Acc: ${move.acc || "--"}`)
+    const statsPP = e("div", "move-overlay-pp", `PP: ${move.pp}`)
+    const statsPrio = e("div", "move-overlay-prio", `Prio: ${move.prio}`)
+    const statsChance = e("div", "move-overlay-chance", `Chance: ${move.chance}`)
+    const otherInfos = e("div", "move-overlay-other")
+    const typeDiv = e("div", "move-overlay-types")
     const type1 = gameData.typeT[move.types[0]]
-    const type1Div = JSUH("div", `move-overlay-type ${type1.toLowerCase()}`, type1)
+    const type1Div = e("div", `move-overlay-type ${type1.toLowerCase()}`, type1)
     const type2 = move.types[1] ? gameData.typeT[move.types[1]] : ""
-    const type2Div = JSUH("div", `move-overlay-type ${type2.toLowerCase()}`, type2)
-    const split = JSUH("img", "move-overlay-img pixelated")
+    const type2Div = e("div", `move-overlay-type ${type2.toLowerCase()}`, type2)
+    const split = e("img", "move-overlay-img pixelated")
     split.src = `./icons/${gameData.splitT[move.split]}.png`
-    const effectsDiv = JSUH("div", "move-overlay-effects")
+    const effectsDiv = e("div", "move-overlay-effects")
     listMoveFlags(move.flags.map((x)=>gameData.flagsT[x]), $(effectsDiv))
 
     return JSHAC([

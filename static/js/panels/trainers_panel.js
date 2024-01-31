@@ -1,7 +1,7 @@
 import { getSpritesURL, redirectSpecie } from "./species_panel.js"
-import { queryFilter, search} from "../search.js"
+import { queryFilter} from "../filters.js"
 import { gameData } from "../data_version.js"
-import { AisInB } from "../utils.js"
+import { AisInB, e, JSHAC } from "../utils.js"
 
 export function feedPanelTrainers(trainerID){
     $('#trainers-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
@@ -30,7 +30,7 @@ function setBaseTrainer(trainer){
         $('#trainers-normal').empty()
         return
     }
-    const nodeNormal = document.createElement('div')
+    const nodeNormal = e('div')
     nodeNormal.innerText = "Normal"
     nodeNormal.className = "trainer-match-btn sel-active"
     nodeNormal.onclick = ()=>{
@@ -48,7 +48,7 @@ function setInsane(trainer){
         $('#trainers-elite').empty()
         return
     }
-    const nodeElite = document.createElement('div')
+    const nodeElite = e('div')
     nodeElite.innerText = "Elite"
     nodeElite.className = "trainer-match-btn sel-n-active"
     nodeElite.onclick = ()=>{
@@ -65,12 +65,12 @@ function setRematchesBar(rematches){
         return $('#trainers-rematch').empty()
     }
     const frag = document.createDocumentFragment()
-    const spanInfo = document.createElement('span')
+    const spanInfo = e('span')
     spanInfo.innerText = "Rematches :"
     frag.append(spanInfo)
     for (const remI in rematches){
         const rem = rematches[remI]
-        const nodeRem = document.createElement('div')
+        const nodeRem = e('div')
         nodeRem.innerText = +remI + 1
         nodeRem.className = "trainer-match-btn sel-n-active"
         nodeRem.onclick = ()=>{
@@ -90,86 +90,63 @@ function setPartyPanel(party){
     }
     const frag = document.createDocumentFragment()
     for (const poke of party){
-        const specie = gameData.species[poke.spc]
-        const ability = gameData.abilities[specie.stats.abis[poke.abi]]
-        const moves = poke.moves.map((x)=>{
-            return gameData.moves[x]
-        })
-        const item = gameData.itemT[poke.item]
-        const nature = gameData.natureT[poke.nature]
-
-        const core = document.createElement('div')
-        core.className="trainers-pokemon"
-        core.onclick = () => {
-          redirectSpecie(poke.spc)
+        const pokeDiv = createPokemon(poke)
+        pokeDiv.firstChild.onclick = () => {
+            redirectSpecie(poke.spc)
         }
-
-        const leftPanel = document.createElement('div')
-        leftPanel.className = "trainers-pokemon-left"
-
-        const pokeName = document.createElement('div')
-        pokeName.className = "trainers-pokemon-specie"
-        pokeName.innerText = specie.name
-
-        const pokeImg = document.createElement('img')
-        pokeImg.className = "trainer-pokemon-sprite"
-        pokeImg.src = getSpritesURL(specie.NAME)
-
-        const pokeAbility = document.createElement('div')
-        pokeAbility.className = "trainers-poke-ability"
-        pokeAbility.innerText = ability.name
-        leftPanel.append(pokeName)
-        leftPanel.append(pokeImg)
-        leftPanel.append(pokeAbility)
-        core.append(leftPanel)
-        const midPanel = document.createElement('div')
-        midPanel.className = "trainers-pokemon-mid"
-
-        const pokeMoves = document.createElement('div')
-        pokeMoves.className = "trainers-poke-moves"
-        for (const move of moves){
-            if (!move) continue
-            const type1 = gameData.typeT[move.types[0]].toLowerCase()
-            const moveNode = document.createElement('div')
-            moveNode.className = `trainers-poke-move ${type1}-t`
-            moveNode.style.color = 
-            moveNode.innerText = move.name
-            pokeMoves.append(moveNode)
-        }
-
-        midPanel.append(pokeMoves)
-        core.append(midPanel)
-
-        const rightPanel = document.createElement('div')
-        rightPanel.className = "trainers-pokemon-right"
-
-        const pokeItem = document.createElement('div')
-        pokeItem.className = "trainers-poke-item"
-        pokeItem.innerText = item
-
-        const pokeNature = document.createElement('div')
-        pokeNature.className = "trainers-poke-nature"
-        pokeNature.innerText = getTextNature(nature)
-        
-
-        const pokeIVs = document.createElement('div')
-        pokeIVs.className = "trainers-poke-ivs"
-        pokeIVs.innerText = 'IVs: ' + poke.ivs.join(' ')
-        
-
-        const pokeEVs = document.createElement('div')
-        pokeEVs.className = "trainers-poke-evs"
-        pokeEVs.innerText = 'EVs: ' + poke.evs.join(' ')
-        
-        rightPanel.append(pokeItem)
-        rightPanel.append(pokeNature)
-        rightPanel.append(pokeIVs)
-        rightPanel.append(pokeEVs)
-        core.append(rightPanel)
-
-        frag.append(core)
+        frag.append(pokeDiv)
     }
     $('#trainers-team').empty().append(frag)
+}
+
+export function createPokemon(poke){
+
+    const specie = gameData.species[poke.spc]
+    const ability = gameData.abilities[specie.stats.abis[poke.abi]]
+    const moves = poke.moves.map((x)=>{
+        return gameData.moves[x]
+    })
+    const item = gameData.itemT[poke.item]
+    const nature = gameData.natureT[poke.nature]
+
+    const core = e('div', "trainers-pokemon")
+    const leftPanel = e('div', "trainers-pokemon-left")
+    const pokeName = e('div', "trainers-poke-specie", specie.name)
+    const pokeImg = e('img', "trainer-poke-sprite")
+    pokeImg.src = getSpritesURL(specie.NAME)
+
+    const pokeAbility = e('div', "trainers-poke-ability", ability.name)
+    const midPanel = e('div', "trainers-pokemon-mid")
+    const pokeMoves = e('div', "trainers-poke-moves")
+    for (const move of moves){
+        if (!move) continue
+        const type1 = gameData.typeT[move.types[0]].toLowerCase()
+        pokeMoves.append(e('div', `trainers-poke-move ${type1}-t`, move.name))
+    }
+    const rightPanel = e('div', "trainers-pokemon-right")
+    const pokeItem = e('div', "trainers-poke-item", item)
+    const pokeNature = e('div', "trainers-poke-nature", getTextNature(nature))
+    const pokeIVs = e('div',"trainers-poke-ivs", 'IVs: ' + poke.ivs.join(' '))
+    const pokeEVs = e('div', "trainers-poke-evs", 'EVs: ' + poke.evs.join(' '))
+
+    return JSHAC([
+        core, [
+            leftPanel, [
+                pokeName,
+                pokeImg,
+                pokeAbility
+            ],
+            midPanel, [
+                pokeMoves
+            ],
+            rightPanel, [
+                pokeItem,
+                pokeNature,
+                pokeIVs,
+                pokeEVs
+            ]
+        ]
+    ])
 }
 
 const natureMap = {
@@ -199,7 +176,7 @@ const natureMap = {
     "Serious": "--",
   }
 
-function getTextNature(nature){
+export function getTextNature(nature){
     return `${nature} (${natureMap[nature]})`
 }
 

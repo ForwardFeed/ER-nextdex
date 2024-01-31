@@ -1,7 +1,8 @@
 import { redirectLocation } from "./locations_panel.js"
 import { redirectMove, moveOverlay } from "./moves_panel.js"
-import { addTooltip, capitalizeFirstLetter, AisInB, JSUH } from "../utils.js"
-import { queryFilter, search } from "../search.js"
+import { addTooltip, capitalizeFirstLetter, AisInB, e } from "../utils.js"
+import { search } from "../search.js"
+import { queryFilter} from "../filters.js"
 import { gameData } from "../data_version.js"
 import { createInformationWindow } from "../window.js"
 import { getDefensiveCoverage } from "../weakness.js"
@@ -54,16 +55,16 @@ function setDefensiveCoverage(coverage){
     const frag = document.createDocumentFragment()
     const multiplicators = Object.keys(coverage).sort()
     for (const mult of multiplicators){
-        const row = JSUH("div", "species-coverage-row")
-        const mulDiv = JSUH("div", "species-coverage-mul")
-        const mulSpan = JSUH("span", "span-align", mult)
+        const row = e("div", "species-coverage-row")
+        const mulDiv = e("div", "species-coverage-mul")
+        const mulSpan = e("span", "span-align", mult)
         mulDiv.append(mulSpan)
         row.append(mulDiv)
-        const typeNodeList = JSUH("div", "species-coverage-list")
+        const typeNodeList = e("div", "species-coverage-list")
         const types = coverage[mult]
         for (const type of types){
-            const colorDiv = JSUH("div", `${type.toLowerCase()} type`)
-            const divText = JSUH("span", "span-align", type.substr(0, 5))
+            const colorDiv = e("div", `${type.toLowerCase()} type`)
+            const divText = e("span", "span-align", type.substr(0, 5))
             colorDiv.append(divText)
             typeNodeList.append(colorDiv)
         }
@@ -78,19 +79,10 @@ function setDefensiveCoverage(coverage){
 
 function setTypes(types){
     const core = $('#species-types')
-    const type1 = gameData.typeT[types[0]]
-    const nodeType1 = core.children().eq(0)
-    nodeType1.attr("class", "type " + type1.toLowerCase())
-    nodeType1.text(type1)
-    let type2
-    if (!types[1] || types[1] == types[0] ) {
-        type2 = ""
-    } else {
-        type2 = gameData.typeT[types[1]]
-    }
-    const nodeType2 = core.children().eq(1)
-    nodeType2.attr("class", "type " + type2.toLowerCase())
-    nodeType2.text(type2)
+    for (let i = 0; i < 2; i++){
+        const type = gameData.typeT[types[i]] || ""
+        core.children().eq(i).text(type).attr("class", `type ${type.toLowerCase()}`)
+    } 
 }
 
 /**
@@ -295,6 +287,25 @@ export function setupSpeciesPanel(){
     $('#species-basestats, #species-coverage').on('click', function(){
         $('#species-basestats, #species-coverage').toggle()
     })
+    /*
+    $('#species-types .type').each(function(){
+        $(this).on('dragstart', (ev)=>{
+            ev.originalEvent.dataTransfer.setData("key", "Type")
+            ev.originalEvent.dataTransfer.setData("data", $(this).text())
+        })
+    })
+    let counter = 0
+    $('#species-data .species-mid').on('touchstart mousedown', (ev)=>{
+        ev.preventDefault()
+        counter = setTimeout(function(){
+            $('#species-data .species-mid').addClass("rotate")
+        },500)
+    })
+    $('#species-data .species-mid').on('touchend mouseup', (ev)=>{
+        clearTimeout(counter)
+        $('#species-data .species-mid').removeClass("rotate")
+        ev.preventDefault()
+    })*/
 }
 function toLowerButFirstCase(word){
     word = word.toLowerCase()
@@ -437,13 +448,7 @@ export const queryMapSpecies = {
         return false
     },
     "move": (queryData, specie) => {
-        let moves = specie.eggMoves.concat(
-            specie.levelUpMoves.map(x=>x.id).concat(
-                specie.TMHMMoves.concat(
-                    specie.tutor
-                )
-            )
-        ).map((x)=>gameData.moves[x].name.toLowerCase())
+        let moves = specie.allMoves.map((x)=>gameData.moves[x].name.toLowerCase())
         for (const move of moves){
             if (AisInB(queryData, move)) return move
         }

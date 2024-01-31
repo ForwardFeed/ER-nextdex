@@ -4,11 +4,16 @@ import { setAvailableVersion } from "./data_version.js"
 import { setupSearch } from "./search.js"
 import { addTooltip } from "./utils.js"
 import { setupSettings } from "./settings.js"
+import { setupFilters } from "./filters.js"
+import { setupTeamBuilder } from "./panels/team_builder.js"
+
 $(document).ready(function(){
     setupSettings()
     setupPanels()
     setupSpeciesPanel()
     setAvailableVersion()
     setupSearch()
+    setupFilters()
+    setupTeamBuilder()
     addTooltip($('.main-title')[0], 'Berkay, the dex is up btw')
 })
