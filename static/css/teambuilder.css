@@ -111,12 +111,16 @@
 .builder-editor-right{
     width: 10em;
 }
+.builder-overlay-items{
+    font-size: 1em;
+}
 .builder-editor-statsrow{
     display: flex;
 }
 .builder-editor-statsrow > div{
     margin: auto;
 }
+
 @media (orientation: landscape) {
     .builder-editor-left{
         flex-direction: row;

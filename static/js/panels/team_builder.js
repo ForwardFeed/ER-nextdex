@@ -3,9 +3,10 @@ import { e, JSHAC } from "../utils.js";
 import { createPokemon } from "./trainers_panel.js";
 import { getSpritesURL, getSpritesShinyURL } from "./species_panel.js";
 import { createInformationWindow } from "../window.js";
+import { quadriRadial } from "../radial.js";
 
-class Pokemon{
-    constructor(){
+class Pokemon {
+    constructor() {
         this.node = null
         this.baseSpc = null
         this.spc = null // specie id
@@ -20,23 +21,23 @@ class Pokemon{
             null,
             null
         ]
-        this.item = null
+        this.item = -1
         this.nature = null
         this.ivs = Array(6)
         this.evs = Array(6)
     }
-    getSpritesURL(){
-        if (this.isShiny){
+    getSpritesURL() {
+        if (this.isShiny) {
             return getSpritesShinyURL(this.baseSpc.NAME)
         } else {
             return getSpritesURL(this.baseSpc.NAME)
         }
-        
+
     }
-    init(pokeID){
+    init(pokeID) {
         this.baseSpc = gameData.species[pokeID]
         const first4Moves = [...Array(4).keys()].map(x => this.baseSpc.levelUpMoves[x].id || 0)
-        this.spc= pokeID
+        this.spc = pokeID
         this.spcName = this.baseSpc.name
         this.isShiny = false
         this.abi = 0
@@ -44,20 +45,20 @@ class Pokemon{
         this.abiName = gameData.abilities[this.ability].name
         this.inns = this.baseSpc.stats.inns
         this.innsNames = this.inns.map(x => gameData.abilities[x].name)
-        this.moves= first4Moves,
-        this.item= 0
-        this.nature= 0
-        this.ivs= [31,31,31,31,31,31]
-        this.evs= [0,0,0,0,0,0]
+        this.moves = first4Moves,
+        this.item = -1
+        this.nature = 0
+        this.ivs = [31, 31, 31, 31, 31, 31]
+        this.evs = [0, 0, 0, 0, 0, 0]
     }
 }
 
-class PokeNodeView{
-    constructor(node){
+class PokeNodeView {
+    constructor(node) {
         this.node = node
         return this
     }
-    init(){
+    init() {
         this.spc = this.node.find('.trainers-poke-specie')
         this.sprite = this.node.find('.trainer-poke-sprite')
         this.abi = this.node.find('.trainers-poke-ability')
@@ -77,21 +78,21 @@ const teamData = [...Array(6).keys()].map((_) => {
 
 const currentTeam = {
     activeMon: null,
-    setActive: function(id){
+    setActive: function (id) {
         this.activeMon = id
     }
 }
 
-export function setupTeamBuilder(){
+export function setupTeamBuilder() {
     let selected = 0
     const buttonArrayMap = [
         ["#builder-editor-btn", "#builder-editor"],
         ["#builder-team-btn", "#builder-team"]
     ]
-    buttonArrayMap.forEach((selection, index, selectionArray)=>{
+    buttonArrayMap.forEach((selection, index, selectionArray) => {
         const btn = $(selection[0])
         const dataTop = $(selection[1])
-        btn.on('click', ()=>{
+        btn.on('click', () => {
             $(selectionArray[selected][0]).removeClass("btn-active").addClass("btn-n-active")
             btn.removeClass("btn-n-active").addClass("btn-active")
             $(selectionArray[selected][1]).hide()
@@ -100,45 +101,45 @@ export function setupTeamBuilder(){
         })
     })
 
-    $('#builder-data').find('.builder-mon').each(function(index, value){
+    $('#builder-data').find('.builder-mon').each(function (index, value) {
         addPlaceholder($(this), index)
-        $(this)[0].ondragover = function(ev){
+        $(this)[0].ondragover = function (ev) {
             ev.preventDefault();
         }
-        $(this)[0].ondrop = (ev)=>{
+        $(this)[0].ondrop = (ev) => {
             ev.preventDefault()
             const pokeID = ev.dataTransfer.getData("id");
             teamData[index].init(pokeID)
             setupPokeView($(this), index)
             setupTeamBuilder
-            
+
         }
-        teamView.push(new PokeNodeView($(this)))  
+        teamView.push(new PokeNodeView($(this)))
     })
 }
 
-function setupPokeView(jNode, viewID){
+function setupPokeView(jNode, viewID) {
     const deleteBtn = e("div", "builder-mon-delete", "Delete")
-    deleteBtn.onclick = (ev)=>{
+    deleteBtn.onclick = (ev) => {
         ev.stopPropagation()
         deletePokemon(jNode, viewID)
     }
     jNode.empty().append(createPokemon(teamData[viewID])).append(deleteBtn)
 
-    jNode[0].onmouseover = ()=>{
+    jNode[0].onmouseover = () => {
         $(deleteBtn).show()
     }
-    jNode[0].onmouseleave = ()=>{
+    jNode[0].onmouseleave = () => {
         $(deleteBtn).hide()
     }
     let startX = 0
     let isSwiping = false
     const screenSwapLength = document.body.offsetWidth / 2
-    jNode[0].ontouchstart = (ev)=>{
+    jNode[0].ontouchstart = (ev) => {
         isSwiping = true;
         startX = ev.touches[0].clientX;
     }
-    jNode[0].ontouchend = (ev)=>{
+    jNode[0].ontouchend = (ev) => {
         if (isSwiping) {
             const endX = ev.changedTouches[0].clientX;
             const deltaX = endX - startX;
@@ -146,23 +147,23 @@ function setupPokeView(jNode, viewID){
             isSwiping = false;
         }
     }
-    jNode[0].onclick = ()=>{
+    jNode[0].onclick = () => {
         feedPokemonEdition(viewID)
     }
     teamView[viewID].init()
 }
 
-function deletePokemon(jNode, viewID){
+function deletePokemon(jNode, viewID) {
     jNode.empty()
     $('#builder-editor').empty()
     addPlaceholder(jNode, viewID)
     teamData[viewID] = new Pokemon()
 }
 
-function addPlaceholder(jNode, viewID){
+function addPlaceholder(jNode, viewID) {
     const isTouchPad = navigator.maxTouchPoints
     let placeholder
-    if (isTouchPad){
+    if (isTouchPad) {
         placeholder = e('div', "builder-placeholder", "tap to add the selected pokemon from the list")
     } else {
         placeholder = e('div', "builder-placeholder", "drop a mon from the list or click to add the selected pokemon from the list")
@@ -175,7 +176,7 @@ function addPlaceholder(jNode, viewID){
     jNode.append(placeholder)
 }
 
-function feedPokemonEdition(viewID){
+function feedPokemonEdition(viewID) {
     const poke = teamData[viewID]
     const view = teamView[viewID]
 
@@ -186,9 +187,9 @@ function feedPokemonEdition(viewID){
 
     const leftMidDiv = e('div', "builder-editor-abilities")
     const abilityDiv = e("div", "builder-editor-ability", poke.abiName)
-    const innateDivs = poke.innsNames.map(x=>  e("div", "builder-editor-ability", x)) 
+    const innateDivs = poke.innsNames.map(x => e("div", "builder-editor-ability", x))
     const midDiv = e("div", "builder-editor-mid")
-    const moveDivs = poke.moves.map((x)=>{
+    const moveDivs = poke.moves.map((x) => {
         return e("div", "builder-editor-move", gameData.moves[x].name)
     })
 
@@ -196,12 +197,12 @@ function feedPokemonEdition(viewID){
     const itemDiv = e("div", "builder-editor-right", gameData.itemT[poke.item])
     const natureDiv = e("div", "builder-editor-nature", gameData.natureT[poke.nature])
     const EVsRow = e("div", "builder-editor-statsrow")
-    const EVs = poke.evs.map((x)=>{
-        return e("div","",x)
+    const EVs = poke.evs.map((x) => {
+        return e("div", "", x)
     })
     const IVsRow = e("div", "builder-editor-statsrow")
-    const IVs = poke.ivs.map((x)=>{
-        return e("div","",x)
+    const IVs = poke.ivs.map((x) => {
+        return e("div", "", x)
     })
 
     spriteDiv.onclick = () => {
@@ -210,13 +211,29 @@ function feedPokemonEdition(viewID){
     }
     leftMidDiv.onclick = (ev) => {
         ev.stopPropagation() //if you forget this the window will instantly close
-        const overlayNode = overlayEditorAbilities(viewID, (abiID)=>{
+        const overlayNode = overlayEditorAbilities(viewID, (abiID) => {
             poke.abi = abiID
             poke.abiName = gameData.abilities[abiID].name
             view.abi.text(poke.abiName)
             abilityDiv.innerText = poke.abiName
         })
-        createInformationWindow(overlayNode, {x: ev.clientX, y: ev.clientY})
+        createInformationWindow(overlayNode, { x: ev.clientX, y: ev.clientY })
+    }
+    const itemCallback = (itemID) => {
+        poke.item = itemID
+        view.item.text(itemDiv.innerText = gameData.itemT[itemID])
+    }
+    rightDiv.onclick = (ev) => {
+        ev.stopPropagation()
+        const overlayNode = quadriRadial([
+            ["Items", () => {
+                createInformationWindow(overlayItem(itemCallback), { x: ev.clientX, y: ev.clientY }, "focus")
+            }],
+            ["Nature", () => { console.log("yippee1") }],
+            ["IVs", () => { console.log("yippee3") }],
+            ["EVs", () => { console.log("yippee2") }],
+        ], "6em", "2vmax")
+        createInformationWindow(overlayNode, { x: ev.clientX, y: ev.clientY }, "mid")
     }
     $('#builder-editor').empty().append(JSHAC([
         leftDiv, [
@@ -241,12 +258,12 @@ function feedPokemonEdition(viewID){
     ]))
 }
 
-function overlayEditorAbilities(viewID, callbackOnclick){
+function overlayEditorAbilities(viewID, callbackOnclick) {
     const core = e('div', 'builder-overlay-abilities')
     const abilities = [...new Set(teamData[viewID].baseSpc.stats.abis)] //remove duplicates
-        .map((x)=>{
+        .map((x) => {
             const abilityNode = e('div', 'builder-overlay-ability', gameData.abilities[x].name)
-            abilityNode.onclick = (ev)=>{
+            abilityNode.onclick = (ev) => {
                 ev.stopPropagation() // not to trigger the window to close
                 callbackOnclick(x)
             }
@@ -255,5 +272,33 @@ function overlayEditorAbilities(viewID, callbackOnclick){
     return JSHAC([
         core,
         abilities
+    ])
+}
+
+function overlayItem(itemCallback) {
+    const input = e("input", "builder-overlay-items")
+    input.setAttribute('list', "item-datalist")
+    const dataList = e("datalist")
+    dataList.id = "item-datalist"
+    const options = gameData.itemT.map((x)=>{
+        const option =  e("option",)
+        option.value = x
+        return option
+    })
+    input.onclick = function(ev){
+        ev.stopPropagation()
+    }
+    input.onkeyup = ()=>{
+        const itemID = gameData.itemT.indexOf(input.value)
+        if (itemID != -1){
+            itemCallback(itemID)
+        }
+        
+    }
+    
+    return JSHAC([
+        input,
+        dataList,
+            options
     ])
 }
