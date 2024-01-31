@@ -448,13 +448,7 @@ export const queryMapSpecies = {
         return false
     },
     "move": (queryData, specie) => {
-        let moves = specie.eggMoves.concat(
-            specie.levelUpMoves.map(x=>x.id).concat(
-                specie.TMHMMoves.concat(
-                    specie.tutor
-                )
-            )
-        ).map((x)=>gameData.moves[x].name.toLowerCase())
+        let moves = specie.allMoves.map((x)=>gameData.moves[x].name.toLowerCase())
         for (const move of moves){
             if (AisInB(queryData, move)) return move
         }

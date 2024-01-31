@@ -36,7 +36,6 @@ class Pokemon {
     }
     init(pokeID) {
         this.baseSpc = gameData.species[pokeID]
-        const first4Moves = [...Array(4).keys()].map(x => this.baseSpc.levelUpMoves[x].id || 0)
         this.spc = pokeID
         this.spcName = this.baseSpc.name
         this.isShiny = false
@@ -45,6 +44,9 @@ class Pokemon {
         this.abiName = gameData.abilities[this.ability].name
         this.inns = this.baseSpc.stats.inns
         this.innsNames = this.inns.map(x => gameData.abilities[x].name)
+        this.allMoves = gameData.species[pokeID].allMoves
+        this.allMovesName = gameData.species[pokeID].allMoves.map(x => gameData.moves[x].name)
+        const first4Moves = [...Array(4).keys()].map(x => this.allMoves[x] || 0)
         this.moves = first4Moves,
         this.item = -1
         this.nature = 0
@@ -225,7 +227,17 @@ function feedPokemonEdition(viewID) {
             poke.moves.map((x, index)=>{
                 return [
                     gameData.moves[x].name,
-                    ()=>{console.log(index)}
+                    ()=>{
+                        const moveCallback = (moveID) => {
+                            poke.moves[index] = poke.allMoves[moveID]
+                            const moveName = poke.allMovesName[moveID]
+                            view.moves.eq(index).text(moveDivs[index].innerText = moveName)
+                        }
+                        createInformationWindow(
+                                overlayList(moveCallback, poke.allMovesName),
+                                { x: ev.clientX, y: ev.clientY }, "focus"
+                            )
+                    }
                 ]
             }), "6em", "2vmax"
         )
@@ -236,8 +248,8 @@ function feedPokemonEdition(viewID) {
         view.item.text(itemDiv.innerText = gameData.itemT[itemID])
     }
     const natureCallback = (natureID) => {
-        poke.item = natureID
-        view.item.text(itemDiv.innerText = getTextNature(gameData.natureT[natureID]))
+        poke.nature = natureID
+        view.nature.text(natureDiv.innerText = getTextNature(gameData.natureT[natureID]))
     }
     const statsCallback = (field, index, value) => {
         poke[field][index] = value
@@ -400,4 +412,5 @@ function editionStats(statField, viewID, callback){
 
 function editionMoves(viewID){
     const poke = teamData[viewID]
+
 }
