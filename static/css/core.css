@@ -210,7 +210,9 @@ input[type="text"] {
     cursor: pointer;
 } 
 #to-filter{
-    
+    width: 6em;
+    height: fit-content;
+    margin: auto;
 }
 #to-filter:hover{
     background-color: var(--btnHover);

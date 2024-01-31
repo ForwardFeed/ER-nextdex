@@ -36,7 +36,7 @@
             <input type="search" name="" id="search-bar" autocomplete="off">
             <div id="search-suggestion" data-suggestion="0"></div>
         </label>
-        <img id="to-filter" src="./icons/to-filter.png" alt="">
+        <div id="to-filter">=> Filters</div>
     </div>
     <div id="non-header">
         <main>
@@ -162,25 +162,25 @@
                     </div>
                 </div>
                 <div id="builder-data" class="data-data" style="display: none;">
-                <div id="builder-top" class="builder-top">
-                    <div id="builder-select" class="builder-select">
-                        <div id="builder-editor-btn" class="btn-active"><span>E</span></div>
-                        <div id="builder-team-btn" class="btn-n-active"><span>T</span></div>
+                    <div id="builder-top" class="builder-top">
+                        <div id="builder-select" class="builder-select">
+                            <div id="builder-editor-btn" class="btn-active"><span>E</span></div>
+                            <div id="builder-team-btn" class="btn-n-active"><span>T</span></div>
+                        </div>
+                        <div id="builder-editor" class="builder-top-data">
+                        </div>
+                        <div id="builder-team" class="builder-top-data" style="display: none;">
+                            Not Ready yet
+                        </div>
                     </div>
-                    <div id="builder-editor" class="builder-top-data">
+                    <div class="builder-bot">
+                        <div class="builder-mon"></div>
+                        <div class="builder-mon"></div>
+                        <div class="builder-mon"></div>
+                        <div class="builder-mon"></div>
+                        <div class="builder-mon"></div>
+                        <div class="builder-mon"></div>
                     </div>
-                    <div id="builder-team" class="builder-top-data" style="display: none;">
-                        Not Ready yet
-                    </div>
-                </div>
-                <div class="builder-bot">
-                    <div class="builder-mon"></div>
-                    <div class="builder-mon"></div>
-                    <div class="builder-mon"></div>
-                    <div class="builder-mon"></div>
-                    <div class="builder-mon"></div>
-                    <div class="builder-mon"></div>
-                </div>
                 </div>
             </div>
             <div id="panel-abis" class="panel">
@@ -343,18 +343,18 @@
                 <div class="filter-help-btn sel">Close</div>
             </div>
             <p> So far what you have to understand is that a search is composed of 4 things: </p>
-            <li>- The search <strong>key</strong></li>   
+            <li>- The search <strong>key</strong></li>
             <p> a key, is a field, if you search by type on species, you will have all pokemon
                 that have this type, and for moves the moves of the type.
-                Note that panels are reactive to a selected number of keys, 
+                Note that panels are reactive to a selected number of keys,
                 asking for a Fire type on an ability pannel would not make sense.
                 At least so far (you can still ask on the discord to implement new keys)
-            </p>   
-            <li>- The search <strong>text</strong></li>   
+            </p>
+            <li>- The search <strong>text</strong></li>
             <p>
                 The text is what you're searching for considering the key, if the key is "type" then
                 entering "bulbasaur" would show nothing because there is no types called bulbasaur
-            </p>   
+            </p>
             <li>- The search <strong>Not</strong></li>
             <p>
                 It's an On/Off button that simply means you don't want this to be shown.
@@ -363,20 +363,20 @@
             </p>
             <li>- The search <strong>operator</strong></li>
             <p> If you have multiple filters on, you may want to have all to Match </p>
-            <li>AND</li> 
+            <li>AND</li>
             <p>Matches all filters with no exception, if you ask for water type AND ground type
                 ,only pokemons that have this double typing will show
             </p>
             <li>OR</li>
-            <p>which means that for one specie to show up it has 
+            <p>which means that for one specie to show up it has
                 to at least get 1 of right, it can be 1 in 500 filters as long 1 matches
             </p>
             <li>XOR</li>
             <p>
                 means that you're asking for only 1 filter to match, not 2, not 0, 1.
                 You may ask for a water type or for a grass type, but not both at the same type. I don't expect
-                people to use this operator that said. 
-            </p>    
+                people to use this operator that said.
+            </p>
         </div>
     </div>
     <div id="settings-frame" style="display: none;">
