@@ -12,7 +12,7 @@ export function quadriRadial(buttons, buttonWidth, buttonHeight){
         const btnData = buttons[btnI]
         const btn = e("div","radial-btn quadri-radial-btn" + btnI ,btnData[0])
         btn.onclick = (ev) => {
-            btnData[1]()
+            btnData[1](ev)
             ev.stopPropagation()
         }
         btn.style.width = buttonWidth

@@ -219,6 +219,18 @@ function feedPokemonEdition(viewID) {
         })
         createInformationWindow(overlayNode, { x: ev.clientX, y: ev.clientY })
     }
+    midDiv.onclick = (ev) => {
+        ev.stopPropagation()
+        const overlayNode = quadriRadial(
+            poke.moves.map((x, index)=>{
+                return [
+                    gameData.moves[x].name,
+                    ()=>{console.log(index)}
+                ]
+            }), "6em", "2vmax"
+        )
+        createInformationWindow(overlayNode, { x: ev.clientX, y: ev.clientY }, "mid")
+    }
     const itemCallback = (itemID) => {
         poke.item = itemID
         view.item.text(itemDiv.innerText = gameData.itemT[itemID])
@@ -227,19 +239,36 @@ function feedPokemonEdition(viewID) {
         poke.item = natureID
         view.item.text(itemDiv.innerText = getTextNature(gameData.natureT[natureID]))
     }
+    const statsCallback = (field, index, value) => {
+        poke[field][index] = value
+        let text, div
+        if (field === "ivs"){
+            text = 'IVs: ' + poke.ivs.join(' ')
+            div = IVs
+        } else {
+            text = 'EVs: ' + poke.evs.join(' ')
+            div = EVs
+        }
+        view[field].text(text)
+        div[index].innerText = value
+    }
     rightDiv.onclick = (ev) => {
         ev.stopPropagation()
         const overlayNode = quadriRadial([
-            ["Items", () => {
+            ["Items", (ev) => {
                 createInformationWindow(overlayList(itemCallback, gameData.itemT), { x: ev.clientX, y: ev.clientY }, "focus")
             }],
-            ["Nature", () => {
+            ["Nature", (ev) => {
                 createInformationWindow(overlayList(natureCallback,
                                                     gameData.natureT.map(x => getTextNature(x))),
                  { x: ev.clientX, y: ev.clientY }, "focus")
             }],
-            ["IVs", () => { console.log("yippee3") }],
-            ["EVs", () => { console.log("yippee2") }],
+            ["IVs", (ev) => { 
+                createInformationWindow(editionStats("ivs", viewID, statsCallback), { x: ev.clientX, y: ev.clientY })
+            }],
+            ["EVs", (ev) => { 
+                createInformationWindow(editionStats("evs", viewID, statsCallback), { x: ev.clientX, y: ev.clientY })
+             }],
         ], "6em", "2vmax")
         createInformationWindow(overlayNode, { x: ev.clientX, y: ev.clientY }, "mid")
     }
@@ -284,6 +313,7 @@ function overlayEditorAbilities(viewID, callbackOnclick) {
 }
 
 function overlayList(callback, list) {
+    let artificialClickToClose = false // if set to true you can click to close
     const input = e("input", "builder-overlay-list")
     input.setAttribute('list', "item-datalist")
     const dataList = e("datalist")
@@ -294,12 +324,16 @@ function overlayList(callback, list) {
         return option
     })
     input.onclick = function(ev){
-        ev.stopPropagation()
+        if (!artificialClickToClose) ev.stopPropagation()
     }
-    input.onkeyup = ()=>{
+    input.onkeyup = input.onchange = (ev)=>{
         const itemID = list.indexOf(input.value)
         if (itemID != -1){
             callback(itemID)
+            if (ev.key === "Enter"){
+                artificialClickToClose = true
+                input.click()
+            }
         }
         
     }
@@ -309,4 +343,61 @@ function overlayList(callback, list) {
         dataList,
             options
     ])
+}
+const statsOrder = [
+    "HP",
+    "Atk",
+    "Def",
+    "SpA",
+    "SpD",
+    "Spe",
+]
+const statFieldInputControl = {
+    "ivs": (value) => {
+        value = +value.replace(/\D/g, "")
+        if (isNaN(value)) return 0
+        return Math.min(Math.max(0,value),31)  
+    },
+    "evs": (value) => {
+        value = +value.replace(/\D/g, "");
+        if (isNaN(value)) return 0
+        return Math.min(Math.max(0,Math.round(value / 4) * 4),252)        
+    }
+}
+function editionStats(statField, viewID, callback){
+    const poke = teamData[viewID]
+    const core = e("div", "overlay-stats-edition")
+    const rowDiv = e("div", "overlay-stats-row")
+    statsOrder.forEach((value, index)=>{
+        const statColumn = e("div", "overlay-stats-column")
+        const statLabel = e("label", "overlay-stats-label", value)
+        statLabel.setAttribute('for', `overlay-stats-edit${index}`)
+        const statStat = e("input", "overlay-stats-edit")
+        statStat.id = `overlay-stats-edit${index}`
+        statStat.value = poke[statField][index]
+        statStat.type = "number"
+        statStat.onclick = statStat.onchange = () =>{
+            statStat.value = statFieldInputControl[statField](statStat.value)
+            callback(statField, index, statStat.value, )
+        }
+        rowDiv.append(JSHAC([
+            statColumn,[
+                statLabel,
+                statStat
+            ]
+        ]))
+    })
+    rowDiv.onclick = function(ev){
+        ev.stopPropagation()
+    }
+
+    return JSHAC([
+        core,[
+            rowDiv,
+        ]
+    ])
+}
+
+function editionMoves(viewID){
+    const poke = teamData[viewID]
 }

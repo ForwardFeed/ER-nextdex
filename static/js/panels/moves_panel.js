@@ -13,18 +13,20 @@ export function feedPanelMoves(moveID){
     $('#moves-prio').text(move.prio)
     setTarget(move.target)
     $('#moves-split').attr("src",`./icons/${gameData.splitT[move.split]}.png`);
-    $('#moves-types').text('' + move.types.map((x)=>gameData.typeT[x]).join(' '))
-    const type1 = gameData.typeT[move.types[0]]
-    $('#moves-types1').text(type1).attr("class", type1.toLowerCase()).addClass("type")
-    if (typeof move.types[1] === "number") {
-        const type2 = gameData.typeT[move.types[1]]
-        $('#moves-types2').text(type2).attr("class", type2.toLowerCase()).addClass("type")
-    }
+    //$('#moves-types').text('' + move.types.map((x)=>gameData.typeT[x]).join(' '))
+    setTypes(move.types)
     $('#moves-desc').text(move.lDesc) //TODO fix the width of this
     listMoveFlags(move.flags.map((x)=>gameData.flagsT[x]), $('#moves-flags'))
 
     $('#moves-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
     $('#moves-list').children().eq(moveID - 1).addClass("sel-active").removeClass("sel-n-active")
+}
+
+function setTypes(types){
+    for (let i = 0; i < 2; i++){
+        const type = gameData.typeT[types[i]] || ""
+        $(`#moves-types${i + 1}`).text(type).attr("class", `type ${type.toLowerCase()}`)
+    } 
 }
 
 function listMoveFlags(flags, core){
