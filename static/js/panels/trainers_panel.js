@@ -176,7 +176,7 @@ const natureMap = {
     "Serious": "--",
   }
 
-function getTextNature(nature){
+export function getTextNature(nature){
     return `${nature} (${natureMap[nature]})`
 }
 

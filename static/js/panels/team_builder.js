@@ -1,6 +1,6 @@
 import { gameData } from "../data_version.js";
 import { e, JSHAC } from "../utils.js";
-import { createPokemon } from "./trainers_panel.js";
+import { createPokemon, getTextNature } from "./trainers_panel.js";
 import { getSpritesURL, getSpritesShinyURL } from "./species_panel.js";
 import { createInformationWindow } from "../window.js";
 import { quadriRadial } from "../radial.js";
@@ -223,13 +223,21 @@ function feedPokemonEdition(viewID) {
         poke.item = itemID
         view.item.text(itemDiv.innerText = gameData.itemT[itemID])
     }
+    const natureCallback = (natureID) => {
+        poke.item = natureID
+        view.item.text(itemDiv.innerText = getTextNature(gameData.natureT[natureID]))
+    }
     rightDiv.onclick = (ev) => {
         ev.stopPropagation()
         const overlayNode = quadriRadial([
             ["Items", () => {
-                createInformationWindow(overlayItem(itemCallback), { x: ev.clientX, y: ev.clientY }, "focus")
+                createInformationWindow(overlayList(itemCallback, gameData.itemT), { x: ev.clientX, y: ev.clientY }, "focus")
             }],
-            ["Nature", () => { console.log("yippee1") }],
+            ["Nature", () => {
+                createInformationWindow(overlayList(natureCallback,
+                                                    gameData.natureT.map(x => getTextNature(x))),
+                 { x: ev.clientX, y: ev.clientY }, "focus")
+            }],
             ["IVs", () => { console.log("yippee3") }],
             ["EVs", () => { console.log("yippee2") }],
         ], "6em", "2vmax")
@@ -275,12 +283,12 @@ function overlayEditorAbilities(viewID, callbackOnclick) {
     ])
 }
 
-function overlayItem(itemCallback) {
-    const input = e("input", "builder-overlay-items")
+function overlayList(callback, list) {
+    const input = e("input", "builder-overlay-list")
     input.setAttribute('list', "item-datalist")
     const dataList = e("datalist")
     dataList.id = "item-datalist"
-    const options = gameData.itemT.map((x)=>{
+    const options = list.map((x)=>{
         const option =  e("option",)
         option.value = x
         return option
@@ -289,9 +297,9 @@ function overlayItem(itemCallback) {
         ev.stopPropagation()
     }
     input.onkeyup = ()=>{
-        const itemID = gameData.itemT.indexOf(input.value)
+        const itemID = list.indexOf(input.value)
         if (itemID != -1){
-            itemCallback(itemID)
+            callback(itemID)
         }
         
     }
