@@ -9,6 +9,9 @@ const insaneAnimation = [
     "texxxt"
 ]
 export function activateInsanity(){
+    clearInterval(insanity.interval)
+    var audio = new Audio('./js/data/playInsanity.webm');
+    audio.play();
     const all = $("body").find('*')
     const len = all.length
     insanity.interval = setInterval(()=>{

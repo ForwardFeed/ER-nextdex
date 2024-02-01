@@ -118,7 +118,7 @@ export function createPokemon(poke){
         pokeImg.src = getSpritesURL(specie.NAME)
     }
 
-    const pokeAbility = e('div', "trainers-poke-ability", ability.name)
+    const pokeAbility = e('div', "trainers-poke-ability", ability?.name)
     const midPanel = e('div', "trainers-pokemon-mid")
     const pokeMoves = e('div', "trainers-poke-moves")
     for (const move of moves){
