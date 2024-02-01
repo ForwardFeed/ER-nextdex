@@ -66,6 +66,7 @@
     font-size: 2vmax;
     width: 100%;
     height: 100%;
+    min-height: 0;
 }
 .sel-n-active, .sel-active{
     cursor: pointer;
@@ -98,6 +99,7 @@
     background-color: var(--colorC);
     display: flex;
     flex-direction: column;
+    overflow: auto;
 
 }
 
@@ -299,6 +301,7 @@ span{
     display: flex;
     width: 100%;
     background-color: var(--colorB);
+    gap: 5px;
 }
 #species-front{
     min-width: 64px;
@@ -321,7 +324,7 @@ span{
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
-    border: 2px solid rgb(0, 0, 0);
+    border: 2px solid var(--selActive);
 }
 #species-innates, #species-abilities{
     font-size: 1.5vmax;
@@ -411,7 +414,7 @@ span{
     flex-direction: column;
     flex-grow: 1;
     background-color: var(--colorD);
-    overflow-y: scroll
+    overflow-y: scroll;
 }
 
 .species-mid{
@@ -448,7 +451,7 @@ span{
     flex-grow: 1;
     font-size: 1.5vmax;
     flex-flow: wrap;
-    overflow-y: scroll;
+    overflow: auto;
 }
 .species-sub-pannel > * {
     flex-grow: 1;
@@ -459,7 +462,7 @@ span{
     flex-flow: wrap;
     height: 50%;
     width: 100%;
-    overflow: scroll;
+    overflow: auto;
 }
 .species-bot-row{
     text-align: center;
@@ -546,6 +549,8 @@ span{
         overflow-y: auto;
         flex-direction: column;
         background-color: var(--selNActive);
+        max-height: 100%;
+
     }
     .data-list-row{
         padding: 10px;
