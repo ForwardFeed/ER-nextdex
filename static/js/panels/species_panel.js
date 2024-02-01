@@ -212,22 +212,6 @@ function changeBaseStat(node, value, statID){
         if (value < colorMapped[0]) break
         color = colorMapped[1]
     }
-    /*const CV = 210// color variator, the closer to 255, the brighter
-    let colorMath = +(((value / average) * CV).toPrecision(2))
-    console.log(colorMath)
-    let color;
-
-    if (colorMath < CV){
-        color = `rgb(170, ${colorMath}, 0)`
-    } else if (colorMath < (CV * 1.5)){
-        colorMath = colorMath > 254 ? 255 : colorMath
-        color = `rgb(${colorMath / 2}, ${colorMath}, 0)`
-    } else {
-        colorMath = colorMath > 254 ? 255 : colorMath
-        color = `rgb(0, ${colorMath / 2}, ${colorMath})`
-    }
-    ^ this one is funky but not working yet
-    */
     const maxValue = statID < 6 ? 255 : gameData.speciesStats.result.maxBST
     const percent = ((value / maxValue ) * 100).toFixed()
     node.find('.stat-num').css('background-color', color)

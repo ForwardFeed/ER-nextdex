@@ -3,7 +3,7 @@ import { updateAbilities, queryMapAbilities} from "./panels/abilities_panel.js"
 import { updateMoves, queryMapMoves} from "./panels/moves_panel.js"
 import { updateLocations, queryMapLocations } from "./panels/locations_panel.js"
 import { updateTrainers, queryMapTrainers } from "./panels/trainers_panel.js"
-import { activateSearch, appendFilter} from "./filters.js"
+import { activateSearch, appendFilter, spinOnAddFilter} from "./filters.js"
 import { clickOutsideToRemove } from "./utils.js"
 
 export const search = {
@@ -190,24 +190,14 @@ export function setupSearch(){
         clickOutsideToRemove($('#search-keys-selections')[0], $('#search-keys')[0])
         $('#search-keys-selections').toggle()
     })
-    $('#to-filter').on('click', ()=>{
+    //weird to use onclick here but i have the long click event on it too
+    $('#to-filter')[0].onclick = ()=>{
         const data = $('#search-bar').val()
         if (!data) return
         appendFilter($('#search-keys').val(), data)
         $('#search-bar').val("")
-    })
-   /* $('#search-wrapper').on('dragover', function(ev){
-        ev.preventDefault()
-        console.log(ev)
-        const key = ev.originalEvent.dataTransfer.getData("key");
-        const data = ev.originalEvent.dataTransfer.getData("data");
-        if (!key || !data) return
-        $('#search-keys').val(key)
-        $('#search-bar').val(data)
-        activateSearch()
-    })*/
-    /*$('#search-wrapper').on('drop', function(ev){
-    })*/
+        spinOnAddFilter()
+    }
     for(const operator of search.operators){
         const option = document.createElement('option')
         option.value = operator

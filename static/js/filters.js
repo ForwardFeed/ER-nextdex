@@ -234,6 +234,27 @@ export function queryFilter(query, data, keymap){
 function removeAllFilters(){
     $('#filter-frame').find('.filter-field').remove()
     activateSearch()
+    $('#filter-icon')[0].animate([
+        { rotate: "0deg"},
+        { backgroundColor: "red"},
+        { rotate: "-360deg"},
+    ],{
+        duration: 750,
+        iterations: 1,
+    })
+}
+
+export function spinOnAddFilter(){
+    console.log('spin')
+    $('#filter-icon')[0].animate([
+        { rotate: "0deg"},
+        { backgroundColor: "green"},
+        { rotate: "360deg"},
+    ],{
+        duration: 750,
+        iterations: 1,
+    })
+    appendFilter()
 }
 
 export function setupFilters(){
@@ -245,9 +266,8 @@ export function setupFilters(){
         $('.filter-panel').toggle()
     })
 
-    $('.filter-add').on('click', function(){
-        appendFilter()
-    })
+    $('.filter-add').on('click', spinOnAddFilter)
+    // weird but it's because i have other events on it like the long click
 
     $('#filter-main-operator').on('change', function(){
         activateSearch()

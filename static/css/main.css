@@ -108,6 +108,13 @@ span{
     margin: auto 0;
 }
 
+.extend {
+    background-color: red;
+    height: 100%;
+    position: absolute;
+    top: 0;
+}
+
 .down-arrow{
     height: 10px;
     width: 7px;
@@ -895,9 +902,3 @@ span{
     }
 }
 
-.extend {
-    background-color: red;
-    height: 100%;
-    position: absolute;
-    top: 0;
-}

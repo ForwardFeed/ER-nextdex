@@ -110,14 +110,20 @@ export class Selectable {
 
 
 export function setLongClickSelection(node, callback, time = 1000){
-    const randomID = (Math.random() * 99999).toFixed()
     const extendableDiv  = e("div", "")
     node.append(extendableDiv)
-
-    const newClass = "extend" + randomID
+    
+    //weird hacks but so it doesn't "click" when long click with the stopImmediaPropagation
+    const ifNotLongClick = node.onclick.bind({})
+    node.onclick = null
     let timeout
-    const mouseDown = ()=>{
-        timeout = setTimeout(callback, time)
+    let hasFired = true
+    const mouseDown = (ev)=>{
+        hasFired = false
+        timeout = setTimeout(()=>{
+            hasFired = true
+            callback()
+        }, time)
         extendableDiv.className = "extend"
         extendableDiv.animate([
             { width: "0%"},
@@ -127,7 +133,9 @@ export function setLongClickSelection(node, callback, time = 1000){
             iterations: 1,
         })
     }
-    const mouseUp = ()=>{
+    const mouseUp = (ev)=>{
+        if (!hasFired) ifNotLongClick.apply() //transform the long click into a short click
+        ev.stopImmediatePropagation(); 
         clearTimeout(timeout)
         extendableDiv.className = ""
     }
