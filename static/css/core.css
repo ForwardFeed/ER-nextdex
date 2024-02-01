@@ -164,7 +164,6 @@ main{
 
 aside {
     display: flex; 
-    overflow: auto;
 }
 
 aside>div {
