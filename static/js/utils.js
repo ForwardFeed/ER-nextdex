@@ -107,3 +107,32 @@ export class Selectable {
 
     }
 }
+
+
+export function setLongClickSelection(node, callback, time = 1000){
+    const randomID = (Math.random() * 99999).toFixed()
+    const extendableDiv  = e("div", "")
+    node.append(extendableDiv)
+
+    const newClass = "extend" + randomID
+    let timeout
+    const mouseDown = ()=>{
+        timeout = setTimeout(callback, time)
+        extendableDiv.className = "extend"
+        extendableDiv.animate([
+            { width: "0%"},
+            { width: "100%"},
+        ], {
+            duration: time,
+            iterations: 1,
+        })
+    }
+    const mouseUp = ()=>{
+        clearTimeout(timeout)
+        extendableDiv.className = ""
+    }
+    node.addEventListener("mousedown", mouseDown)
+    node.addEventListener("touchstart", mouseDown)
+    node.addEventListener("mouseup", mouseUp)
+    node.addEventListener("touchend", mouseUp)
+}

@@ -1,5 +1,5 @@
 import { search, onkeySearchFilter } from "./search.js"
-import { e, JSHAC, clickOutsideToRemove } from "./utils.js"
+import { e, JSHAC, clickOutsideToRemove, setLongClickSelection } from "./utils.js"
 
 /**
  * Will execute all filters query so far
@@ -231,10 +231,14 @@ export function queryFilter(query, data, keymap){
     }
 }
 
+function removeAllFilters(){
+    $('#filter-frame').find('.filter-field').remove()
+    activateSearch()
+}
+
 export function setupFilters(){
     $('#filter-clear-all').on('click', function(){
-        $(this).closest('.filter-panel').find('.filter-field').remove()
-        activateSearch()
+        removeAllFilters()
     })
     $('.filter-help-btn').on('click', function(){
         $('#filter-help').toggle()
@@ -247,6 +251,10 @@ export function setupFilters(){
 
     $('#filter-main-operator').on('change', function(){
         activateSearch()
+    })
+
+    setLongClickSelection($('#to-filter')[0], ()=>{
+        removeAllFilters()
     })
 }
 

@@ -213,6 +213,7 @@ input[type="text"] {
     width: 6em;
     height: fit-content;
     margin: auto;
+    position: relative;
 }
 #to-filter:hover{
     background-color: var(--btnHover);

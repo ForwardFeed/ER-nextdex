@@ -894,3 +894,10 @@ span{
         width: 100vw;
     }
 }
+
+.extend {
+    background-color: red;
+    height: 100%;
+    position: absolute;
+    top: 0;
+}
