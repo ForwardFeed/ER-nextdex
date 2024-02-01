@@ -878,8 +878,8 @@ span{
 
 @media (orientation: portrait) {
     #filter-frame{
-        top: 20vh;
-        height: 72vh;
+        top: 8vh;
+        height: 92vh;
         width: 100vw;
     }
 }

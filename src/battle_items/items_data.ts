@@ -2,15 +2,15 @@ import { regexGrabStr } from "../parse_utils"
 
 export interface Result{
     fileIterator: number,
-    data: Map<string, Item>,
+    data: Map<string, BattleItem>,
 }
 
-export interface Item {
+export interface BattleItem {
     name: string,
     descPtr: string,
 }
 
-function initItem(): Item{
+function initItem(): BattleItem{
     return {
         name: "",
         descPtr: "",
@@ -18,8 +18,8 @@ function initItem(): Item{
 }
 
 interface Context{
-    dataCollection: Map<string, Item>
-    currentItem: Item,
+    dataCollection: Map<string, BattleItem>
+    currentItem: BattleItem,
     key: string,
     isValid: boolean,
     execFlag: string, 
@@ -44,8 +44,9 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
         }
     },
     "main" : (line, context) =>{
+        const baseLine = line
         line = line.replace(/\s/g, '')
-        if (line.match('\[ITEM_')){
+        if (line.match(/\[ITEM_/)){
             if (context.isValid && context.key){
                 context.dataCollection.set(context.key, context.currentItem)
             }
@@ -53,10 +54,10 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
             context.isValid = false
             context.key = regexGrabStr(line, /(?<=\[)\w+/)
         } else if (line.match(/^\.name/)){
-            context.currentItem.name = regexGrabStr(line, "s\w+(?=\[\)")
+            context.currentItem.name = regexGrabStr(baseLine, /(?<=")[^"]+/)
         } else if (line.match(/^\.description/)){
-            context.currentItem.descPtr = regexGrabStr(line, /(?<==)\w+/)
-        } else if (line.match(/^\.holdEffect/)){
+            context.currentItem.descPtr = regexGrabStr(line, /(?<==)s\w+/)
+        } else if (line.match(/^\.holdEffect(?==)/)){
             context.isValid = true //i only fetch for valid items
         } else if (line.match(';')){
             if (context.isValid && context.key){

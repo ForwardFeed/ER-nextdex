@@ -26,17 +26,12 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
             if (context.key){
                 context.dataCollection.set(context.key, context.currentDesc)
             }
-            context.key = regexGrabStr(line, "s\w+(?=\[\)")
+            context.key = regexGrabStr(line, /s\w+(?=\[)/)
             context.currentDesc = ""
         } else if (line.match('"')){
             const desc = regexGrabStr(line, /(?<=")[^"]+/).replace('\\n', ' ')
             context.currentDesc += desc
-        } else if (line.match('gItems')){
-            if (context.key){
-                context.dataCollection.set(context.key, context.currentDesc)
-            }
-            context.stopRead = true
-        }
+        } // no stop read because it is read last
     }
 
 }
@@ -52,6 +47,10 @@ export function parse(lines: string[], fileIterator: number): Result{
             fileIterator--
             break
         }
+    }
+    //since there is no stop it will continue read and won't read the last one
+    if (context.key){
+        context.dataCollection.set(context.key, context.currentDesc)
     }
     return {
         fileIterator: fileIterator,

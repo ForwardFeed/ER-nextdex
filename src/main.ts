@@ -9,7 +9,7 @@ import * as Sprites from './sprites'
 import * as Locations from './locations'
 import * as Trainers from './trainers/trainers'
 import * as ScriptedData from './scripted_data'
-
+import * as BattleItems from './battle_items/battle_items'
 import * as Additionnal from './additional_data/additional'
 
 import { CompactGameData, compactify } from './compactify';
@@ -24,6 +24,7 @@ export interface GameData {
     speciesScripted: Map<string, ScriptedData.SpeciesScripted[]>
     trainersScripted: Map<string, ScriptedData.TrainersScriped>
     mapTable: string[], 
+    battleItems: Map<string, BattleItems.BattleItem>
 }
 
 const gameData: GameData = {
@@ -35,6 +36,7 @@ const gameData: GameData = {
     speciesScripted: new Map(),
     trainersScripted: new Map(),
     mapTable: [],
+    battleItems: new Map(),
 }
 
 function main(configuration: Configuration.Configuration){
@@ -70,11 +72,15 @@ function main(configuration: Configuration.Configuration){
             promiseArray.push(Locations.getLocations(ROOT_PRJ, gameData))
             promiseArray.push(Trainers.getTrainers(ROOT_PRJ, gameData))
             promiseArray.push(ScriptedData.parse(ROOT_PRJ, gameData))
+            promiseArray.push(BattleItems.getItems(ROOT_PRJ, gameData))
             //promiseArray.push()
             Promise.allSettled(promiseArray)
                 .then((values)=>{
                     values.map((x)=>{
-                        if (x.status !== "fulfilled") return
+                        if (x.status !== "fulfilled") {
+                            console.error(`Something went wrong parsing the data: ${x.reason}`)
+                            return
+                        }
                         const result = x.value
                         if (typeof result !== "object") return
 

@@ -73,6 +73,7 @@ interface CompactBaseStats{
 
 interface compactMove {
     name: string,
+    NAME: string, // i could compactify this even more by string | undefined where undefined mean you can reconstruct the NAME by the name
     sName: string,
     eff: number,
     pwr: number,
@@ -125,12 +126,19 @@ interface CompactTrainerRematch{
     party: CompactTrainerPokemon[]
 }
 
+interface CompactBattleItems{
+    name: string,
+    NAME: string,
+    //could add it? desc: string,
+}
+
 export interface CompactGameData{
     abilities: Ability[],
     moves: compactMove[],
     species: CompactSpecie[],
     locations: CompactLocations,
     trainers: CompactTrainers[],
+    items: CompactBattleItems[],
     typeT: string[], //types tabes
     targetT: string[], //targets table
     flagsT: string[],
@@ -140,7 +148,6 @@ export interface CompactGameData{
     growT: string[]; // Growth Table
     colT: string[], //color table
     evoKindT: string[],
-    itemT: string[],
     natureT: string[],
     scriptedEncoutersHowT: string[],
     mapsT: string[],
@@ -161,7 +168,7 @@ function initCompactGameData(): CompactGameData{
         growT: [],
         colT: [],
         evoKindT: [],
-        itemT: [],
+        items: [],
         natureT: [],
         scriptedEncoutersHowT: [],
         mapsT: []
@@ -171,21 +178,30 @@ function initCompactGameData(): CompactGameData{
 
 export function compactify(gameData: GameData): CompactGameData{
     const compacted = initCompactGameData()
+    const tablize = ((x: unknown, table: unknown[]) => {
+        if (!table.includes(x)) table.push(x)
+        return table.indexOf(x)
+    })
     const abiT: string[] = []
     gameData.abilities.forEach((val, key)=>{
         abiT.push(key)
         compacted.abilities.push(val)
     })
-    const movesT: string[] = []
-    const tablize = ((x: unknown, table: unknown[]) => {
-        if (!table.includes(x)) table.push(x)
-        return table.indexOf(x)
+    const itemT: string[] = []
+    gameData.battleItems.forEach((val, key)=>{
+        itemT.push(key)
+        compacted.items.push({
+            name: val.name,
+            NAME: key
+        })
     })
+    const movesT: string[] = []
     gameData.moves.forEach((val, key)=>{
         movesT.push(key)
         const move = val
         compacted.moves.push({
             name: move.name,
+            NAME: key,
             sName: move.shortName,
             eff: tablize(move.effect, compacted.effT),
             pwr: move.power,
@@ -358,11 +374,7 @@ export function compactify(gameData: GameData): CompactGameData{
             abi: poke.ability,
             ivs: poke.ivs,
             evs: poke.evs,
-            item: ((item)=>{
-                item = Xtox('ITEM_', item)
-                if (!compacted.itemT.includes(item))compacted.itemT.push(item)
-                return compacted.itemT.indexOf(item)
-            })(poke.item),
+            item: tablize(poke.item, itemT),
             nature: ((nat)=>{
                 nat = Xtox('NATURE_', nat)
                 if (!compacted.natureT.includes(nat))compacted.natureT.push(nat)

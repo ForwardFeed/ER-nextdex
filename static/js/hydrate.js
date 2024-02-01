@@ -42,6 +42,7 @@ export function hydrate(){
     hydrateSpecies()
     hydrateLocation()
     hydrateTrainers()
+    hydrateItems()
     restoreSave() // also restore the save of the team builder
 }
 
@@ -343,6 +344,13 @@ function hydrateTrainers(){
     }
     $('#trainers-list').empty().append(frag)
     feedPanelTrainers(1)
+}
+
+function hydrateItems(){
+    gameData.itemT = []
+    gameData.items.forEach((val)=>{
+        gameData.itemT.push(val.name)
+    })
 }
 
 export default hydrate

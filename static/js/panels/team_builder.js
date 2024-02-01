@@ -233,7 +233,7 @@ function feedPokemonEdition(viewID) {
     })
 
     const rightDiv = e("div", "builder-editor-right")
-    const itemDiv = e("div", "builder-editor-right", gameData.itemT[poke.item])
+    const itemDiv = e("div", "builder-editor-right", gameData.items[poke.item]?.name)
     const natureDiv = e("div", "builder-editor-nature", gameData.natureT[poke.nature])
     const EVsRow = e("div", "builder-editor-statsrow")
     const EVs = poke.evs.map((x) => {
@@ -285,7 +285,7 @@ function feedPokemonEdition(viewID) {
     }
     const itemCallback = (itemID) => {
         poke.item = itemID
-        view.item.text(itemDiv.innerText = gameData.itemT[itemID])
+        view.item.text(itemDiv.innerText = gameData.items[itemID].name)
         save()
     }
     const natureCallback = (natureID) => {
