@@ -253,7 +253,7 @@ function feedPokemonEdition(viewID) {
         ev.stopPropagation() //if you forget this the window will instantly close
         const overlayNode = overlayEditorAbilities(viewID, (abiID) => {
             poke.abi = abiID
-            poke.abiName = gameData.abilities[abiID].name
+            poke.abiName = gameData.abilities[poke.baseSpc.stats.abis[abiID]].name
             view.abi.text(poke.abiName)
             abilityDiv.innerText = poke.abiName
             save()
@@ -353,11 +353,11 @@ function feedPokemonEdition(viewID) {
 function overlayEditorAbilities(viewID, callbackOnclick) {
     const core = e('div', 'builder-overlay-abilities')
     const abilities = [...new Set(teamData[viewID].baseSpc.stats.abis)] //remove duplicates
-        .map((x) => {
+        .map((x, index) => {
             const abilityNode = e('div', 'builder-overlay-ability', gameData.abilities[x].name)
             abilityNode.onclick = (ev) => {
                 ev.stopPropagation() // not to trigger the window to close
-                callbackOnclick(x)
+                callbackOnclick(index)
             }
             return abilityNode
         })

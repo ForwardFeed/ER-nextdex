@@ -100,7 +100,6 @@ function setPartyPanel(party){
 }
 
 export function createPokemon(poke){
-
     const specie = gameData.species[poke.spc]
     const ability = gameData.abilities[specie.stats.abis[poke.abi]]
     const moves = poke.moves.map((x)=>{
