@@ -6,6 +6,7 @@ import { addTooltip } from "./utils.js"
 import { setupSettings } from "./settings.js"
 import { setupFilters } from "./filters.js"
 import { setupTeamBuilder } from "./panels/team_builder.js"
+import { activateInsanity } from "./insanity.js"
 
 $(document).ready(function(){
     setupSettings()
@@ -16,4 +17,5 @@ $(document).ready(function(){
     setupFilters()
     setupTeamBuilder()
     addTooltip($('.main-title')[0], 'Berkay, the dex is up btw')
+    $('#insanity').on('click', activateInsanity)
 })

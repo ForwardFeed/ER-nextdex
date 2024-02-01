@@ -1,0 +1,55 @@
+.boink {
+    /* animation properties */
+    animation-name: boink;
+    animation-duration: 2s;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+
+    /* other properties */
+    width: 50vw;
+    height: 10vh;
+    border-radius: 10px;
+    left: 0; 
+    right: 0; 
+    margin-left: auto;
+    margin-right: auto; 
+  
+  }
+  
+@keyframes boink {
+from {
+    background-color: #ff7a59;
+    width: 50vw;
+}
+to {
+    background-color: #33475b;
+    width: 2vw;
+}
+}
+
+
+.spinnySkirt {
+    animation: spinnySkirt var(--random0) infinite;
+  }
+  
+@keyframes spinnySkirt {
+    0% {
+        transform: rotate(var(--random1))
+    }
+    100% {
+        transform: rotate(var(--random2))
+    }
+}
+
+.texxxt {
+    animation: texxxt var(--random0) infinite;
+}
+@keyframes texxxt {
+    0% {
+        font-size: var(--random3);
+    }
+    100% {
+        font-size: var(--random4);
+    }
+}
