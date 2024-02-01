@@ -163,24 +163,21 @@ export function appendFilter(initKey = "", initData = ""){
 
 
 /**
- * @callback searchAssertion
- * @param {unknow} data
- * @param {string} queryData
- *  
- * @returns {string} what did it matched
+ * @callback searchAssertion - compare the data from the query and the data from the data
+ * @param {unknow} data -- data from the data
+ * @param {string} queryData -- data from the query
+ * @returns {string | undefined} what did it matched or nothing
  * 
  * @typedef {Object.<string, searchAssertion>} SearchMap
  * 
- * @typedef {Object} QueryElements
  * 
  * @typedef {Object} Query - a query
  * @property {string} op - Operation to do to all direct sub element
  * @property {keyof SearchMap} k - a key for the searchmap
  * @property {Query} queryData - data of the query
  * @property {boolean} suggestion - should it add to suggestions?
- * @param {boolean} [not=false] - should it not match
+ * @property {boolean} [not=false] - should it not match
  * 
- * @property {string} queryData - string to compare it to the data
  * 
  * @param {Query|Query[]} query - a query or multiple to resolve against the data thanks to the keymap
  * @param {Object} data - the data to query on
@@ -213,7 +210,7 @@ export function queryFilter(query, data, keymap){
                 if (answer) return queryNot(query.not, true)
             }
             return queryNot(query.not, false)
-        } else { //Default ANDk
+        } else { //Default AND
             for (const answer of subQueriesAnswer){
                 if (!answer) return queryNot(query.not, false)
             }
