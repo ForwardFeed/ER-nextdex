@@ -8,22 +8,21 @@ html {
     font-family: Inconsolata;
     font-size: larger;
     color: var(--font-color);
-    height: 100vh; 
+    height: 100%; 
 
 } 
 
 body {
     margin: 0;
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    overflow: auto; 
 }
 main{
     display: flex;
     flex-grow: 1;
-    overflow: auto;
+    min-height: 0;
 }
 ::-webkit-scrollbar {
     -webkit-appearance: none;
@@ -160,11 +159,12 @@ main{
 #non-header{
     flex-grow: 1;
     display: flex;
-    overflow: auto;
+    min-height: 0;
 }
 
 aside {
     display: flex; 
+    overflow: auto;
 }
 
 aside>div {
@@ -277,7 +277,7 @@ input[type="text"] {
     }
 
     #non-header {
-        flex-direction: column;
+        flex-direction: column; 
     }
 
     aside {
@@ -285,6 +285,8 @@ input[type="text"] {
         flex-direction: row;
         min-height: 8vh;
         overflow: auto;
+        position: sticky;
+        bottom: 0;
     }
 }
 
