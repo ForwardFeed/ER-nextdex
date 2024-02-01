@@ -111,6 +111,7 @@ main{
 
 .main-search-label{
     position: relative;
+    width: calc(70% -  6em);
 }
 #search-bar{
     text-align: center;
@@ -242,7 +243,6 @@ input[type="text"] {
         width: 30%;
     }
     .main-search-label{
-        width: 70%;
         border-radius: 7px 0 0 7px;
     }
     #search-keys, #search-bar{
@@ -265,9 +265,6 @@ input[type="text"] {
 @media (orientation: portrait) {
     .search-keys-wrapper{
         width: 30%;
-    }
-    .main-search-label{
-        width: 70%;
     }
     .search-wrapper{
         flex-direction: row;
