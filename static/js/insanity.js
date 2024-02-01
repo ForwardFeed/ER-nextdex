@@ -1,6 +1,7 @@
 
 const insanity = {
-    interval: 0
+    interval: 0,
+    audio: false
 }
 const insaneAnimation = [
     "boink",
@@ -10,8 +11,17 @@ const insaneAnimation = [
 ]
 export function activateInsanity(){
     clearInterval(insanity.interval)
-    var audio = new Audio('./js/data/playInsanity.webm');
-    audio.play();
+    
+    if (!insanity.audio){ // play only once
+        insanity.audio = true
+        var audio = new Audio('./js/data/playInsanity.webm');
+        const loopPlay = function(){
+            audio.play();
+        }
+        audio.addEventListener('ended', loopPlay)
+        audio.play();
+    }
+
     const all = $("body").find('*')
     const len = all.length
     insanity.interval = setInterval(()=>{
