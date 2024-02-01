@@ -325,6 +325,9 @@ span{
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     border: 2px solid var(--selActive);
+    margin: 5px 0;
+    padding: 0 5px ;
+
 }
 #species-innates, #species-abilities{
     font-size: 1.5vmax;
