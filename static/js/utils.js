@@ -109,7 +109,7 @@ export class Selectable {
 }
 
 
-export function setLongClickSelection(node, callback, time = 1000){
+export function setLongClickSelection(node, callback, time = 250){
     const extendableDiv  = e("div", "")
     node.append(extendableDiv)
     
