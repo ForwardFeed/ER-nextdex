@@ -19,11 +19,9 @@
   
 @keyframes boink {
 from {
-    background-color: #ff7a59;
     width: 50vw;
 }
 to {
-    background-color: #33475b;
     width: 2vw;
 }
 }
