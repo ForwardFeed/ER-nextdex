@@ -89,6 +89,7 @@
 }
 .data-list-row{
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -295,8 +296,6 @@ span{
 
 .species-list-sprite{
     height:70%;
-    left: 0%;
-    margin: 5px;
 }
 
 .species-name{
@@ -598,7 +597,7 @@ span{
         overflow-x: auto;
         overflow-y: hidden;
         flex-direction: row;
-        min-height: 8vh;
+        min-height: 12vh;
     }
     .data-list-row{
         padding: 0 10px;
