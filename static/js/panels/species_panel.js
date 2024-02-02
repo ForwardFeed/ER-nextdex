@@ -44,11 +44,15 @@ export function feedPanelSpecies(id){
 }
 
 export function redirectSpecie(specieId) {
-    search.callbackAfterFilters = () =>{
+    
+    if ($("#btn-species")[0].classList.contains("btn-active")){
         $('#species-list').children().eq(specieId-1).click()[0].scrollIntoView({behavior:"smooth"})
+    } else {
+        search.callbackAfterFilters = () =>{
+            $('#species-list').children().eq(specieId-1).click()[0].scrollIntoView({behavior:"smooth"})
+        }
+        $("#btn-species").click()
     }
-    $("#btn-species").click()
-   
 }
 
 function setDefensiveCoverage(coverage){
