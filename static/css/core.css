@@ -6,7 +6,6 @@
 html {
     background-color: var(--background);
     font-family: Inconsolata;
-    font-size: larger;
     color: var(--font-color);
     height: 100%; 
 
@@ -48,11 +47,11 @@ main{
 
 .main-title {
     text-align: center;
-    font-size: 3vmax;
     padding-left: 1vw;
     display: inline-block;
     vertical-align: middle;
     line-height: normal;
+    font-size: 3vw;
 }
 
 .header-gradient-ER {
@@ -63,11 +62,8 @@ main{
 .search-wrapper{
     width: 100vw;
     display: flex;
-    font-size: 2vmax;
     height: fit-content;
-    max-height: 30px;
 }
-
 .search-selectors {
     display: flex;
     width: 13vw;
@@ -97,7 +93,6 @@ main{
     z-index: 2;
     padding: 0;
     position: absolute;
-    width: 100%;
     text-align: center;
 }
 
@@ -113,7 +108,7 @@ main{
 
 .main-search-label{
     position: relative;
-    width: calc(70% -  6em);
+    width: calc(70% -  5em);
 }
 #search-bar{
     text-align: center;
@@ -127,8 +122,6 @@ main{
 #search-suggestion{
     position: absolute;
     z-index: 3;
-    width: 100%;
-    font-size: 2vmax;
 }
 
 #search-suggestion >div:hover{
@@ -137,7 +130,6 @@ main{
 #search-suggestion > div{
     background-color: var(--selNActive);
     text-align: center;
-    font-size: 1em;
     cursor: pointer;
 }
 
@@ -203,7 +195,7 @@ aside>div {
 } 
 
 input[type="text"] {
-    font-size: 2vmax;
+    
 }
 
 .btn,
@@ -213,10 +205,10 @@ input[type="text"] {
     cursor: pointer;
 } 
 #to-filter{
-    width: 6em;
     height: fit-content;
     margin: auto;
     position: relative;
+    width: 5em;
 }
 #to-filter:hover{
     background-color: var(--btnHover);
@@ -248,11 +240,8 @@ input[type="text"] {
     .main-search-label{
         border-radius: 7px 0 0 7px;
     }
-    #search-keys, #search-bar{
-        font-size: 1.5vmax;
-    }
-    #search-keys-selections > div{
-        font-size: 1.5em;
+    #search-keys, #search-bar, #search-keys-selections > div, #search-suggestion > div{
+        font-size: 20px;
     }
 
     #non-header {
@@ -271,6 +260,12 @@ input[type="text"] {
     }
     .search-wrapper{
         flex-direction: row;
+    }
+    .search-keys-wrapper, #search-suggestion{
+        font-size: 7vh;
+    }
+    #search-keys, #search-bar{
+        font-size: 4vh;
     }
     #search-bar, #search-keys{
         border-radius: 0;

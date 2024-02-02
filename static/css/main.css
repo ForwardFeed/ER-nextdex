@@ -89,6 +89,7 @@
 }
 .data-list-row{
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -294,8 +295,6 @@ span{
 
 .species-list-sprite{
     height:70%;
-    left: 0%;
-    margin: 5px;
 }
 
 .species-name{
@@ -571,9 +570,6 @@ span{
         height: 100%;
         flex-grow: 1;
     }
-    .species-top{
-        height: 15vw;
-    }
     #species-front{
         height: 15vw;
         width: 15vw;
@@ -596,7 +592,7 @@ span{
         overflow-x: auto;
         overflow-y: hidden;
         flex-direction: row;
-        min-height: 8vh;
+        min-height: 12vh;
     }
     .data-list-row{
         padding: 0 10px;
@@ -604,9 +600,6 @@ span{
     }
     .data-data{
         width: 100%;
-    }
-    .species-top{
-        height: 15vh;
     }
     #species-front{
         height: 15vh;

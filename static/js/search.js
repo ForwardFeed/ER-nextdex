@@ -72,6 +72,9 @@ export const search = {
         this.suggestions.push(suggestion)
     },
     clearSuggestion: function(){
+        if (this.suggestionNode){
+            $(this.suggestionNode).empty()
+        }
         this.suggestions = []
         if( this.suggestionNode) this.suggestionNode.dataset.suggestion = null
     },
