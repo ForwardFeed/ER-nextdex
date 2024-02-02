@@ -100,7 +100,6 @@
     display: flex;
     flex-direction: column;
     overflow: auto;
-
 }
 
 span{
@@ -326,7 +325,6 @@ span{
     flex-direction: column;
     align-items: center;
     text-align: center;
-    user-select: none;
     max-width: 5em;
 }
 .abi-inn-info{

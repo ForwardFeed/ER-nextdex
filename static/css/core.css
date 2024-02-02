@@ -32,6 +32,7 @@ main{
 
 *{
     user-select: none;
+    -webkit-user-select: none;
 }
 
 #top-header {
@@ -83,11 +84,12 @@ main{
     color: var(--font-color);
     user-select: none;
     cursor: pointer;
+    background-color: var(--selHover);
+    outline: none;
 }
 
 .search-keys-wrapper {
     display: flex;
-    position: relative;
 }
 
 #search-keys-selections {
