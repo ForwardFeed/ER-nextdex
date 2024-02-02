@@ -121,16 +121,6 @@ function setMoveRow(moveID){
             createInformationWindow(moveOverlay(moveID), {x: ev.clientX, y: ev.clientY})
         });
     }
-    /*row.onmouseenter= (ev)=>{
-        mouseHoverTimer = setTimeout(()=>{
-            fastdom.mutate(() => {
-                createInformationWindow(moveOverlay(moveID), {x: ev.clientX, y: ev.clientY})
-            });
-        }, 500) // Half of second
-    }
-    row.onmouseout = ()=>{
-        clearTimeout(mouseHoverTimer)
-    }*/
     return row
 }
 
@@ -271,25 +261,6 @@ export function setupSpeciesPanel(){
     $('#species-basestats, #species-coverage').on('click', function(){
         $('#species-basestats, #species-coverage').toggle()
     })
-    /*
-    $('#species-types .type').each(function(){
-        $(this).on('dragstart', (ev)=>{
-            ev.originalEvent.dataTransfer.setData("key", "Type")
-            ev.originalEvent.dataTransfer.setData("data", $(this).text())
-        })
-    })
-    let counter = 0
-    $('#species-data .species-mid').on('touchstart mousedown', (ev)=>{
-        ev.preventDefault()
-        counter = setTimeout(function(){
-            $('#species-data .species-mid').addClass("rotate")
-        },500)
-    })
-    $('#species-data .species-mid').on('touchend mouseup', (ev)=>{
-        clearTimeout(counter)
-        $('#species-data .species-mid').removeClass("rotate")
-        ev.preventDefault()
-    })*/
 }
 function toLowerButFirstCase(word){
     word = word.toLowerCase()
