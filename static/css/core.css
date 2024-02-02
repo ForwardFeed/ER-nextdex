@@ -86,6 +86,7 @@ main{
     cursor: pointer;
     background-color: var(--selHover);
     outline: none;
+    text-align: center;
 }
 
 .search-keys-wrapper {
