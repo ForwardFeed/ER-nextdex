@@ -6,6 +6,7 @@ const themesList =  [
     "blueish",
     "rushed",
     "wood",
+    "blahaj",
 ]
 export const settings = {
 

@@ -39,6 +39,10 @@
 .steel-t{color: #aab;}
 .fairy-t{color: #e9e;}
 
+.normal-t, .fire-t, .water-t, .electric-t, .grass-t, .ice-t, .fighting-t, .poison-t, .ground-t, .flying-t, .bug-t, .rock-t, .ghost-t, .dragon-t, .dark-t, .steel-t, .fairy-t{
+    filter: var(--filter);
+}
+
 .phy{
     color: rgb(189, 83, 21);
 }

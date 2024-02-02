@@ -15,4 +15,5 @@
     --headerBG: rgb(172,171,155);
     --headerBGL: linear-gradient(0deg, rgba(216,84,84,1)30%, rgba(172,171,155,1)  100%);
     --font-color: black;
+    --filter: contrast(1000%) saturate(900%);
 }
