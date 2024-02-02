@@ -65,7 +65,7 @@ export function e(tag = "div", classname = "", innerText ="" ){
 /**
  * Javascript HTML Array Concatenation
  * @param {HTMLDivElement | HTMLDivElement[]} htmlArray
- * @returns  {HTMLDivElement}
+ * @returns  {DocumentFragment}
  */
 export function JSHAC(htmlArray){
     const frag = document.createDocumentFragment()

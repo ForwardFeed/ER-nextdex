@@ -4,9 +4,15 @@ import { feedPanelLocations } from "./panels/locations_panel.js"
 import { feedPanelTrainers } from "./panels/trainers_panel.js"
 import { gameData } from "./data_version.js"
 import { restoreSave } from "./panels/team_builder.js"
+import { e, JSHAC } from "./utils.js"
+
 
 export const nodeLists = {
-
+    species: [],
+    abilities: [],
+    moves: [],
+    locations: [],
+    trainers: [],
 }
 
 export function hydrate(){
@@ -71,30 +77,34 @@ function setMeanBaseStats(){
     delete gameData.speciesStats.data
 }
 
-function hydrateAbilities(){
-    const fragment = document.createDocumentFragment();
-    const abilities = gameData.abilities
-    for (const i in abilities){
-        if (i == 0) continue
-        const abi = abilities[i]
-        const core = document.createElement('div')
-        core.className = "abi-row"
-        const name = document.createElement('div')
-        name.innerText = abi.name || "unknown"
-        name.className = "abi-name color" + (i % 2 ? "A" : "B")
-        const desc = document.createElement('div')
-        desc.innerText = abi.desc || "unknown"
-        desc.className = "abi-desc color" + (i % 2? "C" : "D")
-        core.append(name)
-        core.append(desc)
-        fragment.append(core)
-    }
-    $("#abis-list").empty().append(fragment);
+function hydrateAbilities(abilities = gameData.abilities){
+    $("#abis-list").empty().append(JSHAC(
+        abilities.map((abi, i)=>{
+            if (abi.name === "-------") return undefined
+            const row = JSHAC([
+                e("div", "abi-row"), [
+                    e("div", "abi-name color" + (i % 2 ? "A" : "B"), abi.name),
+                    e("div", "abi-desc color" + (i % 2? "C" : "D"), abi.desc)
+                ]
+            ])
+            nodeLists.abilities.push()
+            return row
+        }).filter(x => x)
+    ));
+    /*$('#filter-alphabethically').on('click', ()=>{
+        fastdom.mutate(()=>{
+            function sortAlphabethically(a, b){
+                return a.name.localeCompare(b.name)
+            }
+            const abiSorted = structuredClone(abilities)
+            abiSorted.splice(0,1)
+            hydrateAbilities(abiSorted.sort(sortAlphabethically))
+        })
+    })*/
 }
 
-function hydrateMoves(){
+function hydrateMoves(moves = gameData.moves){
     const fragment = document.createDocumentFragment();
-    const moves = gameData.moves
     for (const i in moves){
         if (i == 0) continue
         const mv = moves[i]

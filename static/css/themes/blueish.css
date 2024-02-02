@@ -13,6 +13,6 @@
     --background: rgb(44, 62, 75);
     --shadow: rgb(1, 7, 19);
     --headerBG: rgb(155, 165, 172);
-    --headerBGL: linear-gradient(0deg, rgb(28, 64, 105)30%, rrgb(81, 96, 100) 100%);
+    --headerBGL: linear-gradient(0deg, rgb(28, 64, 105)30%, rgb(81, 96, 100) 100%);
     --font-color: white;
 }
