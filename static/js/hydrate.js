@@ -5,6 +5,10 @@ import { feedPanelTrainers } from "./panels/trainers_panel.js"
 import { gameData } from "./data_version.js"
 import { restoreSave } from "./panels/team_builder.js"
 
+export const nodeLists = {
+
+}
+
 export function hydrate(){
     if (!gameData){
         return console.warn("couldn't find gameData")

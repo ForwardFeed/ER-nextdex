@@ -45,7 +45,7 @@ function setupHeader(){
         }
         showOrNot ? $('#top-header, #search-wrapper').show() : $('#top-header, #search-wrapper').hide()
     })
-    let heightTrigger = 0
+    /*let heightTrigger = 0
     $('#top-header, #search-wrapper').toArray().map(x => heightTrigger += x.clientHeight + 2)
     $(document).on('mousemove', (ev) => {
         if (isClick){ // before fucking mousemove is triggered by touchend F U
@@ -68,6 +68,6 @@ function setupHeader(){
             showOrNot ? $('#top-header, #search-wrapper').show("1000") : $('#top-header, #search-wrapper').hide()
         }, 300) // time for the pointer to stay in the zone
          
-    })
+    })*/
     
 }
