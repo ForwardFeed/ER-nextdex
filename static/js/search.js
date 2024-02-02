@@ -72,7 +72,6 @@ export const search = {
         this.suggestions.push(suggestion)
     },
     clearSuggestion: function(){
-        console.log('aa')
         if (this.suggestionNode){
             $(this.suggestionNode).empty()
         }

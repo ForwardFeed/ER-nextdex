@@ -90,7 +90,6 @@ main{
     z-index: 2;
     padding: 0;
     position: absolute;
-    width: 100%;
     text-align: center;
 }
 
@@ -120,7 +119,6 @@ main{
 #search-suggestion{
     position: absolute;
     z-index: 3;
-    width: 100%;
 }
 
 #search-suggestion >div:hover{

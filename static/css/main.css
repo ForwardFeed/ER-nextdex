@@ -572,9 +572,6 @@ span{
         height: 100%;
         flex-grow: 1;
     }
-    .species-top{
-        height: 15vw;
-    }
     #species-front{
         height: 15vw;
         width: 15vw;
@@ -605,9 +602,6 @@ span{
     }
     .data-data{
         width: 100%;
-    }
-    .species-top{
-        height: 15vh;
     }
     #species-front{
         height: 15vh;
