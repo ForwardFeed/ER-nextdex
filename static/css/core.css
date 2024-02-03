@@ -243,10 +243,10 @@ input[type="text"] {
     .main-search-label{
         border-radius: 7px 0 0 7px;
     }
-    #search-keys, #search-bar, #search-suggestion > div{
+    #search-keys, #search-bar{
         font-size: 20px;
     }
-    #search-keys-selections > div {
+    #search-keys-selections > div, #search-suggestion > div {
         font-size: calc(2vw + 20px);
     }
     #non-header {

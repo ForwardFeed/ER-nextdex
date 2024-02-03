@@ -1,6 +1,6 @@
 import { gameData } from "../data_version.js"
 import { search } from "../search.js"
-import { queryFilter} from "../filters.js"
+import { queryFilter2} from "../filters.js"
 import { AisInB, e, JSHAC } from "../utils.js"
 
 export function feedPanelMoves(moveID){
@@ -173,11 +173,17 @@ export function moveOverlay(moveId){
 
 export const queryMapMoves = {
     "name": (queryData, move) => {
-        if (AisInB(queryData, move.name.toLowerCase())) return move.name
+        const moveName = move.name.toLowerCase()
+        if (AisInB(queryData, moveName)) {
+            return [moveName === queryData, moveName]
+        }
         return false
     },
     "move": (queryData, move) => {
-        if (AisInB(queryData, move.name.toLowerCase())) return move.name
+        const moveName = move.name.toLowerCase()
+        if (AisInB(queryData, moveName)) {
+            return [moveName === queryData, moveName]
+        }
         return false
     },
     "type": (queryData, move) => {
@@ -201,13 +207,12 @@ export const queryMapMoves = {
 export function updateMoves(searchQuery){
     const moves = gameData.moves
     const nodeList = $('#moves-list').children()
-    
+    const matched = queryFilter2(searchQuery, moves, queryMapMoves)
     let validID;
     for (const i in moves){
         if (i == 0 ) continue
-        const move = moves[i]
         const node = nodeList.eq(i - 1)
-        if (queryFilter(searchQuery, move, queryMapMoves))
+        if (!matched || matched.indexOf(i) != -1)
         {
                 if (!validID) validID = i
                 node.show()

@@ -1,5 +1,5 @@
 import { getSpritesURL, redirectSpecie, getSpritesShinyURL } from "./species_panel.js"
-import { queryFilter} from "../filters.js"
+import { queryFilter2} from "../filters.js"
 import { gameData } from "../data_version.js"
 import { AisInB, e, JSHAC } from "../utils.js"
 
@@ -213,18 +213,16 @@ export function updateTrainers(searchQuery){
     const trainers = gameData.trainers
     const nodeList = $('#trainers-list > .btn')
     let validID;
-    
+    const matched = queryFilter2(searchQuery, trainers, queryMapTrainers)
     for (const i in trainers){
-        if (i == 0) continue
-        const trainer = trainers[i]
+        if (i == 0 ) continue
         const node = nodeList.eq(i - 1)
-        if (queryFilter(searchQuery, trainer, queryMapTrainers))
+        if (!matched || matched.indexOf(i) != -1)
         {
                 if (!validID) validID = i
                 node.show()
         } else {
                 node.hide()
-
         }
     }
     if (validID) feedPanelTrainers(validID)

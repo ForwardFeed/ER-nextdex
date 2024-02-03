@@ -2,7 +2,7 @@ import { redirectLocation } from "./locations_panel.js"
 import { redirectMove, moveOverlay } from "./moves_panel.js"
 import { addTooltip, capitalizeFirstLetter, AisInB, e } from "../utils.js"
 import { search } from "../search.js"
-import { queryFilter} from "../filters.js"
+import { queryFilter2} from "../filters.js"
 import { gameData } from "../data_version.js"
 import { createInformationWindow } from "../window.js"
 import { getDefensiveCoverage } from "../weakness.js"
@@ -386,7 +386,10 @@ function setLocations(locations, SEnc){
 }
 export const queryMapSpecies = {
     "name": (queryData, specie) => {
-        if (AisInB(queryData, specie.name.toLowerCase())) return specie.name
+        const specieName = specie.name.toLowerCase()
+        if (AisInB(queryData, specieName)) {
+            return [queryData === specieName, specie.name]
+        }
     },
     "type": (queryData, specie) => {
         const types = specie.stats.types.map((x)=>gameData.typeT[x].toLowerCase())
@@ -402,14 +405,18 @@ export const queryMapSpecies = {
                             specie.stats.inns.map((x)=>gameData.abilities[x].name.toLowerCase())
                         )
         for (const abi of abilities){
-            if (AisInB(queryData, abi)) return abi
+            if (AisInB(queryData, abi)) {
+                return [abi === queryData, abi]
+            }
         }
         return false
     },
     "move": (queryData, specie) => {
         let moves = specie.allMoves.map((x)=>gameData.moves[x].name.toLowerCase())
         for (const move of moves){
-            if (AisInB(queryData, move)) return move
+            if (AisInB(queryData, move)) {
+                return [queryData === move, move]
+            }
         }
         return false
     },
@@ -417,12 +424,12 @@ export const queryMapSpecies = {
 export function updateSpecies(searchQuery){
     const species = gameData.species
     const nodeList = $('#species-list').children()
+    const matched = queryFilter2(searchQuery, species, queryMapSpecies)
     let validID;
     for (const i in species){
         if (i == 0 ) continue
-        const specie = species[i]
         const node = nodeList.eq(i - 1)
-        if (queryFilter(searchQuery, specie, queryMapSpecies))
+        if (!matched || matched.indexOf(i) != -1)
         {
                 if (!validID) validID = i
                 node.show()

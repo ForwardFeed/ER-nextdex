@@ -230,6 +230,88 @@ export function queryFilter(query, data, keymap){
         else return true // true i suppose?
     }
 }
+/**
+ * 
+ * @param {*} query 
+ * @param {*} datas 
+ * @param {*} keymap 
+ * @returns the list of element that matched
+ */
+export function queryFilter2(query, datas, keymap){
+    const queryNot = (notFlag, value) => {
+        return notFlag ? !value : value
+    }
+    if (query.data.constructor === Array){
+        // break it down until it is no longer an array
+        // resolve all using the parent operator
+        const subQueriesAnswers = query.data.map((subQuery)=>{
+            return queryFilter2(subQuery, datas, keymap)
+        }).filter(x => x)
+        // if the is nothing to compare to, then just shrug
+
+        if (subQueriesAnswers.length < 1) return undefined
+        // just one?
+        if (subQueriesAnswers.length == 1) return subQueriesAnswers[0]
+        // okay now it's we get to use our operators
+        let allIndexes = subQueriesAnswers.splice(0,1)[0]
+        const subQlen = subQueriesAnswers.length
+        for (let i = 0; i < subQlen; i++){
+            const answers = subQueriesAnswers[i]
+            allIndexes.push(...answers)
+            if (query.op === "OR"){
+                // or is basically a concatenation + a unique values
+                allIndexes = [...new Set(allIndexes)]
+            } else if (query.op === "XOR"){
+                const onlyUniq = []
+                const len = allIndexes.length
+                for (let i = 0; i < len; i++){
+                    const checkUniq = allIndexes.splice(0,1)[0]
+                    if (allIndexes.indexOf(checkUniq) == -1) onlyUniq.push(checkUniq)
+                    allIndexes.push(checkUniq)
+                }
+                allIndexes = onlyUniq
+            } else { //Default AND
+                // concatenation + only duplicate
+                const duplicates = []
+                const len = allIndexes.length
+                for (let i = 0; i < len; i++){
+                    const checkDupli = allIndexes.splice(0,1)[0]
+                    if (allIndexes.indexOf(checkDupli) != -1) duplicates.push(checkDupli)
+                }
+                allIndexes = duplicates
+            }
+        }
+        return allIndexes
+    } else {
+        const execFn = keymap[query.k]
+        // if the is nothing to compare to, then just shrug
+        if (!execFn) return undefined
+        const allElementsIndexesThatMatched = []
+        for (const i in datas){
+            const data = datas[i]
+            const answer = execFn(query.data, data)
+            let suggestion
+            // when asking for object it's because the function may support perfect matching
+            // Which means that ignore any other, this is to fix this case:
+            // powder and powder poison, if the string is "pow" both may trigger
+            // but if it's "powder" then no, only powder may show
+            if (typeof answer === "object"){
+                const perfectMatch = answer[0]
+                if (perfectMatch) return [i]
+                suggestion = answer[1]
+            } else {
+                suggestion = answer
+            }
+            if (queryNot(query.not, suggestion)){
+                allElementsIndexesThatMatched.push(i)
+                if (query.suggestion){
+                    search.addSuggestion(suggestion)
+                }
+            }
+        }
+        return allElementsIndexesThatMatched
+    }
+}
 
 function removeAllFilters(){
     $('#filter-frame').find('.filter-field').remove()
@@ -245,7 +327,6 @@ function removeAllFilters(){
 }
 
 export function spinOnAddFilter(){
-    console.log('spin')
     $('#filter-icon')[0].animate([
         { rotate: "0deg"},
         { backgroundColor: "green"},

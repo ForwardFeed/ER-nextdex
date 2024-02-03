@@ -1,5 +1,5 @@
 import { updateSpecies,queryMapSpecies } from "./panels/species_panel.js"
-import { updateAbilities, queryMapAbilities} from "./panels/abilities_panel.js"
+import { filterAbilities, queryMapAbilities} from "./panels/abilities_panel.js"
 import { updateMoves, queryMapMoves} from "./panels/moves_panel.js"
 import { updateLocations, queryMapLocations } from "./panels/locations_panel.js"
 import { updateTrainers, queryMapTrainers } from "./panels/trainers_panel.js"
@@ -17,7 +17,7 @@ export const search = {
     // if modified sync it with "siderbar.js > setupPanels() > panelTable" variable
     panelUpdatesTable: [
         updateSpecies,
-        updateAbilities,
+        filterAbilities,
         updateMoves,
         updateLocations,
         updateTrainers,
