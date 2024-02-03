@@ -430,7 +430,7 @@ export const queryMapSpecies = {
         return false
     },
     "move": (queryData, specie) => {
-        let moves = specie.allMoves.map((x)=>gameData.moves[x].name.toLowerCase())
+        let moves = specie.allMoves?.map((x)=>gameData.moves[x].name.toLowerCase()) || []
         for (const move of moves){
             if (AisInB(queryData, move)) {
                 return [queryData === move, move]

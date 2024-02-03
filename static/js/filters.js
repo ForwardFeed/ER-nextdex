@@ -347,7 +347,6 @@ export function spinOnRemoveFilter(){
 export function hasFilter(key, data){
     data = data.toLowerCase()
     for (const query of allQueries){
-        console.log(key, data, query)
         if (query.k === key && query.data.toLowerCase() === data){
             return true
         }
