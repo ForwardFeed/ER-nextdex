@@ -3,6 +3,10 @@ import { queryFilter2} from "../filters.js"
 import { gameData } from "../data_version.js"
 import { AisInB, e, JSHAC } from "../utils.js"
 
+const trainerParam = {
+    elite: false
+}
+
 export function feedPanelTrainers(trainerID){
     $('#trainers-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
     $('#trainers-list > .btn').eq(trainerID - 1).addClass("sel-active").removeClass("sel-n-active")
@@ -34,6 +38,7 @@ function setBaseTrainer(trainer){
     nodeNormal.innerText = "Normal"
     nodeNormal.className = "trainer-match-btn sel-active"
     nodeNormal.onclick = ()=>{
+        trainerParam.elite = false
         setPartyPanel(party)
         $('#trainers-infobar').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
         nodeNormal.className = "trainer-match-btn sel-active"
@@ -52,12 +57,16 @@ function setInsane(trainer){
     nodeElite.innerText = "Elite"
     nodeElite.className = "trainer-match-btn sel-n-active"
     nodeElite.onclick = ()=>{
+        trainerParam.elite = true
         setPartyPanel(insaneTeam)
         $('#trainers-infobar').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
         nodeElite.className = "trainer-match-btn sel-active"
     }
     $('#trainers-elite').empty().append(nodeElite)
     setDouble(trainer.db)
+    if (trainerParam.elite){
+        nodeElite.onclick()
+    }
 }
 
 function setRematchesBar(rematches){
