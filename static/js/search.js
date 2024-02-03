@@ -47,6 +47,7 @@ export const search = {
         "Ability",
         "Move",
         "Move-effect",
+        "category",
         "specie",
         "map",
     ],

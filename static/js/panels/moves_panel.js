@@ -1,9 +1,9 @@
 import { gameData } from "../data_version.js"
 import { search } from "../search.js"
-import { queryFilter2} from "../filters.js"
+import { queryFilter2 } from "../filters.js"
 import { AisInB, e, JSHAC } from "../utils.js"
 
-export function feedPanelMoves(moveID){
+export function feedPanelMoves(moveID) {
     const move = gameData.moves[moveID]
     $('#moves-name').text(move.name)
     $('#moves-pwr').text(move.pwr ? move.pwr == 1 ? "?" : move.pwr : "--")
@@ -12,24 +12,24 @@ export function feedPanelMoves(moveID){
     $('#moves-pp').text(move.pp)
     $('#moves-prio').text(move.prio)
     setTarget(move.target)
-    $('#moves-split').attr("src",`./icons/${gameData.splitT[move.split]}.png`);
+    $('#moves-split').attr("src", `./icons/${gameData.splitT[move.split]}.png`);
     //$('#moves-types').text('' + move.types.map((x)=>gameData.typeT[x]).join(' '))
     setTypes(move.types)
     $('#moves-desc').text(move.lDesc) //TODO fix the width of this
-    listMoveFlags(move.flags.map((x)=>gameData.flagsT[x]), $('#moves-flags'))
+    listMoveFlags(move.flags.map((x) => gameData.flagsT[x]), $('#moves-flags'))
 
     $('#moves-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
     $('#moves-list').children().eq(moveID - 1).addClass("sel-active").removeClass("sel-n-active")
 }
 
-function setTypes(types){
-    for (let i = 0; i < 2; i++){
+function setTypes(types) {
+    for (let i = 0; i < 2; i++) {
         const type = gameData.typeT[types[i]] || ""
         $(`#moves-types${i + 1}`).text(type).attr("class", `type ${type.toLowerCase()}`)
-    } 
+    }
 }
 
-function listMoveFlags(flags, core){
+function listMoveFlags(flags, core) {
     const flagMap = {
         "Makes Contact": "Has contact and Big Pecks boost",
         "Kings Rock Affected": "Triggers King's rock",
@@ -70,7 +70,7 @@ function listMoveFlags(flags, core){
         "Mirror Move Affected": "Cannot be mirrored",
     }
     const frag = document.createDocumentFragment()
-    for (const flag of flags){
+    for (const flag of flags) {
         const descFlag = flagMap[flag]
         if (!descFlag) continue
         const node = document.createElement('div')
@@ -78,7 +78,7 @@ function listMoveFlags(flags, core){
         frag.append(node)
     }
     const noFlagArray = Object.keys(NoFlagMap)
-    for (const noFlag of noFlagArray){
+    for (const noFlag of noFlagArray) {
         if (flags.indexOf(noFlag) != -1) continue
         const descFlag = NoFlagMap[noFlag]
         const node = document.createElement('div')
@@ -89,41 +89,40 @@ function listMoveFlags(flags, core){
     core.append(frag)
 }
 
-function setTarget(targetID){
+function setTarget(targetID) {
     const target = gameData.targetT[targetID]
-    const targetMap =  ["foe1", "foe2", "foe3", "ally1", "allySelf", "ally2"]
+    const targetMap = ["foe1", "foe2", "foe3", "ally1", "allySelf", "ally2"]
     const colorMap = {
-        "SELECTED": [0,1,0, 0,0,0],
-        "BOTH": [0,1,0, 0,1,0],
-        "USER": [0,0,0, 0,1,0],
-        "RANDOM": [2,2,2, 2,0,2], // how do i communicate the randomly?
-        "FOES_AND_ALLY": [1,1,1, 1,0,1],
-        "DEPENDS": [2,2,2, 0,0,0], //
-        "ALL_BATTLERS": [1,1,1, 1,1,1],
-        "OPPONENTS_FIELD": [1,1,1, 0,0,0],
-        "ALLY": [0,0,0,1,0,1],
+        "SELECTED": [0, 1, 0, 0, 0, 0],
+        "BOTH": [0, 1, 0, 0, 1, 0],
+        "USER": [0, 0, 0, 0, 1, 0],
+        "RANDOM": [2, 2, 2, 2, 0, 2], // how do i communicate the randomly?
+        "FOES_AND_ALLY": [1, 1, 1, 1, 0, 1],
+        "DEPENDS": [2, 2, 2, 0, 0, 0], //
+        "ALL_BATTLERS": [1, 1, 1, 1, 1, 1],
+        "OPPONENTS_FIELD": [1, 1, 1, 0, 0, 0],
+        "ALLY": [0, 0, 0, 1, 0, 1],
     }[target]
-    const colorCode = ["unset","#f4072a","#c74fef" ]
-    for (const i in targetMap){
+    const colorCode = ["unset", "#f4072a", "#c74fef"]
+    for (const i in targetMap) {
         const nodeTarget = $("#" + targetMap[i])
         const colorID = colorMap[i]
         nodeTarget.css('background-color', colorCode[colorID])
     }
 }
 
-export function redirectMove(moveId)
-{
-    search.callbackAfterFilters = () =>{
-        $('#moves-list').children().eq(moveId - 1).click()[0].scrollIntoView({behavior:"smooth"})
+export function redirectMove(moveId) {
+    search.callbackAfterFilters = () => {
+        $('#moves-list').children().eq(moveId - 1).click()[0].scrollIntoView({ behavior: "smooth" })
     }
     $("#btn-moves").click()
-    
+
 }
 
 
-export function moveOverlay(moveId){
+export function moveOverlay(moveId) {
     const move = gameData.moves[moveId]
-    
+
     const core = e("div", "move-overlay")
     const power = e("div", "move-overlay-power")
     const powerTitle = e("div", "move-overlay-top", move.name)
@@ -145,7 +144,7 @@ export function moveOverlay(moveId){
     const split = e("img", "move-overlay-img pixelated")
     split.src = `./icons/${gameData.splitT[move.split]}.png`
     const effectsDiv = e("div", "move-overlay-effects")
-    listMoveFlags(move.flags.map((x)=>gameData.flagsT[x]), $(effectsDiv))
+    listMoveFlags(move.flags.map((x) => gameData.flagsT[x]), $(effectsDiv))
 
     return JSHAC([
         core, [
@@ -187,37 +186,41 @@ export const queryMapMoves = {
         return false
     },
     "type": (queryData, move) => {
-        const types = move.types.map((x)=>gameData.typeT[x].toLowerCase())
-        for (const type of types){
+        const types = move.types.map((x) => gameData.typeT[x].toLowerCase())
+        for (const type of types) {
             if (AisInB(queryData, type)) return type
         }
         return false
     },
     "move-effect": (queryData, move) => {
         //it's called effect but in the data it's flags not effect
-        //effect in the data might be useless to the calc, at least to short and medium terms
-        const flags = move.flags.map((x)=>gameData.flagsT[x].toLowerCase())
-        for (const flag of flags){
+        //effect in the data might be useless to the dex, at least to short and medium terms
+        const flags = move.flags.map((x) => gameData.flagsT[x].toLowerCase())
+        for (const flag of flags) {
             if (AisInB(queryData, flag)) return flag
         }
         return false
     },
+    "category": (queryData, move) => {
+        const moveSplit = gameData.splitT[move.split].toLowerCase()
+        if (AisInB(queryData, moveSplit)){
+            return moveSplit
+        }
+    },
 }
-
-export function updateMoves(searchQuery){
+export function updateMoves(searchQuery) {
     const moves = gameData.moves
     const nodeList = $('#moves-list').children()
     const matched = queryFilter2(searchQuery, moves, queryMapMoves)
     let validID;
-    for (const i in moves){
-        if (i == 0 ) continue
+    for (const i in moves) {
+        if (i == 0) continue
         const node = nodeList.eq(i - 1)
-        if (!matched || matched.indexOf(i) != -1)
-        {
-                if (!validID) validID = i
-                node.show()
+        if (!matched || matched.indexOf(i) != -1) {
+            if (!validID) validID = i
+            node.show()
         } else {
-                node.hide()
+            node.hide()
         }
     }
     if (validID) feedPanelMoves(validID)
