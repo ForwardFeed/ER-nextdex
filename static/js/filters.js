@@ -1,5 +1,5 @@
 import { search, onkeySearchFilter } from "./search.js"
-import { e, JSHAC, clickOutsideToRemove, setLongClickSelection } from "./utils.js"
+import { e, JSHAC, clickOutsideToHide, setLongClickSelection } from "./utils.js"
 
 let allQueries = []
 
@@ -144,7 +144,7 @@ export function appendFilter(initKey = "", initData = ""){
     inputKey.onclick = () =>{
         $(divKeySelection).show()
         //ev.stopPropagation()
-        clickOutsideToRemove(divKeySelection, inputKey)
+        clickOutsideToHide(divKeySelection, inputKey)
     }
 
     inputSearch.onclick = ()=>{
@@ -363,7 +363,9 @@ export function setupFilters(){
         $('.filter-panel').toggle()
     })
 
-    $('.filter-add').on('click', spinOnAddFilter)
+    $('.filter-add').on('click', function(){
+        appendFilter()
+    })
     // weird but it's because i have other events on it like the long click
 
     $('#filter-main-operator').on('change', function(){

@@ -36,16 +36,34 @@ export function AisInB(a, b){
 
 
 /**
- * will work as long no future event.stop propagation is written in the code
+ * 
  */
-
-export function clickOutsideToRemove(htmlNodeToHide, htmlNodeClickedOn){
+export function clickOutsideToHide(htmlNodeToHide, htmlNodeClickedOn){
     const clickToHide = (ev)=>{
         if (htmlNodeClickedOn == ev.target) return 
         htmlNodeToHide.style.display = "none"
         $(document).off('click', clickToHide)
     }
+    // will work as long no future event.stop propagation is written in the code
     $(document).on('click', clickToHide)
+}
+
+export function clickOutsideToRemove(node, absorb = false){
+    function hasParent(node, nodeToCompare){
+        if (!node) return false
+        if (node != nodeToCompare){
+            return hasParent(node.parentNode, nodeToCompare)
+        }
+        return true
+    }
+    const clickToHide = (ev)=>{
+        if (hasParent(ev.target, node)) return
+        if (absorb) ev.stopPropagation()
+        node.remove()
+        document.body.removeEventListener('click', clickToHide, absorb)
+    }
+    // will work as long no future event.stop propagation is written in the code
+    document.body.addEventListener('click', clickToHide, absorb)
 }
 
 /** JS Util to HTML */

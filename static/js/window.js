@@ -1,4 +1,4 @@
-
+import { clickOutsideToRemove } from "./utils.js"
 
 let windowFrame  
 
@@ -13,20 +13,14 @@ let windowFrame
  * @param {CursorPosition} cursorPosition
  */
 export function createInformationWindow(node, { x: x, y: y }, cursorPlacement) {
-    // remove previous helper
-    if (windowFrame) windowFrame.remove()
+    // remove previous window
+    removeInformationWindow()
 
     windowFrame = document.createElement('div')
     windowFrame.className = "window-frame"
     windowFrame.append(node)
     document.body.append(windowFrame)
-    //close the window when the document hears a click (you can ev.stopPropagation())
-    const remove = () => {
-        console.log("window closed")
-        windowFrame.remove()
-        $(document).off('click', remove)
-    }
-    $(document).on('click', remove) //if i click it remove this div too
+    clickOutsideToRemove(windowFrame, true)
     // apply cursorPlacement
     if (cursorPlacement === "mid"){
         x -= parseInt(node.offsetWidth / 2)
@@ -46,3 +40,7 @@ export function createInformationWindow(node, { x: x, y: y }, cursorPlacement) {
     }
 }
 
+export function removeInformationWindow(){
+    // remove previous window
+    if (windowFrame) windowFrame.remove()
+}

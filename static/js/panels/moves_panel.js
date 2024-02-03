@@ -2,6 +2,7 @@ import { gameData } from "../data_version.js"
 import { search } from "../search.js"
 import { queryFilter2 } from "../filters.js"
 import { AisInB, e, JSHAC } from "../utils.js"
+import { removeInformationWindow } from "../window.js"
 
 export function feedPanelMoves(moveID) {
     const move = gameData.moves[moveID]
@@ -127,6 +128,7 @@ export function moveOverlay(moveId) {
     const power = e("div", "move-overlay-power")
     const powerTitle = e("div", "move-overlay-top", move.name)
     powerTitle.onclick = () => {
+        removeInformationWindow()
         redirectMove(moveId)
     }
     const powerNumber = e("div", "move-overlay-fill", move.pwr || "?")

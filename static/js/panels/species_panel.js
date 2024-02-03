@@ -4,7 +4,7 @@ import { addTooltip, capitalizeFirstLetter, setLongClickSelection, AisInB, e } f
 import { search } from "../search.js"
 import { queryFilter2, hasFilter, activateSearch, appendFilter, spinOnRemoveFilter} from "../filters.js"
 import { gameData } from "../data_version.js"
-import { createInformationWindow } from "../window.js"
+import { createInformationWindow , removeInformationWindow} from "../window.js"
 import { getDefensiveCoverage } from "../weakness.js"
 
 export function feedPanelSpecies(id){
