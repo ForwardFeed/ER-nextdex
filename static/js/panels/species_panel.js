@@ -1,8 +1,8 @@
 import { redirectLocation } from "./locations_panel.js"
 import { redirectMove, moveOverlay } from "./moves_panel.js"
-import { addTooltip, capitalizeFirstLetter, AisInB, e } from "../utils.js"
+import { addTooltip, capitalizeFirstLetter, setLongClickSelection, AisInB, e } from "../utils.js"
 import { search } from "../search.js"
-import { queryFilter2} from "../filters.js"
+import { queryFilter2, hasFilter, activateSearch, appendFilter, spinOnRemoveFilter} from "../filters.js"
 import { gameData } from "../data_version.js"
 import { createInformationWindow } from "../window.js"
 import { getDefensiveCoverage } from "../weakness.js"
@@ -85,7 +85,8 @@ function setTypes(types){
     const core = $('#species-types')
     for (let i = 0; i < 2; i++){
         const type = gameData.typeT[types[i]] || ""
-        core.children().eq(i).text(type).attr("class", `type ${type.toLowerCase()}`)
+        const node = core.children().eq(i).children().eq(0)
+        node.text(type).attr("class", `type ${type.toLowerCase()}`)
     } 
 }
 
@@ -265,6 +266,23 @@ export function setupSpeciesPanel(){
     $('#species-basestats, #species-coverage').on('click', function(){
         $('#species-basestats, #species-coverage').toggle()
     })
+    $('#species-types').children().each((index, val)=>{
+        const type = () => {return val.innerText}
+        let filterDiv, color
+        let extendableDiv = setLongClickSelection(val, ()=>{
+            if (hasFilter("type", type())){
+                filterDiv.remove()
+                spinOnRemoveFilter()
+                color = "green";
+            } else {
+                filterDiv = appendFilter("Type", type())
+                color = "red"
+            }
+            activateSearch()
+            extendableDiv.style.backgroundColor = color
+        }, 450, hasFilter("type", type())?"red":"green")
+    })
+    
 }
 function toLowerButFirstCase(word){
     word = word.toLowerCase()

@@ -1,11 +1,13 @@
 import { search, onkeySearchFilter } from "./search.js"
 import { e, JSHAC, clickOutsideToRemove, setLongClickSelection } from "./utils.js"
 
+let allQueries = []
+
 /**
- * Will execute all filters query so far
+ * Will fetch and execute all filters queries
  */
 function executeAllFilters(){
-    let allQueries = [{ //this is the top bar search
+    allQueries = [{ //this is the top bar search
         op:"AND",
         not: false, //not yet implemented
         k: $('#search-keys').val().toLowerCase(),
@@ -158,9 +160,10 @@ export function appendFilter(initKey = "", initData = ""){
     }
     
     $('#filter-data').find('.filter-add').before(frag)
+    
+    spinOnAddFilter()
+    return divField
 }
-
-
 
 /**
  * @callback searchAssertion - compare the data from the query and the data from the data
@@ -316,14 +319,7 @@ export function queryFilter2(query, datas, keymap){
 function removeAllFilters(){
     $('#filter-frame').find('.filter-field').remove()
     activateSearch()
-    $('#filter-icon')[0].animate([
-        { rotate: "0deg"},
-        { backgroundColor: "red"},
-        { rotate: "-360deg"},
-    ],{
-        duration: 750,
-        iterations: 1,
-    })
+    spinOnRemoveFilter()
 }
 
 export function spinOnAddFilter(){
@@ -335,7 +331,28 @@ export function spinOnAddFilter(){
         duration: 750,
         iterations: 1,
     })
-    appendFilter()
+}
+
+export function spinOnRemoveFilter(){
+    $('#filter-icon')[0].animate([
+        { rotate: "0deg"},
+        { backgroundColor: "red"},
+        { rotate: "-360deg"},
+    ],{
+        duration: 750,
+        iterations: 1,
+    })
+}
+
+export function hasFilter(key, data){
+    data = data.toLowerCase()
+    for (const query of allQueries){
+        console.log(key, data, query)
+        if (query.k === key && query.data.toLowerCase() === data){
+            return true
+        }
+    }
+    return false
 }
 
 export function setupFilters(){
@@ -358,4 +375,7 @@ export function setupFilters(){
         removeAllFilters()
     })
 }
+
+
+
 
