@@ -230,14 +230,34 @@ export function filterMacros(data: string, macros: MacroMap = defaultMacroMap())
 
 function fullyResolveMacro(macros: MacroMap): MacroMap{
     for (const [key, value] of macros){
-        if (typeof value === "string"){
-            // if it's a number it means that it's a raw value, so don't modify it
-            if (!isNaN(+value)) continue
-            // if it's really not a pure value but a reference to another value, lets look for it
-            if (macros.has(value)) {
-                //has value as a key, we can substitute
-                macros.set(key, macros.get(value)) 
+        if (typeof value !== "string") continue
+        // if it's a number it means that it's a raw value, so don't modify it
+        if (!isNaN(+value)) continue
+        // if it's really not a pure value but a reference to another value, lets look for it
+        if (macros.has(value)) {
+            //has value as a key, we can substitute
+            macros.set(key, macros.get(value)) 
+            continue
+        }
+        const values = value.split(' ')
+        if (values.length === 3){
+            const resolveEach = values.map((x)=>{
+                if (macros.has(x)){
+                    return macros.get(x) + ""
+                }
+                return x
+            })
+            const operator = resolveEach[1]
+            if (!operator) continue
+            if (operator === "+"){
+                const val1 = resolveEach[0]
+                const val2 = resolveEach[2]
+                if (!val1 || !val2) continue
+                macros.set(key, (+val1 + +val2)+"") 
+            } else {
+                //console.warn(`fullyResolveMacro: unknown operator : ${operator}`)
             }
+
         }
     }
     return macros

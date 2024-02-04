@@ -102,6 +102,7 @@ export interface CompactSpecie{
     forms: number[],
     SEnc:CompactedScripted[], // scripted encounters
     dex: PokePokedex,
+    id: number,
 }
 
 export interface CompactTrainers{
@@ -331,6 +332,7 @@ export function compactify(gameData: GameData): CompactGameData{
             }),
             SEnc: sEnc,
             dex: val.dex,
+            id: gameData.speciesInternalID.get(val.NAME) || -1
         })
     })
     compacted.locations = {

@@ -10,6 +10,7 @@ import { getDefensiveCoverage } from "../weakness.js"
 export function feedPanelSpecies(id) {
     const specie = gameData.species[id]
     $('#species-name').text(`${specie.name}#${specie.dex.id||"??"}`)
+    $('#species-id').text(`ingame ID: ${specie.id}`)
     updateBaseStats(specie.stats.base)
     $('#species-front').attr('src', getSpritesURL(specie.NAME))
     $('#species-front')[0].onclick = () => {
@@ -281,7 +282,9 @@ export function setupSpeciesPanel() {
             extendableDiv.style.backgroundColor = color
         }, 450, hasFilter("type", type()) ? "red" : "green")
     })
-
+    $('#species-id, #species-name').on('click', function(){
+        $('#species-id, #species-name').toggle()
+    })
 }
 function toLowerButFirstCase(word) {
     word = word.toLowerCase()
