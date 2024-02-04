@@ -6,6 +6,8 @@ import * as LevelUpLearnSets from './level_up_learnsets'
 import * as TMHMLearnsets from './tmhm_learnsets'
 import * as TutorMoves from './tutor_learnsets'
 import * as FormsSpecies from './form_species'
+import * as PokePokedex from './pokedex'
+
 import { FileDataOptions, getMulFilesData, autojoinFilePath } from '../utils'
 import { GameData } from '../main'
 
@@ -19,11 +21,13 @@ export interface Specie {
     tutorMoves: string[],
     TMHMMoves: string[],
     forms: string[],
+    dex: PokePokedex.PokePokedex
 }
 
 function parse(pokeData: string): Specie[]{
     const lines = pokeData.split('\n')
-    const speciesNamesResult = SpeciesNames.parse(lines,0)
+    const pokePokedexResult = PokePokedex.parse(lines, 0)
+    const speciesNamesResult = SpeciesNames.parse(lines, pokePokedexResult.fileIterator)
     const baseStatsResult = BaseStats.parse(lines, speciesNamesResult.fileIterator)
     const evolutionsResult = Evolutions.parse(lines, baseStatsResult.fileIterator)
     const eggMovesResult = EggMoves.parse(lines, evolutionsResult.fileIterator)
@@ -32,9 +36,9 @@ function parse(pokeData: string): Specie[]{
     const TutorMovesResult = TutorMoves.parse(lines, TMHMLearnsetsResult.fileIterator)
     const formsResult = FormsSpecies.parse(lines, TutorMovesResult.fileIterator)
 
-    const Species: Specie[] = []
+    const species: Specie[] = []
     baseStatsResult.baseStats.forEach((BaseStats, key)=>{
-        Species.push({
+        species.push({
             NAME: key,
             name: speciesNamesResult.names.get(key) || "undefined",
             baseStats: BaseStats,
@@ -44,28 +48,30 @@ function parse(pokeData: string): Specie[]{
             TMHMMoves: TMHMLearnsetsResult.tmhmLearnsets.get(key) || [],
             tutorMoves: TutorMovesResult.tutorMoves.get(key) || [],
             forms: formsResult.forms.get(key) || [],
+            dex: pokePokedexResult.data.get(key) || {} as PokePokedex.PokePokedex
         })
     })
-    return Species
+    return species
 }
 
 export function getSpecies(ROOT_PRJ: string, optionsGlobal_h: FileDataOptions, gameData: GameData): Promise<void>{
     return new Promise((resolve: ()=>void, reject)=>{
-        getMulFilesData(autojoinFilePath(ROOT_PRJ, [//'src/data/pokemon/pokedex_entries.h', //will do later
-                                                //'src/data/pokemon/pokedex_text.h', //both goes together with entries
-                                                'src/data/text/species_names.h',
-                                                'src/data/pokemon/base_stats.h',
-                                                'src/data/pokemon/evolution.h',
-                                                'src/data/pokemon/egg_moves.h',
-                                                'src/data/pokemon/level_up_learnsets.h', // order with pointers is important
-                                                'src/data/pokemon/level_up_learnset_pointers.h',
-                                                'src/data/pokemon/tmhm_learnsets.h',
-                                                'src/data/pokemon/tutor_learnsets.h',
-                                                'src/data/pokemon/form_species_tables.h',
-                                                'src/data/pokemon/form_species_table_pointers.h',
-                                                'src/data/graphics/pokemon.h',
-                                                'src/data/pokemon_graphics/front_pic_table.h',
-                                            ]), optionsGlobal_h)
+        getMulFilesData(autojoinFilePath(ROOT_PRJ, [
+                'src/data/pokemon/pokedex_text.h', //both goes together with entries
+                'src/data/pokemon/pokedex_entries.h', 
+                'src/data/text/species_names.h',
+                'src/data/pokemon/base_stats.h',
+                'src/data/pokemon/evolution.h',
+                'src/data/pokemon/egg_moves.h',
+                'src/data/pokemon/level_up_learnsets.h', // order with pointers is important
+                'src/data/pokemon/level_up_learnset_pointers.h',
+                'src/data/pokemon/tmhm_learnsets.h',
+                'src/data/pokemon/tutor_learnsets.h',
+                'src/data/pokemon/form_species_tables.h',
+                'src/data/pokemon/form_species_table_pointers.h',
+                'src/data/graphics/pokemon.h',
+                'src/data/pokemon_graphics/front_pic_table.h',
+            ]), optionsGlobal_h)
         .then((pokeData)=>{
             gameData.species = parse(pokeData)
             resolve()

@@ -9,8 +9,7 @@ import { getDefensiveCoverage } from "../weakness.js"
 
 export function feedPanelSpecies(id) {
     const specie = gameData.species[id]
-
-    $('#species-name').text(specie.name)
+    $('#species-name').text(`${specie.name}#${specie.dex.id||"??"}`)
     updateBaseStats(specie.stats.base)
     $('#species-front').attr('src', getSpritesURL(specie.NAME))
     $('#species-front')[0].onclick = () => {

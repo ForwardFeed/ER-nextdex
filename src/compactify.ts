@@ -2,6 +2,7 @@ import { GameData } from "./main";
 import { Ability } from "./abilities";
 import { Xtox } from "./parse_utils";
 import { TrainerPokemon } from "./trainers/teams";
+import { PokePokedex } from "./species/pokedex";
 
 interface CompactedScripted{
     how: number, // indexed from CompactGameData.ScriptedEncoutersHowT
@@ -100,6 +101,7 @@ export interface CompactSpecie{
     tutor: number[],
     forms: number[],
     SEnc:CompactedScripted[], // scripted encounters
+    dex: PokePokedex,
 }
 
 export interface CompactTrainers{
@@ -328,6 +330,7 @@ export function compactify(gameData: GameData): CompactGameData{
                 return NAMET.indexOf(x)
             }),
             SEnc: sEnc,
+            dex: val.dex,
         })
     })
     compacted.locations = {
