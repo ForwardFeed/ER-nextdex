@@ -28,19 +28,6 @@ function setAvailableVersion(){
     $('#versions').append(fragment).val(defaultVersion).change()
 
 }
-function iOS() {
-    return [
-      'iPad Simulator',
-      'iPhone Simulator',
-      'iPod Simulator',
-      'iPad',
-      'iPhone',
-      'iPod'
-    ].includes(navigator.platform)
-    // iPad on iOS 13 detection
-    || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
-  }
-
   
 function changeVersion(version){
     if (!version || allVersions.indexOf(version) == -1){
@@ -48,7 +35,7 @@ function changeVersion(version){
     }
     const savedVersion = fetchFromLocalstorage("dataversion"+version)
     //disabled fetch from local storage for iOS products
-    if (savedVersion == LATEST_DATA_VERSION && !iOS()){
+    if (savedVersion == LATEST_DATA_VERSION){
         console.log("take gamedata from storage")
         gameData = JSON.parse(fetchFromLocalstorage("data"+version))
         hydrate()

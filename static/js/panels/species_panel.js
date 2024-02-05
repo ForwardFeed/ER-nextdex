@@ -180,12 +180,7 @@ function updateBaseStats(stats) {
         '#BST',
     ]
     for (const i in baseStatsTable) {
-        try {
-            changeBaseStat($(baseStatsTable[i]), stats[i], i)
-        } catch(e){
-            console.error('HUH?', e)
-        }
-        
+        changeBaseStat($(baseStatsTable[i]), stats[i], i)
     }
 }
 
