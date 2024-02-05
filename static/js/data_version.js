@@ -8,14 +8,14 @@ export let gameData;
 
 // each time the data is modified, this is updated
 // so the client checks if it have the latest version by checking lo
-const version = "1"/*%%VERSION%%*/
+const version = "2"/*%%VERSION%%*/
 
 export function setAvailableVersion(){
     const allVersions = [
-        "2.6.1",
+        "1.6.1",
         "Alpha",
     ]
-    let defaultVersion = "2.6.1"
+    let defaultVersion = "1.6.1"
     if (!allVersions.includes(defaultVersion)){
         console.warn('flimsy dev, you set a wrong default version, defaulting to first')
         defaultVersion = allVersions[0]
