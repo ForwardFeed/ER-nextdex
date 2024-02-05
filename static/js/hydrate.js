@@ -19,10 +19,7 @@ export function hydrate(){
     if (!gameData){
         return console.warn("couldn't find gameData")
     }
-    /*
-        add some reconstitution data for ease of use here
-    */
-   
+    // add some reconstitution data for ease of use here
     gameData.minMaxBaseStats = new Array(6).fill(0)
     gameData.speciesStats = {
         result: {
@@ -44,9 +41,7 @@ export function hydrate(){
         ],
     }
     
-    /*
-        hydrate the UI with the data
-    */
+    // hydrate the UI with the data
     hydrateAbilities()
     hydrateMoves()
     hydrateSpecies()
