@@ -34,8 +34,7 @@ function changeVersion(version){
         return console.warn(`no such version : ${version}`)
     }
     const savedVersion = fetchFromLocalstorage("dataversion"+version)
-    //disabled fetch from local storage for iOS products
-    if (savedVersion == LATEST_DATA_VERSION){
+    if (savedVersion && savedVersion == LATEST_DATA_VERSION){
         console.log("take gamedata from storage")
         gameData = JSON.parse(fetchFromLocalstorage("data"+version))
         hydrate()
