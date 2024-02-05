@@ -45,48 +45,11 @@ def getPaletteList(filepath):
             # line 3 has the number of colors in the palette, here 16
             if lNumber <= 3: 
                     continue
-            palList.append(getPaletteColors(line))
+            for c in line.strip("\n").split(' '):
+                palList.append(int(c))
+
         return palList
             
-'''
-    Main struggle i have is how did the colors where indexed,
-    the first color met linearily isn't the one indexed
-'''
-def reorderPaletteFromPrecedent(img, colorListExemple, colorList):
-    colorListImg = indexImageColor(img)
-    linearOrderedColorList = []
-    for i in range(len(colorListImg)):
-        if colorListImg[i] not in colorListExemple:
-            return colorList # i hope this works
-        newIndex = colorListExemple.index(colorListImg[i])
-        linearOrderedColorList.append(colorList[newIndex])
-    return linearOrderedColorList
-         
-
-def indexImageColor(img):
-    pixelMap = img.load()
-    width, height = img.size
-    colorList = []
-    for i in range(height): 
-            for j in range(width):
-                r,g,b = pixelMap[j,i]
-                if not (r,g,b) in colorList:
-                    colorList.append((r,g,b))
-    return colorList
-
-def applyPalette(img, palette):
-    applied = []
-    colorList = [] ## color to replace
-    width, height = img.size
-    for i in range(height): 
-        for j in range(width):
-            r,g,b = img.getpixel((j,i))
-            if not (r,g,b) in colorList:
-                colorList.append((r,g,b))
-            applied.append(palette[colorList.index((r,g,b))])
-    return applied
-
-
 def getShiny(paletteFolder, ImageFolder, imageName):
 
     normalPalPath = paletteFolder + imageName + ".pal"
@@ -95,13 +58,10 @@ def getShiny(paletteFolder, ImageFolder, imageName):
     if not path.exists(inputImagePath) or not path.exists(normalPalPath) or not path.exists(shinyPalPath):
         print('One file doesn\'t exist:', inputImagePath, normalPalPath, shinyPalPath)
         return
-    img = Image.open(inputImagePath).convert('RGB')
-    normalPal =  getPaletteList(normalPalPath)
-    shiny =  getPaletteList(shinyPalPath)
-    reorderedShiny = reorderPaletteFromPrecedent(img, normalPal, shiny)
-    newImg = applyPalette(img, reorderedShiny)
-    img.putdata(newImg)
+    img = Image.open(inputImagePath)
+    img.putpalette(getPaletteList(shinyPalPath))
     img.save(ImageFolder + "SHINY_" + imageName + ".png", format="png")
+    return
 
 files = listdir("./out/sprites/")
 shinyRegex = re.compile('SHINY_')
