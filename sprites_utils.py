@@ -103,9 +103,6 @@ def getShiny(paletteFolder, ImageFolder, imageName):
     img.putdata(newImg)
     img.save(ImageFolder + "SHINY_" + imageName + ".png", format="png")
 
-# you may uncomment from here, i just commented it because of i didn't needed it at one point
-# but it's functionnal
-
 files = listdir("./out/sprites/")
 shinyRegex = re.compile('SHINY_')
 for name in files:
@@ -122,4 +119,3 @@ for name in files:
 files = listdir("./out/sprites/")
 for name in files:
     addTransparentBackground("./out/sprites/" + name, "./static/sprites/" + name)
-
