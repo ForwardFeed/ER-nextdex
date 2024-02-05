@@ -38,7 +38,7 @@ function changeVersion(version){
         console.log("take gamedata from storage")
         gameData = JSON.parse(fetchFromLocalstorage("data"+version))
         hydrate()
-        return
+        if (gameData) return
     }
     //fetch remotely
     fetch(`js/data/gameDataV${version}.json`)

@@ -123,7 +123,6 @@ export function redirectMove(moveId) {
 
 export function moveOverlay(moveId) {
     const move = gameData.moves[moveId]
-
     const core = e("div", "move-overlay")
     const power = e("div", "move-overlay-power")
     const powerTitle = e("div", "move-overlay-top", move.name)

@@ -201,12 +201,7 @@ function hydrateSpecies(){
         $(core).on('click', function(){
             $("#filter-frame").hide() 
             fastdom.mutate(() => {
-                try{
-                    feedPanelSpecies($(this).attr('data-id'))
-                } catch(e){
-                    document.getElementById('ugly-error-span').innerText += e
-                }
-                
+                feedPanelSpecies($(this).attr('data-id'))  
             });
         });
         fragment.append(core)

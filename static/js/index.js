@@ -9,6 +9,9 @@ import { setupTeamBuilder } from "./panels/team_builder.js"
 import { activateInsanity } from "./insanity.js"
 
 $(document).ready(function(){
+    window.onerror = function(msg, url, lineN){
+        document.getElementById('ugly-error-span').innerText += `in ${url.replace(/[^/]+\//g, '')} ${lineN}: ${msg}`
+    }
     setupHeader()
     setupSettings()
     setupPanels()
@@ -19,6 +22,7 @@ $(document).ready(function(){
     setupFilters()
     addTooltip($('.main-title')[0], 'Berkay, the dex is up btw')
     $('#insanity').on('click', activateInsanity)
+    
 })
 
 
