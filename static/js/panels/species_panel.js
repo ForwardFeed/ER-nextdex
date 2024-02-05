@@ -129,10 +129,6 @@ function setMoveRow(moveID) {
     return row
 }
 
-function applyMoveFilters(){
-    
-}
-
 function setMoves(core, moves) {
     core.empty()
     const frag = document.createDocumentFragment()

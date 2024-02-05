@@ -56,7 +56,9 @@ export function setupDataVersionning(){
     setAvailableVersion()
     $('#versions').on('change', function(){
         changeVersion($(this).val())
+        saveToLocalstorage("lastusedversion", $(this).val())
     })
-    changeVersion(defaultVersion)
+    const lastUsedVersion = fetchFromLocalstorage("lastusedversion")
+    $('#versions').val(lastUsedVersion || defaultVersion).change()
 }
 

@@ -3,10 +3,7 @@ import { e, JSHAC, clickOutsideToHide, setLongClickSelection } from "./utils.js"
 
 let allQueries = []
 
-/**
- * Will fetch and execute all filters queries
- */
-function executeAllFilters(){
+export function getQueries(){
     allQueries = [{ //this is the top bar search
         op:"AND",
         not: false, //not yet implemented
@@ -40,8 +37,15 @@ function executeAllFilters(){
             data: allQueries, 
         }
     }
+    return finalQuery
+}
+
+/**
+ * Will fetch and execute all filters queries
+ */
+function executeAllFilters(){
     //execute the update of the active panel
-    search.panelUpdatesTable[search.panelUpdatesIndex](finalQuery)
+    search.panelUpdatesTable[search.panelUpdatesIndex](getQueries())
 }
 
 export function activateSearch(callback){
