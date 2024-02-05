@@ -1,10 +1,10 @@
 import { redirectLocation } from "./locations_panel.js"
 import { redirectMove, moveOverlay } from "./moves_panel.js"
-import { addTooltip, capitalizeFirstLetter, setLongClickSelection, AisInB, e } from "../utils.js"
+import { addTooltip, capitalizeFirstLetter, AisInB, e } from "../utils.js"
 import { search } from "../search.js"
-import { queryFilter2, hasFilter, activateSearch, appendFilter, spinOnRemoveFilter } from "../filters.js"
+import { queryFilter2, longClickToFilter } from "../filters.js"
 import { gameData } from "../data_version.js"
-import { createInformationWindow, removeInformationWindow } from "../window.js"
+import { createInformationWindow } from "../window.js"
 import { getDefensiveCoverage } from "../weakness.js"
 
 export function feedPanelSpecies(id) {
@@ -129,6 +129,10 @@ function setMoveRow(moveID) {
     return row
 }
 
+function applyMoveFilters(){
+    
+}
+
 function setMoves(core, moves) {
     core.empty()
     const frag = document.createDocumentFragment()
@@ -222,10 +226,9 @@ function setAbilities(abilities) {
             continue
         }
         const abi = gameData.abilities[abilities[i]]
-        const name = document.createElement('div')
-        name.className = "species-abilities"
-        name.innerText = abi.name
+        const name = e("div", "species-abilities", abi.name)
         addTooltip(name, abi.desc)
+        longClickToFilter(name, "ability", ()=>{return abi.name} )
         fragment.append(name)
     }
     node.append(fragment)
@@ -240,9 +243,8 @@ function setInnates(innates) {
             continue
         }
         const inn = gameData.abilities[innates[i]]
-        const name = document.createElement('div')
-        name.className = "species-innate"
-        name.innerText = inn.name
+        const name = e("div", "species-innate", inn.name)
+        longClickToFilter(name, "ability", ()=>{return inn.name})
         addTooltip(name, inn.desc)
         fragment.append(name)
     }
@@ -267,20 +269,7 @@ export function setupSpeciesPanel() {
         $('#species-basestats, #species-coverage').toggle()
     })
     $('#species-types').children().each((index, val) => {
-        const type = () => { return val.innerText }
-        let filterDiv, color
-        let extendableDiv = setLongClickSelection(val, () => {
-            if (hasFilter("type", type())) {
-                filterDiv.remove()
-                spinOnRemoveFilter()
-                color = "green";
-            } else {
-                filterDiv = appendFilter("Type", type())
-                color = "red"
-            }
-            activateSearch()
-            extendableDiv.style.backgroundColor = color
-        }, 450, hasFilter("type", type()) ? "red" : "green")
+        longClickToFilter(val, "type")
     })
     $('#species-id, #species-name').on('click', function(){
         $('#species-id, #species-name').toggle()

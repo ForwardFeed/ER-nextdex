@@ -343,7 +343,12 @@ export function spinOnRemoveFilter(){
         iterations: 1,
     })
 }
-
+/**
+ * 
+ * @param {string} key - lower case!!!
+ * @param {string} data 
+ * @returns 
+ */
 export function hasFilter(key, data){
     data = data.toLowerCase()
     for (const query of allQueries){
@@ -377,6 +382,28 @@ export function setupFilters(){
     })
 }
 
-
+export function longClickToFilter(node, key, data = ()=>{return node.innerText}){
+    let filterDiv, color
+    let extendableDiv = setLongClickSelection(node, () => {
+        if (hasFilter(key, data())) {
+            if (!filterDiv){
+                $('.filter-search').each((index, val)=>{
+                    if (val.value === data()){
+                        $(val).closest(".filter-field").remove()
+                    }
+                })
+            } else {
+                filterDiv.remove()
+            }
+            spinOnRemoveFilter()
+            color = "green";
+        } else {
+            filterDiv = appendFilter(key, data())
+            color = "red"
+        }
+        activateSearch()
+        extendableDiv.style.backgroundColor = color
+    }, 450, hasFilter(key, data()) ? "red" : "green")
+}
 
 
