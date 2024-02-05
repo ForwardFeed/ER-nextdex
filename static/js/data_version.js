@@ -8,7 +8,7 @@ export let gameData;
 
 // each time the data is modified, this is updated
 // so the client checks if it have the latest version by checking lo
-const version = "2"/*%%VERSION%%*/
+const version = "1"/*%%VERSION%%*/
 
 export function setAvailableVersion(){
     const allVersions = [

@@ -54,4 +54,4 @@ cp out/gameDataVAlpha.json static/js/data/gameDataVAlpha.json
 # update the version
 version=$(grep "%%VERSION%%" static/js/data_version.js | grep -Eo '"[^"]+"' | grep -Eo '[^"]+')
 next_version=$((version + 1))
-sed -i "s/\"${version}\"/\"${next_version}\"/" static/js/data_version.js
+sed -i "s/const version = \"${version}\"/const version = \"${next_version}\"/" static/js/data_version.js
