@@ -10,7 +10,7 @@ import { activateInsanity } from "./insanity.js"
 
 $(document).ready(function(){
     window.onerror = function(msg, url, lineN){
-        document.getElementById('ugly-error-span').innerText += `in ${url.replace(/[^/]+\//g, '')} ${lineN}: ${msg}`
+        //document.getElementById('ugly-error-span').innerText += `in ${url.replace(/[^/]+\//g, '')} ${lineN}: ${msg}`
     }
     setupHeader()
     setupSettings()
