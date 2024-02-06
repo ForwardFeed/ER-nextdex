@@ -23,7 +23,7 @@ export function feedPanelSpecies(id) {
         }
     }
     $('#species-front')[0].dataset.shiny = "off"
-    setAbilities(specie.stats.abis)
+    setAbilities(specie.stats.abis, specie)
     setInnates(specie.stats.inns)
     
     setTypes([...new Set(specie.stats.types),abilitiesExtraType(0, specie)])
@@ -226,7 +226,7 @@ function setAbilities(abilities, specie) {
             name.onclick = () => {
                 $('#species-abilities .sel-active').removeClass('sel-active').addClass('sel-n-active')
                 name.classList.replace('sel-n-active', 'sel-active')
-
+                setTypes([...new Set(specie.stats.types),abilitiesExtraType(i, specie)])
             }
             name.classList.add(i?"sel-n-active":"sel-active")
             longClickToFilter(name, "ability", ()=>{return abi.name} )
