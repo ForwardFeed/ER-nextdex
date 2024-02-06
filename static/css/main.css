@@ -348,6 +348,7 @@ span{
     padding: 1%;
     flex-grow: 1;
     cursor: default;
+    width: 100%;
 
 }
 .species-innate,.species-ability{

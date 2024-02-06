@@ -1,11 +1,11 @@
 import { redirectLocation } from "./locations_panel.js"
 import { redirectMove, moveOverlay } from "./moves_panel.js"
-import { addTooltip, capitalizeFirstLetter, AisInB, e } from "../utils.js"
+import { addTooltip, capitalizeFirstLetter, AisInB, e, JSHAC } from "../utils.js"
 import { search } from "../search.js"
 import { queryFilter2, longClickToFilter } from "../filters.js"
 import { gameData } from "../data_version.js"
 import { createInformationWindow } from "../window.js"
-import { getDefensiveCoverage } from "../weakness.js"
+import { getDefensiveCoverage, abilitiesToAddedType} from "../weakness.js"
 
 export function feedPanelSpecies(id) {
     const specie = gameData.species[id]
@@ -25,7 +25,8 @@ export function feedPanelSpecies(id) {
     $('#species-front')[0].dataset.shiny = "off"
     setAbilities(specie.stats.abis)
     setInnates(specie.stats.inns)
-    setTypes(specie.stats.types)
+    
+    setTypes([...new Set(specie.stats.types),abilitiesExtraType(0, specie)])
     setLevelUpMoves($('#learnset'), specie.levelUpMoves)
     setMoves($('#tmhm'), specie.TMHMMoves)
     setMoves($('#tutor'), specie.tutor)
@@ -34,13 +35,6 @@ export function feedPanelSpecies(id) {
     setLocations(specie.locations, specie.SEnc)
     $('#species-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
     $('#species-list').children().eq(id - 1).addClass("sel-active").removeClass("sel-n-active")
-    //need to make a selection for the type coverage
-    const abilities = specie.stats.abis
-        .map(x => gameData.abilities[x].name)
-        .concat(specie.stats.inns
-            .map(x => gameData.abilities[x].name))
-    const types = specie.stats.types.map(x => gameData.typeT[x])
-    setDefensiveCoverage(getDefensiveCoverage(types, abilities))
 }
 
 export function redirectSpecie(specieId) {
@@ -82,12 +76,19 @@ function setDefensiveCoverage(coverage) {
 }
 
 function setTypes(types) {
+    types = types.filter(x => x)
     const core = $('#species-types')
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 3; i++) {
         const type = gameData.typeT[types[i]] || ""
         const node = core.children().eq(i).children().eq(0)
+        if (!type) {
+            node.hide()
+            continue
+        }
+        node.show()
         node.text(type).attr("class", `type ${type.toLowerCase()}`)
     }
+    setDefensiveCoverage(getDefensiveCoverage(types.map(x => gameData.typeT[x])))
 }
 
 /**
@@ -213,40 +214,45 @@ function changeBaseStat(node, value, statID) {
     node.find('.stat-bar').css('background', `linear-gradient(to right, ${color} ${percent}%, #0000 0%)`)
 }
 
-function setAbilities(abilities) {
-    const node = $('#species-abilities')
-    node.empty()
-    const fragment = document.createDocumentFragment()
-    for (const i in abilities) {
-        if (abilities[i] == abilities[i - 1] || abilities[i] === 0) {
-            continue
-        }
-        const abi = gameData.abilities[abilities[i]]
-        const name = e("div", "species-abilities", abi.name)
-        addTooltip(name, abi.desc)
-        longClickToFilter(name, "ability", ()=>{return abi.name} )
-        fragment.append(name)
-    }
-    node.append(fragment)
+function setAbilities(abilities, specie) {
+    $('#species-abilities').empty().append(
+        JSHAC(abilities.map((val, i)=>{
+            if (abilities[i] == abilities[i - 1] || abilities[i] === 0) {
+                return undefined
+            }
+            const abi = gameData.abilities[abilities[i]]
+            const name = e("div", "species-abilities", abi.name)
+            addTooltip(name, abi.desc)
+            name.onclick = () => {
+                $('#species-abilities .sel-active').removeClass('sel-active').addClass('sel-n-active')
+                name.classList.replace('sel-n-active', 'sel-active')
+
+            }
+            name.classList.add(i?"sel-n-active":"sel-active")
+            longClickToFilter(name, "ability", ()=>{return abi.name} )
+            return name
+        }).filter(x => x))
+    )
 }
 
 function setInnates(innates) {
-    const node = $('#species-innates')
-    node.empty()
-    const fragment = document.createDocumentFragment()
-    for (const i in innates) {
-        if (innates[i] == innates[i - 1] || innates[i] === 0) {
-            continue
-        }
-        const inn = gameData.abilities[innates[i]]
-        const name = e("div", "species-innate", inn.name)
-        longClickToFilter(name, "ability", ()=>{return inn.name})
-        addTooltip(name, inn.desc)
-        fragment.append(name)
-    }
-    node.append(fragment)
+    $('#species-innates').empty().append(
+        JSHAC(innates.map((val, i)=>{
+            if (innates[i] == innates[i - 1] || innates[i] === 0) {
+                return
+            }
+            const inn = gameData.abilities[innates[i]]
+            const name = e("div", "species-innate", inn.name)
+            longClickToFilter(name, "ability", ()=>{return inn.name})
+            addTooltip(name, inn.desc)
+            return name
+        }).filter(x => x))
+    )
 }
 
+function abilitiesExtraType(abilityID, specie){
+    return abilitiesToAddedType([specie.stats.abis[abilityID], ...specie.stats.inns])
+}
 
 export function setupSpeciesPanel() {
     const subPanelsAndBtns = [
