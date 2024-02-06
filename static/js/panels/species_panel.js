@@ -398,6 +398,20 @@ function setLocations(locations, SEnc) {
     $('#species-locations').empty().append(frag)
 }
 
+const reorderMapSpecies = {
+    "alphabetical": "",
+    "atk": "",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+    "":"",
+
+}
+
 export const queryMapSpecies = {
     "name": (queryData, specie) => {
         const specieName = specie.name.toLowerCase()

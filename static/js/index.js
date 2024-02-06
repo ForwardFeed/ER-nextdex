@@ -7,6 +7,7 @@ import { setupSettings } from "./settings.js"
 import { setupFilters } from "./filters.js"
 import { setupTeamBuilder } from "./panels/team_builder.js"
 import { activateInsanity } from "./insanity.js"
+import { setupMoves} from "./panels/moves_panel.js"
 
 $(document).ready(function(){
     window.onerror = function(msg, url, lineN){
@@ -15,6 +16,7 @@ $(document).ready(function(){
     setupHeader()
     setupSettings()
     setupPanels()
+    setupMoves()
     setupSpeciesPanel()
     setupTeamBuilder() // the team builder BEFORE data version is Important
     setupDataVersionning()
