@@ -391,7 +391,7 @@ export const queryMapSpecies = {
     "name": (queryData, specie) => {
         const specieName = specie.name.toLowerCase()
         if (AisInB(queryData, specieName)) {
-            return [queryData === specieName, specie.name]
+            return [queryData === specieName, specie.name, true]
         }
     },
     "type": (queryData, specie) => {
@@ -409,7 +409,7 @@ export const queryMapSpecies = {
             )
         for (const abi of abilities) {
             if (AisInB(queryData, abi)) {
-                return abi
+                return [abi === queryData, abi, false] 
             }
         }
         return false
@@ -418,7 +418,7 @@ export const queryMapSpecies = {
         let moves = specie.allMoves?.map((x) => gameData.moves[x].name.toLowerCase()) || []
         for (const move of moves) {
             if (AisInB(queryData, move)) {
-                return [queryData === move, move]
+                return [queryData === move, move, false]
             }
         }
         return false
@@ -429,7 +429,8 @@ export function updateSpecies(searchQuery) {
     const nodeList = $('#species-list').children()
     const matched = queryFilter2(searchQuery, species, queryMapSpecies)
     let validID;
-    for (const i in species) {
+    const specieLen = species.length
+    for (let i  = 0; i < specieLen; i++) {
         if (i == 0) continue
         const node = nodeList.eq(i - 1)
         if (!matched || matched.indexOf(i) != -1) {

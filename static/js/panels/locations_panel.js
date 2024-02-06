@@ -63,9 +63,9 @@ export function updateLocations(searchQuery){
     const nodeList = $('#locations-list').children()
     const matched = queryFilter2(searchQuery, maps, queryMapLocations)
     let validID;
-    for (const i in maps){
-        if (i == 0 ) continue
-        const node = nodeList.eq(i - 1)
+    const mapsLen = maps.length
+    for (let i  = 0; i < mapsLen; i++) {
+        const node = nodeList.eq(i)
         if (!matched || matched.indexOf(i) != -1)
         {
                 if (!validID) validID = i

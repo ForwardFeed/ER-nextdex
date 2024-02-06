@@ -175,14 +175,14 @@ export const queryMapMoves = {
     "name": (queryData, move) => {
         const moveName = move.name.toLowerCase()
         if (AisInB(queryData, moveName)) {
-            return [moveName === queryData, moveName]
+            return [moveName === queryData, moveName, true]
         }
         return false
     },
     "move": (queryData, move) => {
         const moveName = move.name.toLowerCase()
         if (AisInB(queryData, moveName)) {
-            return [moveName === queryData, moveName]
+            return [moveName === queryData, moveName, true]
         }
         return false
     },
@@ -214,7 +214,8 @@ export function updateMoves(searchQuery) {
     const nodeList = $('#moves-list').children()
     const matched = queryFilter2(searchQuery, moves, queryMapMoves)
     let validID;
-    for (const i in moves) {
+    const movesLen = moves.length
+    for (let i  = 0; i < movesLen; i++) {
         if (i == 0) continue
         const node = nodeList.eq(i - 1)
         if (!matched || matched.indexOf(i) != -1) {

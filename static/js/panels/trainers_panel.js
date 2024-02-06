@@ -223,7 +223,8 @@ export function updateTrainers(searchQuery){
     const nodeList = $('#trainers-list > .btn')
     let validID;
     const matched = queryFilter2(searchQuery, trainers, queryMapTrainers)
-    for (const i in trainers){
+    const trainersLen = trainers.length
+    for (let i  = 0; i < trainersLen; i++) {
         if (i == 0 ) continue
         const node = nodeList.eq(i - 1)
         if (!matched || matched.indexOf(i) != -1)

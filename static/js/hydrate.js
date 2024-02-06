@@ -267,7 +267,7 @@ function hydrateLocation(){
             }
         $('#locations-' + rateName).empty().append(fragmentRate)
     }
-    feedPanelLocations(1)
+    feedPanelLocations(0)
 }
 
 function addFishingTable(rates)

@@ -242,7 +242,7 @@ export function queryFilter(query, data, keymap){
  * @param {*} query 
  * @param {*} datas 
  * @param {*} keymap 
- * @returns the list of element that matched
+ * @returns {number[]}the list of element that matched by index
  */
 export function queryFilter2(query, datas, keymap){
     const queryNot = (notFlag, value) => {
@@ -294,7 +294,9 @@ export function queryFilter2(query, datas, keymap){
         // if the is nothing to compare to, then just shrug
         if (!execFn) return undefined
         const allElementsIndexesThatMatched = []
-        for (const i in datas){
+        const  perfectMatches = [] //for not unique properties like abilities or move that can be shared by multiple pokemons
+        const dataLen = datas.length
+        for (let i = 0; i < dataLen; i++){
             const data = datas[i]
             const answer = execFn(query.data, data)
             let suggestion
@@ -302,10 +304,27 @@ export function queryFilter2(query, datas, keymap){
             // Which means that ignore any other, this is to fix this case:
             // powder and powder poison, if the string is "pow" both may trigger
             // but if it's "powder" then no, only powder may show
+            // in the case of generator or generator as abilities, it's the ability that should be uniq
+            // not the first pokemon to hit it, that's why there is isNotUnique
             if (typeof answer === "object"){
                 const perfectMatch = answer[0]
-                if (perfectMatch) return [i]
                 suggestion = answer[1]
+                if (perfectMatch) {
+                    const isUnique = answer[2]
+                    // a name is unique
+                    if (isUnique) {
+                        // invert the unique search
+                        if (query.not){
+                            const inverted = [...Array(dataLen).keys()]
+                            inverted.splice(i, 1)
+                            return inverted
+                        }
+                        return [i]
+                    }
+                    // an ability or a move isn't
+                    perfectMatches.push(i)
+
+                }
             } else {
                 suggestion = answer
             }
@@ -316,7 +335,7 @@ export function queryFilter2(query, datas, keymap){
                 }
             }
         }
-        return allElementsIndexesThatMatched
+        return perfectMatches.length ? perfectMatches : allElementsIndexesThatMatched
     }
 }
 

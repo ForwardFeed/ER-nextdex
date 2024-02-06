@@ -4,20 +4,22 @@ import { AisInB } from "../utils.js"
 
 export const queryMapAbilities = {
     "name": (queryData, ability) => {
-        if ((AisInB(queryData, ability.name.toLowerCase())) ||
-        (AisInB(queryData, ability.desc.toLowerCase()))){
-            return ability.name
-        }  else {
-            return false
+        const desc = ability.desc.toLowerCase()
+        const name = ability.name.toLowerCase()
+        if ((AisInB(queryData, name)) ||
+        (AisInB(queryData, desc))){
+            return [name === queryData || desc === queryData, name, true]
         }
+        return false
     },
     "ability": (queryData, ability) => {
-        if ((AisInB(queryData, ability.name.toLowerCase())) ||
-        (AisInB(queryData, ability.desc.toLowerCase()))){
-            return ability.name
-        }  else {
-            return false
+        const desc = ability.desc.toLowerCase()
+        const name = ability.name.toLowerCase()
+        if ((AisInB(queryData, name)) ||
+        (AisInB(queryData, desc))){
+            return [name === queryData || desc === queryData, name, true]
         }
+        return false
     }
 }
 
@@ -27,8 +29,8 @@ export function filterAbilities(searchQuery){
 
     const matched = queryFilter2(searchQuery, abis, queryMapAbilities)
     let colorID = 0 //to continue to repeat good color pattern
-    for (const i in abis){
-        if (i == 0 ) continue
+    const abisLen = abis.length
+    for (let i  = 0; i < abisLen; i++) {
         const node = nodeList.eq(i - 1)
         if (!matched || matched.indexOf(i) != -1)
         {
