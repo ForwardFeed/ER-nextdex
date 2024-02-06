@@ -1,5 +1,5 @@
 import { redirectLocation } from "./locations_panel.js"
-import { redirectMove, moveOverlay } from "./moves_panel.js"
+import { matchedMoves, moveOverlay } from "./moves_panel.js"
 import { addTooltip, capitalizeFirstLetter, AisInB, e, JSHAC } from "../utils.js"
 import { search } from "../search.js"
 import { queryFilter2, longClickToFilter } from "../filters.js"
@@ -91,8 +91,11 @@ function setTypes(types) {
     setDefensiveCoverage(getDefensiveCoverage(types.map(x => gameData.typeT[x])))
 }
 
+function filterMoves(moveIDlist){
+    if (!matchedMoves) return moveIDlist
+    return moveIDlist.map(x => matchedMoves.indexOf(x) != -1 && x).filter(x => x)
+}
 /**
- * 
  * @param {Object} move 
  * @returns an HTML node
  */
@@ -103,7 +106,6 @@ function setSplitMove(move) {
     return nodeMoveSplit
 }
 /**
- * 
  * @param {Object} move
  * @param {number} moveID
  * @returns an HTML node
@@ -133,6 +135,7 @@ function setMoveRow(moveID) {
 function setMoves(core, moves) {
     core.empty()
     const frag = document.createDocumentFragment()
+    moves = filterMoves(moves)
     for (const moveID of moves) {
         const move = gameData.moves[moveID]
         if (!move) {
@@ -150,6 +153,7 @@ function setLevelUpMoves(core, moves) {
     core.empty()
     const frag = document.createDocumentFragment()
     for (const { lv: lvl, id: id } of moves) {
+        if (matchedMoves && matchedMoves.indexOf(id) == -1) continue
         const move = gameData.moves[id]
         if (!move) {
             console.warn(`unable to find move with ID ${id}`)
@@ -446,5 +450,6 @@ export function updateSpecies(searchQuery) {
             node.hide()
         }
     }
+    // also it should apply the filters to the specie console.log(moveID, matchedMoves)
     if (validID) feedPanelSpecies(validID)
 }

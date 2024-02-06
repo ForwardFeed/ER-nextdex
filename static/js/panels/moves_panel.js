@@ -4,6 +4,8 @@ import { queryFilter2 } from "../filters.js"
 import { AisInB, e, JSHAC } from "../utils.js"
 import { removeInformationWindow } from "../window.js"
 
+export let matchedMoves
+
 export function feedPanelMoves(moveID) {
     const move = gameData.moves[moveID]
     $('#moves-name').text(move.name)
@@ -212,13 +214,13 @@ export const queryMapMoves = {
 export function updateMoves(searchQuery) {
     const moves = gameData.moves
     const nodeList = $('#moves-list').children()
-    const matched = queryFilter2(searchQuery, moves, queryMapMoves)
+    matchedMoves = queryFilter2(searchQuery, moves, queryMapMoves)
     let validID;
     const movesLen = moves.length
     for (let i  = 0; i < movesLen; i++) {
         if (i == 0) continue
         const node = nodeList.eq(i - 1)
-        if (!matched || matched.indexOf(i) != -1) {
+        if (!matchedMoves || matchedMoves.indexOf(i) != -1) {
             if (!validID) validID = i
             node.show()
         } else {
