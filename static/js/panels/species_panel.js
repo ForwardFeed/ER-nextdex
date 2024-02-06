@@ -397,6 +397,7 @@ function setLocations(locations, SEnc) {
     }
     $('#species-locations').empty().append(frag)
 }
+
 export const queryMapSpecies = {
     "name": (queryData, specie) => {
         const specieName = specie.name.toLowerCase()
