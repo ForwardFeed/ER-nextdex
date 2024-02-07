@@ -25,7 +25,6 @@ export function feedPanelSpecies(id) {
     $('#species-front')[0].dataset.shiny = "off"
     setAbilities(specie.stats.abis, specie)
     setInnates(specie.stats.inns)
-    
     setTypes([...new Set(specie.stats.types),abilitiesExtraType(0, specie)])
     setLevelUpMoves($('#learnset'), specie.levelUpMoves)
     setMoves($('#tmhm'), specie.TMHMMoves)
@@ -76,10 +75,11 @@ function setDefensiveCoverage(coverage) {
 }
 
 function setTypes(types) {
-    types = types.filter(x => x)
+    types = types.filter(x => x != undefined)
     const core = $('#species-types')
     for (let i = 0; i < 3; i++) {
         const type = gameData.typeT[types[i]] || ""
+        console.log(type)
         const node = core.children().eq(i).children().eq(0)
         if (!type) {
             node.hide()
