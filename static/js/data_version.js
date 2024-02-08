@@ -35,9 +35,9 @@ function changeVersion(version){
     }
     const savedVersion = fetchFromLocalstorage("dataversion"+version)
     if (savedVersion && savedVersion == LATEST_DATA_VERSION){
-        console.log("take gamedata from storage")
         gameData = JSON.parse(fetchFromLocalstorage("data"+version))
-        if (gameData && gameData.species) {
+        if (gameData && gameData.speciesStats) {
+            console.log("take gamedata from storage")
             hydrate()
             return
         }
