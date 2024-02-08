@@ -79,7 +79,6 @@ function setTypes(types) {
     const core = $('#species-types')
     for (let i = 0; i < 3; i++) {
         const type = gameData.typeT[types[i]] || ""
-        console.log(type)
         const node = core.children().eq(i).children().eq(0)
         if (!type) {
             node.hide()
