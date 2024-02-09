@@ -517,6 +517,12 @@ export const queryMapSpecies = {
         }
         return false
     },
+    "region": (queryData, specie) => {
+        const specieRegion = specie.region?.toLowerCase() || ""
+        if (AisInB(queryData, specieRegion)) {
+            return specie.region
+        }
+    },
 }
 export function updateSpecies(searchQuery) {
     const species = gameData.species

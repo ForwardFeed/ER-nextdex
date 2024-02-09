@@ -50,6 +50,7 @@ export const search = {
         "category",
         "specie",
         "map",
+        "region",
     ],
     operators: [
         "AND",
