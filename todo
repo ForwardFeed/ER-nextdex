@@ -51,7 +51,7 @@
 [ ] Species Tab
     [x] make evo & locations tab instead of two separates
     [ ] Insert all leftovers data, like exp curve, body color and stuff
-    [ ] make a team builder
+    [x] make a team builder
 [ ] Trainers Tab
     [x] Order trainer per route
 [ ] Add a welcome menu?
