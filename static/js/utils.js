@@ -1,4 +1,5 @@
-import { search } from "./search.js";
+import { gameData } from "./data_version.js";
+import { nodeLists } from "./hydrate.js";
 
 export function addTooltip(node, description) {
 	const tooltip = document.createElement("div");
@@ -165,4 +166,18 @@ export function setLongClickSelection(node, callback, time = 1000, bgColor = "re
     node.addEventListener("touchend", mouseUp)
 
     return extendableDiv
+}
+
+
+export function reorderNodeList(list, sortFn, direction = ">"){
+    fastdom.mutate(()=>{ // do not forget to do it in a single frame or it will lag a lot on some browsers
+        let clonedForReorder = structuredClone(gameData.species).sort(sortFn)
+        if (direction === ">") clonedForReorder = clonedForReorder.reverse()
+        const len = clonedForReorder.length
+        for (var i=0; i < len; i++){
+            const mon = clonedForReorder[i]
+            if (mon.nodeID === undefined) continue
+            list.append(nodeLists.species[mon.nodeID])
+        }
+    })
 }

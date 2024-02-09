@@ -1,5 +1,11 @@
 import {e} from "./utils.js"
-
+/**
+ * 
+ * @param {*} buttons - [0: InnerText, 1:CallBack on click]
+ * @param {*} buttonWidth 
+ * @param {*} buttonHeight 
+ * @returns 
+ */
 export function quadriRadial(buttons, buttonWidth, buttonHeight){
     if (buttons.length != 4) {
         return console.warn("quadri radial needs 4 buttons not : " + buttons.length)
@@ -17,6 +23,33 @@ export function quadriRadial(buttons, buttonWidth, buttonHeight){
         }
         btn.style.width = buttonWidth
         core.append(btn)
+    }
+    return core
+}
+
+export function cubicRadial(buttons, buttonWidth, buttonHeight){
+    if (buttons.length && !buttons.length % 2) {
+        return console.warn("cubic radial needs a even number of buttons not : " + buttons.length)
+    }
+    const nbSides = Math.round(Math.sqrt(buttons.length))
+    const core = e("div", "cubic-radial")
+    core.style.width = `calc(${buttonWidth} * ${nbSides} * 1.05)`
+    core.style.height = `calc(${buttonHeight} * ${nbSides} * 2.25)`
+
+    for (let i = 0; i < nbSides; i++){//row
+        for (let j = 0; j < nbSides; j++){//columns
+            const btnData =  buttons[i * nbSides +j]
+            if (!btnData) continue
+            const btnNode = e("div","radial-btn" , btnData[0])
+            btnNode.style.left = `calc(${buttonWidth} * 1.05 * ${j?1/j:0})`
+            btnNode.style.top = `calc(${buttonHeight} * 2.25 * ${i?1/i:0})`
+            btnNode.onclick = (ev) => {
+                btnData[1](ev)
+                ev.stopPropagation()
+            }
+            btnNode.style.width = buttonWidth
+            core.append(btnNode)
+        }
     }
     return core
 }

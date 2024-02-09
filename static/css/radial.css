@@ -42,3 +42,12 @@
     right: 0;
 }
 
+.cubic-radial{
+    background-color: rgba(0, 0, 0, 0);
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    position: relative;
+    font-size: 2em;
+}
+

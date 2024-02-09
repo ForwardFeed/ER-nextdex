@@ -1,12 +1,13 @@
 import { redirectLocation } from "./locations_panel.js"
 import { matchedMoves, moveOverlay } from "./moves_panel.js"
-import { addTooltip, capitalizeFirstLetter, AisInB, e, JSHAC } from "../utils.js"
+import { addTooltip, capitalizeFirstLetter, AisInB, e, JSHAC, reorderNodeList } from "../utils.js"
 import { search } from "../search.js"
 import { queryFilter2, longClickToFilter } from "../filters.js"
 import { gameData } from "../data_version.js"
 import { createInformationWindow } from "../window.js"
 import { getDefensiveCoverage, abilitiesToAddedType} from "../weakness.js"
 import { nodeLists } from "../hydrate.js"
+import { cubicRadial } from "../radial.js"
 
 export function feedPanelSpecies(id) {
     const specie = gameData.species[id]
@@ -411,22 +412,32 @@ const reorderMapSpecies = {
 
 }
 
+
 export function setupReorderBtn(){
     const row = e('div', 'data-list-row', 'reorder')
     function byAlpha(a, b){
         return a.name.localeCompare(b.name)
     }
+    function localeByStats(statID, a, b){
+        return a.stats.base[statID] - b.stats.base[statID]
+    }
+    // reorderNodeList(list, localeByStats.bind(null, 1), "<")
     const list = $('#species-list')
-    row.onclick = ()=>{
-        fastdom.mutate(()=>{ // do not forget this lmao
-            const clonedForReorder = structuredClone(gameData.species).sort(byAlpha);
-            const len = clonedForReorder.length
-            for (var i=0; i < len; i++){
-                const mon = clonedForReorder[i]
-                if (mon.nodeID === undefined) continue
-                list.append(nodeLists.species[mon.nodeID])
-            }
-        })
+    row.onclick = (ev)=>{
+        createInformationWindow(cubicRadial([
+            ["Default", ()=>{
+                console.log('azeaze')
+            }],
+            ["Alpha", ()=>{
+                console.log('aaa')
+            }],
+            ["Stats", ()=>{
+                console.log('azeaze')
+            }],
+            ["", ()=>{
+                
+            }]
+        ], "6em", "0.5em"), {x: ev.clientX, y: ev.clientY}, "mid")
     }
     
     return row

@@ -3,7 +3,7 @@ import { e, JSHAC } from "../utils.js";
 import { createPokemon, getTextNature } from "./trainers_panel.js";
 import { getSpritesURL, getSpritesShinyURL } from "./species_panel.js";
 import { createInformationWindow } from "../window.js";
-import { quadriRadial } from "../radial.js";
+import { cubicRadial } from "../radial.js";
 import { saveToLocalstorage, fetchFromLocalstorage } from "../settings.js";
 
 const saveKeysPokemon = [
@@ -260,7 +260,7 @@ function feedPokemonEdition(viewID) {
     }
     midDiv.onclick = (ev) => {
         ev.stopPropagation()
-        const overlayNode = quadriRadial(
+        const overlayNode = cubicRadial(
             poke.moves.map((x, index)=>{
                 return [
                     gameData.moves[x].name,
@@ -307,7 +307,7 @@ function feedPokemonEdition(viewID) {
     }
     rightDiv.onclick = (ev) => {
         ev.stopPropagation()
-        const overlayNode = quadriRadial([
+        const overlayNode = cubicRadial([
             ["Items", (ev) => {
                 createInformationWindow(overlayList(itemCallback, gameData.itemT), { x: ev.clientX, y: ev.clientY }, "focus")
             }],

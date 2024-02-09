@@ -24,7 +24,9 @@ export function createInformationWindow(node, { x: x, y: y }, cursorPlacement) {
     // apply cursorPlacement
     if (cursorPlacement === "mid"){
         x -= parseInt(node.offsetWidth / 2)
+        if (x < 0) x = 0
         y -= parseInt(node.offsetHeight / 2)
+        if (y < 0) y = 0
     }
     if (windowFrame.offsetWidth + x > document.body.offsetWidth) {
         x = document.body.offsetWidth - windowFrame.offsetWidth // no overflow
