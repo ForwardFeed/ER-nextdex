@@ -36,8 +36,8 @@ function changeVersion(version){
     const savedVersion = fetchFromLocalstorage("dataversion"+version)
     if (savedVersion && savedVersion == LATEST_DATA_VERSION){
         gameData = JSON.parse(fetchFromLocalstorage("data"+version))
-        if (gameData && gameData.speciesStats) {
-            console.log("take gamedata from storage")
+        if (gameData) {
+            console.log("took gamedata from storage")
             hydrate()
             return
         }
@@ -46,7 +46,7 @@ function changeVersion(version){
     fetch(`js/data/gameDataV${version}.json`)
         .then((response) => response.json())
         .then((data) => {
-            console.log("take gamedata from server")
+            console.log("took gamedata from server")
             gameData = data
             saveToLocalstorage("data"+version, gameData)
             hydrate()
