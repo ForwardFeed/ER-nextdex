@@ -6,6 +6,7 @@ import { queryFilter2, longClickToFilter } from "../filters.js"
 import { gameData } from "../data_version.js"
 import { createInformationWindow } from "../window.js"
 import { getDefensiveCoverage, abilitiesToAddedType} from "../weakness.js"
+import { nodeLists } from "../hydrate.js"
 
 export function feedPanelSpecies(id) {
     const specie = gameData.species[id]
@@ -33,16 +34,15 @@ export function feedPanelSpecies(id) {
     setEvos(specie.evolutions)
     setLocations(specie.locations, specie.SEnc)
     $('#species-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
-    $('#species-list').children().eq(id - 1).addClass("sel-active").removeClass("sel-n-active")
+    nodeLists.species[id - 1].classList.replace("sel-n-active", "sel-active")
 }
 
 export function redirectSpecie(specieId) {
-
     if ($("#btn-species")[0].classList.contains("btn-active")) {
-        $('#species-list').children().eq(specieId - 1).click()[0].scrollIntoView({ behavior: "smooth" })
+        $(nodeLists.species[specieId - 1]).click()[0].scrollIntoView({ behavior: "smooth" })
     } else {
         search.callbackAfterFilters = () => {
-            $('#species-list').children().eq(specieId - 1).click()[0].scrollIntoView({ behavior: "smooth" })
+            $(nodeLists.species[specieId - 1]).click()[0].scrollIntoView({ behavior: "smooth" })
         }
         $("#btn-species").click()
     }
@@ -409,6 +409,27 @@ const reorderMapSpecies = {
     "":"",
     "":"",
 
+}
+
+export function setupReorderBtn(){
+    const row = e('div', 'data-list-row', 'reorder')
+    function byAlpha(a, b){
+        return a.name.localeCompare(b.name)
+    }
+    const list = $('#species-list')
+    row.onclick = ()=>{
+        fastdom.mutate(()=>{ // do not forget this lmao
+            const clonedForReorder = structuredClone(gameData.species).sort(byAlpha);
+            const len = clonedForReorder.length
+            for (var i=0; i < len; i++){
+                const mon = clonedForReorder[i]
+                if (mon.nodeID === undefined) continue
+                list.append(nodeLists.species[mon.nodeID])
+            }
+        })
+    }
+    
+    return row
 }
 
 export const queryMapSpecies = {

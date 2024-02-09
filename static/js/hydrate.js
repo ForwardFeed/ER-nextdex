@@ -1,4 +1,4 @@
-import { feedPanelSpecies, getSpritesURL} from "./panels/species_panel.js"
+import { feedPanelSpecies, getSpritesURL, setupReorderBtn} from "./panels/species_panel.js"
 import { feedPanelMoves } from "./panels/moves_panel.js"
 import { feedPanelLocations } from "./panels/locations_panel.js"
 import { feedPanelTrainers } from "./panels/trainers_panel.js"
@@ -82,7 +82,7 @@ function hydrateAbilities(abilities = gameData.abilities){
                     e("div", "abi-desc color" + (i % 2? "C" : "D"), abi.desc)
                 ]
             ])
-            nodeLists.abilities.push()
+            nodeLists.abilities.push(row)
             return row
         }).filter(x => x)
     ));
@@ -142,13 +142,15 @@ function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo){
 }
 
 function hydrateSpecies(){
+    nodeLists.species = [] // reset
     const regionOfOriginMapIndexed = {
         "0": "Kanto",
         "151": "Jhoto",
-    }
+    } // get index in function of the ingameID
     let currentRegion = regionOfOriginMapIndexed[0]
     const fragment = document.createDocumentFragment();
     const species = gameData.species
+    fragment.append(setupReorderBtn())
     for (const i in species){
         if (i == 0) continue
         const spec = species[i]
@@ -174,32 +176,31 @@ function hydrateSpecies(){
             )
         ))]
         // add to the html list 
-        const core = document.createElement('div')
-        core.className = "btn data-list-row sel-n-active"
-        core.setAttribute('draggable', true);
-        core.ondragstart = (ev)=>{
+        const row = e('div', "btn data-list-row sel-n-active")
+        row.setAttribute('draggable', true);
+        row.ondragstart = (ev)=>{
             ev.dataTransfer.setData("id", i)
         }
-        const image = document.createElement('img')
-        image.className = 'species-list-sprite'
+        //Node id because for correlation with nodelist in sorting
+        spec.nodeID = nodeLists.species.length
+        nodeLists.species.push(row)
+
+        const image = e('img', 'species-list-sprite')
         image.src = getSpritesURL(spec.NAME)
         image.alt = spec.name
         image.loading = "lazy"
-        core.appendChild(image)
+        row.appendChild(image)
 
-
-        const name = document.createElement('span')
-        name.innerText = spec.name || "unknown"
-        name.className="species-name"
-        core.append(name)
-        core.dataset.id = i
-        $(core).on('click', function(){
+        const name = e('span', "species-name", spec.name)
+        row.append(name)
+        row.dataset.id = i
+        $(row).on('click', function(){
             $("#filter-frame").hide() 
             fastdom.mutate(() => {
                 feedPanelSpecies($(this).attr('data-id'))  
             });
         });
-        fragment.append(core)
+        fragment.append(row)
     }
     setMeanBaseStats()
     $("#species-list").empty().append(fragment);
