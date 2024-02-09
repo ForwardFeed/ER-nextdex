@@ -5,13 +5,13 @@ import { search } from "../search.js"
 import { queryFilter2, longClickToFilter } from "../filters.js"
 import { gameData } from "../data_version.js"
 import { createInformationWindow, removeInformationWindow } from "../window.js"
-import { getDefensiveCoverage, abilitiesToAddedType} from "../weakness.js"
+import { getDefensiveCoverage, abilitiesToAddedType } from "../weakness.js"
 import { nodeLists } from "../hydrate.js"
 import { cubicRadial } from "../radial.js"
 
 export function feedPanelSpecies(id) {
     const specie = gameData.species[id]
-    $('#species-name').text(`${specie.name}#${specie.dex.id||"??"}`)
+    $('#species-name').text(`${specie.name}#${specie.dex.id || "??"}`)
     $('#species-id').text(`ingame ID: ${specie.id}`)
     updateBaseStats(specie.stats.base)
     $('#species-front').attr('src', getSpritesURL(specie.NAME))
@@ -27,7 +27,7 @@ export function feedPanelSpecies(id) {
     $('#species-front')[0].dataset.shiny = "off"
     setAbilities(specie.stats.abis, specie)
     setInnates(specie.stats.inns)
-    setTypes([...new Set(specie.stats.types),abilitiesExtraType(0, specie)])
+    setTypes([...new Set(specie.stats.types), abilitiesExtraType(0, specie)])
     setLevelUpMoves($('#learnset'), specie.levelUpMoves)
     setMoves($('#tmhm'), specie.TMHMMoves)
     setMoves($('#tutor'), specie.tutor)
@@ -91,7 +91,7 @@ function setTypes(types) {
     setDefensiveCoverage(getDefensiveCoverage(types.map(x => gameData.typeT[x])))
 }
 
-function filterMoves(moveIDlist){
+function filterMoves(moveIDlist) {
     if (!matchedMoves) return moveIDlist
     return moveIDlist.map(x => matchedMoves.indexOf(x) != -1 && x).filter(x => x)
 }
@@ -220,7 +220,7 @@ function changeBaseStat(node, value, statID) {
 
 function setAbilities(abilities, specie) {
     $('#species-abilities').empty().append(
-        JSHAC(abilities.map((val, i)=>{
+        JSHAC(abilities.map((val, i) => {
             if (abilities[i] == abilities[i - 1] || abilities[i] === 0) {
                 return undefined
             }
@@ -230,10 +230,10 @@ function setAbilities(abilities, specie) {
             name.onclick = () => {
                 $('#species-abilities .sel-active').removeClass('sel-active').addClass('sel-n-active')
                 name.classList.replace('sel-n-active', 'sel-active')
-                setTypes([...new Set(specie.stats.types),abilitiesExtraType(i, specie)])
+                setTypes([...new Set(specie.stats.types), abilitiesExtraType(i, specie)])
             }
-            name.classList.add(i?"sel-n-active":"sel-active")
-            longClickToFilter(name, "ability", ()=>{return abi.name} )
+            name.classList.add(i ? "sel-n-active" : "sel-active")
+            longClickToFilter(name, "ability", () => { return abi.name })
             return name
         }).filter(x => x))
     )
@@ -241,20 +241,20 @@ function setAbilities(abilities, specie) {
 
 function setInnates(innates) {
     $('#species-innates').empty().append(
-        JSHAC(innates.map((val, i)=>{
+        JSHAC(innates.map((val, i) => {
             if (innates[i] == innates[i - 1] || innates[i] === 0) {
                 return
             }
             const inn = gameData.abilities[innates[i]]
             const name = e("div", "species-innate", inn.name)
-            longClickToFilter(name, "ability", ()=>{return inn.name})
+            longClickToFilter(name, "ability", () => { return inn.name })
             addTooltip(name, inn.desc)
             return name
         }).filter(x => x))
     )
 }
 
-function abilitiesExtraType(abilityID, specie){
+function abilitiesExtraType(abilityID, specie) {
     return abilitiesToAddedType([specie.stats.abis[abilityID], ...specie.stats.inns])
 }
 
@@ -277,7 +277,7 @@ export function setupSpeciesPanel() {
     $('#species-types').children().each((index, val) => {
         longClickToFilter(val, "type")
     })
-    $('#species-id, #species-name').on('click', function(){
+    $('#species-id, #species-name').on('click', function () {
         $('#species-id, #species-name').toggle()
     })
 }
@@ -401,83 +401,83 @@ function setLocations(locations, SEnc) {
 const reorderMapSpecies = {
     "alphabetical": "",
     "atk": "",
-    "":"",
-    "":"",
-    "":"",
-    "":"",
-    "":"",
-    "":"",
-    "":"",
-    "":"",
+    "": "",
+    "": "",
+    "": "",
+    "": "",
+    "": "",
+    "": "",
+    "": "",
+    "": "",
 
 }
 
 
-export function setupReorderBtn(){
+export function setupReorderBtn() {
     const row = e('div', 'data-list-row', 'reorder')
-    function byAlpha(a, b){
+    function byAlpha(a, b) {
         return a.name.localeCompare(b.name)
     }
-    function localeByStats(statID, a, b){
+    function localeByStats(statID, a, b) {
         return a.stats.base[statID] - b.stats.base[statID]
     }
     const list = $('#species-list')
-    const sortOrderStats = (ev, statsID)=> { 
+    const sortOrderStats = (ev, statsID) => {
         createInformationWindow(cubicRadial([
-            ["STRONGER First >", (ev)=>{
+            ["STRONGER First >", (ev) => {
                 reorderNodeList(list, localeByStats.bind(null, statsID), ">")
                 removeInformationWindow(ev)
             }],
-            ["weaker first <", (ev)=>{
+            ["weaker first <", (ev) => {
                 reorderNodeList(list, localeByStats.bind(null, statsID), "<")
                 removeInformationWindow(ev)
             }],
             undefined, undefined // if you don't make it a square it won't work
         ], "8em", "1em"), ev, "mid", true, true)
     }
-    row.onclick = (ev)=>{
+    row.onclick = (ev) => {
         createInformationWindow(cubicRadial([
-            ["Default", (ev)=>{
+            ["Default", (ev) => {
                 reorderNodeList(list)
                 removeInformationWindow(ev)
-                
+
             }],
-            ["Alpha", (ev)=>{
+            ["Alpha", (ev) => {
                 reorderNodeList(list, byAlpha)
                 removeInformationWindow(ev)
             }],
-            ["Stats", ()=>{
+            ["Stats", () => {
                 createInformationWindow(cubicRadial([
-                    ["HP", (ev)=>{
+                    ["HP", (ev) => {
                         sortOrderStats(ev, 0)
                     }],
-                    ["Atk", (ev)=>{
-                        sortOrderStats(ev,1)
+                    ["Atk", (ev) => {
+                        sortOrderStats(ev, 1)
                     }],
-                    ["Def", (ev)=>{
-                        sortOrderStats(ev,2)
+                    ["Def", (ev) => {
+                        sortOrderStats(ev, 2)
                     }],
-                    ["SpA", (ev)=>{
-                        sortOrderStats(ev,3)
+                    ["SpA", (ev) => {
+                        sortOrderStats(ev, 3)
                     }],
-                    ["SpD", (ev)=>{
-                        sortOrderStats(ev,4)
+                    ["SpD", (ev) => {
+                        sortOrderStats(ev, 4)
                     }],
-                    ["Spe", (ev)=>{
-                        sortOrderStats(ev,5)
+                    ["Spe", (ev) => {
+                        sortOrderStats(ev, 5)
                     }],
-                    ["BST", (ev)=>{
-                        sortOrderStats(ev,6)
+                    ["BST", (ev) => {
+                        sortOrderStats(ev, 6)
                     }],
                     undefined // if you don't make it a square it won't work
                 ], "4em", "1em"), ev, "mid", true, false)
             }],
-            ["", ()=>{
-                
+            ["", () => {
+
             }]
         ], "6em", "1em"), ev, "mid", true, false)
     }
-    
+
     return row
 }
 
@@ -503,7 +503,7 @@ export const queryMapSpecies = {
             )
         for (const abi of abilities) {
             if (AisInB(queryData, abi)) {
-                return [abi === queryData, abi, false] 
+                return [abi === queryData, abi, false]
             }
         }
         return false
@@ -524,9 +524,9 @@ export function updateSpecies(searchQuery) {
     const matched = queryFilter2(searchQuery, species, queryMapSpecies)
     let validID;
     const specieLen = species.length
-    for (let i  = 0; i < specieLen; i++) {
+    for (let i = 0; i < specieLen; i++) {
         if (i == 0) continue
-        const node = nodeList.eq(i - 1)
+        const node = nodeList.eq(i)
         if (!matched || matched.indexOf(i) != -1) {
             if (!validID) validID = i
             node.show()

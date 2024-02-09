@@ -1,4 +1,4 @@
-import { feedPanelSpecies, getSpritesURL, setupReorderBtn} from "./panels/species_panel.js"
+import { feedPanelSpecies, getSpritesURL, setupReorderBtn } from "./panels/species_panel.js"
 import { feedPanelMoves } from "./panels/moves_panel.js"
 import { feedPanelLocations } from "./panels/locations_panel.js"
 import { feedPanelTrainers } from "./panels/trainers_panel.js"
@@ -15,8 +15,8 @@ export const nodeLists = {
     trainers: [],
 }
 
-export function hydrate(){
-    if (!gameData){
+export function hydrate() {
+    if (!gameData) {
         return console.warn("couldn't find gameData")
     }
     // add some reconstitution data for ease of use here
@@ -40,7 +40,7 @@ export function hydrate(){
             [],
         ],
     }
-    
+
     // hydrate the UI with the data
     hydrateAbilities()
     hydrateMoves()
@@ -51,16 +51,16 @@ export function hydrate(){
     restoreSave() // also restore the save of the team builder
 }
 
-function feedBaseStatsStats(statID, value){
+function feedBaseStatsStats(statID, value) {
     gameData.speciesStats.data[statID].push(value)
     if (statID == 6 && (value > gameData.speciesStats.result.maxBST)) {
         gameData.speciesStats.result.maxBST = value
     }
 }
 
-function setMeanBaseStats(){
-    for (const statID in gameData.speciesStats.data){
-        const sorted = gameData.speciesStats.data[statID].sort((a,b)=>{return a - b})
+function setMeanBaseStats() {
+    for (const statID in gameData.speciesStats.data) {
+        const sorted = gameData.speciesStats.data[statID].sort((a, b) => { return a - b })
         const len = sorted.length
         gameData.speciesStats.result.min5[statID] = sorted[Math.ceil(len * 0.05)]
         gameData.speciesStats.result.min20[statID] = sorted[Math.ceil(len * 0.2)]
@@ -72,14 +72,14 @@ function setMeanBaseStats(){
     delete gameData.speciesStats.data
 }
 
-function hydrateAbilities(abilities = gameData.abilities){
+function hydrateAbilities(abilities = gameData.abilities) {
     $("#abis-list").empty().append(JSHAC(
-        abilities.map((abi, i)=>{
+        abilities.map((abi, i) => {
             if (abi.name === "-------") return undefined
             const row = JSHAC([
                 e("div", "abi-row"), [
                     e("div", "abi-name color" + (i % 2 ? "A" : "B"), abi.name),
-                    e("div", "abi-desc color" + (i % 2? "C" : "D"), abi.desc)
+                    e("div", "abi-desc color" + (i % 2 ? "C" : "D"), abi.desc)
                 ]
             ])
             nodeLists.abilities.push(row)
@@ -98,9 +98,9 @@ function hydrateAbilities(abilities = gameData.abilities){
     })*/
 }
 
-function hydrateMoves(moves = gameData.moves){
+function hydrateMoves(moves = gameData.moves) {
     const fragment = document.createDocumentFragment();
-    for (const i in moves){
+    for (const i in moves) {
         if (i == 0) continue
         const mv = moves[i]
         const core = document.createElement('div')
@@ -109,9 +109,9 @@ function hydrateMoves(moves = gameData.moves){
         name.innerText = mv.name || "Unknown"
         core.append(name)
         core.dataset.id = i
-        $(core).on('click', function(){
+        $(core).on('click', function () {
             fastdom.mutate(() => {
-                $("#filter-frame").hide() 
+                $("#filter-frame").hide()
                 feedPanelMoves($(this).attr('data-id'))
             });
         });
@@ -125,7 +125,7 @@ function hydrateMoves(moves = gameData.moves){
  * @param {number} currentSpecieID - species into what the pokemon is evolving
  * @param {import("./compactify.js").CompactEvolution} currentEvo - the how this pokemon is getting evolved (first degree)
  */
-function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo){
+function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo) {
     if (currentEvo.in == -1 || currentEvo.from) return
     const previousSpecie = gameData.species[previousSpecieID]
     const currentSpecie = gameData.species[currentEvo.in]
@@ -134,34 +134,29 @@ function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo){
     if (!currentSpecie.tutor.length) currentSpecie.tutor = previousSpecie.tutor
     //import evolution
     currentSpecie.evolutions.push({
-        kd: currentEvo.kd, 
+        kd: currentEvo.kd,
         rs: currentEvo.rs,
         in: previousSpecieID,
         from: true// its a added flag so we can know if into into but from
     })
 }
 
-function hydrateSpecies(){
+function hydrateSpecies() {
     nodeLists.species = [] // reset
-    const regionOfOriginMapIndexed = {
-        "0": "Kanto",
-        "151": "Jhoto",
-    } // get index in function of the ingameID
-    let currentRegion = regionOfOriginMapIndexed[0]
     const fragment = document.createDocumentFragment();
     const species = gameData.species
     fragment.append(setupReorderBtn())
-    for (const i in species){
+    for (const i in species) {
         if (i == 0) continue
         const spec = species[i]
         spec.stats.base[6] = 0
-        for (const statID in spec.stats.base){
+        for (const statID in spec.stats.base) {
             const value = spec.stats.base[statID]
             feedBaseStatsStats(statID, value)
-            if (statID < 6)spec.stats.base[6] += + value
+            if (statID < 6) spec.stats.base[6] += + value
         }
         //share the eggmoves to the evolutions recursively
-        for (const evo of spec.evolutions){
+        for (const evo of spec.evolutions) {
             hydrateNextEvolutionWithMoves(i, evo)
         }
         // prepare to be appended a list of location where this pokemon appear
@@ -169,16 +164,37 @@ function hydrateSpecies(){
         // concatenate all moves into a new variable
         // also remove all duplicates
         spec.allMoves = [...new Set(spec.eggMoves.concat(
-            spec.levelUpMoves.map(x=>x.id).concat(
+            spec.levelUpMoves.map(x => x.id).concat(
                 spec.TMHMMoves.concat(
                     spec.tutor
                 )
             )
         ))]
+        // add the pokedexID to the form so it is region indexed and does not show a "??"
+        // for megas this will be a lie but watever
+        spec.forms.forEach((val, index) => {
+            if (!index) return
+            gameData.species[val].dex.id = spec.dex.id
+        })
+        // add the region
+        for (const regionsMapped of [
+            [0, "Kanto"],
+            [151, "Jhoto"],
+            [251, "Hoenn"],
+            [386, "Sinnoh"],
+            [494, "Unova"],
+            [649, "Kalos"],
+            [809, "Alola"],
+            [898, "Galar"],
+            [32768, "Redux"],
+        ]) {
+            if (spec.dex.id <= regionsMapped[0]) break
+            spec.region = regionsMapped[1]
+        }
         // add to the html list 
         const row = e('div', "btn data-list-row sel-n-active")
         row.setAttribute('draggable', true);
-        row.ondragstart = (ev)=>{
+        row.ondragstart = (ev) => {
             ev.dataTransfer.setData("id", i)
         }
         //Node id because for correlation with nodelist in sorting
@@ -194,10 +210,10 @@ function hydrateSpecies(){
         const name = e('span', "species-name", spec.name)
         row.append(name)
         row.dataset.id = i
-        $(row).on('click', function(){
-            $("#filter-frame").hide() 
+        $(row).on('click', function () {
+            $("#filter-frame").hide()
             fastdom.mutate(() => {
-                feedPanelSpecies($(this).attr('data-id'))  
+                feedPanelSpecies($(this).attr('data-id'))
             });
         });
         fragment.append(row)
@@ -207,7 +223,7 @@ function hydrateSpecies(){
     feedPanelSpecies(1)
 }
 
-function hydrateLocation(){
+function hydrateLocation() {
     const xmapTable = [
         "land",
         "water",
@@ -218,19 +234,19 @@ function hydrateLocation(){
     ]
     const fragmentList = document.createDocumentFragment();
     const maps = gameData.locations.maps
-    for (const mapID in maps){
+    for (const mapID in maps) {
         const map = maps[mapID]
         map.speciesSet = new Set() // new variable that store pokemon names
         // FEED the pokemons location
-        for (const locName of xmapTable){
+        for (const locName of xmapTable) {
             const mons = map[locName]
             if (!mons) continue
-            for (const monID of mons){
+            for (const monID of mons) {
                 const specieID = monID[2]
                 if (specieID < 1) continue
                 map.speciesSet.add(gameData.species[specieID].name.toLowerCase())
-                if(!gameData.species[specieID].locations.get(mapID))
-                    gameData.species[specieID].locations.set(mapID,new Set())
+                if (!gameData.species[specieID].locations.get(mapID))
+                    gameData.species[specieID].locations.set(mapID, new Set())
                 gameData.species[specieID].locations.get(mapID).add(locName)
             }
         }
@@ -242,7 +258,7 @@ function hydrateLocation(){
         name.innerText = map.name || "unknown"
         listRow.append(name)
         listRow.dataset.id = mapID
-        $(listRow).on('click', function(){
+        $(listRow).on('click', function () {
             fastdom.mutate(() => {
                 feedPanelLocations($(this).attr('data-id'))
             });
@@ -251,19 +267,18 @@ function hydrateLocation(){
     }
     $("#locations-list").empty().append(fragmentList);
     const locations = gameData.locations
-    for (const rateName of xmapTable){
-        
-        const rates = locations[rateName+ "Rate"]
+    for (const rateName of xmapTable) {
+
+        const rates = locations[rateName + "Rate"]
         if (!rates) continue
-        
+
         const fragmentRate = document.createDocumentFragment();
-        if(rateName === "fish")
-        {
+        if (rateName === "fish") {
             $('#locations-' + rateName).empty().append(addFishingTable(rates))
             continue
         }
         else
-            for (const rate of rates){
+            for (const rate of rates) {
                 fragmentRate.appendChild(addLocationRow(rate))
             }
         $('#locations-' + rateName).empty().append(fragmentRate)
@@ -271,31 +286,27 @@ function hydrateLocation(){
     feedPanelLocations(0)
 }
 
-function addFishingTable(rates)
-{
+function addFishingTable(rates) {
     const fragmentRate = document.createDocumentFragment();
     let parent = document.createElement('div')
-    parent.className="location-rod"
-    parent.innerHTML="Old Rod"
+    parent.className = "location-rod"
+    parent.innerHTML = "Old Rod"
     fragmentRate.append(parent)
     // I took this data from the games files
     // and sunk cost fallacy made me use it instead of using a comprehensible way
-    const rodGrades = gameData.locations.rodGrade 
-    for( let i = 0; i < rates.length;i++)
-    {
+    const rodGrades = gameData.locations.rodGrade
+    for (let i = 0; i < rates.length; i++) {
         const rate = rates[i]
-        if(i === rodGrades[0] + 1)
-        {
+        if (i === rodGrades[0] + 1) {
             parent = document.createElement('div')
-            parent.className="location-rod"
-            parent.innerText="Good Rod"
+            parent.className = "location-rod"
+            parent.innerText = "Good Rod"
             fragmentRate.append(parent)
         }
-        if(i === rodGrades[1] + 1)
-        {
+        if (i === rodGrades[1] + 1) {
             parent = document.createElement('div')
-            parent.className="location-rod"
-            parent.innerText="Super Rod"
+            parent.className = "location-rod"
+            parent.innerText = "Super Rod"
             fragmentRate.append(parent)
         }
         fragmentRate.append(addLocationRow(rates[i]))
@@ -319,13 +330,13 @@ function addLocationRow(rate) {
     return nodeCore
 }
 
-function hydrateTrainers(){
+function hydrateTrainers() {
     // still missing in the data the alternative like for the rivals
     // and it's not ordered (it requires to have an order set manually)
     const frag = document.createDocumentFragment();
     const trainers = gameData.trainers
     //let lastMap = -1
-    for (const i in trainers){
+    for (const i in trainers) {
         if (i == 0) continue
         const trainer = trainers[i]
         //check if it's a new map to add it as a header
@@ -345,7 +356,7 @@ function hydrateTrainers(){
         name.innerText = trainer.name || "unknown"
         core.append(name)
         core.dataset.id = i
-        $(core).on('click', function(){
+        $(core).on('click', function () {
             fastdom.mutate(() => {
                 feedPanelTrainers($(this).attr('data-id'))
             });
@@ -356,9 +367,9 @@ function hydrateTrainers(){
     feedPanelTrainers(1)
 }
 
-function hydrateItems(){
+function hydrateItems() {
     gameData.itemT = []
-    gameData.items.forEach((val)=>{
+    gameData.items.forEach((val) => {
         gameData.itemT.push(val.name)
     })
 }
