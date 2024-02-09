@@ -33,16 +33,16 @@ export function cubicRadial(buttons, buttonWidth, buttonHeight){
     }
     const nbSides = Math.round(Math.sqrt(buttons.length))
     const core = e("div", "cubic-radial")
-    core.style.width = `calc(${buttonWidth} * ${nbSides} * 1.05)`
-    core.style.height = `calc(${buttonHeight} * ${nbSides} * 2.25)`
+    core.style.width = `calc(${buttonWidth} * ${nbSides})`
+    core.style.height = `calc(${buttonHeight} * ${nbSides})`
 
     for (let i = 0; i < nbSides; i++){//row
         for (let j = 0; j < nbSides; j++){//columns
-            const btnData =  buttons[i * nbSides +j]
+            const btnData =  buttons[i * nbSides + j]
             if (!btnData) continue
             const btnNode = e("div","radial-btn" , btnData[0])
-            btnNode.style.left = `calc(${buttonWidth} * 1.05 * ${j?1/j:0})`
-            btnNode.style.top = `calc(${buttonHeight} * 2.25 * ${i?1/i:0})`
+            btnNode.style.left = `calc(${buttonWidth} * ${j})`
+            btnNode.style.top = `calc(${buttonHeight} * ${i})`
             btnNode.onclick = (ev) => {
                 btnData[1](ev)
                 ev.stopPropagation()

@@ -126,7 +126,7 @@ function setMoveRow(moveID) {
     row.className = "species-move-row"
     row.onclick = (ev) => {
         fastdom.mutate(() => {
-            createInformationWindow(moveOverlay(moveID), { x: ev.clientX, y: ev.clientY })
+            createInformationWindow(moveOverlay(moveID), ev)
         });
     }
     return row
@@ -421,23 +421,57 @@ export function setupReorderBtn(){
     function localeByStats(statID, a, b){
         return a.stats.base[statID] - b.stats.base[statID]
     }
-    // reorderNodeList(list, localeByStats.bind(null, 1), "<")
     const list = $('#species-list')
+    const sortOrderStats = (ev, statsID)=> { 
+        createInformationWindow(cubicRadial([
+            ["STRONGER First >", ()=>{
+                reorderNodeList(list, localeByStats.bind(null, statsID), ">")
+            }],
+            ["weaker first <", ()=>{
+                reorderNodeList(list, localeByStats.bind(null, statsID), "<")
+            }],
+            undefined, undefined // if you don't make it a square it won't work
+        ], "8em", "1em"), ev, "mid", true, true)
+    }
     row.onclick = (ev)=>{
         createInformationWindow(cubicRadial([
             ["Default", ()=>{
-                console.log('azeaze')
+                reorderNodeList(list)
+                
             }],
             ["Alpha", ()=>{
-                console.log('aaa')
+                reorderNodeList(list, byAlpha)
             }],
             ["Stats", ()=>{
-                console.log('azeaze')
+                createInformationWindow(cubicRadial([
+                    ["HP", (ev)=>{
+                        sortOrderStats(ev, 0)
+                    }],
+                    ["Atk", (ev)=>{
+                        sortOrderStats(ev,1)
+                    }],
+                    ["Def", (ev)=>{
+                        sortOrderStats(ev,2)
+                    }],
+                    ["SpA", (ev)=>{
+                        sortOrderStats(ev,3)
+                    }],
+                    ["SpD", (ev)=>{
+                        sortOrderStats(ev,4)
+                    }],
+                    ["Spe", (ev)=>{
+                        sortOrderStats(ev,5)
+                    }],
+                    ["BST", (ev)=>{
+                        sortOrderStats(ev,6)
+                    }],
+                    undefined // if you don't make it a square it won't work
+                ], "4em", "1em"), ev, "mid", true, false)
             }],
             ["", ()=>{
                 
             }]
-        ], "6em", "0.5em"), {x: ev.clientX, y: ev.clientY}, "mid")
+        ], "6em", "1em"), ev, "mid", true, false)
     }
     
     return row

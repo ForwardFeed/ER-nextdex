@@ -12,15 +12,19 @@ let windowFrame
  * @param {HTMLElement} node
  * @param {CursorPosition} cursorPosition
  */
-export function createInformationWindow(node, { x: x, y: y }, cursorPlacement) {
+export function createInformationWindow(node, ev, cursorPlacement, transparency=false, absorb = true) {
     // remove previous window
     removeInformationWindow()
 
+    let x = ev.clientX
+    let y = ev.clientY
     windowFrame = document.createElement('div')
     windowFrame.className = "window-frame"
+    if (transparency) windowFrame.style.backgroundColor = "rgba(0,0,0,0)"
     windowFrame.append(node)
     document.body.append(windowFrame)
-    clickOutsideToRemove(windowFrame, true)
+    clickOutsideToRemove(windowFrame, absorb)
+    ev.stopPropagation()
     // apply cursorPlacement
     if (cursorPlacement === "mid"){
         x -= parseInt(node.offsetWidth / 2)
