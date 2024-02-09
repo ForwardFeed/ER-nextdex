@@ -4,7 +4,7 @@ import { addTooltip, capitalizeFirstLetter, AisInB, e, JSHAC, reorderNodeList } 
 import { search } from "../search.js"
 import { queryFilter2, longClickToFilter } from "../filters.js"
 import { gameData } from "../data_version.js"
-import { createInformationWindow } from "../window.js"
+import { createInformationWindow, removeInformationWindow } from "../window.js"
 import { getDefensiveCoverage, abilitiesToAddedType} from "../weakness.js"
 import { nodeLists } from "../hydrate.js"
 import { cubicRadial } from "../radial.js"
@@ -424,23 +424,27 @@ export function setupReorderBtn(){
     const list = $('#species-list')
     const sortOrderStats = (ev, statsID)=> { 
         createInformationWindow(cubicRadial([
-            ["STRONGER First >", ()=>{
+            ["STRONGER First >", (ev)=>{
                 reorderNodeList(list, localeByStats.bind(null, statsID), ">")
+                removeInformationWindow(ev)
             }],
-            ["weaker first <", ()=>{
+            ["weaker first <", (ev)=>{
                 reorderNodeList(list, localeByStats.bind(null, statsID), "<")
+                removeInformationWindow(ev)
             }],
             undefined, undefined // if you don't make it a square it won't work
         ], "8em", "1em"), ev, "mid", true, true)
     }
     row.onclick = (ev)=>{
         createInformationWindow(cubicRadial([
-            ["Default", ()=>{
+            ["Default", (ev)=>{
                 reorderNodeList(list)
+                removeInformationWindow(ev)
                 
             }],
-            ["Alpha", ()=>{
+            ["Alpha", (ev)=>{
                 reorderNodeList(list, byAlpha)
+                removeInformationWindow(ev)
             }],
             ["Stats", ()=>{
                 createInformationWindow(cubicRadial([

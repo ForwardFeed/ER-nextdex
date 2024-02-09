@@ -65,6 +65,8 @@ export function clickOutsideToRemove(node, absorb = false){
     }
     // will work as long no future event.stop propagation is written in the code
     document.body.addEventListener('click', clickToHide, absorb)
+    //return the callback to delete
+    return clickToHide
 }
 
 /** JS Util to HTML */

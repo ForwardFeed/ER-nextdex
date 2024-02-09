@@ -1,7 +1,6 @@
 import { clickOutsideToRemove } from "./utils.js"
 
-let windowFrame  
-
+let windowFrame, callbackDelete
 /**
  * @typedef CursorPosition
  * @type {Object}
@@ -23,7 +22,7 @@ export function createInformationWindow(node, ev, cursorPlacement, transparency=
     if (transparency) windowFrame.style.backgroundColor = "rgba(0,0,0,0)"
     windowFrame.append(node)
     document.body.append(windowFrame)
-    clickOutsideToRemove(windowFrame, absorb)
+    callbackDelete = clickOutsideToRemove(windowFrame, absorb)
     ev.stopPropagation()
     // apply cursorPlacement
     if (cursorPlacement === "mid"){
@@ -46,7 +45,8 @@ export function createInformationWindow(node, ev, cursorPlacement, transparency=
     }
 }
 
-export function removeInformationWindow(){
+export function removeInformationWindow(ev){
     // remove previous window
+    if (ev && callbackDelete) callbackDelete(ev)
     if (windowFrame) windowFrame.remove()
 }
