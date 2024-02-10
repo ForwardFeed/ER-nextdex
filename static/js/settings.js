@@ -1,7 +1,7 @@
 
 const appName = "ERdex"
 const appSettings = appName + "_settings"
-const settingsVersion = "1"
+const settingsVersion = "2" //when changed it will init newly added elements from default to the current settings
 const themesList =  [
     "blueish",
     "rushed",
@@ -11,16 +11,30 @@ const themesList =  [
 export const settings = {
 
 }
+
+const defaultSettings = {
+    settingsVersion: settingsVersion,
+    theme: "blueish",
+    storageEnable: true,
+}
+
 export function initAppSettings(){
     if (!window.localStorage.getItem(appSettings)){
         //default settings
-        Object.assign(settings, { 
-            theme: "blueish",
-            settingsVersion: settingsVersion,
-        })
+        Object.assign(settings, defaultSettings)
         saveSettings()
     } else {
         Object.assign(settings, JSON.parse(window.localStorage.getItem(appSettings)))
+        if (settings.settingsVersion !== settingsVersion){
+            console.log('readapted the settings')
+            for (const newSettings in defaultSettings){
+                if (settings[newSettings] == undefined){
+                    settings[newSettings] = defaultSettings[newSettings]
+                }
+            }
+            settings.settingsVersion = settingsVersion
+            saveSettings()
+        }
     }
     changeTheme()
 }
@@ -58,6 +72,15 @@ export function setupSettings(){
     $('#settings-btn').on('click', function(){
         $('#settings-frame').toggle()
     })
+    $('#disable-storage').on('change', ()=>{
+        settings.storageEnable = false
+        saveSettings()
+    })
+    $('#enable-storage').on('change', ()=>{
+        settings.storageEnable = true
+        saveSettings()
+    })
+    if (!settings.storageEnable) $('#disable-storage').attr('checked', true)
     const toUpperCaseFirst = (word)=>{
         return word.charAt(0).toUpperCase() + word.slice(1)
     }
