@@ -103,11 +103,14 @@ export function activateSearch(callback){
                 search.callbackAfterFilters()
                 search.callbackAfterFilters = null
             }
+            //save it there so it's written only once
+            search.searchKeys[search.panelUpdatesIndex] = $('#search-keys').val()
+            search.searchData[search.panelUpdatesIndex] = $('#search-bar').val()
         })
         if (!search.updateQueue) break
         search.updateQueue = false
     }
-    search.updateGuard = false    
+    search.updateGuard = false
 }
 
 

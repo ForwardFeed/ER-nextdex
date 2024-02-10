@@ -65,7 +65,9 @@ export function setupPanels(){
             if (!$('#search-bar').val()){
                 updateMainSearchKey(search.queryMapList[i])
             }
-            
+            // restore previous search on this panel
+            $('#search-keys').val(search.searchKeys[search.panelUpdatesIndex])
+            $('#search-bar').val(search.searchData[search.panelUpdatesIndex])
         })
         $(btnPanel[1]).toggle()
     }
