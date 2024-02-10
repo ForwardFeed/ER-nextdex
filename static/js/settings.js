@@ -29,7 +29,7 @@ export function saveSettings(){
     window.localStorage.setItem(appSettings, JSON.stringify(settings))
 }
 
-export function saveTowindow.localStorage(key, value){
+export function saveToLocalstorage(key, value){
     //disabled fetch from local storage if it does not support it
     if (typeof window.localStorage === 'undefined') return undefined
     if (typeof value === "object"){
@@ -39,7 +39,7 @@ export function saveTowindow.localStorage(key, value){
     }
 }
 
-export function fetchFromwindow.localStorage(key){
+export function fetchFromLocalstorage(key){
     //disabled fetch from local storage if it does not support it
     if (typeof window.localStorage === 'undefined') return undefined
     return window.localStorage.getItem(appName + key)
