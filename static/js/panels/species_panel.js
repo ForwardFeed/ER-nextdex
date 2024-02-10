@@ -220,7 +220,7 @@ function changeBaseStat(node, value, statID) {
         {width: "0"},
         {width: `100%`},
     ], {
-        duration: 250,
+        duration: 300,
         iterations: 1,
     })
 }

@@ -28,13 +28,27 @@ function setAvailableVersion(){
     $('#versions').append(fragment).val(defaultVersion).change()
 
 }
-  
+function iOS() {
+    return [
+      'iPad Simulator',
+      'iPhone Simulator',
+      'iPod Simulator',
+      'iPad',
+      'iPhone',
+      'iPod'
+    ].includes(navigator.platform)
+    // iPad on iOS 13 detection
+    || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+  }
+
 function changeVersion(version){
     if (!version || allVersions.indexOf(version) == -1){
         return console.warn(`no such version : ${version}`)
     }
     const savedVersion = fetchFromLocalstorage("dataversion"+version)
-    if (savedVersion && savedVersion == LATEST_DATA_VERSION){
+    //deactivate fetching from localstorage for iOS product
+    // as it has an unknown device, i would gladly have someone with an Apple to help me fixing it out
+    if (savedVersion && savedVersion == LATEST_DATA_VERSION && !iOS()){
         gameData = JSON.parse(fetchFromLocalstorage("data"+version))
         if (gameData) {
             console.log("took gamedata from storage")
