@@ -343,6 +343,7 @@ function removeAllFilters(){
     $('#filter-frame').find('.filter-field').remove()
     activateSearch()
     spinOnRemoveFilter()
+    activateSearch()
 }
 
 export function spinOnAddFilter(){
