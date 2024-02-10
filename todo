@@ -44,7 +44,6 @@
     [x] click on type to filter by type
     [x] add an arrow to put the selection as a filter
     [x] Filters moves available in the pokemon :<= was linked to the move search
-[ ] pressing control or shift allow to not be redicted but add move as filter
 [x] settings file for the extractor of data
 [x] fix species-mid-stats on 300px size phone <= somewhat fixed
 [x] hide non-querable fields in function of the pannel

@@ -67,6 +67,7 @@
 }
 #builder-editor > div{
     margin: auto;
+    flex-grow: 1;
 }
 .builder-editor-left{
     height: 100%;
@@ -86,6 +87,7 @@
 }
 .builder-editor-abilities, .builder-overlay-abilities{
     display: flex;
+    flex-grow: 1;
     text-align: left;
     flex-direction: column;
     margin: auto;
