@@ -449,7 +449,7 @@ export function setupReorderBtn() {
                 removeInformationWindow(ev)
 
             }],
-            ["Alpha", (ev) => {
+            ["Alphabetical", (ev) => {
                 reorderNodeList(list, byAlpha)
                 removeInformationWindow(ev)
             }],

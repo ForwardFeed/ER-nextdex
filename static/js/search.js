@@ -187,11 +187,9 @@ const evKeymap = {
 
 export function setupSearch(){
     $('#search-keys').on('change', ()=>{
-        search.searchKeys[search.panelUpdatesIndex] = $('#search-keys').val()
         activateSearch()
     })
     $('#search-bar').on('keyup search', (ev)=>{
-        search.searchData[search.panelUpdatesIndex] = $('#search-bar').val()
         onkeySearchFilter(ev, $('#search-suggestion')[0], $('#search-bar')[0])
     })
     $('#filter-icon').on('click', function(){
