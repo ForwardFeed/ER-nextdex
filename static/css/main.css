@@ -754,8 +754,8 @@ span{
     margin: auto;
 }
 .filter-panel{
-    min-height: 50%;
     width: 100%;
+    height: 100%;
 }
 
 .filter-title, .filter-help-title{
