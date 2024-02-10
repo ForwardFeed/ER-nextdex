@@ -12,7 +12,7 @@ export const settings = {
 
 }
 export function initAppSettings(){
-    if (!localStorage.getItem(appSettings)){
+    if (!window.localStorage.getItem(appSettings)){
         //default settings
         Object.assign(settings, { 
             theme: "blueish",
@@ -20,29 +20,29 @@ export function initAppSettings(){
         })
         saveSettings()
     } else {
-        Object.assign(settings, JSON.parse(localStorage.getItem(appSettings)))
+        Object.assign(settings, JSON.parse(window.localStorage.getItem(appSettings)))
     }
     changeTheme()
 }
 
 export function saveSettings(){
-    localStorage.setItem(appSettings, JSON.stringify(settings))
+    window.localStorage.setItem(appSettings, JSON.stringify(settings))
 }
 
-export function saveToLocalstorage(key, value){
+export function saveTowindow.localStorage(key, value){
     //disabled fetch from local storage if it does not support it
-    if (typeof localStorage === 'undefined') return undefined
+    if (typeof window.localStorage === 'undefined') return undefined
     if (typeof value === "object"){
-        localStorage.setItem(appName + key, JSON.stringify(value))
+        window.localStorage.setItem(appName + key, JSON.stringify(value))
     } else {
-        localStorage.setItem(appName + key, value)
+        window.localStorage.setItem(appName + key, value)
     }
 }
 
-export function fetchFromLocalstorage(key){
+export function fetchFromwindow.localStorage(key){
     //disabled fetch from local storage if it does not support it
-    if (typeof localStorage === 'undefined') return undefined
-    return localStorage.getItem(appName + key)
+    if (typeof window.localStorage === 'undefined') return undefined
+    return window.localStorage.getItem(appName + key)
 }
 
 function changeTheme(){
