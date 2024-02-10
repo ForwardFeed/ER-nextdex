@@ -7,6 +7,9 @@ import { activateSearch, appendFilter, spinOnAddFilter} from "./filters.js"
 import { clickOutsideToHide } from "./utils.js"
 
 export const search = {
+    // memories of all search, to sync with the number of tabs
+    searchData: new Array(5).fill(""),
+    searchKeys: new Array(5).fill(""),
     // the search guard is here to prevent that while the app is searching
     // no more searching is going, not to overwhelm the app
     updateGuard: false,
@@ -183,8 +186,12 @@ const evKeymap = {
 }
 
 export function setupSearch(){
-    $('#search-keys').on('change', activateSearch)
+    $('#search-keys').on('change', ()=>{
+        search.searchKeys[search.panelUpdatesIndex] = $('#search-keys').val()
+        activateSearch()
+    })
     $('#search-bar').on('keyup search', (ev)=>{
+        search.searchData[search.panelUpdatesIndex] = $('#search-bar').val()
         onkeySearchFilter(ev, $('#search-suggestion')[0], $('#search-bar')[0])
     })
     $('#filter-icon').on('click', function(){

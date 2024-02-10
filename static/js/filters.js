@@ -1,6 +1,40 @@
 import { search, onkeySearchFilter } from "./search.js"
 import { e, JSHAC, clickOutsideToHide, setLongClickSelection } from "./utils.js"
 
+// Sync it with search.js => panelUpdatesTable
+export const filterDatas = [
+    { // species
+        filters: [],
+        modify: function(){
+
+        },
+    },
+    { // abilities
+        filters: [],
+        modify: function(){
+
+        },
+    },
+    { // moves
+        filters: [],
+        modify: function(){
+
+        },
+    },
+    { // locations
+        filters: [],
+        modify: function(){
+
+        },
+    },
+    { //trainers
+        filters: [],
+        modify: function(){
+
+        },
+    },
+]
+
 let allQueries = []
 
 export function getQueries(){
