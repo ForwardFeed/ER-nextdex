@@ -215,7 +215,14 @@ function changeBaseStat(node, value, statID) {
     const maxValue = statID < 6 ? 255 : gameData.speciesStats.result.maxBST
     const percent = ((value / maxValue) * 100).toFixed()
     node.find('.stat-num').css('background-color', color)
-    node.find('.stat-bar').css('background', `linear-gradient(to right, ${color} ${percent}%, #0000 0%)`)
+    node.find('.stat-bar').css('background', `linear-gradient(to right, ${color} ${percent}%, #0000 0%)`)[0]
+    node[0].animate([
+        {width: "0"},
+        {width: `100%`},
+    ], {
+        duration: 250,
+        iterations: 1,
+    })
 }
 
 function setAbilities(abilities, specie) {
