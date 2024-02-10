@@ -64,7 +64,7 @@ export function setupPanels(){
             // restore previous search on this panel
             $('#search-bar').val(search.searchData[search.panelUpdatesIndex])
             // restore previous key on this panel or adapt the query key to the first available
-            console.log(search.searchKeys[search.panelUpdatesIndex], )
+            updateMainSearchKey(search.queryMapList[i])
             $('#search-keys').val(search.searchKeys[search.panelUpdatesIndex] ||
                 capitalizeFirstLetter(Object.keys(search.queryMapList[i])[0]))
         })
