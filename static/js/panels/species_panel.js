@@ -240,7 +240,7 @@ function setAbilities(abilities, specie) {
                 setTypes([...new Set(specie.stats.types), abilitiesExtraType(i, specie)])
             }
             name.classList.add(i ? "sel-n-active" : "sel-active")
-            longClickToFilter(name, "ability", () => { return abi.name })
+            longClickToFilter(0, name, "ability", () => { return abi.name })
             return name
         }).filter(x => x))
     )
@@ -254,7 +254,7 @@ function setInnates(innates) {
             }
             const inn = gameData.abilities[innates[i]]
             const name = e("div", "species-innate", inn.name)
-            longClickToFilter(name, "ability", () => { return inn.name })
+            longClickToFilter(0, name, "ability", () => { return inn.name }, 0)
             addTooltip(name, inn.desc)
             return name
         }).filter(x => x))
@@ -282,7 +282,7 @@ export function setupSpeciesPanel() {
         $('#species-basestats, #species-coverage').toggle()
     })
     $('#species-types').children().each((index, val) => {
-        longClickToFilter(val, "type")
+        longClickToFilter(0, val, "type")
     })
     $('#species-id, #species-name').on('click', function () {
         $('#species-id, #species-name').toggle()

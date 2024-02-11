@@ -79,7 +79,7 @@ function listMoveFlags(flags, core) {
         const descFlag = flagMap[flag]
         if (!descFlag) continue
         const node = e("div", undefined, descFlag)
-        longClickToFilter(node, "move-effect", () => {return flag})
+        longClickToFilter(2, node, "move-effect", () => {return flag})
         frag.append(node)
     }
     const noFlagArray = Object.keys(NoFlagMap)
@@ -87,7 +87,7 @@ function listMoveFlags(flags, core) {
         if (flags.indexOf(noFlag) != -1) continue
         const descFlag = NoFlagMap[noFlag]
         const node = e("div", undefined, descFlag)
-        longClickToFilter(node, "move-effect", () => {return descFlag})
+        longClickToFilter(2, node, "move-effect", () => {return descFlag})
         frag.append(node)
     }
     core.empty()
@@ -118,9 +118,9 @@ function setTarget(targetID) {
 
 export function setupMoves(){
     $('#moves-types1, moves-types2').each((index, node)=>{
-        longClickToFilter(node, "type", ()=>{return node.children[0].innerText})
+        longClickToFilter(2, node, "type", ()=>{return node.children[0].innerText})
     })
-    longClickToFilter($('#moves-split').parent()[0], "category", 
+    longClickToFilter(2, $('#moves-split').parent()[0], "category", 
             ()=>{ return $('#moves-split')[0].dataset.split || ""}
         )
     

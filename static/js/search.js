@@ -204,7 +204,7 @@ export function setupSearch(){
     $('#to-filter')[0].onclick = ()=>{
         const data = $('#search-bar').val()
         if (!data) return
-        appendFilter($('#search-keys').val(), data)
+        appendFilter(search.panelUpdatesIndex,$('#search-keys').val(), data)
         $('#search-bar').val("")
         spinOnAddFilter()
     }

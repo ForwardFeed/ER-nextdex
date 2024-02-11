@@ -75,12 +75,16 @@ export function clickOutsideToRemove(node, absorb = false){
  * @param {string | undefined} tag 
  * @param {string | undefined} classname 
  * @param {string | undefined} innerText 
+ * @param {Object | undefined} events 
  * @returns {HTMLDivElement}
  */
-export function e(tag = "div", classname = "", innerText ="" ){
+export function e(tag = "div", classname = "", innerText ="", events = {}){
     const htmlTag = document.createElement(tag)
-    htmlTag.className = classname
+    if (classname) htmlTag.className = classname
     htmlTag.innerText = innerText
+    for (const event in events){
+        htmlTag[event] = events[event]
+    }
     return htmlTag
 }
 /**

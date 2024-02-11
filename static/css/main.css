@@ -799,10 +799,25 @@ span{
 .filter-data > *{
     margin: auto;
 }
+.filter-row{
+    width: calc(98% - 2px);
+    padding: 1%;
+    border: dotted var(--font-color) 1px;
+    display: flex;
+}
+.filter-target{
+    width: 4.5em;
+    height: 100%;
+    padding-right: 0.7%;
+    border-right: solid var(--font-color) 2px;
+}
+.filter-list{
+    padding-left: 0.7%;
+    flex-grow: 1;
+}
 .filter-field{
     display: flex;
 }
-
 .filter-field *{
     padding-top: 0.1em;
     padding-bottom: 0.1em;
@@ -861,8 +876,9 @@ span{
 }
 
 .filter-remove{
-    padding-right: 0.1em;
     color: red;
+    width: 2em;
+    text-align: center;
 }
 .filter-add{
     border-radius: 10px;

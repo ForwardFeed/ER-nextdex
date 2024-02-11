@@ -3,31 +3,36 @@ import { e, JSHAC, clickOutsideToHide, setLongClickSelection } from "./utils.js"
 
 // Sync it with search.js => panelUpdatesTable
 export const filterDatas = [
-    { // species
+    {
+        name: "Species",
         filters: [],
         modify: function(){
 
         },
     },
-    { // abilities
+    {
+        name: "Abilities",
         filters: [],
         modify: function(){
 
         },
     },
-    { // moves
+    {
+        name: "Moves",
         filters: [],
         modify: function(){
 
         },
     },
-    { // locations
+    {
+        name: "Locations",
         filters: [],
         modify: function(){
 
         },
     },
-    { //trainers
+    {
+        name: "Trainers",
         filters: [],
         modify: function(){
 
@@ -114,7 +119,7 @@ export function activateSearch(callback){
 }
 
 
-export function appendFilter(initKey = "", initData = ""){  
+export function appendFilter(panelID, initKey = "", initData = ""){  
     const divField = e("div", "filter-field")
 
     const divNot = e("div", "filter-not", "¿?")
@@ -200,7 +205,7 @@ export function appendFilter(initKey = "", initData = ""){
         activateSearch()
     }
     
-    $('#filter-data').find('.filter-add').before(frag)
+    $('#filter-data').find('.filter-add').eq(panelID).before(frag)
     
     spinOnAddFilter()
     return divField
@@ -430,9 +435,8 @@ export function setupFilters(){
     })
 
     $('.filter-add').on('click', function(){
-        appendFilter()
+        
     })
-    // weird but it's because i have other events on it like the long click
 
     $('#filter-main-operator').on('change', function(){
         activateSearch()
@@ -441,9 +445,11 @@ export function setupFilters(){
     setLongClickSelection($('#to-filter')[0], ()=>{
         removeAllFilters()
     })
+
+    setupFiltersRow()
 }
 
-export function longClickToFilter(node, key, data = ()=>{return node.innerText}){
+export function longClickToFilter(panelID, node, key, data = ()=>{return node.innerText}){
     let filterDiv, color
     let extendableDiv = setLongClickSelection(node, () => {
         if (hasFilter(key, data())) {
@@ -459,7 +465,7 @@ export function longClickToFilter(node, key, data = ()=>{return node.innerText})
             spinOnRemoveFilter()
             color = "green";
         } else {
-            filterDiv = appendFilter(key, data())
+            filterDiv = appendFilter(panelID, key, data())
             color = "red"
         }
         activateSearch()
@@ -467,4 +473,25 @@ export function longClickToFilter(node, key, data = ()=>{return node.innerText})
     }, 450, hasFilter(key, data()) ? "red" : "green")
 }
 
+function setupFiltersRow(){
 
+    $('#filter-data').append(filterDatas.map((rowData, index)=>{
+        const filterAdd = (ev) => {
+            console.log(ev)
+            appendFilter(index)
+        }
+        return JSHAC([
+            e('div', 'filter-row'),[
+                e('div', 'filter-target'),[
+                    e('span', '', rowData.name)
+                ],
+                e('div', 'filter-list'), [
+                    e('div', 'filter-add', null, {onclick:filterAdd}),[
+                        e('span', 'filter-plus', '+'),
+                        e('span', '', 'Add a filter')
+                    ]
+                ]
+            ]
+        ])
+    }))
+}
