@@ -21,7 +21,11 @@ export const filterDatas = [
         name: "Moves",
         filters: [],
         modify: function(){
-
+            //trick the search
+            const current = search.panelUpdatesIndex
+            search.panelUpdatesIndex = 2
+            search.panelUpdatesTable[2](getQueries())
+            search.panelUpdatesIndex = current
         },
     },
     {
@@ -51,7 +55,7 @@ export function getQueries(){
         suggestion: $('#search-bar')[0] === search.suggestionInput
     }]
     $('.filter-row').map(function(index, row){
-        filterDatas[index] = []
+        filterDatas[index].filters = []
         const allFields = row.querySelectorAll('.filter-field')
         const allFieldsLength = allFields.length
         if (!allFieldsLength) return
@@ -65,11 +69,11 @@ export function getQueries(){
                 data: field.querySelector('.filter-search').value.toLowerCase(),
                 suggestion: field.querySelector('.filter-search') === search.suggestionInput
             }
-            filterDatas[index].push(toAddQuery)
+            filterDatas[index].filters.push(toAddQuery)
         }
     })
     //filters the empty queries
-    allQueries.push(...filterDatas[search.panelUpdatesIndex])
+    allQueries.push(...filterDatas[search.panelUpdatesIndex].filters)
     allQueries = allQueries.filter((x)=> x.data)
     let finalQuery
     if (allQueries.length == 1){
@@ -139,7 +143,10 @@ export function appendFilter(panelID, initKey = "", initData = ""){
     const inputKey = e('input', "filter-key")
     inputKey.type = "button"
     inputKey.value = initKey || search.queryKeys[0] || "Name"
-    inputKey.onchange = activateSearch
+    inputKey.onchange = ()=>{
+        activateSearch()
+        filterDatas[panelID].modify()
+    }
 
     const divKeySelection = e('div', "filter-key-selection")
     divKeySelection.style.display = "none"
@@ -150,6 +157,7 @@ export function appendFilter(panelID, initKey = "", initData = ""){
             inputKey.value = key
             $(divKeySelection).hide()
             activateSearch()
+            filterDatas[panelID].modify()
         }
         return option
     }
@@ -194,6 +202,7 @@ export function appendFilter(panelID, initKey = "", initData = ""){
             inputKey.classList.remove('filter-not-not')
         }
         activateSearch()
+        filterDatas[panelID].modify()
     }
 
     inputKey.onclick = () =>{
@@ -207,12 +216,16 @@ export function appendFilter(panelID, initKey = "", initData = ""){
         search.suggestionNode = divSuggestions
     }
 
-    inputSearch.onkeyup = (ev)=>{onkeySearchFilter(ev, divSuggestions, inputSearch)}
+    inputSearch.onkeyup = (ev)=>{
+        onkeySearchFilter(ev, divSuggestions, inputSearch)
+        filterDatas[panelID].modify()
+    }
 
     divRemove.onclick = ()=>{
         divField.remove()
         activateSearch()
         spinOnRemoveFilter()
+        filterDatas[panelID].modify()
     }
     
     $('#filter-data').find('.filter-add').eq(panelID).before(frag)
@@ -393,7 +406,6 @@ export function queryFilter2(query, datas, keymap){
 
 function removeAllFilters(){
     $('#filter-frame').find('.filter-field').remove()
-    activateSearch()
     spinOnRemoveFilter()
     activateSearch()
 }
