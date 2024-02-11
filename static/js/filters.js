@@ -50,18 +50,26 @@ export function getQueries(){
         data: $('#search-bar').val().toLowerCase(),
         suggestion: $('#search-bar')[0] === search.suggestionInput
     }]
-    
-    $('.filter-field').map(function(){
-        allQueries.push({
-            op:"AND",
-            //if you use data('state') jquery util here you're fucked for no acceptable reason
-            not: $(this).find('.filter-not')[0].dataset.state === "on" ? true : false,
-            k: $(this).find('.filter-key').val().toLowerCase(),
-            data: $(this).find('.filter-search').val().toLowerCase(),
-            suggestion: $(this).find('.filter-search')[0] === search.suggestionInput
-        })
+    $('.filter-row').map(function(index, row){
+        filterDatas[index] = []
+        const allFields = row.querySelectorAll('.filter-field')
+        const allFieldsLength = allFields.length
+        if (!allFieldsLength) return
+        for (let fieldIndex = 0; fieldIndex < allFieldsLength; fieldIndex++){
+            const field = allFields[fieldIndex]
+            const toAddQuery = {
+                op:"AND",
+                //if you use data('state') jquery util here you're fucked for no acceptable reason
+                not: field.querySelector('.filter-not').dataset.state === "on" ? true : false,
+                k: field.querySelector('.filter-key').value.toLowerCase(),
+                data: field.querySelector('.filter-search').value.toLowerCase(),
+                suggestion: field.querySelector('.filter-search') === search.suggestionInput
+            }
+            filterDatas[index].push(toAddQuery)
+        }
     })
     //filters the empty queries
+    allQueries.push(...filterDatas[search.panelUpdatesIndex])
     allQueries = allQueries.filter((x)=> x.data)
     let finalQuery
     if (allQueries.length == 1){
@@ -119,7 +127,7 @@ export function activateSearch(callback){
 }
 
 
-export function appendFilter(panelID, initKey = "", initData = ""){  
+export function appendFilter(panelID, initKey = "", initData = ""){ 
     const divField = e("div", "filter-field")
 
     const divNot = e("div", "filter-not", "¿?")
@@ -162,8 +170,9 @@ export function appendFilter(panelID, initKey = "", initData = ""){
             divNot,
             divKeyWrapper, [
                 inputKey,
-                divKeySelection,
-                search.queryKeys.map(createSelectable)
+                divKeySelection, [
+                    ...Object.keys(search.queryMapList[panelID]).map(createSelectable)
+                ]
             ],
             divLabel, [
                 inputSearch,
@@ -203,6 +212,7 @@ export function appendFilter(panelID, initKey = "", initData = ""){
     divRemove.onclick = ()=>{
         divField.remove()
         activateSearch()
+        spinOnRemoveFilter()
     }
     
     $('#filter-data').find('.filter-add').eq(panelID).before(frag)
@@ -477,7 +487,6 @@ function setupFiltersRow(){
 
     $('#filter-data').append(filterDatas.map((rowData, index)=>{
         const filterAdd = (ev) => {
-            console.log(ev)
             appendFilter(index)
         }
         return JSHAC([
