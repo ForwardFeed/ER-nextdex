@@ -9,7 +9,10 @@ import { getDefensiveCoverage, abilitiesToAddedType } from "../weakness.js"
 import { nodeLists } from "../hydrate.js"
 import { cubicRadial } from "../radial.js"
 
+export let currentSpecieID = 1
+
 export function feedPanelSpecies(id) {
+    currentSpecieID = id
     const specie = gameData.species[id]
     $('#species-name').text(`${specie.name}#${specie.dex.id || "??"}`)
     $('#species-id').text(`ingame ID: ${specie.id}`)
@@ -28,10 +31,7 @@ export function feedPanelSpecies(id) {
     setAbilities(specie.stats.abis, specie)
     setInnates(specie.stats.inns)
     setTypes([...new Set(specie.stats.types), abilitiesExtraType(0, specie)])
-    setLevelUpMoves($('#learnset'), specie.levelUpMoves)
-    setMoves($('#tmhm'), specie.TMHMMoves)
-    setMoves($('#tutor'), specie.tutor)
-    setMoves($('#eggmoves'), specie.eggMoves)
+    setAllMoves(specie)
     setEvos(specie.evolutions)
     setLocations(specie.locations, specie.SEnc)
     $('#species-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
@@ -89,6 +89,13 @@ function setTypes(types) {
         node.text(type).attr("class", `type ${type.toLowerCase()}`)
     }
     setDefensiveCoverage(getDefensiveCoverage(types.map(x => gameData.typeT[x])))
+}
+
+export function setAllMoves(specie = gameData.species[currentSpecieID]){
+    setLevelUpMoves($('#learnset'), specie.levelUpMoves)
+    setMoves($('#tmhm'), specie.TMHMMoves)
+    setMoves($('#tutor'), specie.tutor)
+    setMoves($('#eggmoves'), specie.eggMoves)
 }
 
 function filterMoves(moveIDlist) {

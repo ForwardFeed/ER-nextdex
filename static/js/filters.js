@@ -1,5 +1,6 @@
 import { search, onkeySearchFilter } from "./search.js"
 import { e, JSHAC, clickOutsideToHide, setLongClickSelection } from "./utils.js"
+import { setAllMoves } from "./panels/species_panel.js"
 
 // Sync it with search.js => panelUpdatesTable
 export const filterDatas = [
@@ -22,6 +23,7 @@ export const filterDatas = [
         filters: [],
         modify: function(){
             trickFilterSearch(2)
+            setAllMoves()
         },
     },
     {
@@ -402,7 +404,6 @@ export function queryFilter2(query, datas, keymap){
                 }
             }
         }
-        console.log(search.suggestions)
         return perfectMatches.length ? perfectMatches : allElementsIndexesThatMatched
     }
 }
