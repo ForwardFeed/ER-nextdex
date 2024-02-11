@@ -85,7 +85,6 @@ export const search = {
     },
     showSuggestion: function(){
         if (!this.suggestionNode) return
-
         if(!this.searchIsActive) {
             this.searchIsActive=true
             this.suggestionInput.blur()
@@ -113,7 +112,7 @@ export const search = {
 
 }
 
-export function onkeySearchFilter(ev, divSuggestions, inputSearch){
+export function onkeySearchFilter(ev, divSuggestions, inputSearch, callback){
     search.suggestionNode = divSuggestions
     search.suggestionInput = inputSearch
     divSuggestions.style.display = "block"
@@ -122,11 +121,7 @@ export function onkeySearchFilter(ev, divSuggestions, inputSearch){
         divSuggestions.style.display = "none"
     }, 3000) // 3 secs
     if (evKeymap[ev.key] && evKeymap[ev.key]()) return
-    const callback = ()=>{
-        clickOutsideToHide(search.suggestionNode)
-        search.suggestionSaved = search.suggestionInput.value
-    }
-    activateSearch(callback)
+    callback()
 }
 
 // non-text key that affect the searching bar 
@@ -190,7 +185,14 @@ export function setupSearch(){
         activateSearch()
     })
     $('#search-bar').on('keyup search', (ev)=>{
-        onkeySearchFilter(ev, $('#search-suggestion')[0], $('#search-bar')[0])
+        onkeySearchFilter(ev, $('#search-suggestion')[0], $('#search-bar')[0],
+        ()=>{
+            const callback = ()=>{
+                clickOutsideToHide(search.suggestionNode)
+                search.suggestionSaved = search.suggestionInput.value
+            }
+            activateSearch(callback)
+        })
     })
     $('#filter-icon').on('click', function(){
         $('#filter-frame').toggle()

@@ -7,42 +7,48 @@ export const filterDatas = [
         name: "Species",
         filters: [],
         modify: function(){
-
+            trickFilterSearch(0)
         },
     },
     {
         name: "Abilities",
         filters: [],
         modify: function(){
-
+            trickFilterSearch(1)
         },
     },
     {
         name: "Moves",
         filters: [],
         modify: function(){
-            //trick the search
-            const current = search.panelUpdatesIndex
-            search.panelUpdatesIndex = 2
-            search.panelUpdatesTable[2](getQueries())
-            search.panelUpdatesIndex = current
+            trickFilterSearch(2)
         },
     },
     {
         name: "Locations",
         filters: [],
         modify: function(){
-
+            trickFilterSearch(3)
         },
     },
     {
         name: "Trainers",
         filters: [],
         modify: function(){
-
+            trickFilterSearch(4)
         },
     },
 ]
+
+//trick the search to show suggestions
+function trickFilterSearch(panelID){
+    const current = search.panelUpdatesIndex
+    search.panelUpdatesIndex = panelID
+    search.clearSuggestion()
+    search.panelUpdatesTable[panelID](getQueries())
+    search.showSuggestion()
+    search.panelUpdatesIndex = current
+}
 
 let allQueries = []
 
@@ -144,7 +150,6 @@ export function appendFilter(panelID, initKey = "", initData = ""){
     inputKey.type = "button"
     inputKey.value = initKey || search.queryKeys[0] || "Name"
     inputKey.onchange = ()=>{
-        activateSearch()
         filterDatas[panelID].modify()
     }
 
@@ -156,7 +161,6 @@ export function appendFilter(panelID, initKey = "", initData = ""){
         option.onclick = ()=>{
             inputKey.value = key
             $(divKeySelection).hide()
-            activateSearch()
             filterDatas[panelID].modify()
         }
         return option
@@ -201,7 +205,6 @@ export function appendFilter(panelID, initKey = "", initData = ""){
             divNot.classList.remove('filter-not-not')
             inputKey.classList.remove('filter-not-not')
         }
-        activateSearch()
         filterDatas[panelID].modify()
     }
 
@@ -217,15 +220,14 @@ export function appendFilter(panelID, initKey = "", initData = ""){
     }
 
     inputSearch.onkeyup = (ev)=>{
-        onkeySearchFilter(ev, divSuggestions, inputSearch)
-        filterDatas[panelID].modify()
+        onkeySearchFilter(ev, divSuggestions, inputSearch, filterDatas[panelID].modify)
     }
 
     divRemove.onclick = ()=>{
         divField.remove()
-        activateSearch()
-        spinOnRemoveFilter()
         filterDatas[panelID].modify()
+        spinOnRemoveFilter()
+        
     }
     
     $('#filter-data').find('.filter-add').eq(panelID).before(frag)
@@ -400,6 +402,7 @@ export function queryFilter2(query, datas, keymap){
                 }
             }
         }
+        console.log(search.suggestions)
         return perfectMatches.length ? perfectMatches : allElementsIndexesThatMatched
     }
 }
@@ -454,10 +457,6 @@ export function setupFilters(){
     $('.filter-help-btn').on('click', function(){
         $('#filter-help').toggle()
         $('.filter-panel').toggle()
-    })
-
-    $('.filter-add').on('click', function(){
-        
     })
 
     $('#filter-main-operator').on('change', function(){
