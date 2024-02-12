@@ -56,7 +56,9 @@ export function saveToLocalstorage(key, value){
 export function fetchFromLocalstorage(key){
     //disabled fetch from local storage if it does not support it
     if (typeof window.localStorage === 'undefined') return undefined
-    return window.localStorage.getItem(appName + key)
+    const returnedValue = window.localStorage.getItem(appName + key)
+    // sometimes it's "null" stringified, which is very fun
+    return returnedValue === "null" ? undefined : returnedValue
 }
 
 function changeTheme(){
