@@ -20,7 +20,6 @@ function setAvailableVersion(){
     const fragment = document.createDocumentFragment()
     for (const version of allVersions){
         const option = document.createElement('option')
-        if (option === defaultVersion) option.prop('selected',true);
         option.value = version
         option.innerText = version
         fragment.append(option)
