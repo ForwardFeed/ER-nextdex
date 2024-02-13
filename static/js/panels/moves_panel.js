@@ -36,7 +36,7 @@ function setTypes(types) {
     }
 }
 
-function listMoveFlags(flags, core) {
+function listMoveFlags(flags, core, longClickCallback = ()=>{}) {
     const flagMap = {
         "Makes Contact": "Has contact and Big Pecks boost",
         "Kings Rock Affected": "Triggers King's rock",
@@ -81,7 +81,7 @@ function listMoveFlags(flags, core) {
         const descFlag = flagMap[flag]
         if (!descFlag) continue
         const node = e("div", undefined, descFlag)
-        longClickToFilter(2, node, "move-effect", () => {return flag})
+        longClickToFilter(2, node, "move-effect", () => {return flag}, longClickCallback)
         frag.append(node)
     }
     const noFlagArray = Object.keys(NoFlagMap)
@@ -89,7 +89,7 @@ function listMoveFlags(flags, core) {
         if (flags.indexOf(noFlag) != -1) continue
         const descFlag = NoFlagMap[noFlag]
         const node = e("div", undefined, descFlag)
-        longClickToFilter(2, node, "move-effect", () => {return descFlag})
+        longClickToFilter(2, node, "move-effect", () => {return descFlag}, longClickCallback)
         frag.append(node)
     }
     core.empty()
@@ -172,7 +172,7 @@ export function moveOverlay(moveId) {
             ()=>{ return gameData.splitT[move.split].toLowerCase() || ""}
         , triggerMoveRefresh)
     const effectsDiv = e("div", "move-overlay-effects")
-    listMoveFlags(move.flags.map((x) => gameData.flagsT[x]), $(effectsDiv))
+    listMoveFlags(move.flags.map((x) => gameData.flagsT[x]), $(effectsDiv), triggerMoveRefresh)
 
     return JSHAC([
         core, [
