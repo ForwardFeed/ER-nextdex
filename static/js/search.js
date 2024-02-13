@@ -181,9 +181,7 @@ const evKeymap = {
 }
 
 export function setupSearch(){
-    $('#search-keys').on('change', ()=>{
-        activateSearch()
-    })
+    $('#search-keys').on('change', activateSearch)
     $('#search-bar').on('keyup search', (ev)=>{
         onkeySearchFilter(ev, $('#search-suggestion')[0], $('#search-bar')[0],
         ()=>{

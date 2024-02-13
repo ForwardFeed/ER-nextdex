@@ -79,6 +79,9 @@ main{
     color: var(--font-color);
     user-select: none;
     cursor: pointer;
+    background-color: var(--selHover);
+    outline: none;
+    text-align: center;
 }
 
 .search-keys-wrapper {

@@ -9,6 +9,10 @@
     text-align: center;
     height: fit-content;
     position: absolute;
+    border-color: var(--font-color);
+    border-width: 1px;
+    border-style: solid;
+    box-sizing: border-box;
 }
 
 .radial-btn:hover{

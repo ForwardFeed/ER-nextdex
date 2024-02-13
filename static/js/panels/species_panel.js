@@ -244,7 +244,7 @@ function setAbilities(abilities, specie) {
                 return undefined
             }
             const abi = gameData.abilities[abilities[i]]
-            const name = e("div", "species-abilities", abi.name)
+            const name = e("div", "species-ability", abi.name)
             addTooltip(name, abi.desc)
             name.onclick = () => {
                 $('#species-abilities .sel-active').removeClass('sel-active').addClass('sel-n-active')
@@ -492,9 +492,6 @@ export function setupReorderBtn() {
                     undefined // if you don't make it a square it won't work
                 ], "4em", "1em"), ev, "mid", true, false)
             }],
-            ["", () => {
-
-            }]
         ], "6em", "1em"), ev, "mid", true, false)
     }
 
