@@ -134,7 +134,7 @@ export class Selectable {
 }
 
 
-export function setLongClickSelection(node, callback, time = 1000, bgColor = "red"){
+export function setLongClickSelection(node, callback, time = 500, bgColor = "red"){
     const extendableDiv  = e("div", "extend")
     extendableDiv.style.backgroundColor = bgColor
     extendableDiv.style.display = "none"
