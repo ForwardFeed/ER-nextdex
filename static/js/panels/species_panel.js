@@ -499,7 +499,7 @@ export const queryMapSpecies = {
     "name": (queryData, specie) => {
         const specieName = specie.name.toLowerCase()
         if (AisInB(queryData, specieName)) {
-            return [queryData === specieName, specie.name, true]
+            return specie.name
         }
     },
     "type": (queryData, specie) => {
