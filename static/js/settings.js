@@ -52,7 +52,12 @@ export function saveToLocalstorage(key, value){
     //disabled fetch from local storage if it does not support it
     if (typeof window.localStorage === 'undefined') return undefined
     if (typeof value === "object"){
-        window.localStorage.setItem(appName + key, JSON.stringify(value))
+        try{
+            window.localStorage.setItem(appName + key, JSON.stringify(value))
+        }
+        catch(e){
+            cleanLocalStorage()
+        }
     } else {
         window.localStorage.setItem(appName + key, value)
     }
@@ -118,4 +123,19 @@ export function setupSettings(){
     }
     themeCore.append(frag)
     $('#settings-frame').append(themeCore)
+}
+
+/**
+ * when the localStorage is too full
+ */
+function cleanLocalStorage(){
+    console.log('cleaned the local storage of data')
+    const keys = Object.keys(localStorage) 
+    for (const key of keys){
+        //only delete the part that are about ER dex
+        if (key.indexOf("ERdex") == -1) continue
+        // only delete the data
+        if (key.indexOf("ERdexdata") == -1) continue
+        localStorage.removeItem(key)
+    }
 }
