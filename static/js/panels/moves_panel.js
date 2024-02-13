@@ -3,6 +3,7 @@ import { search } from "../search.js"
 import { queryFilter2, longClickToFilter, trickFilterSearch} from "../filters.js"
 import { AisInB, e, JSHAC } from "../utils.js"
 import { removeInformationWindow } from "../window.js"
+import { setAllMoves } from "./species_panel.js"
 
 export let matchedMoves
 let currentMoveID = 0
@@ -137,12 +138,17 @@ export function redirectMove(moveId) {
 
 
 export function moveOverlay(moveId) {
+    const triggerMoveRefresh = ()=>{
+        trickFilterSearch()
+        setAllMoves()
+        console.log('what')
+    }
     const move = gameData.moves[moveId]
     const core = e("div", "move-overlay")
     const power = e("div", "move-overlay-power")
     const powerTitle = e("div", "move-overlay-top", move.name)
-    powerTitle.onclick = () => {
-        removeInformationWindow()
+    powerTitle.onclick = (ev) => {
+        removeInformationWindow(ev)
         redirectMove(moveId)
     }
     const powerNumber = e("div", "move-overlay-fill", move.pwr || "?")
@@ -155,16 +161,16 @@ export function moveOverlay(moveId) {
     const typeDiv = e("div", "move-overlay-types")
     const type1 = gameData.typeT[move.types[0]]
     const type1Div = e("div", `move-overlay-type ${type1.toLowerCase()}`, type1)
-    longClickToFilter(2, type1Div, "type", undefined, true)
+    longClickToFilter(2, type1Div, "type", undefined, triggerMoveRefresh)
     const type2 = move.types[1] ? gameData.typeT[move.types[1]] : ""
     const type2Div = e("div", `move-overlay-type ${type2.toLowerCase()}`, type2)
-    longClickToFilter(2, type2Div, "type", undefined, true)
+    longClickToFilter(2, type2Div, "type", undefined, triggerMoveRefresh)
     const splitDiv = e('div')
     const split = e("img", "move-overlay-img pixelated")
     split.src = `./icons/${gameData.splitT[move.split]}.png`
     longClickToFilter(2, splitDiv, "category", 
             ()=>{ return gameData.splitT[move.split].toLowerCase() || ""}
-        , undefined, true)
+        , undefined, triggerMoveRefresh)
     const effectsDiv = e("div", "move-overlay-effects")
     listMoveFlags(move.flags.map((x) => gameData.flagsT[x]), $(effectsDiv))
 
