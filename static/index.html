@@ -1,9 +1,11 @@
 <!doctype html>
-<html lang="en">
+<html lang="en us">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Maybe i'd set this iOS fix again and this time it will work-->
+    <meta http-equiv="Content-Security-Policy" content="img-src * 'self' data:; default-src * 'self' gap: ; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; ">
     <title>ER NextDex</title>
     <link rel="stylesheet" href="./css/core.css">
     <!--load css themes-->
@@ -238,8 +240,8 @@
                     <div class="moves-bot">
                         <div class="moves-bot-info">
                             <div id="moves-name"></div>
-                            <div id="moves-types1"></div>
-                            <div id="moves-types2"></div>
+                            <div id="moves-types1"><span></span></div>
+                            <div id="moves-types2"><span></span></div>
                         </div>
                         <div id="moves-desc"></div>
                         <div id="moves-flags"></div>
@@ -328,17 +330,8 @@
                 <div id="filter-clear-all" class="sel">Delete All</div>
             </div>
             <div class="filter-data" id="filter-data">
-                <div class="filter-add">
-                    <span class="filter-plus">+</span>
-                    <span>Add a filter</span>
-                </div>
+               
             </div>
-        </div>
-        <div class="filter-panel">
-            <div class="filter-title">
-                <span>Order</span>
-            </div>
-            <div class="filter-data" id="order-data"></div>
         </div>
         <div id="filter-help" style="display: none;">
             <div class="filter-help-title">
@@ -386,6 +379,13 @@
             <label for="versions">Game Version</label>
             <select name="versions" id="versions"></select>
             <span id="ugly-error-span" style="color: red;"></span>
+        </div>
+        <div class="setting-radio">
+            <span>store gamedata locally: </span>
+            <label for="disable-storage">Disable</label>
+            <input type="radio" name="settings-storage" id="disable-storage">
+            <label for="enable-storage">Enable</label>
+            <input type="radio" name="settings-storage" id="enable-storage" checked>
         </div>
         <button id="insanity">ACTIVATE INSANITY WARNING EPILEPSY</button>
     </div>

@@ -1,6 +1,6 @@
 import { gameData } from "../data_version.js"
 import { search } from "../search.js"
-import { queryFilter2 } from "../filters.js"
+import { queryFilter2, longClickToFilter } from "../filters.js"
 import { AisInB, e, JSHAC } from "../utils.js"
 import { removeInformationWindow } from "../window.js"
 
@@ -16,6 +16,7 @@ export function feedPanelMoves(moveID) {
     $('#moves-prio').text(move.prio)
     setTarget(move.target)
     $('#moves-split').attr("src", `./icons/${gameData.splitT[move.split]}.png`);
+    $('#moves-split')[0].dataset.split = gameData.splitT[move.split].toLowerCase()
     //$('#moves-types').text('' + move.types.map((x)=>gameData.typeT[x]).join(' '))
     setTypes(move.types)
     $('#moves-desc').text(move.lDesc) //TODO fix the width of this
@@ -28,7 +29,8 @@ export function feedPanelMoves(moveID) {
 function setTypes(types) {
     for (let i = 0; i < 2; i++) {
         const type = gameData.typeT[types[i]] || ""
-        $(`#moves-types${i + 1}`).text(type).attr("class", `type ${type.toLowerCase()}`)
+        $(`#moves-types${i + 1}`).attr("class", `type ${type.toLowerCase()}`)
+            .children().text(type)
     }
 }
 
@@ -76,16 +78,16 @@ function listMoveFlags(flags, core) {
     for (const flag of flags) {
         const descFlag = flagMap[flag]
         if (!descFlag) continue
-        const node = document.createElement('div')
-        node.innerText = descFlag
+        const node = e("div", undefined, descFlag)
+        longClickToFilter(2, node, "move-effect", () => {return flag})
         frag.append(node)
     }
     const noFlagArray = Object.keys(NoFlagMap)
     for (const noFlag of noFlagArray) {
         if (flags.indexOf(noFlag) != -1) continue
         const descFlag = NoFlagMap[noFlag]
-        const node = document.createElement('div')
-        node.innerText = descFlag
+        const node = e("div", undefined, descFlag)
+        longClickToFilter(2, node, "move-effect", () => {return descFlag})
         frag.append(node)
     }
     core.empty()
@@ -112,6 +114,16 @@ function setTarget(targetID) {
         const colorID = colorMap[i]
         nodeTarget.css('background-color', colorCode[colorID])
     }
+}
+
+export function setupMoves(){
+    $('#moves-types1, moves-types2').each((index, node)=>{
+        longClickToFilter(2, node, "type", ()=>{return node.children[0].innerText})
+    })
+    longClickToFilter(2, $('#moves-split').parent()[0], "category", 
+            ()=>{ return $('#moves-split')[0].dataset.split || ""}
+        )
+    
 }
 
 export function redirectMove(moveId) {

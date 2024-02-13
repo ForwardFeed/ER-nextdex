@@ -50,9 +50,9 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
             const species = regexGrabStr(line, /(?<=\[)SPECIES\w+/)
             const ptr = regexGrabStr(line, /(?<==)\w+/)
             if (!context.forms.has(ptr)) return
-            const learnset = context.forms.get(ptr)
-            if (!learnset) return
-            context.forms.set(species, learnset)
+            const formList = context.forms.get(ptr)
+            if (!formList) return
+            context.forms.set(species, formList)
             context.forms.delete(ptr)    
         } else if (line.match('};')){
             context.forms.set(context.currKey, context.current)

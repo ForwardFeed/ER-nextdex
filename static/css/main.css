@@ -320,7 +320,7 @@ span{
     min-height: 64px;
     margin: auto;
 }
-#species-front:hover{
+#species-front:hover, #species-coverage:hover, #species-basestats:hover{
     box-shadow: inset 2px 0px 10px var(--font-color);
 }
 .species-abi-inn{
@@ -387,15 +387,8 @@ span{
     background-color: green;
     background: linear-gradient(to right, green 100%, white 0%);
     height: 50%;
-    border-style: solid;
-    border-top-width: 2px;
-    border-right-width: 0;
-    border-bottom-width: 2px;
-    border-left-width: 0.5px;
-    border-radius: 3px;
     flex-grow: 1;
     margin-top: 0.2em;
-    border-color: rgba(0,0,0,0);
 }
 
 .species-coverage-row{
@@ -759,8 +752,8 @@ span{
     margin: auto;
 }
 .filter-panel{
-    min-height: 50%;
     width: 100%;
+    height: 100%;
 }
 
 .filter-title, .filter-help-title{
@@ -804,10 +797,25 @@ span{
 .filter-data > *{
     margin: auto;
 }
+.filter-row{
+    width: calc(98% - 2px);
+    padding: 1%;
+    border: dotted var(--font-color) 1px;
+    display: flex;
+}
+.filter-target{
+    width: 4.5em;
+    height: 100%;
+    padding-right: 0.7%;
+    border-right: solid var(--font-color) 2px;
+}
+.filter-list{
+    padding-left: 0.7%;
+    flex-grow: 1;
+}
 .filter-field{
     display: flex;
 }
-
 .filter-field *{
     padding-top: 0.1em;
     padding-bottom: 0.1em;
@@ -866,8 +874,9 @@ span{
 }
 
 .filter-remove{
-    padding-right: 0.1em;
     color: red;
+    width: 2em;
+    text-align: center;
 }
 .filter-add{
     border-radius: 10px;

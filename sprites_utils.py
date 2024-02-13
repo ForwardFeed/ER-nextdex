@@ -49,19 +49,32 @@ def getPaletteList(filepath):
                 palList.append(int(c))
 
         return palList
-            
-def getShiny(paletteFolder, ImageFolder, imageName):
 
+def applyPalette(inputImagePath, inputPaletteFile, outputImagePath):
+    img = Image.open(inputImagePath)
+    img.putpalette(getPaletteList(inputPaletteFile))
+    img.save(outputImagePath, format="png")
+
+# the .png isn't accurate, sometimes the palette differs
+def getNormal(paletteFolder, ImageFolder, imageName):
     normalPalPath = paletteFolder + imageName + ".pal"
+    inputImagePath = ImageFolder + imageName + ".png"
+    if not path.exists(inputImagePath) or not path.exists(normalPalPath):
+        print('One file doesn\'t exist:', inputImagePath, normalPalPath)
+        return
+    outputImagePath = ImageFolder + imageName + ".png"
+    applyPalette(inputImagePath, normalPalPath, outputImagePath)
+
+def getShiny(paletteFolder, ImageFolder, imageName):
     shinyPalPath  =  paletteFolder + "shiny_" + imageName + ".pal"
     inputImagePath = ImageFolder + imageName + ".png"
-    if not path.exists(inputImagePath) or not path.exists(normalPalPath) or not path.exists(shinyPalPath):
-        print('One file doesn\'t exist:', inputImagePath, normalPalPath, shinyPalPath)
+    if not path.exists(inputImagePath) or not path.exists(shinyPalPath):
+        print('One file doesn\'t exist:', inputImagePath, shinyPalPath)
         return
-    img = Image.open(inputImagePath)
-    img.putpalette(getPaletteList(shinyPalPath))
-    img.save(ImageFolder + "SHINY_" + imageName + ".png", format="png")
+    outputImagePath = ImageFolder + "SHINY_" + imageName + ".png"
+    applyPalette(inputImagePath, shinyPalPath, outputImagePath)
     return
+
 
 files = listdir("./out/sprites/")
 shinyRegex = re.compile('SHINY_')
@@ -72,6 +85,7 @@ for name in files:
     name = name.replace('.png', '')
     try:
         getShiny("./out/palettes/", "./out/sprites/", name)
+        getNormal("./out/palettes/", "./out/sprites/", name)
     except Exception as e: 
         print("Couldn't get shiny of " + name + ", reason: " + str(e))
         pass

@@ -1,15 +1,20 @@
 import { redirectLocation } from "./locations_panel.js"
 import { matchedMoves, moveOverlay } from "./moves_panel.js"
-import { addTooltip, capitalizeFirstLetter, AisInB, e, JSHAC } from "../utils.js"
+import { addTooltip, capitalizeFirstLetter, AisInB, e, JSHAC, reorderNodeList } from "../utils.js"
 import { search } from "../search.js"
 import { queryFilter2, longClickToFilter } from "../filters.js"
 import { gameData } from "../data_version.js"
-import { createInformationWindow } from "../window.js"
-import { getDefensiveCoverage, abilitiesToAddedType} from "../weakness.js"
+import { createInformationWindow, removeInformationWindow } from "../window.js"
+import { getDefensiveCoverage, abilitiesToAddedType } from "../weakness.js"
+import { nodeLists } from "../hydrate.js"
+import { cubicRadial } from "../radial.js"
+
+export let currentSpecieID = 1
 
 export function feedPanelSpecies(id) {
+    currentSpecieID = id
     const specie = gameData.species[id]
-    $('#species-name').text(`${specie.name}#${specie.dex.id||"??"}`)
+    $('#species-name').text(`${specie.name}#${specie.dex.id || "??"}`)
     $('#species-id').text(`ingame ID: ${specie.id}`)
     updateBaseStats(specie.stats.base)
     $('#species-front').attr('src', getSpritesURL(specie.NAME))
@@ -25,25 +30,20 @@ export function feedPanelSpecies(id) {
     $('#species-front')[0].dataset.shiny = "off"
     setAbilities(specie.stats.abis, specie)
     setInnates(specie.stats.inns)
-    
-    setTypes([...new Set(specie.stats.types),abilitiesExtraType(0, specie)])
-    setLevelUpMoves($('#learnset'), specie.levelUpMoves)
-    setMoves($('#tmhm'), specie.TMHMMoves)
-    setMoves($('#tutor'), specie.tutor)
-    setMoves($('#eggmoves'), specie.eggMoves)
+    setTypes([...new Set(specie.stats.types), abilitiesExtraType(0, specie)])
+    setAllMoves(specie)
     setEvos(specie.evolutions)
     setLocations(specie.locations, specie.SEnc)
     $('#species-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
-    $('#species-list').children().eq(id - 1).addClass("sel-active").removeClass("sel-n-active")
+    nodeLists.species[id - 1].classList.replace("sel-n-active", "sel-active")
 }
 
 export function redirectSpecie(specieId) {
-
     if ($("#btn-species")[0].classList.contains("btn-active")) {
-        $('#species-list').children().eq(specieId - 1).click()[0].scrollIntoView({ behavior: "smooth" })
+        $(nodeLists.species[specieId - 1]).click()[0].scrollIntoView({ behavior: "smooth" })
     } else {
         search.callbackAfterFilters = () => {
-            $('#species-list').children().eq(specieId - 1).click()[0].scrollIntoView({ behavior: "smooth" })
+            $(nodeLists.species[specieId - 1]).click()[0].scrollIntoView({ behavior: "smooth" })
         }
         $("#btn-species").click()
     }
@@ -76,7 +76,7 @@ function setDefensiveCoverage(coverage) {
 }
 
 function setTypes(types) {
-    types = types.filter(x => x)
+    types = types.filter(x => x != undefined)
     const core = $('#species-types')
     for (let i = 0; i < 3; i++) {
         const type = gameData.typeT[types[i]] || ""
@@ -91,7 +91,14 @@ function setTypes(types) {
     setDefensiveCoverage(getDefensiveCoverage(types.map(x => gameData.typeT[x])))
 }
 
-function filterMoves(moveIDlist){
+export function setAllMoves(specie = gameData.species[currentSpecieID]){
+    setLevelUpMoves($('#learnset'), specie.levelUpMoves)
+    setMoves($('#tmhm'), specie.TMHMMoves)
+    setMoves($('#tutor'), specie.tutor)
+    setMoves($('#eggmoves'), specie.eggMoves)
+}
+
+function filterMoves(moveIDlist) {
     if (!matchedMoves) return moveIDlist
     return moveIDlist.map(x => matchedMoves.indexOf(x) != -1 && x).filter(x => x)
 }
@@ -126,7 +133,7 @@ function setMoveRow(moveID) {
     row.className = "species-move-row"
     row.onclick = (ev) => {
         fastdom.mutate(() => {
-            createInformationWindow(moveOverlay(moveID), { x: ev.clientX, y: ev.clientY })
+            createInformationWindow(moveOverlay(moveID), ev)
         });
     }
     return row
@@ -215,12 +222,19 @@ function changeBaseStat(node, value, statID) {
     const maxValue = statID < 6 ? 255 : gameData.speciesStats.result.maxBST
     const percent = ((value / maxValue) * 100).toFixed()
     node.find('.stat-num').css('background-color', color)
-    node.find('.stat-bar').css('background', `linear-gradient(to right, ${color} ${percent}%, #0000 0%)`)
+    node.find('.stat-bar').css('background', `linear-gradient(to right, ${color} ${percent}%, #0000 0%)`)[0]
+    node[0].animate([
+        {width: "0"},
+        {width: `100%`},
+    ], {
+        duration: 300,
+        iterations: 1,
+    })
 }
 
 function setAbilities(abilities, specie) {
     $('#species-abilities').empty().append(
-        JSHAC(abilities.map((val, i)=>{
+        JSHAC(abilities.map((val, i) => {
             if (abilities[i] == abilities[i - 1] || abilities[i] === 0) {
                 return undefined
             }
@@ -230,10 +244,10 @@ function setAbilities(abilities, specie) {
             name.onclick = () => {
                 $('#species-abilities .sel-active').removeClass('sel-active').addClass('sel-n-active')
                 name.classList.replace('sel-n-active', 'sel-active')
-                setTypes([...new Set(specie.stats.types),abilitiesExtraType(i, specie)])
+                setTypes([...new Set(specie.stats.types), abilitiesExtraType(i, specie)])
             }
-            name.classList.add(i?"sel-n-active":"sel-active")
-            longClickToFilter(name, "ability", ()=>{return abi.name} )
+            name.classList.add(i ? "sel-n-active" : "sel-active")
+            longClickToFilter(0, name, "ability", () => { return abi.name })
             return name
         }).filter(x => x))
     )
@@ -241,20 +255,20 @@ function setAbilities(abilities, specie) {
 
 function setInnates(innates) {
     $('#species-innates').empty().append(
-        JSHAC(innates.map((val, i)=>{
+        JSHAC(innates.map((val, i) => {
             if (innates[i] == innates[i - 1] || innates[i] === 0) {
                 return
             }
             const inn = gameData.abilities[innates[i]]
             const name = e("div", "species-innate", inn.name)
-            longClickToFilter(name, "ability", ()=>{return inn.name})
+            longClickToFilter(0, name, "ability", () => { return inn.name }, 0)
             addTooltip(name, inn.desc)
             return name
         }).filter(x => x))
     )
 }
 
-function abilitiesExtraType(abilityID, specie){
+function abilitiesExtraType(abilityID, specie) {
     return abilitiesToAddedType([specie.stats.abis[abilityID], ...specie.stats.inns])
 }
 
@@ -275,9 +289,9 @@ export function setupSpeciesPanel() {
         $('#species-basestats, #species-coverage').toggle()
     })
     $('#species-types').children().each((index, val) => {
-        longClickToFilter(val, "type")
+        longClickToFilter(0, val, "type")
     })
-    $('#species-id, #species-name').on('click', function(){
+    $('#species-id, #species-name').on('click', function () {
         $('#species-id, #species-name').toggle()
     })
 }
@@ -398,11 +412,94 @@ function setLocations(locations, SEnc) {
     $('#species-locations').empty().append(frag)
 }
 
+const reorderMapSpecies = {
+    "alphabetical": "",
+    "atk": "",
+    "": "",
+    "": "",
+    "": "",
+    "": "",
+    "": "",
+    "": "",
+    "": "",
+    "": "",
+
+}
+
+
+export function setupReorderBtn() {
+    const row = e('div', 'data-list-row', 'reorder')
+    function byAlpha(a, b) {
+        return a.name.localeCompare(b.name)
+    }
+    function localeByStats(statID, a, b) {
+        return a.stats.base[statID] - b.stats.base[statID]
+    }
+    const list = $('#species-list')
+    const sortOrderStats = (ev, statsID) => {
+        createInformationWindow(cubicRadial([
+            ["STRONGER First >", (ev) => {
+                reorderNodeList(list, localeByStats.bind(null, statsID), ">")
+                removeInformationWindow(ev)
+            }],
+            ["weaker first <", (ev) => {
+                reorderNodeList(list, localeByStats.bind(null, statsID), "<")
+                removeInformationWindow(ev)
+            }],
+            undefined, undefined // if you don't make it a square it won't work
+        ], "8em", "1em"), ev, "mid", true, true)
+    }
+    row.onclick = (ev) => {
+        createInformationWindow(cubicRadial([
+            ["Default", (ev) => {
+                reorderNodeList(list)
+                removeInformationWindow(ev)
+
+            }],
+            ["A-Z", (ev) => {
+                reorderNodeList(list, byAlpha)
+                removeInformationWindow(ev)
+            }],
+            ["Stats", () => {
+                createInformationWindow(cubicRadial([
+                    ["HP", (ev) => {
+                        sortOrderStats(ev, 0)
+                    }],
+                    ["Atk", (ev) => {
+                        sortOrderStats(ev, 1)
+                    }],
+                    ["Def", (ev) => {
+                        sortOrderStats(ev, 2)
+                    }],
+                    ["SpA", (ev) => {
+                        sortOrderStats(ev, 3)
+                    }],
+                    ["SpD", (ev) => {
+                        sortOrderStats(ev, 4)
+                    }],
+                    ["Spe", (ev) => {
+                        sortOrderStats(ev, 5)
+                    }],
+                    ["BST", (ev) => {
+                        sortOrderStats(ev, 6)
+                    }],
+                    undefined // if you don't make it a square it won't work
+                ], "4em", "1em"), ev, "mid", true, false)
+            }],
+            ["", () => {
+
+            }]
+        ], "6em", "1em"), ev, "mid", true, false)
+    }
+
+    return row
+}
+
 export const queryMapSpecies = {
     "name": (queryData, specie) => {
         const specieName = specie.name.toLowerCase()
         if (AisInB(queryData, specieName)) {
-            return [queryData === specieName, specie.name, true]
+            return specie.name
         }
     },
     "type": (queryData, specie) => {
@@ -420,7 +517,7 @@ export const queryMapSpecies = {
             )
         for (const abi of abilities) {
             if (AisInB(queryData, abi)) {
-                return [abi === queryData, abi, false] 
+                return [abi === queryData, abi, false]
             }
         }
         return false
@@ -434,6 +531,12 @@ export const queryMapSpecies = {
         }
         return false
     },
+    "region": (queryData, specie) => {
+        const specieRegion = specie.region?.toLowerCase() || ""
+        if (AisInB(queryData, specieRegion)) {
+            return specie.region
+        }
+    },
 }
 export function updateSpecies(searchQuery) {
     const species = gameData.species
@@ -441,9 +544,9 @@ export function updateSpecies(searchQuery) {
     const matched = queryFilter2(searchQuery, species, queryMapSpecies)
     let validID;
     const specieLen = species.length
-    for (let i  = 0; i < specieLen; i++) {
+    for (let i = 0; i < specieLen; i++) {
         if (i == 0) continue
-        const node = nodeList.eq(i - 1)
+        const node = nodeList.eq(i)
         if (!matched || matched.indexOf(i) != -1) {
             if (!validID) validID = i
             node.show()

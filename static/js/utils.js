@@ -1,4 +1,5 @@
-import { search } from "./search.js";
+import { gameData } from "./data_version.js";
+import { nodeLists } from "./hydrate.js";
 
 export function addTooltip(node, description) {
 	const tooltip = document.createElement("div");
@@ -64,6 +65,8 @@ export function clickOutsideToRemove(node, absorb = false){
     }
     // will work as long no future event.stop propagation is written in the code
     document.body.addEventListener('click', clickToHide, absorb)
+    //return the callback to delete
+    return clickToHide
 }
 
 /** JS Util to HTML */
@@ -72,12 +75,16 @@ export function clickOutsideToRemove(node, absorb = false){
  * @param {string | undefined} tag 
  * @param {string | undefined} classname 
  * @param {string | undefined} innerText 
+ * @param {Object | undefined} events 
  * @returns {HTMLDivElement}
  */
-export function e(tag = "div", classname = "", innerText ="" ){
+export function e(tag = "div", classname = "", innerText ="", events = {}){
     const htmlTag = document.createElement(tag)
-    htmlTag.className = classname
+    if (classname) htmlTag.className = classname
     htmlTag.innerText = innerText
+    for (const event in events){
+        htmlTag[event] = events[event]
+    }
     return htmlTag
 }
 /**
@@ -165,4 +172,25 @@ export function setLongClickSelection(node, callback, time = 1000, bgColor = "re
     node.addEventListener("touchend", mouseUp)
 
     return extendableDiv
+}
+
+
+export function reorderNodeList(list, sortFn, direction = "<"){
+    // fastdom to do it in a single frame or it will lag a lot on some browsers
+    fastdom.mutate(()=>{ 
+        let clonedForReorder
+        if (sortFn){
+            clonedForReorder = structuredClone(gameData.species).sort(sortFn)
+        } else {
+            console.log(sortFn)
+            clonedForReorder = structuredClone(gameData.species)
+        }
+        if (direction === ">") clonedForReorder = clonedForReorder.reverse()
+        const len = clonedForReorder.length
+        for (var i=0; i < len; i++){
+            const mon = clonedForReorder[i]
+            if (mon.nodeID === undefined) continue
+            list.append(nodeLists.species[mon.nodeID])
+        }
+    })
 }

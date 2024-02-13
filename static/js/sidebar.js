@@ -61,11 +61,12 @@ export function setupPanels(){
                 search.callbackAfterFilters()
                 search.callbackAfterFilters = null
             }
-            // adapt the query key to the first available
-            if (!$('#search-bar').val()){
-                updateMainSearchKey(search.queryMapList[i])
-            }
-            
+            // restore previous search on this panel
+            $('#search-bar').val(search.searchData[search.panelUpdatesIndex])
+            // restore previous key on this panel or adapt the query key to the first available
+            updateMainSearchKey(search.queryMapList[i])
+            $('#search-keys').val(search.searchKeys[search.panelUpdatesIndex] ||
+                capitalizeFirstLetter(Object.keys(search.queryMapList[i])[0]))
         })
         $(btnPanel[1]).toggle()
     }

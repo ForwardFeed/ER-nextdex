@@ -1,5 +1,56 @@
 import { search, onkeySearchFilter } from "./search.js"
 import { e, JSHAC, clickOutsideToHide, setLongClickSelection } from "./utils.js"
+import { setAllMoves } from "./panels/species_panel.js"
+
+// Sync it with search.js => panelUpdatesTable
+export const filterDatas = [
+    {
+        name: "Species",
+        filters: [],
+        modify: function(){
+            trickFilterSearch(0)
+        },
+    },
+    {
+        name: "Abilities",
+        filters: [],
+        modify: function(){
+            trickFilterSearch(1)
+        },
+    },
+    {
+        name: "Moves",
+        filters: [],
+        modify: function(){
+            trickFilterSearch(2)
+            setAllMoves()
+        },
+    },
+    {
+        name: "Locations",
+        filters: [],
+        modify: function(){
+            trickFilterSearch(3)
+        },
+    },
+    {
+        name: "Trainers",
+        filters: [],
+        modify: function(){
+            trickFilterSearch(4)
+        },
+    },
+]
+
+//trick the search to show suggestions
+function trickFilterSearch(panelID){
+    const current = search.panelUpdatesIndex
+    search.panelUpdatesIndex = panelID
+    search.clearSuggestion()
+    search.panelUpdatesTable[panelID](getQueries())
+    search.showSuggestion()
+    search.panelUpdatesIndex = current
+}
 
 let allQueries = []
 
@@ -11,18 +62,26 @@ export function getQueries(){
         data: $('#search-bar').val().toLowerCase(),
         suggestion: $('#search-bar')[0] === search.suggestionInput
     }]
-    
-    $('.filter-field').map(function(){
-        allQueries.push({
-            op:"AND",
-            //if you use data('state') jquery util here you're fucked for no acceptable reason
-            not: $(this).find('.filter-not')[0].dataset.state === "on" ? true : false,
-            k: $(this).find('.filter-key').val().toLowerCase(),
-            data: $(this).find('.filter-search').val().toLowerCase(),
-            suggestion: $(this).find('.filter-search')[0] === search.suggestionInput
-        })
+    $('.filter-row').map(function(index, row){
+        filterDatas[index].filters = []
+        const allFields = row.querySelectorAll('.filter-field')
+        const allFieldsLength = allFields.length
+        if (!allFieldsLength) return
+        for (let fieldIndex = 0; fieldIndex < allFieldsLength; fieldIndex++){
+            const field = allFields[fieldIndex]
+            const toAddQuery = {
+                op:"AND",
+                //if you use data('state') jquery util here you're fucked for no acceptable reason
+                not: field.querySelector('.filter-not').dataset.state === "on" ? true : false,
+                k: field.querySelector('.filter-key').value.toLowerCase(),
+                data: field.querySelector('.filter-search').value.toLowerCase(),
+                suggestion: field.querySelector('.filter-search') === search.suggestionInput
+            }
+            filterDatas[index].filters.push(toAddQuery)
+        }
     })
     //filters the empty queries
+    allQueries.push(...filterDatas[search.panelUpdatesIndex].filters)
     allQueries = allQueries.filter((x)=> x.data)
     let finalQuery
     if (allQueries.length == 1){
@@ -69,15 +128,18 @@ export function activateSearch(callback){
                 search.callbackAfterFilters()
                 search.callbackAfterFilters = null
             }
+            //save it there so it's written only once
+            search.searchKeys[search.panelUpdatesIndex] = $('#search-keys').val()
+            search.searchData[search.panelUpdatesIndex] = $('#search-bar').val()
         })
         if (!search.updateQueue) break
         search.updateQueue = false
     }
-    search.updateGuard = false    
+    search.updateGuard = false
 }
 
 
-export function appendFilter(initKey = "", initData = ""){  
+export function appendFilter(panelID, initKey = "", initData = ""){ 
     const divField = e("div", "filter-field")
 
     const divNot = e("div", "filter-not", "¿?")
@@ -89,7 +151,9 @@ export function appendFilter(initKey = "", initData = ""){
     const inputKey = e('input', "filter-key")
     inputKey.type = "button"
     inputKey.value = initKey || search.queryKeys[0] || "Name"
-    inputKey.onchange = activateSearch
+    inputKey.onchange = ()=>{
+        filterDatas[panelID].modify()
+    }
 
     const divKeySelection = e('div', "filter-key-selection")
     divKeySelection.style.display = "none"
@@ -99,7 +163,7 @@ export function appendFilter(initKey = "", initData = ""){
         option.onclick = ()=>{
             inputKey.value = key
             $(divKeySelection).hide()
-            activateSearch()
+            filterDatas[panelID].modify()
         }
         return option
     }
@@ -120,8 +184,9 @@ export function appendFilter(initKey = "", initData = ""){
             divNot,
             divKeyWrapper, [
                 inputKey,
-                divKeySelection,
-                search.queryKeys.map(createSelectable)
+                divKeySelection, [
+                    ...Object.keys(search.queryMapList[panelID]).map(createSelectable)
+                ]
             ],
             divLabel, [
                 inputSearch,
@@ -142,7 +207,7 @@ export function appendFilter(initKey = "", initData = ""){
             divNot.classList.remove('filter-not-not')
             inputKey.classList.remove('filter-not-not')
         }
-        activateSearch()
+        filterDatas[panelID].modify()
     }
 
     inputKey.onclick = () =>{
@@ -156,14 +221,18 @@ export function appendFilter(initKey = "", initData = ""){
         search.suggestionNode = divSuggestions
     }
 
-    inputSearch.onkeyup = (ev)=>{onkeySearchFilter(ev, divSuggestions, inputSearch)}
+    inputSearch.onkeyup = (ev)=>{
+        onkeySearchFilter(ev, divSuggestions, inputSearch, filterDatas[panelID].modify)
+    }
 
     divRemove.onclick = ()=>{
         divField.remove()
-        activateSearch()
+        filterDatas[panelID].modify()
+        spinOnRemoveFilter()
+        
     }
     
-    $('#filter-data').find('.filter-add').before(frag)
+    $('#filter-data').find('.filter-add').eq(panelID).before(frag)
     
     spinOnAddFilter()
     return divField
@@ -341,8 +410,8 @@ export function queryFilter2(query, datas, keymap){
 
 function removeAllFilters(){
     $('#filter-frame').find('.filter-field').remove()
-    activateSearch()
     spinOnRemoveFilter()
+    activateSearch()
 }
 
 export function spinOnAddFilter(){
@@ -391,11 +460,6 @@ export function setupFilters(){
         $('.filter-panel').toggle()
     })
 
-    $('.filter-add').on('click', function(){
-        appendFilter()
-    })
-    // weird but it's because i have other events on it like the long click
-
     $('#filter-main-operator').on('change', function(){
         activateSearch()
     })
@@ -403,9 +467,11 @@ export function setupFilters(){
     setLongClickSelection($('#to-filter')[0], ()=>{
         removeAllFilters()
     })
+
+    setupFiltersRow()
 }
 
-export function longClickToFilter(node, key, data = ()=>{return node.innerText}){
+export function longClickToFilter(panelID, node, key, data = ()=>{return node.innerText}){
     let filterDiv, color
     let extendableDiv = setLongClickSelection(node, () => {
         if (hasFilter(key, data())) {
@@ -421,7 +487,7 @@ export function longClickToFilter(node, key, data = ()=>{return node.innerText})
             spinOnRemoveFilter()
             color = "green";
         } else {
-            filterDiv = appendFilter(key, data())
+            filterDiv = appendFilter(panelID, key, data())
             color = "red"
         }
         activateSearch()
@@ -429,4 +495,24 @@ export function longClickToFilter(node, key, data = ()=>{return node.innerText})
     }, 450, hasFilter(key, data()) ? "red" : "green")
 }
 
+function setupFiltersRow(){
 
+    $('#filter-data').append(filterDatas.map((rowData, index)=>{
+        const filterAdd = (ev) => {
+            appendFilter(index)
+        }
+        return JSHAC([
+            e('div', 'filter-row'),[
+                e('div', 'filter-target'),[
+                    e('span', '', rowData.name)
+                ],
+                e('div', 'filter-list'), [
+                    e('div', 'filter-add', null, {onclick:filterAdd}),[
+                        e('span', 'filter-plus', '+'),
+                        e('span', '', 'Add a filter')
+                    ]
+                ]
+            ]
+        ])
+    }))
+}

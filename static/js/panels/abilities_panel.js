@@ -17,7 +17,7 @@ export const queryMapAbilities = {
         const name = ability.name.toLowerCase()
         if ((AisInB(queryData, name)) ||
         (AisInB(queryData, desc))){
-            return [name === queryData || desc === queryData, name, true]
+            return [name === queryData || desc === queryData, desc, true]
         }
         return false
     }

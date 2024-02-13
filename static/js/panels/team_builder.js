@@ -3,7 +3,7 @@ import { e, JSHAC } from "../utils.js";
 import { createPokemon, getTextNature } from "./trainers_panel.js";
 import { getSpritesURL, getSpritesShinyURL } from "./species_panel.js";
 import { createInformationWindow } from "../window.js";
-import { quadriRadial } from "../radial.js";
+import { cubicRadial } from "../radial.js";
 import { saveToLocalstorage, fetchFromLocalstorage } from "../settings.js";
 
 const saveKeysPokemon = [
@@ -256,11 +256,11 @@ function feedPokemonEdition(viewID) {
             abilityDiv.innerText = poke.abiName
             save()
         })
-        createInformationWindow(overlayNode, { x: ev.clientX, y: ev.clientY })
+        createInformationWindow(overlayNode, ev)
     }
     midDiv.onclick = (ev) => {
         ev.stopPropagation()
-        const overlayNode = quadriRadial(
+        const overlayNode = cubicRadial(
             poke.moves.map((x, index)=>{
                 return [
                     gameData.moves[x].name,
@@ -273,13 +273,13 @@ function feedPokemonEdition(viewID) {
                         }
                         createInformationWindow(
                                 overlayList(moveCallback, poke.allMovesName),
-                                { x: ev.clientX, y: ev.clientY }, "focus"
+                                ev, "focus"
                             )
                     }
                 ]
-            }), "6em", "2vmax"
+            }), "6em", "1em"
         )
-        createInformationWindow(overlayNode, { x: ev.clientX, y: ev.clientY }, "mid")
+        createInformationWindow(overlayNode, ev, "mid")
     }
     const itemCallback = (itemID) => {
         poke.item = itemID
@@ -307,23 +307,23 @@ function feedPokemonEdition(viewID) {
     }
     rightDiv.onclick = (ev) => {
         ev.stopPropagation()
-        const overlayNode = quadriRadial([
+        const overlayNode = cubicRadial([
             ["Items", (ev) => {
-                createInformationWindow(overlayList(itemCallback, gameData.itemT), { x: ev.clientX, y: ev.clientY }, "focus")
+                createInformationWindow(overlayList(itemCallback, gameData.itemT), ev, "focus")
             }],
             ["Nature", (ev) => {
                 createInformationWindow(overlayList(natureCallback,
                                                     gameData.natureT.map(x => getTextNature(x))),
-                 { x: ev.clientX, y: ev.clientY }, "focus")
+                 ev, "focus")
             }],
             ["IVs", (ev) => { 
-                createInformationWindow(editionStats("ivs", viewID, statsCallback), { x: ev.clientX, y: ev.clientY })
+                createInformationWindow(editionStats("ivs", viewID, statsCallback), ev)
             }],
             ["EVs", (ev) => { 
-                createInformationWindow(editionStats("evs", viewID, statsCallback), { x: ev.clientX, y: ev.clientY })
+                createInformationWindow(editionStats("evs", viewID, statsCallback), ev)
              }],
-        ], "6em", "2vmax")
-        createInformationWindow(overlayNode, { x: ev.clientX, y: ev.clientY }, "mid")
+        ], "6em", "1em")
+        createInformationWindow(overlayNode, ev, "mid")
     }
     $('#builder-editor').empty().append(JSHAC([
         leftDiv, [

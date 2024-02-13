@@ -14,31 +14,13 @@
 .radial-btn:hover{
     background-color: var(--selHover);
 }
-.quadri-radial{
+
+.cubic-radial{
     background-color: rgba(0, 0, 0, 0);
     display: flex;
     flex-wrap: wrap;
     border-radius: 10px;
     position: relative;
     font-size: 2em;
-}
-.quadri-radial-btn0{
-    top: 0;
-    left: 0;
-}
-
-.quadri-radial-btn1{
-    top: 0;
-    right: 0;
-}
-
-.quadri-radial-btn2{
-    bottom: 0;
-    left: 0;
-}
-
-.quadri-radial-btn3{
-    bottom: 0;
-    right: 0;
 }
 

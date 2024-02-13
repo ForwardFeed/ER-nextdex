@@ -20,7 +20,6 @@ function setAvailableVersion(){
     const fragment = document.createDocumentFragment()
     for (const version of allVersions){
         const option = document.createElement('option')
-        if (option === defaultVersion) option.prop('selected',true);
         option.value = version
         option.innerText = version
         fragment.append(option)
@@ -28,16 +27,19 @@ function setAvailableVersion(){
     $('#versions').append(fragment).val(defaultVersion).change()
 
 }
-  
+
 function changeVersion(version){
     if (!version || allVersions.indexOf(version) == -1){
         return console.warn(`no such version : ${version}`)
     }
     const savedVersion = fetchFromLocalstorage("dataversion"+version)
-    if (savedVersion && savedVersion == LATEST_DATA_VERSION){
-        console.log("take gamedata from storage")
+    //deactivate fetching from localstorage for iOS product
+    // as it has an unknown device, i would gladly have someone with an Apple to help me fixing it out
+    if (savedVersion && savedVersion == LATEST_DATA_VERSION &&
+        $('#enable-storage')[0].checked ){
         gameData = JSON.parse(fetchFromLocalstorage("data"+version))
-        if (gameData && gameData.species) {
+        if (gameData) {
+            console.log("took gamedata from storage")
             hydrate()
             return
         }
@@ -46,7 +48,7 @@ function changeVersion(version){
     fetch(`js/data/gameDataV${version}.json`)
         .then((response) => response.json())
         .then((data) => {
-            console.log("take gamedata from server")
+            console.log("took gamedata from server")
             gameData = data
             saveToLocalstorage("data"+version, gameData)
             hydrate()
