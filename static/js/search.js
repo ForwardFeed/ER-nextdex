@@ -181,9 +181,7 @@ const evKeymap = {
 }
 
 export function setupSearch(){
-    $('#search-keys').on('change', ()=>{
-        activateSearch()
-    })
+    $('#search-keys').on('change', activateSearch)
     $('#search-bar').on('keyup search', (ev)=>{
         onkeySearchFilter(ev, $('#search-suggestion')[0], $('#search-bar')[0],
         ()=>{
@@ -196,12 +194,12 @@ export function setupSearch(){
     })
     $('#filter-icon').on('click', function(){
         $('#filter-frame').toggle()
-    })/* 
+    })
     $('#search-keys').on('click', function(ev){
         ev.stopPropagation()
         clickOutsideToHide($('#search-keys-selections')[0], $('#search-keys')[0])
         $('#search-keys-selections').toggle()
-    }) */
+    })
     //weird to use onclick here but i have the long click event on it too
     $('#to-filter')[0].onclick = ()=>{
         const data = $('#search-bar').val()
@@ -217,17 +215,22 @@ export function setupSearch(){
         $('#filter-main-operator').append(option)
     }
     
-    const keyNode = $('#search-keys')
+    const keyNode = $('#search-keys-selections')
     for (const key of search.queryKeys){
-        const option = document.createElement('option')
+        const option = document.createElement('div')
         option.innerText = key
+        option.onclick = ()=>{
+            $('#search-keys').val(key)
+            $('#search-keys-selections').toggle()
+            activateSearch()
+        }
         keyNode.append(option)
     }
     updateMainSearchKey(search.queryMapList[search.panelUpdatesIndex])
 }
 
 export function updateMainSearchKey(queryMap){
-    const nodes = $('#search-keys').children()
+    const nodes = $('#search-keys-selections').children()
     let validID = null
     search.queryKeys.forEach((key, index)=>{
         key = key.toLowerCase()

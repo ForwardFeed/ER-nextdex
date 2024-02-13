@@ -31,7 +31,6 @@ main{
 
 *{
     user-select: none;
-    -webkit-user-select: none;
 }
 
 #top-header {
@@ -87,6 +86,7 @@ main{
 
 .search-keys-wrapper {
     display: flex;
+    position: relative;
 }
 
 #search-keys-selections {
