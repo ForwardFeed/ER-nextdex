@@ -470,7 +470,7 @@ export function setupFilters(){
     setupFiltersRow()
 }
 
-export function longClickToFilter(panelID, node, key, data = ()=>{return node.innerText}){
+export function longClickToFilter(panelID, node, key, data = ()=>{return node.innerText}, trickSearch = false){
     let filterDiv, color
     let extendableDiv = setLongClickSelection(node, () => {
         if (hasFilter(key, data(), panelID)) {
@@ -492,6 +492,7 @@ export function longClickToFilter(panelID, node, key, data = ()=>{return node.in
         }
         activateSearch()
         extendableDiv.style.backgroundColor = color
+        if (trickSearch) trickFilterSearch(panelID)
     }, 450, hasFilter(key, data(), panelID) ? "red" : "green")
 }
 

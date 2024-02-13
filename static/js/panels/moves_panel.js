@@ -155,16 +155,16 @@ export function moveOverlay(moveId) {
     const typeDiv = e("div", "move-overlay-types")
     const type1 = gameData.typeT[move.types[0]]
     const type1Div = e("div", `move-overlay-type ${type1.toLowerCase()}`, type1)
-    longClickToFilter(2, type1Div, "type")
+    longClickToFilter(2, type1Div, "type", undefined, true)
     const type2 = move.types[1] ? gameData.typeT[move.types[1]] : ""
     const type2Div = e("div", `move-overlay-type ${type2.toLowerCase()}`, type2)
-    longClickToFilter(2, type2Div, "type")
+    longClickToFilter(2, type2Div, "type", undefined, true)
     const splitDiv = e('div')
     const split = e("img", "move-overlay-img pixelated")
     split.src = `./icons/${gameData.splitT[move.split]}.png`
     longClickToFilter(2, splitDiv, "category", 
             ()=>{ return gameData.splitT[move.split].toLowerCase() || ""}
-        )
+        , undefined, true)
     const effectsDiv = e("div", "move-overlay-effects")
     listMoveFlags(move.flags.map((x) => gameData.flagsT[x]), $(effectsDiv))
 
@@ -249,5 +249,5 @@ export function updateMoves(searchQuery) {
         }
     }
     //if the current selection isn't in the list then change
-    if (matched && matched.indexOf(currentMoveID) == -1 && validID) feedPanelMoves(validID)
+    if (matchedMoves && matchedMoves.indexOf(currentMoveID) == -1 && validID) feedPanelMoves(validID)
 }
