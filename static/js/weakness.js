@@ -119,6 +119,7 @@ const abilityAddingType = {
     "Aquatic": "Water",
     "Turboblaze": "Fire",
     "Teravolt": "Electric",
+    "Fairy Tale": "Fairy", //TODO ADD IT TO THE CALC TOO
 }
 
 export function abilitiesToAddedType(abis){
@@ -149,6 +150,9 @@ export function getDefensiveCoverage(defTypes, abis){
         if (modifiers[2].indexOf(AtkT) != -1) {
             typeEffectiveness = 0.5
         }
+        if (modifiers[3].indexOf(AtkT) != -1) {
+            typeEffectiveness = 2
+        }
         for (const defT of defTypes){
             typeEffectiveness *= getTypeEffectiveness(AtkT, defT)
         }
@@ -168,15 +172,23 @@ export function getDefensiveCoverage(defTypes, abis){
     })
     return defensiveCoverageSorted
 }
-
+// misses things like Magma Armor or others that reduce by 35% like Filter
+// or Ice Scales or Fluffy for Physical or other damage
 const abilityThatAddsImmunity = {
     "Flash Fire": ["Fire"],
     "Sap Sipper": ["Grass"],
     "Volt Absorb": ["Electric"],
+    "Lightning Rod": ["Electric"],
+    "Motor Drive": ["Electric"],
     "Water Absorb": ["Water"],
-    "Immunity": ["Poison"],
+    "Dry Skin": ["Water"],
+    "Storm Drain": ["Water"],
+    "Evaporate": ["Water"],
     "Wonder Guard": [], //Find a way to put it
-    "Lightning Rod": ["Electric"]
+    "Levitate": ["Ground"],
+    "Dragonfly": ["Ground"],
+    "Mountaineer": ["Rock"],
+    "Poison Absorb": ["Poison"],
 }
 
 const abilityThatAddsNormal = {
@@ -184,14 +196,25 @@ const abilityThatAddsNormal = {
 }
 
 const abilityThatAddsResist = {
+    "Well Baked Body": ["Fire"],
+    "Water Bubble": ["Fire"],
     "Sea Weed": ["Fire"],
+    "Heatproof": ["Fire"],
     "Thick Fat": ["Fire", "Ice"],
+    "Immunity": ["Poison"],
+    "Fossilized": ["Rock"],
+    "Raw Wood": ["Grass"],
+}
 
+const abilityThatAddsWeakness = {
+    "Fluffy": ["Fire"],
+    "Liquified": ["Water"],
 }
 
 function abilityModifiesTypeChart(abis){
     abis = abis.map(x => gameData.abilities[x].name)
     const modifiers = [
+        [],
         [],
         [],
         [],
@@ -203,6 +226,8 @@ function abilityModifiesTypeChart(abis){
         if (addedNormal) modifiers[1].push(...addedNormal)
         const addedResist = abilityThatAddsResist[abi]
         if (addedResist) modifiers[2].push(...addedResist)
+        const addedWeak = abilityThatAddsWeakness[abi]
+        if (addedWeak) modifiers[3].push(...addedWeak)
     }
     return modifiers
 }
