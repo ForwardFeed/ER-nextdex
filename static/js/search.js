@@ -115,6 +115,9 @@ export const search = {
 export function onkeySearchFilter(ev, divSuggestions, inputSearch, callback){
     search.suggestionNode = divSuggestions
     search.suggestionInput = inputSearch
+    // i am required to do this if i want in filters.js > hasFilter()
+    // to able to select by HTML attribute, yes it is akward but it works
+    inputSearch.setAttribute("value", inputSearch.value)
     divSuggestions.style.display = "block"
     if (search.timeoutAutoComplete) clearTimeout(search.timeoutAutoComplete)
     search.timeoutAutoComplete = setTimeout(()=>{

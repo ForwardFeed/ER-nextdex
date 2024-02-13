@@ -1,7 +1,7 @@
 import { search, onkeySearchFilter } from "./search.js"
 import { e, JSHAC, clickOutsideToHide, setLongClickSelection } from "./utils.js"
 import { setAllMoves } from "./panels/species_panel.js"
-
+import { capitalizeFirstLetter } from "./utils.js"
 // Sync it with search.js => panelUpdatesTable
 export const filterDatas = [
     {
@@ -43,7 +43,7 @@ export const filterDatas = [
 ]
 
 //trick the search to show suggestions
-function trickFilterSearch(panelID){
+export function trickFilterSearch(panelID){
     const current = search.panelUpdatesIndex
     search.panelUpdatesIndex = panelID
     search.clearSuggestion()
@@ -173,6 +173,9 @@ export function appendFilter(panelID, initKey = "", initData = ""){
     const inputSearch = e('input', "filter-search")
     inputSearch.type = "search"
     inputSearch.value = initData
+    // i am required to do this if i want in filters.js > hasFilter()
+    // to able to select by HTML attribute, yes it is akward but it works
+    inputSearch.setAttribute("value", inputSearch.value)
 
     const divSuggestions = e('div', "filter-suggestions")
     divSuggestions.style.display = "none"
@@ -441,14 +444,10 @@ export function spinOnRemoveFilter(){
  * @param {string} data 
  * @returns 
  */
-export function hasFilter(key, data){
-    data = data.toLowerCase()
-    for (const query of allQueries){
-        if (query.k === key && query.data.toLowerCase() === data){
-            return true
-        }
-    }
-    return false
+export function hasFilter(key, data, panelID){
+    const row = $('#filter-data').children().eq(panelID)
+    return row.find(`.filter-key[value="${key.toLowerCase()}"]`) &&
+        row.find(`.filter-search[value="${data}"]`)[0]
 }
 
 export function setupFilters(){
@@ -474,8 +473,7 @@ export function setupFilters(){
 export function longClickToFilter(panelID, node, key, data = ()=>{return node.innerText}){
     let filterDiv, color
     let extendableDiv = setLongClickSelection(node, () => {
-        console.log(data(), key)
-        if (hasFilter(key, data())) {
+        if (hasFilter(key, data(), panelID)) {
             console.log(filterDiv)
             if (!filterDiv){
                 $('.filter-search').each((index, val)=>{
@@ -494,7 +492,7 @@ export function longClickToFilter(panelID, node, key, data = ()=>{return node.in
         }
         activateSearch()
         extendableDiv.style.backgroundColor = color
-    }, 450, hasFilter(key, data()) ? "red" : "green")
+    }, 450, hasFilter(key, data(), panelID) ? "red" : "green")
 }
 
 function setupFiltersRow(){
