@@ -141,7 +141,6 @@ export function moveOverlay(moveId) {
     const triggerMoveRefresh = ()=>{
         trickFilterSearch(2)
         setAllMoves()
-        console.log('what')
     }
     const move = gameData.moves[moveId]
     const core = e("div", "move-overlay")

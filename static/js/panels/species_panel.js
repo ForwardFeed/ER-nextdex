@@ -527,12 +527,14 @@ export const queryMapSpecies = {
     },
     "move": (queryData, specie) => {
         let moves = specie.allMoves?.map((x) => gameData.moves[x].name.toLowerCase()) || []
+        let isUnperfectMatch = false
         for (const move of moves) {
             if (AisInB(queryData, move)) {
-                return [queryData === move, move, false]
+                if (queryData === move) return [true, move, false]
+                isUnperfectMatch = true
             }
         }
-        return false
+        return isUnperfectMatch
     },
     "region": (queryData, specie) => {
         const specieRegion = specie.region?.toLowerCase() || ""
