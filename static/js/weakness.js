@@ -1,8 +1,3 @@
-/**
- * this file will be to calculate the weaknesses of pokemon
- * I need to add this before i create the team builder tab (I will create a behind the back tab with the species)
- */
-
 import { gameData } from "./data_version.js"
 
 /**
@@ -14,6 +9,10 @@ import { gameData } from "./data_version.js"
  * ]
  * }
  */
+const IMMUNE = 0
+const RESIST = 1
+const WEAK = 2
+
 const typeChart = {
     "Normal": [["Ghost"],
         [],
@@ -129,41 +128,27 @@ export function abilitiesToAddedType(abis){
     }
     return undefined
 }
-
-const abiltyModifyTypeChart = {
-    "Gifted Mind" : (atkT, defT) => {
-        if (defT === "Psychic"  && typeChart[Psychic][2].indexOf(atkT) !== 1){
-            return 1
-        }
-    },
-    "Flash Fire": (atkT, defT) => {
-        if (atkT === "Fire") return 0
-    },
-    "Sea Weed": (atkT, defT) => {
-        if (atkT === "Fire") return 0.5
-    },
-    /*
-    "Overwhelm": (atkT, defT) => {
-        if (atkT === "Dragon") return 0.5
-    },*/
-    /*
-    "Raw Wood": (atkT, defT) => {
-        if (atkT === "Grass") return 0.5
-    },*/
-    /*"Molten Down": (atkT, defT) => {
-        if (defT)
-    }*/
-}
-
 /**
  * 
  * @param {string[]} defTypes 
  * @param {string[]} abilities 
  */
-export function getDefensiveCoverage(defTypes){
+export function getDefensiveCoverage(defTypes, abis){
+    const modifiers = abilityModifiesTypeChart(abis)
     const defensiveCoverage = []
     for (const AtkT of gameData.typeT){
         let typeEffectiveness = 1
+        if (modifiers[0].indexOf(AtkT) != -1) {
+            typeEffectiveness = 0
+            defensiveCoverage.push(typeEffectiveness)
+            continue
+        }
+        if (modifiers[1].indexOf(AtkT) != -1) {
+            typeEffectiveness = 1
+        }
+        if (modifiers[2].indexOf(AtkT) != -1) {
+            typeEffectiveness = 0.5
+        }
         for (const defT of defTypes){
             typeEffectiveness *= getTypeEffectiveness(AtkT, defT)
         }
@@ -182,6 +167,44 @@ export function getDefensiveCoverage(defTypes){
         }
     })
     return defensiveCoverageSorted
+}
+
+const abilityThatAddsImmunity = {
+    "Flash Fire": ["Fire"],
+    "Sap Sipper": ["Grass"],
+    "Volt Absorb": ["Electric"],
+    "Water Absorb": ["Water"],
+    "Immunity": ["Poison"],
+    "Wonder Guard": [], //Find a way to put it
+    "Lightning Rod"
+}
+
+const abilityThatAddsNormal = {
+    "Gifted Mind": typeChart.Psychic[WEAK],
+}
+
+const abilityThatAddsResist = {
+    "Sea Weed": ["Fire"],
+    "Thick Fat": ["Fire", "Ice"],
+
+}
+
+function abilityModifiesTypeChart(abis){
+    abis = abis.map(x => gameData.abilities[x].name)
+    const modifiers = [
+        [],
+        [],
+        [],
+    ]
+    for (const abi of abis){
+        const addedImunity = abilityThatAddsImmunity[abi]
+        if (addedImunity) modifiers[0].push(...addedImunity)
+        const addedNormal = abilityThatAddsNormal[abi]
+        if (addedNormal) modifiers[1].push(...addedNormal)
+        const addedResist = abilityThatAddsResist[abi]
+        if (addedResist) modifiers[2].push(...addedResist)
+    }
+    return modifiers
 }
 
 /**

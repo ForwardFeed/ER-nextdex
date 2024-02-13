@@ -75,7 +75,8 @@ def getShiny(paletteFolder, ImageFolder, imageName):
     applyPalette(inputImagePath, shinyPalPath, outputImagePath)
     return
 
-
+# todo fix this one
+#getShiny("./out/palettes/", "./out/sprites/", "PANGORO")
 files = listdir("./out/sprites/")
 shinyRegex = re.compile('SHINY_')
 for name in files:

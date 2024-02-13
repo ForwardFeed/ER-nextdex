@@ -5,7 +5,7 @@ import { search } from "../search.js"
 import { queryFilter2, longClickToFilter } from "../filters.js"
 import { gameData } from "../data_version.js"
 import { createInformationWindow, removeInformationWindow } from "../window.js"
-import { getDefensiveCoverage, abilitiesToAddedType } from "../weakness.js"
+import { getDefensiveCoverage, abilitiesToAddedType} from "../weakness.js"
 import { nodeLists } from "../hydrate.js"
 import { cubicRadial } from "../radial.js"
 
@@ -30,7 +30,8 @@ export function feedPanelSpecies(id) {
     $('#species-front')[0].dataset.shiny = "off"
     setAbilities(specie.stats.abis, specie)
     setInnates(specie.stats.inns)
-    setTypes([...new Set(specie.stats.types), abilitiesExtraType(0, specie)])
+    specie.activeAbi = 0
+    setTypes([...new Set(specie.stats.types), abilitiesExtraType(specie.activeAbi, specie)], specie)
     setAllMoves(specie)
     setEvos(specie.evolutions)
     setLocations(specie.locations, specie.SEnc)
@@ -75,7 +76,7 @@ function setDefensiveCoverage(coverage) {
     core.append(frag)
 }
 
-function setTypes(types) {
+function setTypes(types, specie) {
     types = types.filter(x => x != undefined)
     const core = $('#species-types')
     for (let i = 0; i < 3; i++) {
@@ -88,7 +89,11 @@ function setTypes(types) {
         node.show()
         node.text(type).attr("class", `type ${type.toLowerCase()}`)
     }
-    setDefensiveCoverage(getDefensiveCoverage(types.map(x => gameData.typeT[x])))
+    setDefensiveCoverage(
+        getDefensiveCoverage(
+            types.map(x => gameData.typeT[x]), [specie.stats.abis[specie.activeAbi], ...specie.stats.inns]
+        )
+    )
 }
 
 export function setAllMoves(specie = gameData.species[currentSpecieID]){
@@ -244,7 +249,8 @@ function setAbilities(abilities, specie) {
             name.onclick = () => {
                 $('#species-abilities .sel-active').removeClass('sel-active').addClass('sel-n-active')
                 name.classList.replace('sel-n-active', 'sel-active')
-                setTypes([...new Set(specie.stats.types), abilitiesExtraType(i, specie)])
+                specie.activeAbi = i
+                setTypes([...new Set(specie.stats.types), abilitiesExtraType(specie.activeAbi, specie)], specie)
             }
             name.classList.add(i ? "sel-n-active" : "sel-active")
             longClickToFilter(0, name, "ability", () => { return abi.name })
