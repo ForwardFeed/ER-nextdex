@@ -139,7 +139,7 @@ export function redirectMove(moveId) {
 
 export function moveOverlay(moveId) {
     const triggerMoveRefresh = ()=>{
-        trickFilterSearch()
+        trickFilterSearch(2)
         setAllMoves()
         console.log('what')
     }
@@ -170,7 +170,7 @@ export function moveOverlay(moveId) {
     split.src = `./icons/${gameData.splitT[move.split]}.png`
     longClickToFilter(2, splitDiv, "category", 
             ()=>{ return gameData.splitT[move.split].toLowerCase() || ""}
-        , undefined, triggerMoveRefresh)
+        , triggerMoveRefresh)
     const effectsDiv = e("div", "move-overlay-effects")
     listMoveFlags(move.flags.map((x) => gameData.flagsT[x]), $(effectsDiv))
 
