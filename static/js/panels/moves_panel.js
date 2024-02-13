@@ -5,8 +5,9 @@ import { AisInB, e, JSHAC } from "../utils.js"
 import { removeInformationWindow } from "../window.js"
 
 export let matchedMoves
-
+let currentMoveID = 0
 export function feedPanelMoves(moveID) {
+    currentMoveID = moveID
     const move = gameData.moves[moveID]
     $('#moves-name').text(move.name)
     $('#moves-pwr').text(move.pwr ? move.pwr == 1 ? "?" : move.pwr : "--")
@@ -154,10 +155,16 @@ export function moveOverlay(moveId) {
     const typeDiv = e("div", "move-overlay-types")
     const type1 = gameData.typeT[move.types[0]]
     const type1Div = e("div", `move-overlay-type ${type1.toLowerCase()}`, type1)
+    longClickToFilter(2, type1Div, "type")
     const type2 = move.types[1] ? gameData.typeT[move.types[1]] : ""
     const type2Div = e("div", `move-overlay-type ${type2.toLowerCase()}`, type2)
+    longClickToFilter(2, type2Div, "type")
+    const splitDiv = e('div')
     const split = e("img", "move-overlay-img pixelated")
     split.src = `./icons/${gameData.splitT[move.split]}.png`
+    longClickToFilter(2, splitDiv, "category", 
+            ()=>{ return gameData.splitT[move.split].toLowerCase() || ""}
+        )
     const effectsDiv = e("div", "move-overlay-effects")
     listMoveFlags(move.flags.map((x) => gameData.flagsT[x]), $(effectsDiv))
 
@@ -178,7 +185,9 @@ export function moveOverlay(moveId) {
                     type1Div,
                     type2Div,
                 ],
-                split
+                splitDiv, [
+                    split
+                ]
             ],
             effectsDiv
         ]
@@ -239,5 +248,6 @@ export function updateMoves(searchQuery) {
             node.hide()
         }
     }
-    if (validID) feedPanelMoves(validID)
+    //if the current selection isn't in the list then change
+    if (matched && matched.indexOf(currentMoveID) == -1 && validID) feedPanelMoves(validID)
 }

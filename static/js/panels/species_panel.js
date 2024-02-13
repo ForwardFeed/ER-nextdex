@@ -557,6 +557,6 @@ export function updateSpecies(searchQuery) {
             node.hide()
         }
     }
-    // also it should apply the filters to the specie console.log(moveID, matchedMoves)
-    if (validID) feedPanelSpecies(validID)
+    //if the current selection isn't in the list then change
+    if (matched && matched.indexOf(currentSpecieID) == -1 && validID) feedPanelSpecies(validID)
 }

@@ -474,7 +474,9 @@ export function setupFilters(){
 export function longClickToFilter(panelID, node, key, data = ()=>{return node.innerText}){
     let filterDiv, color
     let extendableDiv = setLongClickSelection(node, () => {
+        console.log(data(), key)
         if (hasFilter(key, data())) {
+            console.log(filterDiv)
             if (!filterDiv){
                 $('.filter-search').each((index, val)=>{
                     if (val.value === data()){

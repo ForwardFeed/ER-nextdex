@@ -4,7 +4,9 @@ import { queryFilter2 } from "../filters.js"
 import { gameData } from "../data_version.js"
 import { AisInB } from "../utils.js"
 
+let currentLocID = 0
 export function feedPanelLocations(mapID){
+    currentLocID = mapID
     const map = gameData.locations.maps[mapID]
     const xrateTable = [
         "land",
@@ -74,5 +76,6 @@ export function updateLocations(searchQuery){
                 node.hide()
         }
     }
-    if (validID) feedPanelLocations(validID)
+    //if the current selection isn't in the list then change
+    if (matched && matched.indexOf(currentLocID) == -1 && validID) feedPanelLocations(validID)
 }

@@ -7,7 +7,9 @@ const trainerParam = {
     elite: false
 }
 
+let currentTrainerID = 0
 export function feedPanelTrainers(trainerID){
+    currentTrainerID = trainerID
     $('#trainers-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
     $('#trainers-list > .btn').eq(trainerID - 1).addClass("sel-active").removeClass("sel-n-active")
 
@@ -235,5 +237,6 @@ export function updateTrainers(searchQuery){
                 node.hide()
         }
     }
-    if (validID) feedPanelTrainers(validID)
+    //if the current selection isn't in the list then change
+    if (matched && matched.indexOf(currentTrainerID) == -1 && validID) feedPanelTrainers(validID)
 }
