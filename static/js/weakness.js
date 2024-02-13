@@ -176,7 +176,7 @@ const abilityThatAddsImmunity = {
     "Water Absorb": ["Water"],
     "Immunity": ["Poison"],
     "Wonder Guard": [], //Find a way to put it
-    "Lightning Rod"
+    "Lightning Rod": ["Electric"]
 }
 
 const abilityThatAddsNormal = {
