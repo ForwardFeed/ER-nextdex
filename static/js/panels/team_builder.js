@@ -149,8 +149,6 @@ export function setupTeamBuilder() {
             const pokeID = ev.dataTransfer.getData("id");
             teamData[index].init(pokeID)
             createPokeView($(this), index)
-            setupTeamBuilder
-
         }
         teamView.push(new PokeNodeView($(this)))
     })

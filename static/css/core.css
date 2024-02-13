@@ -94,12 +94,18 @@ main{
     padding: 0;
     position: absolute;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 #search-keys-selections>div {
     cursor: pointer;
     background-color: var(--selNActive);
     text-align: center;
+    margin: auto;
+    width: 100%;
+    border: solid var(--shadow) 2px;
 }
 
 #search-keys-selections>div:hover {
@@ -240,10 +246,12 @@ input[type="text"] {
     .main-search-label{
         border-radius: 7px 0 0 7px;
     }
-    #search-keys, #search-bar, #search-keys-selections > div, #search-suggestion > div{
+    #search-keys, #search-bar{
         font-size: 20px;
     }
-
+    #search-keys-selections > div, #search-suggestion > div {
+        font-size: calc(2vw + 20px);
+    }
     #non-header {
         flex-direction: row;
     }

@@ -36,16 +36,34 @@ export function AisInB(a, b){
 
 
 /**
- * will work as long no future event.stop propagation is written in the code
+ * 
  */
-
-export function clickOutsideToRemove(htmlNodeToHide, htmlNodeClickedOn){
+export function clickOutsideToHide(htmlNodeToHide, htmlNodeClickedOn){
     const clickToHide = (ev)=>{
         if (htmlNodeClickedOn == ev.target) return 
         htmlNodeToHide.style.display = "none"
         $(document).off('click', clickToHide)
     }
+    // will work as long no future event.stop propagation is written in the code
     $(document).on('click', clickToHide)
+}
+
+export function clickOutsideToRemove(node, absorb = false){
+    function hasParent(node, nodeToCompare){
+        if (!node) return false
+        if (node != nodeToCompare){
+            return hasParent(node.parentNode, nodeToCompare)
+        }
+        return true
+    }
+    const clickToHide = (ev)=>{
+        if (hasParent(ev.target, node)) return
+        if (absorb) ev.stopPropagation()
+        node.remove()
+        document.body.removeEventListener('click', clickToHide, absorb)
+    }
+    // will work as long no future event.stop propagation is written in the code
+    document.body.addEventListener('click', clickToHide, absorb)
 }
 
 /** JS Util to HTML */
@@ -65,7 +83,7 @@ export function e(tag = "div", classname = "", innerText ="" ){
 /**
  * Javascript HTML Array Concatenation
  * @param {HTMLDivElement | HTMLDivElement[]} htmlArray
- * @returns  {HTMLDivElement}
+ * @returns  {DocumentFragment}
  */
 export function JSHAC(htmlArray){
     const frag = document.createDocumentFragment()
@@ -109,22 +127,24 @@ export class Selectable {
 }
 
 
-export function setLongClickSelection(node, callback, time = 250){
-    const extendableDiv  = e("div", "")
+export function setLongClickSelection(node, callback, time = 1000, bgColor = "red"){
+    const extendableDiv  = e("div", "extend")
+    extendableDiv.style.backgroundColor = bgColor
+    extendableDiv.style.display = "none"
     node.append(extendableDiv)
-    
+    node.style.position = "relative"
     //weird hacks but so it doesn't "click" when long click with the stopImmediaPropagation
-    const ifNotLongClick = node.onclick.bind({})
+    const ifNotLongClick = node.onclick?.bind({})
     node.onclick = null
     let timeout
     let hasFired = true
     const mouseDown = (ev)=>{
+        extendableDiv.style.display = "block"
         hasFired = false
         timeout = setTimeout(()=>{
             hasFired = true
             callback()
         }, time)
-        extendableDiv.className = "extend"
         extendableDiv.animate([
             { width: "0%"},
             { width: "100%"},
@@ -134,13 +154,15 @@ export function setLongClickSelection(node, callback, time = 250){
         })
     }
     const mouseUp = (ev)=>{
-        if (!hasFired) ifNotLongClick.apply() //transform the long click into a short click
+        extendableDiv.style.display = "none"
+        if (!hasFired && ifNotLongClick) ifNotLongClick.apply() //transform the long click into a short click
         ev.stopImmediatePropagation(); 
         clearTimeout(timeout)
-        extendableDiv.className = ""
     }
     node.addEventListener("mousedown", mouseDown)
     node.addEventListener("touchstart", mouseDown)
     node.addEventListener("mouseup", mouseUp)
     node.addEventListener("touchend", mouseUp)
+
+    return extendableDiv
 }

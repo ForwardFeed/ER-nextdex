@@ -1,6 +1,6 @@
 import { createSpeciesBlock, redirectSpecie } from "./species_panel.js"
 import { search } from "../search.js"
-import { queryFilter} from "../filters.js"
+import { queryFilter2 } from "../filters.js"
 import { gameData } from "../data_version.js"
 import { AisInB } from "../utils.js"
 
@@ -61,16 +61,15 @@ export const queryMapLocations = {
 export function updateLocations(searchQuery){
     const maps = gameData.locations.maps
     const nodeList = $('#locations-list').children()
+    const matched = queryFilter2(searchQuery, maps, queryMapLocations)
     let validID;
-    
-    for (const i in maps){
-        const map = maps[i]
+    const mapsLen = maps.length
+    for (let i  = 0; i < mapsLen; i++) {
         const node = nodeList.eq(i)
-        if (queryFilter(searchQuery, map, queryMapLocations))
+        if (!matched || matched.indexOf(i) != -1)
         {
                 if (!validID) validID = i
                 node.show()
-                
         } else {
                 node.hide()
         }

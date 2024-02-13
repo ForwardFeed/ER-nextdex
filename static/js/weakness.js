@@ -110,8 +110,24 @@ export function checkTypos(types){
         }
     }
 }
-const abilityToTypeAdded = {
+const abilityAddingType = {
     "Phantom": "Ghost",
+    "Metallic": "Steel",
+    "Dragonfly": "Dragon",
+    "Half Drake": "Dragon",
+    "Ice Age": "Ice",
+    "Grounded": "Ground",
+    "Aquatic": "Water",
+    "Turboblaze": "Fire",
+    "Teravolt": "Electric",
+}
+
+export function abilitiesToAddedType(abis){
+    for (const abi of abis){
+        const addedType = abilityAddingType[gameData.abilities[abi].name]
+        if (addedType) return gameData.typeT.indexOf(addedType)
+    }
+    return undefined
 }
 
 const abiltyModifyTypeChart = {
@@ -144,15 +160,8 @@ const abiltyModifyTypeChart = {
  * @param {string[]} defTypes 
  * @param {string[]} abilities 
  */
-export function getDefensiveCoverage(defTypes, abilities){
-    /*for (const ability of abilities){
-        if (abilityToTypeAdded[ability]){
-            defTypes.push(abilityToTypeAdded[ability])
-        }
-    }*/
+export function getDefensiveCoverage(defTypes){
     const defensiveCoverage = []
-    // remove duplicates
-    defTypes = defTypes[0] === defTypes [1] ? [defTypes[0]] : defTypes
     for (const AtkT of gameData.typeT){
         let typeEffectiveness = 1
         for (const defT of defTypes){

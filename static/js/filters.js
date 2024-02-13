@@ -1,11 +1,10 @@
 import { search, onkeySearchFilter } from "./search.js"
-import { e, JSHAC, clickOutsideToRemove, setLongClickSelection } from "./utils.js"
+import { e, JSHAC, clickOutsideToHide, setLongClickSelection } from "./utils.js"
 
-/**
- * Will execute all filters query so far
- */
-function executeAllFilters(){
-    let allQueries = [{ //this is the top bar search
+let allQueries = []
+
+export function getQueries(){
+    allQueries = [{ //this is the top bar search
         op:"AND",
         not: false, //not yet implemented
         k: $('#search-keys').val().toLowerCase(),
@@ -38,8 +37,15 @@ function executeAllFilters(){
             data: allQueries, 
         }
     }
+    return finalQuery
+}
+
+/**
+ * Will fetch and execute all filters queries
+ */
+function executeAllFilters(){
     //execute the update of the active panel
-    search.panelUpdatesTable[search.panelUpdatesIndex](finalQuery)
+    search.panelUpdatesTable[search.panelUpdatesIndex](getQueries())
 }
 
 export function activateSearch(callback){
@@ -142,7 +148,7 @@ export function appendFilter(initKey = "", initData = ""){
     inputKey.onclick = () =>{
         $(divKeySelection).show()
         //ev.stopPropagation()
-        clickOutsideToRemove(divKeySelection, inputKey)
+        clickOutsideToHide(divKeySelection, inputKey)
     }
 
     inputSearch.onclick = ()=>{
@@ -158,9 +164,10 @@ export function appendFilter(initKey = "", initData = ""){
     }
     
     $('#filter-data').find('.filter-add').before(frag)
+    
+    spinOnAddFilter()
+    return divField
 }
-
-
 
 /**
  * @callback searchAssertion - compare the data from the query and the data from the data
@@ -230,10 +237,126 @@ export function queryFilter(query, data, keymap){
         else return true // true i suppose?
     }
 }
+/**
+ * 
+ * @param {*} query 
+ * @param {*} datas 
+ * @param {*} keymap 
+ * @returns {number[]}the list of element that matched by index
+ */
+export function queryFilter2(query, datas, keymap){
+    const queryNot = (notFlag, value) => {
+        return notFlag ? !value : value
+    }
+    if (query.data.constructor === Array){
+        // break it down until it is no longer an array
+        // resolve all using the parent operator
+        const subQueriesAnswers = query.data.map((subQuery)=>{
+            return queryFilter2(subQuery, datas, keymap)
+        }).filter(x => x)
+        // if the is nothing to compare to, then just shrug
+
+        if (subQueriesAnswers.length < 1) return undefined
+        // just one?
+        if (subQueriesAnswers.length == 1) return subQueriesAnswers[0]
+        // okay now it's we get to use our operators
+        let allIndexes = subQueriesAnswers.splice(0,1)[0]
+        const subQlen = subQueriesAnswers.length
+        for (let i = 0; i < subQlen; i++){
+            const answers = subQueriesAnswers[i]
+            allIndexes.push(...answers)
+            if (query.op === "OR"){
+                // or is basically a concatenation + a unique values
+                allIndexes = [...new Set(allIndexes)]
+            } else if (query.op === "XOR"){
+                const onlyUniq = []
+                const len = allIndexes.length
+                for (let i = 0; i < len; i++){
+                    const checkUniq = allIndexes.splice(0,1)[0]
+                    if (allIndexes.indexOf(checkUniq) == -1) onlyUniq.push(checkUniq)
+                    allIndexes.push(checkUniq)
+                }
+                allIndexes = onlyUniq
+            } else { //Default AND
+                // concatenation + only duplicate
+                const duplicates = []
+                const len = allIndexes.length
+                for (let i = 0; i < len; i++){
+                    const checkDupli = allIndexes.splice(0,1)[0]
+                    if (allIndexes.indexOf(checkDupli) != -1) duplicates.push(checkDupli)
+                }
+                allIndexes = duplicates
+            }
+        }
+        return allIndexes
+    } else {
+        const execFn = keymap[query.k]
+        // if the is nothing to compare to, then just shrug
+        if (!execFn) return undefined
+        const allElementsIndexesThatMatched = []
+        const  perfectMatches = [] //for not unique properties like abilities or move that can be shared by multiple pokemons
+        const dataLen = datas.length
+        for (let i = 0; i < dataLen; i++){
+            const data = datas[i]
+            const answer = execFn(query.data, data)
+            let suggestion
+            // when asking for object it's because the function may support perfect matching
+            // Which means that ignore any other, this is to fix this case:
+            // powder and powder poison, if the string is "pow" both may trigger
+            // but if it's "powder" then no, only powder may show
+            // in the case of generator or generator as abilities, it's the ability that should be uniq
+            // not the first pokemon to hit it, that's why there is isNotUnique
+            if (typeof answer === "object"){
+                const perfectMatch = answer[0]
+                suggestion = answer[1]
+                if (perfectMatch) {
+                    const isUnique = answer[2]
+                    // a name is unique
+                    if (isUnique) {
+                        // invert the unique search
+                        if (query.not){
+                            const inverted = [...Array(dataLen).keys()]
+                            inverted.splice(i, 1)
+                            return inverted
+                        }
+                        return [i]
+                    }
+                    // an ability or a move isn't
+                    perfectMatches.push(i)
+
+                }
+            } else {
+                suggestion = answer
+            }
+            if (queryNot(query.not, suggestion)){
+                allElementsIndexesThatMatched.push(i)
+                if (query.suggestion){
+                    search.addSuggestion(suggestion)
+                }
+            }
+        }
+        return perfectMatches.length ? perfectMatches : allElementsIndexesThatMatched
+    }
+}
 
 function removeAllFilters(){
     $('#filter-frame').find('.filter-field').remove()
     activateSearch()
+    spinOnRemoveFilter()
+}
+
+export function spinOnAddFilter(){
+    $('#filter-icon')[0].animate([
+        { rotate: "0deg"},
+        { backgroundColor: "green"},
+        { rotate: "360deg"},
+    ],{
+        duration: 750,
+        iterations: 1,
+    })
+}
+
+export function spinOnRemoveFilter(){
     $('#filter-icon')[0].animate([
         { rotate: "0deg"},
         { backgroundColor: "red"},
@@ -243,18 +366,20 @@ function removeAllFilters(){
         iterations: 1,
     })
 }
-
-export function spinOnAddFilter(){
-    console.log('spin')
-    $('#filter-icon')[0].animate([
-        { rotate: "0deg"},
-        { backgroundColor: "green"},
-        { rotate: "360deg"},
-    ],{
-        duration: 750,
-        iterations: 1,
-    })
-    appendFilter()
+/**
+ * 
+ * @param {string} key - lower case!!!
+ * @param {string} data 
+ * @returns 
+ */
+export function hasFilter(key, data){
+    data = data.toLowerCase()
+    for (const query of allQueries){
+        if (query.k === key && query.data.toLowerCase() === data){
+            return true
+        }
+    }
+    return false
 }
 
 export function setupFilters(){
@@ -266,7 +391,9 @@ export function setupFilters(){
         $('.filter-panel').toggle()
     })
 
-    $('.filter-add').on('click', spinOnAddFilter)
+    $('.filter-add').on('click', function(){
+        appendFilter()
+    })
     // weird but it's because i have other events on it like the long click
 
     $('#filter-main-operator').on('change', function(){
@@ -277,4 +404,29 @@ export function setupFilters(){
         removeAllFilters()
     })
 }
+
+export function longClickToFilter(node, key, data = ()=>{return node.innerText}){
+    let filterDiv, color
+    let extendableDiv = setLongClickSelection(node, () => {
+        if (hasFilter(key, data())) {
+            if (!filterDiv){
+                $('.filter-search').each((index, val)=>{
+                    if (val.value === data()){
+                        $(val).closest(".filter-field").remove()
+                    }
+                })
+            } else {
+                filterDiv.remove()
+            }
+            spinOnRemoveFilter()
+            color = "green";
+        } else {
+            filterDiv = appendFilter(key, data())
+            color = "red"
+        }
+        activateSearch()
+        extendableDiv.style.backgroundColor = color
+    }, 450, hasFilter(key, data()) ? "red" : "green")
+}
+
 

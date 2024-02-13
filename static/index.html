@@ -9,6 +9,7 @@
     <!--load css themes-->
     <link rel="stylesheet" href="./css/themes/blueish.css" id="styles-blueish">
     <link rel="stylesheet" href="./css/themes/rushed.css" id="styles-rushed">
+    <link rel="stylesheet" href="./css/themes/blahaj.css" id="styles-blahaj">
     <link rel="stylesheet" href="./css/themes/wood.css" id="styles-wood">
     <link rel="icon" type="image/x-icon" href="./icons/favicon.webp">
     <script type="module" src="./js/settings.js"></script>
@@ -105,9 +106,11 @@
                     <div class="species-mid">
                         <div class="species-mid-stats">
                             <div id="species-name"></div>
+                            <div id="species-id" style="display: none;"></div>
                             <div id="species-types">
-                                <div class="type"></div>
-                                <div class="type"></div>
+                                <div class="type"><span></span></div>
+                                <div class="type"><span></span></div>
+                                <div class="type"><span></span></div>
                             </div>
                         </div>
                         <div class="species-switch">
@@ -183,8 +186,8 @@
                 </div>
             </div>
             <div id="panel-abis" class="panel">
+                <!--button id="filter-alphabethically">Filter Alphabethically</button-->
                 <div id="abis-list">
-
                 </div>
             </div>
             <div id="panel-moves" class="panel">
@@ -382,6 +385,7 @@
         <div class="versionning">
             <label for="versions">Game Version</label>
             <select name="versions" id="versions"></select>
+            <span id="ugly-error-span" style="color: red;"></span>
         </div>
         <button id="insanity">ACTIVATE INSANITY WARNING EPILEPSY</button>
     </div>

@@ -1,10 +1,10 @@
 import { updateSpecies,queryMapSpecies } from "./panels/species_panel.js"
-import { updateAbilities, queryMapAbilities} from "./panels/abilities_panel.js"
+import { filterAbilities, queryMapAbilities} from "./panels/abilities_panel.js"
 import { updateMoves, queryMapMoves} from "./panels/moves_panel.js"
 import { updateLocations, queryMapLocations } from "./panels/locations_panel.js"
 import { updateTrainers, queryMapTrainers } from "./panels/trainers_panel.js"
 import { activateSearch, appendFilter, spinOnAddFilter} from "./filters.js"
-import { clickOutsideToRemove } from "./utils.js"
+import { clickOutsideToHide } from "./utils.js"
 
 export const search = {
     // the search guard is here to prevent that while the app is searching
@@ -17,7 +17,7 @@ export const search = {
     // if modified sync it with "siderbar.js > setupPanels() > panelTable" variable
     panelUpdatesTable: [
         updateSpecies,
-        updateAbilities,
+        filterAbilities,
         updateMoves,
         updateLocations,
         updateTrainers,
@@ -47,6 +47,7 @@ export const search = {
         "Ability",
         "Move",
         "Move-effect",
+        "category",
         "specie",
         "map",
     ],
@@ -118,7 +119,7 @@ export function onkeySearchFilter(ev, divSuggestions, inputSearch){
     }, 3000) // 3 secs
     if (evKeymap[ev.key] && evKeymap[ev.key]()) return
     const callback = ()=>{
-        clickOutsideToRemove(search.suggestionNode)
+        clickOutsideToHide(search.suggestionNode)
         search.suggestionSaved = search.suggestionInput.value
     }
     activateSearch(callback)
@@ -192,7 +193,7 @@ export function setupSearch(){
     })/* 
     $('#search-keys').on('click', function(ev){
         ev.stopPropagation()
-        clickOutsideToRemove($('#search-keys-selections')[0], $('#search-keys')[0])
+        clickOutsideToHide($('#search-keys-selections')[0], $('#search-keys')[0])
         $('#search-keys-selections').toggle()
     }) */
     //weird to use onclick here but i have the long click event on it too

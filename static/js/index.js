@@ -1,6 +1,6 @@
 import setupPanels from "./sidebar.js"
 import { setupSpeciesPanel } from "./panels/species_panel.js"
-import { setAvailableVersion } from "./data_version.js"
+import { setupDataVersionning } from "./data_version.js"
 import { setupSearch } from "./search.js"
 import { addTooltip } from "./utils.js"
 import { setupSettings } from "./settings.js"
@@ -9,16 +9,20 @@ import { setupTeamBuilder } from "./panels/team_builder.js"
 import { activateInsanity } from "./insanity.js"
 
 $(document).ready(function(){
+    window.onerror = function(msg, url, lineN){
+        //document.getElementById('ugly-error-span').innerText += `in ${url.replace(/[^/]+\//g, '')} ${lineN}: ${msg}`
+    }
     setupHeader()
     setupSettings()
     setupPanels()
     setupSpeciesPanel()
-    setAvailableVersion()
+    setupTeamBuilder() // the team builder BEFORE data version is Important
+    setupDataVersionning()
     setupSearch()
     setupFilters()
-    setupTeamBuilder()
     addTooltip($('.main-title')[0], 'Berkay, the dex is up btw')
     $('#insanity').on('click', activateInsanity)
+    
 })
 
 
@@ -45,7 +49,7 @@ function setupHeader(){
         }
         showOrNot ? $('#top-header, #search-wrapper').show() : $('#top-header, #search-wrapper').hide()
     })
-    let heightTrigger = 0
+    /*let heightTrigger = 0
     $('#top-header, #search-wrapper').toArray().map(x => heightTrigger += x.clientHeight + 2)
     $(document).on('mousemove', (ev) => {
         if (isClick){ // before fucking mousemove is triggered by touchend F U
@@ -68,6 +72,6 @@ function setupHeader(){
             showOrNot ? $('#top-header, #search-wrapper').show("1000") : $('#top-header, #search-wrapper').hide()
         }, 300) // time for the pointer to stay in the zone
          
-    })
+    })*/
     
 }

@@ -1,20 +1,20 @@
 import { redirectLocation } from "./locations_panel.js"
-import { redirectMove, moveOverlay } from "./moves_panel.js"
-import { addTooltip, capitalizeFirstLetter, AisInB, e } from "../utils.js"
+import { matchedMoves, moveOverlay } from "./moves_panel.js"
+import { addTooltip, capitalizeFirstLetter, AisInB, e, JSHAC } from "../utils.js"
 import { search } from "../search.js"
-import { queryFilter} from "../filters.js"
+import { queryFilter2, longClickToFilter } from "../filters.js"
 import { gameData } from "../data_version.js"
 import { createInformationWindow } from "../window.js"
-import { getDefensiveCoverage } from "../weakness.js"
+import { getDefensiveCoverage, abilitiesToAddedType} from "../weakness.js"
 
-export function feedPanelSpecies(id){
+export function feedPanelSpecies(id) {
     const specie = gameData.species[id]
-
-    $('#species-name').text(specie.name)
+    $('#species-name').text(`${specie.name}#${specie.dex.id||"??"}`)
+    $('#species-id').text(`ingame ID: ${specie.id}`)
     updateBaseStats(specie.stats.base)
     $('#species-front').attr('src', getSpritesURL(specie.NAME))
-    $('#species-front')[0].onclick = ()=>{
-        if ($('#species-front')[0].dataset.shiny === "off"){
+    $('#species-front')[0].onclick = () => {
+        if ($('#species-front')[0].dataset.shiny === "off") {
             $('#species-front')[0].dataset.shiny = "on"
             $('#species-front').attr('src', getSpritesShinyURL(specie.NAME))
         } else {
@@ -23,9 +23,10 @@ export function feedPanelSpecies(id){
         }
     }
     $('#species-front')[0].dataset.shiny = "off"
-    setAbilities(specie.stats.abis)
+    setAbilities(specie.stats.abis, specie)
     setInnates(specie.stats.inns)
-    setTypes(specie.stats.types)
+    
+    setTypes([...new Set(specie.stats.types),abilitiesExtraType(0, specie)])
     setLevelUpMoves($('#learnset'), specie.levelUpMoves)
     setMoves($('#tmhm'), specie.TMHMMoves)
     setMoves($('#tutor'), specie.tutor)
@@ -33,32 +34,25 @@ export function feedPanelSpecies(id){
     setEvos(specie.evolutions)
     setLocations(specie.locations, specie.SEnc)
     $('#species-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
-    $('#species-list').children().eq(id-1).addClass("sel-active").removeClass("sel-n-active")
-    //need to make a selection for the type coverage
-    const abilities = specie.stats.abis
-        .map(x => gameData.abilities[x].name)
-        .concat(specie.stats.inns
-                .map(x=> gameData.abilities[x].name))
-    const types = specie.stats.types.map(x => gameData.typeT[x])
-    setDefensiveCoverage(getDefensiveCoverage(types, abilities))
+    $('#species-list').children().eq(id - 1).addClass("sel-active").removeClass("sel-n-active")
 }
 
 export function redirectSpecie(specieId) {
-    
-    if ($("#btn-species")[0].classList.contains("btn-active")){
-        $('#species-list').children().eq(specieId-1).click()[0].scrollIntoView({behavior:"smooth"})
+
+    if ($("#btn-species")[0].classList.contains("btn-active")) {
+        $('#species-list').children().eq(specieId - 1).click()[0].scrollIntoView({ behavior: "smooth" })
     } else {
-        search.callbackAfterFilters = () =>{
-            $('#species-list').children().eq(specieId-1).click()[0].scrollIntoView({behavior:"smooth"})
+        search.callbackAfterFilters = () => {
+            $('#species-list').children().eq(specieId - 1).click()[0].scrollIntoView({ behavior: "smooth" })
         }
         $("#btn-species").click()
     }
 }
 
-function setDefensiveCoverage(coverage){
+function setDefensiveCoverage(coverage) {
     const frag = document.createDocumentFragment()
     const multiplicators = Object.keys(coverage).sort()
-    for (const mult of multiplicators){
+    for (const mult of multiplicators) {
         const row = e("div", "species-coverage-row")
         const mulDiv = e("div", "species-coverage-mul")
         const mulSpan = e("span", "span-align", mult)
@@ -66,7 +60,7 @@ function setDefensiveCoverage(coverage){
         row.append(mulDiv)
         const typeNodeList = e("div", "species-coverage-list")
         const types = coverage[mult]
-        for (const type of types){
+        for (const type of types) {
             const colorDiv = e("div", `${type.toLowerCase()} type`)
             const divText = e("span", "span-align", type.substr(0, 5))
             colorDiv.append(divText)
@@ -81,32 +75,42 @@ function setDefensiveCoverage(coverage){
     core.append(frag)
 }
 
-function setTypes(types){
+function setTypes(types) {
+    types = types.filter(x => x)
     const core = $('#species-types')
-    for (let i = 0; i < 2; i++){
+    for (let i = 0; i < 3; i++) {
         const type = gameData.typeT[types[i]] || ""
-        core.children().eq(i).text(type).attr("class", `type ${type.toLowerCase()}`)
-    } 
+        const node = core.children().eq(i).children().eq(0)
+        if (!type) {
+            node.hide()
+            continue
+        }
+        node.show()
+        node.text(type).attr("class", `type ${type.toLowerCase()}`)
+    }
+    setDefensiveCoverage(getDefensiveCoverage(types.map(x => gameData.typeT[x])))
 }
 
+function filterMoves(moveIDlist){
+    if (!matchedMoves) return moveIDlist
+    return moveIDlist.map(x => matchedMoves.indexOf(x) != -1 && x).filter(x => x)
+}
 /**
- * 
  * @param {Object} move 
  * @returns an HTML node
  */
-function setSplitMove(move){
+function setSplitMove(move) {
     const nodeMoveSplit = document.createElement('img')
     nodeMoveSplit.src = `./icons/${gameData.splitT[move.split]}.png`
     nodeMoveSplit.className = "species-move-sprite"
     return nodeMoveSplit
 }
 /**
- * 
  * @param {Object} move
  * @param {number} moveID
  * @returns an HTML node
  */
-function setMoveName(move){
+function setMoveName(move) {
     const type1 = gameData.typeT[move.types[0]].toLowerCase()
     const nodeMoveName = document.createElement('div')
     nodeMoveName.innerText = move.name
@@ -117,21 +121,22 @@ function setMoveName(move){
  * 
  * @returns an HTML node
  */
-function setMoveRow(moveID){
+function setMoveRow(moveID) {
     const row = document.createElement('div')
-    row.className="species-move-row"
-    row.onclick=(ev) => {
+    row.className = "species-move-row"
+    row.onclick = (ev) => {
         fastdom.mutate(() => {
-            createInformationWindow(moveOverlay(moveID), {x: ev.clientX, y: ev.clientY})
+            createInformationWindow(moveOverlay(moveID), { x: ev.clientX, y: ev.clientY })
         });
     }
     return row
 }
 
-function setMoves(core, moves){
+function setMoves(core, moves) {
     core.empty()
     const frag = document.createDocumentFragment()
-    for (const moveID of moves){
+    moves = filterMoves(moves)
+    for (const moveID of moves) {
         const move = gameData.moves[moveID]
         if (!move) {
             console.warn(`unable to find move with ID ${moveID}`)
@@ -144,31 +149,32 @@ function setMoves(core, moves){
     }
     core.append(frag)
 }
-function setLevelUpMoves(core, moves){
+function setLevelUpMoves(core, moves) {
     core.empty()
     const frag = document.createDocumentFragment()
-    for (const {lv: lvl, id:id} of moves){
+    for (const { lv: lvl, id: id } of moves) {
+        if (matchedMoves && matchedMoves.indexOf(id) == -1) continue
         const move = gameData.moves[id]
         if (!move) {
             console.warn(`unable to find move with ID ${id}`)
             continue
         }
         const row = setMoveRow(id)
-        
+
         const nodeMoveLvl = document.createElement('div')
         nodeMoveLvl.innerText = +lvl || "Ev"
         nodeMoveLvl.className = "species-levelup-lvl"
         row.append(nodeMoveLvl)
         row.append(setSplitMove(move))
 
-       
+
         row.append(setMoveName(move))
         frag.append(row)
     }
     core.append(frag)
 }
 
-function updateBaseStats(stats){
+function updateBaseStats(stats) {
     const baseStatsTable = [
         '#BHP',
         '#BAT',
@@ -178,21 +184,21 @@ function updateBaseStats(stats){
         '#BSP',
         '#BST',
     ]
-    for (const i in baseStatsTable){
+    for (const i in baseStatsTable) {
         changeBaseStat($(baseStatsTable[i]), stats[i], i)
     }
 }
 
-export function getSpritesURL(NAME){
+export function getSpritesURL(NAME) {
     NAME = NAME.replace(/^SPECIES_/, '')
     return `./sprites/${NAME}.png`
 }
-export function getSpritesShinyURL(NAME){
+export function getSpritesShinyURL(NAME) {
     NAME = NAME.replace(/^SPECIES_/, '')
     return `./sprites/SHINY_${NAME}.png`
 }
 
-function changeBaseStat(node, value, statID){
+function changeBaseStat(node, value, statID) {
     node.find('.stat-num').text(value)
     let color = "gray"
     for (const colorMapped of [
@@ -202,90 +208,99 @@ function changeBaseStat(node, value, statID){
         [gameData.speciesStats.result.top20[statID], "#99cc00"],
         [gameData.speciesStats.result.top5[statID], "#33cc33"],
         [256, "#0033cc"],
-    ]){
+    ]) {
         if (value < colorMapped[0]) break
         color = colorMapped[1]
     }
     const maxValue = statID < 6 ? 255 : gameData.speciesStats.result.maxBST
-    const percent = ((value / maxValue ) * 100).toFixed()
+    const percent = ((value / maxValue) * 100).toFixed()
     node.find('.stat-num').css('background-color', color)
-    node.find('.stat-bar').css('background', `linear-gradient(to right, ${color} ${percent}%, white 0%)`)
+    node.find('.stat-bar').css('background', `linear-gradient(to right, ${color} ${percent}%, #0000 0%)`)
 }
 
-function setAbilities(abilities){
-    const node = $('#species-abilities')
-    node.empty()
-    const fragment = document.createDocumentFragment()
-    for (const i in abilities){
-        if (abilities[i] == abilities[i -1] || abilities[i] === 0) {    
-            continue
-        }
-        const abi = gameData.abilities[abilities[i]]
-        const name = document.createElement('div')
-        name.className = "species-abilities"
-        name.innerText = abi.name
-        addTooltip(name, abi.desc)
-        fragment.append(name)
-    }
-    node.append(fragment)
+function setAbilities(abilities, specie) {
+    $('#species-abilities').empty().append(
+        JSHAC(abilities.map((val, i)=>{
+            if (abilities[i] == abilities[i - 1] || abilities[i] === 0) {
+                return undefined
+            }
+            const abi = gameData.abilities[abilities[i]]
+            const name = e("div", "species-abilities", abi.name)
+            addTooltip(name, abi.desc)
+            name.onclick = () => {
+                $('#species-abilities .sel-active').removeClass('sel-active').addClass('sel-n-active')
+                name.classList.replace('sel-n-active', 'sel-active')
+                setTypes([...new Set(specie.stats.types),abilitiesExtraType(i, specie)])
+            }
+            name.classList.add(i?"sel-n-active":"sel-active")
+            longClickToFilter(name, "ability", ()=>{return abi.name} )
+            return name
+        }).filter(x => x))
+    )
 }
 
-function setInnates(innates){
-    const node = $('#species-innates')
-    node.empty()
-    const fragment = document.createDocumentFragment()
-    for (const i in innates){
-        if (innates[i] == innates[i -1] || innates[i] === 0) {    
-            continue
-        }
-        const inn = gameData.abilities[innates[i]]
-        const name = document.createElement('div')
-        name.className = "species-innate"
-        name.innerText = inn.name
-        addTooltip(name, inn.desc)
-        fragment.append(name)
-    }
-    node.append(fragment)
+function setInnates(innates) {
+    $('#species-innates').empty().append(
+        JSHAC(innates.map((val, i)=>{
+            if (innates[i] == innates[i - 1] || innates[i] === 0) {
+                return
+            }
+            const inn = gameData.abilities[innates[i]]
+            const name = e("div", "species-innate", inn.name)
+            longClickToFilter(name, "ability", ()=>{return inn.name})
+            addTooltip(name, inn.desc)
+            return name
+        }).filter(x => x))
+    )
 }
 
+function abilitiesExtraType(abilityID, specie){
+    return abilitiesToAddedType([specie.stats.abis[abilityID], ...specie.stats.inns])
+}
 
-export function setupSpeciesPanel(){
+export function setupSpeciesPanel() {
     const subPanelsAndBtns = [
         ["#switch-moves", "#species-moves"],
         ["#switch-evos-locs", "#species-evos-locs"],
     ]
-    subPanelsAndBtns.forEach((x)=>{
-        $(x[0]).on('click', ()=>{
+    subPanelsAndBtns.forEach((x) => {
+        $(x[0]).on('click', () => {
             $(x[0]).parent().find('.sel-active').addClass('sel-n-active').removeClass('sel-active')
             $(x[0]).addClass('sel-active').removeClass('sel-n-active')
             $("#species-bot").find('.active-sub-panel').removeClass('active-sub-panel').hide()
             $(x[1]).addClass('active-sub-panel').show()
         })
     })
-    $('#species-basestats, #species-coverage').on('click', function(){
+    $('#species-basestats, #species-coverage').on('click', function () {
         $('#species-basestats, #species-coverage').toggle()
     })
+    $('#species-types').children().each((index, val) => {
+        longClickToFilter(val, "type")
+    })
+    $('#species-id, #species-name').on('click', function(){
+        $('#species-id, #species-name').toggle()
+    })
 }
-function toLowerButFirstCase(word){
+function toLowerButFirstCase(word) {
     word = word.toLowerCase()
     return word.charAt(0).toUpperCase() + word.slice(1);
 }
-function convertItemNames(word){
+function convertItemNames(word) {
     return word.replace('ITEM_', '').split('_').map(toLowerButFirstCase).join(' ')
 }
-function convertMoveNames(word){
+function convertMoveNames(word) {
     return word.replace('MOVE_', '').split('_').map(toLowerButFirstCase).join(' ')
 }
-function convertSpeciesNames(word){
+function convertSpeciesNames(word) {
     return word.replace('SPECIES_', '').split('_').map(toLowerButFirstCase).join(' ')
 }
-function convertMapName(word){
+function convertMapName(word) {
     return word.replace('MAPSEC_', '').split('_').map(toLowerButFirstCase).join(' ')
 }
 
-function setEvos(evos){
+function setEvos(evos) {
     const frag = document.createDocumentFragment()
-    for (const evo of evos){
+    for (const evo of evos) {
         if (evo.in == -1) continue //not set yet
         const node = document.createElement('div')
         node.className = "evo-parent" // i dunno how do classname it
@@ -303,15 +318,14 @@ function setEvos(evos){
     $('#species-evos').empty().append(frag)
 }
 
-export function createSpeciesBlock(specieId)
-{
+export function createSpeciesBlock(specieId) {
     //create a div, then inside an image and the species name with redirection
     const node = $("<span/>").addClass("specie-block").click(() => {
-      redirectSpecie(specieId)
+        redirectSpecie(specieId)
     })
     const specie = gameData.species[specieId]
-    const img= $("<img/>").attr('src', getSpritesURL(specie.NAME))
-                .addClass("sprite")
+    const img = $("<img/>").attr('src', getSpritesURL(specie.NAME))
+        .addClass("sprite")
     const name = $("<span/>").html(specie.name)
     return node.append(img).append(name)[0]
 
@@ -324,7 +338,7 @@ export function createSpeciesBlock(specieId)
  * @param {string} reason the whatever reason that is given
  * @returns text
  */
-function setEvoReason(kindID, reason){
+function setEvoReason(kindID, reason) {
     return {
         "EVO_LEVEL": `Evolves at level: ${reason}`,
         "EVO_MEGA_EVOLUTION": `Mega-evolves with ${convertItemNames(reason)}`,
@@ -334,7 +348,7 @@ function setEvoReason(kindID, reason){
         "EVO_LEVEL_ATK_GT_DEF": `Evolves if Atk > def`,
         "EVO_LEVEL_ATK_EQ_DEF": `Evolves if Atk = def`,
         "EVO_LEVEL_SILCOON": "???",
-        "EVO_LEVEL_CASCOON": "???" ,
+        "EVO_LEVEL_CASCOON": "???",
         "EVO_PRIMAL_REVERSION": "???",
         "EVO_ITEM_MALE": `Evolves with ${convertItemNames(reason)}`,
         "EVO_ITEM_FEMALE": `Evolves with ${convertItemNames(reason)}`,
@@ -352,23 +366,22 @@ function setEvoReason(kindID, reason){
 }
 
 
-function setLocations(locations, SEnc){
+function setLocations(locations, SEnc) {
     const frag = document.createDocumentFragment()
-    for (const [locID,value] of locations){
+    for (const [locID, value] of locations) {
         const loc = gameData.locations.maps[locID]
-        if (!loc) continue 
+        if (!loc) continue
         const node = document.createElement('div')
         node.className = "specie-locs"
         let locationString = `Can be found at ${loc.name}`
-        
+
         let first = true
         for (const field of value) {
-            if(first) first=false
-            else
-            {
-                locationString+=` and`
+            if (first) first = false
+            else {
+                locationString += ` and`
             }
-            locationString+=` on ${capitalizeFirstLetter(field)}`
+            locationString += ` on ${capitalizeFirstLetter(field)}`
         }
         node.innerText = locationString
         node.onclick = () => {
@@ -376,7 +389,7 @@ function setLocations(locations, SEnc){
         }
         frag.append(node)
     }
-    for (const enc of SEnc){
+    for (const enc of SEnc) {
         const node = document.createElement('div')
         node.className = "specie-locs-scripted"
         node.innerHTML = `Can be found at ${gameData.mapsT[enc.map]} as a ${gameData.scriptedEncoutersHowT[enc.how]}`
@@ -384,51 +397,60 @@ function setLocations(locations, SEnc){
     }
     $('#species-locations').empty().append(frag)
 }
+
 export const queryMapSpecies = {
     "name": (queryData, specie) => {
-        if (AisInB(queryData, specie.name.toLowerCase())) return specie.name
+        const specieName = specie.name.toLowerCase()
+        if (AisInB(queryData, specieName)) {
+            return [queryData === specieName, specie.name, true]
+        }
     },
     "type": (queryData, specie) => {
-        const types = specie.stats.types.map((x)=>gameData.typeT[x].toLowerCase())
-        for (const type of types){
+        const types = specie.stats.types.map((x) => gameData.typeT[x].toLowerCase())
+        for (const type of types) {
             if (AisInB(queryData, type)) return type
         }
         return false
     },
     "ability": (queryData, specie) => {
         let abilities = specie.stats.abis
-                        .map((x)=>gameData.abilities[x].name.toLowerCase())
-                        .concat(
-                            specie.stats.inns.map((x)=>gameData.abilities[x].name.toLowerCase())
-                        )
-        for (const abi of abilities){
-            if (AisInB(queryData, abi)) return abi
+            .map((x) => gameData.abilities[x].name.toLowerCase())
+            .concat(
+                specie.stats.inns.map((x) => gameData.abilities[x].name.toLowerCase())
+            )
+        for (const abi of abilities) {
+            if (AisInB(queryData, abi)) {
+                return [abi === queryData, abi, false] 
+            }
         }
         return false
     },
     "move": (queryData, specie) => {
-        let moves = specie.allMoves.map((x)=>gameData.moves[x].name.toLowerCase())
-        for (const move of moves){
-            if (AisInB(queryData, move)) return move
+        let moves = specie.allMoves?.map((x) => gameData.moves[x].name.toLowerCase()) || []
+        for (const move of moves) {
+            if (AisInB(queryData, move)) {
+                return [queryData === move, move, false]
+            }
         }
         return false
     },
 }
-export function updateSpecies(searchQuery){
+export function updateSpecies(searchQuery) {
     const species = gameData.species
     const nodeList = $('#species-list').children()
+    const matched = queryFilter2(searchQuery, species, queryMapSpecies)
     let validID;
-    for (const i in species){
-        if (i == 0 ) continue
-        const specie = species[i]
+    const specieLen = species.length
+    for (let i  = 0; i < specieLen; i++) {
+        if (i == 0) continue
         const node = nodeList.eq(i - 1)
-        if (queryFilter(searchQuery, specie, queryMapSpecies))
-        {
-                if (!validID) validID = i
-                node.show()
+        if (!matched || matched.indexOf(i) != -1) {
+            if (!validID) validID = i
+            node.show()
         } else {
-                node.hide()
+            node.hide()
         }
     }
+    // also it should apply the filters to the specie console.log(moveID, matchedMoves)
     if (validID) feedPanelSpecies(validID)
 }

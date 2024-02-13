@@ -1,0 +1,19 @@
+:root {
+    --btnActive: #faacbc;
+    --btnHover: #d8a9b2;
+    --btnNActive: #d38191;
+    --selActive: #7acae9;
+    --selHover: #4fa4c5;
+    --selNActive: #4099bd;
+    --colorA: #faacbc;
+    --colorB: #c5939d;
+    --colorC: #5BCEFA;
+    --colorD: #42a3c9;
+    --colorE: white;
+    --background: #da7c8e;
+    --shadow: rgb(147, 206, 233);
+    --headerBG: #5BCEFA;
+    --headerBGL: linear-gradient(0deg, #5BCEFA 10%, #F5A9B8 30%, white 50%, #F5A9B8 70%, #5BCEFA 90%);
+    --font-color: black;
+    --filter: contrast(1000%) saturate(900%) brightness(0.3);
+}

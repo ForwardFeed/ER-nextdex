@@ -39,6 +39,10 @@
 .steel-t{color: #aab;}
 .fairy-t{color: #e9e;}
 
+.normal-t, .fire-t, .water-t, .electric-t, .grass-t, .ice-t, .fighting-t, .poison-t, .ground-t, .flying-t, .bug-t, .rock-t, .ghost-t, .dragon-t, .dark-t, .steel-t, .fairy-t{
+    filter: var(--filter);
+}
+
 .phy{
     color: rgb(189, 83, 21);
 }
@@ -327,13 +331,13 @@ span{
     max-width: 5em;
 }
 .abi-inn-info{
-    width: 100%;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     border: 2px solid var(--selActive);
     margin: 5px 0;
     padding: 0 5px ;
+    border-radius: 10px;
 
 }
 #species-innates, #species-abilities{
@@ -342,6 +346,7 @@ span{
     padding: 1%;
     flex-grow: 1;
     cursor: default;
+    width: 100%;
 
 }
 .species-innate,.species-ability{
@@ -384,12 +389,13 @@ span{
     height: 50%;
     border-style: solid;
     border-top-width: 2px;
-    border-right-width: 1px;
+    border-right-width: 0;
     border-bottom-width: 2px;
     border-left-width: 0.5px;
     border-radius: 3px;
     flex-grow: 1;
     margin-top: 0.2em;
+    border-color: rgba(0,0,0,0);
 }
 
 .species-coverage-row{

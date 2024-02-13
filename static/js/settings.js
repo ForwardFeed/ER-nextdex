@@ -6,6 +6,7 @@ const themesList =  [
     "blueish",
     "rushed",
     "wood",
+    "blahaj",
 ]
 export const settings = {
 
@@ -29,6 +30,8 @@ export function saveSettings(){
 }
 
 export function saveToLocalstorage(key, value){
+    //disabled fetch from local storage if it does not support it
+    if (typeof localStorage === 'undefined') return undefined
     if (typeof value === "object"){
         localStorage.setItem(appName + key, JSON.stringify(value))
     } else {
@@ -37,6 +40,8 @@ export function saveToLocalstorage(key, value){
 }
 
 export function fetchFromLocalstorage(key){
+    //disabled fetch from local storage if it does not support it
+    if (typeof localStorage === 'undefined') return undefined
     return localStorage.getItem(appName + key)
 }
 

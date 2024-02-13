@@ -57,4 +57,6 @@
 [ ] Add a welcome menu?
     [ ] add a wait icon, the time everything loads
 [ ] Add a manual as a iframe or another webpage
-[ ] if clicked on elite keep it as a elite mode
+[x] if clicked on elite keep it as a elite mode
+[ ] show the date of upload of last pokedex data
+[ ] fix the form index

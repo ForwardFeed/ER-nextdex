@@ -1,7 +1,11 @@
 import { getSpritesURL, redirectSpecie, getSpritesShinyURL } from "./species_panel.js"
-import { queryFilter} from "../filters.js"
+import { queryFilter2} from "../filters.js"
 import { gameData } from "../data_version.js"
 import { AisInB, e, JSHAC } from "../utils.js"
+
+const trainerParam = {
+    elite: false
+}
 
 export function feedPanelTrainers(trainerID){
     $('#trainers-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
@@ -34,6 +38,7 @@ function setBaseTrainer(trainer){
     nodeNormal.innerText = "Normal"
     nodeNormal.className = "trainer-match-btn sel-active"
     nodeNormal.onclick = ()=>{
+        trainerParam.elite = false
         setPartyPanel(party)
         $('#trainers-infobar').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
         nodeNormal.className = "trainer-match-btn sel-active"
@@ -52,12 +57,16 @@ function setInsane(trainer){
     nodeElite.innerText = "Elite"
     nodeElite.className = "trainer-match-btn sel-n-active"
     nodeElite.onclick = ()=>{
+        trainerParam.elite = true
         setPartyPanel(insaneTeam)
         $('#trainers-infobar').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
         nodeElite.className = "trainer-match-btn sel-active"
     }
     $('#trainers-elite').empty().append(nodeElite)
     setDouble(trainer.db)
+    if (trainerParam.elite){
+        nodeElite.onclick()
+    }
 }
 
 function setRematchesBar(rematches){
@@ -213,18 +222,17 @@ export function updateTrainers(searchQuery){
     const trainers = gameData.trainers
     const nodeList = $('#trainers-list > .btn')
     let validID;
-    
-    for (const i in trainers){
-        if (i == 0) continue
-        const trainer = trainers[i]
+    const matched = queryFilter2(searchQuery, trainers, queryMapTrainers)
+    const trainersLen = trainers.length
+    for (let i  = 0; i < trainersLen; i++) {
+        if (i == 0 ) continue
         const node = nodeList.eq(i - 1)
-        if (queryFilter(searchQuery, trainer, queryMapTrainers))
+        if (!matched || matched.indexOf(i) != -1)
         {
                 if (!validID) validID = i
                 node.show()
         } else {
                 node.hide()
-
         }
     }
     if (validID) feedPanelTrainers(validID)
