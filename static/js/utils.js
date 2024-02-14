@@ -151,6 +151,7 @@ export function setLongClickSelection(node, callback, time = 500, bgColor = "red
         hasFired = false
         timeout = setTimeout(()=>{
             hasFired = true
+            callback()
         }, time)
         extendableDiv.animate([
             { width: "0%"},
