@@ -150,6 +150,7 @@ export function moveOverlay(moveId) {
         removeInformationWindow(ev)
         redirectMove(moveId)
     }
+    longClickToFilter(0, powerTitle, "Move", undefined)
     const powerNumber = e("div", "move-overlay-fill", move.pwr || "?")
     const stats = e("div", "move-overlay-stats")
     const statsAcc = e("div", "move-overlay-acc", `Acc: ${move.acc || "--"}`)

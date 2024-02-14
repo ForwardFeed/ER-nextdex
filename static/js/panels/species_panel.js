@@ -136,12 +136,11 @@ function setMoveName(move) {
 function setMoveRow(moveID) {
     const row = document.createElement('div')
     row.className = "species-move-row"
-    row.onclick = function(){
+    row.onclick = function(ev){
         fastdom.mutate(() => {
-            createInformationWindow(moveOverlay(moveID), this.ev)
+            createInformationWindow(moveOverlay(moveID), ev)
         });
     }
-    longClickToFilter(0, row, "Move", ()=>{return row.querySelector('.species-move-name')?.innerText || ""})
     return row
 }
 
