@@ -139,6 +139,8 @@ function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo) {
         in: previousSpecieID,
         from: true// its a added flag so we can know if into into but from
     })
+    //import region for megas
+    if (!currentSpecie.region) currentSpecie.region = previousSpecie.region
 }
 
 function hydrateSpecies() {
@@ -155,10 +157,6 @@ function hydrateSpecies() {
             feedBaseStatsStats(statID, value)
             if (statID < 6) spec.stats.base[6] += + value
         }
-        //share the eggmoves to the evolutions recursively
-        for (const evo of spec.evolutions) {
-            hydrateNextEvolutionWithMoves(i, evo)
-        }
         // prepare to be appended a list of location where this pokemon appear
         spec.locations = new Map();
         // concatenate all moves into a new variable
@@ -170,26 +168,33 @@ function hydrateSpecies() {
                 )
             )
         ))]
-        // add the pokedexID to the form so it is region indexed and does not show a "??"
-        // for megas this will be a lie but watever
-        spec.forms.forEach((val, index) => {
-            if (!index) return
-            gameData.species[val].dex.id = spec.dex.id
-        })
         // add the region
         for (const regionsMapped of [
             [0, "Kanto"],
-            [151, "Jhoto"],
+            [151, "Johto"],
             [251, "Hoenn"],
             [386, "Sinnoh"],
             [494, "Unova"],
             [649, "Kalos"],
-            [809, "Alola"],
-            [898, "Galar"],
-            [32768, "Redux"],
+            [721, "Alola"],
+            [809, "Galar"],
+            [898, "Hisui"],
+            [906, "Paldea"],
+            [1500, ""], //MEGAs to link up after
+            [1547, "Alola"],
+            [1568, "Galar"],
+            [1587, ""], //Misc forms to link up after
+            [1808, "Hisui"],
+            [1824, ""],//Misc forms to link up after
+            [2300, "Redux"], 
         ]) {
-            if (spec.dex.id <= regionsMapped[0]) break
+
+            if (spec.id <= regionsMapped[0]) break
             spec.region = regionsMapped[1]
+        }
+        //share the eggmoves to the evolutions !TODO recursively
+        for (const evo of spec.evolutions) {
+            hydrateNextEvolutionWithMoves(i, evo)
         }
         // add to the html list 
         const row = e('div', "btn data-list-row sel-n-active")
