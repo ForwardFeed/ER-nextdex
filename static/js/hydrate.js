@@ -179,7 +179,7 @@ function hydrateSpecies() {
             [721, "Alola"],
             [809, "Galar"],
             [898, "Hisui"],
-            [906, "Paldea"],
+            [905, "Paldea"],
             [1500, ""], //MEGAs to link up after
             [1547, "Alola"],
             [1568, "Galar"],
