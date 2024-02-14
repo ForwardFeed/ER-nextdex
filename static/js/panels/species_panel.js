@@ -532,7 +532,7 @@ export const queryMapSpecies = {
         for (const move of moves) {
             if (AisInB(queryData, move)) {
                 if (queryData === move) return [true, move, false]
-                isUnperfectMatch = true
+                isUnperfectMatch = move
             }
         }
         return isUnperfectMatch
