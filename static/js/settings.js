@@ -41,10 +41,10 @@ export function initAppSettings(){
 
 export function saveSettings(){
     try{
-        window.localStorage.setItem(appSettings, JSON.stringify(settings))
+        if (window.localStorage) window.localStorage.setItem(appSettings, JSON.stringify(settings))
     }
     catch(e){
-        alert("Muh data too big to fit? :3 (seriously, report to the dev if this message appear)")
+        alert("couldn't save settings, report to the dev if this message appear")
     }
 }
 
