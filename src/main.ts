@@ -28,6 +28,7 @@ export interface GameData {
     mapTable: string[], 
     battleItems: Map<string, BattleItems.BattleItem>
     speciesInternalID: Map<string, number>,
+    movesInternalID: Map<string, number>,
 }
 
 const gameData: GameData = {
@@ -41,6 +42,7 @@ const gameData: GameData = {
     mapTable: [],
     battleItems: new Map(),
     speciesInternalID: new Map(),
+    movesInternalID: new Map(),
 }
 
 function main(configuration: Configuration.Configuration){
@@ -48,10 +50,10 @@ function main(configuration: Configuration.Configuration){
     const OUTPUT_VERSION = process.argv[2] ? "V" + process.argv[2] : ""
     const OUTPUT = `./out/gameData${OUTPUT_VERSION}.json`
     const OUTPUT_ADDITIONNAL = `./out/additional${OUTPUT_VERSION}.json`
-    comparify('./out/gameDataVAlpha.json', './out/gameDataV1.6.1.json')
+    /*comparify('./out/gameDataVAlpha.json', './out/gameDataV1.6.1.json')
         .then((x)=>{console.log(JSON.stringify(x))})
         .catch((e)=>{console.error(e)})
-    return
+    return*/
     getFileData(Path.join(ROOT_PRJ, 'include/global.h'), {filterComments: true, filterMacros: true, macros: new Map()})
     .then((global_h) => {
         const optionsGlobal_h = {
@@ -82,6 +84,7 @@ function main(configuration: Configuration.Configuration){
             promiseArray.push(ScriptedData.parse(ROOT_PRJ, gameData))
             promiseArray.push(BattleItems.getItems(ROOT_PRJ, gameData))
             promiseArray.push(InternalID.getSpeciesInternalID(ROOT_PRJ, gameData))
+            promiseArray.push(InternalID.getMovesInternalID(ROOT_PRJ, gameData))
             //promiseArray.push()
             Promise.allSettled(promiseArray)
                 .then((values)=>{
