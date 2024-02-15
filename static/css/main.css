@@ -503,6 +503,7 @@ span{
     border-bottom-width: 1px;
 }
 .species-move-row{
+    width: 11em;
     display: flex;
     cursor: pointer;
     align-items: center;
