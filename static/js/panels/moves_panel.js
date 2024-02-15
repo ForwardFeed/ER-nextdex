@@ -11,6 +11,7 @@ export function feedPanelMoves(moveID) {
     currentMoveID = moveID
     const move = gameData.moves[moveID]
     $('#moves-name').text(move.name)
+    $('#moves-internal-id').text(`ingame ID: ${move.id}`)
     $('#moves-pwr').text(move.pwr ? move.pwr == 1 ? "?" : move.pwr : "--")
     $('#moves-acc').text(move.acc)
     $('#moves-chance').text(move.chance)
@@ -121,6 +122,9 @@ function setTarget(targetID) {
 export function setupMoves(){
     $('#moves-types1, moves-types2').each((index, node)=>{
         longClickToFilter(2, node, "type", ()=>{return node.children[0].innerText})
+    })
+    $('#moves-name, #moves-internal-id').on('click', function(){
+        $('#moves-name, #moves-internal-id').toggle()
     })
     longClickToFilter(2, $('#moves-split').parent()[0], "category", 
             ()=>{ return $('#moves-split')[0].dataset.split || ""}

@@ -1,8 +1,8 @@
 #/bin/bash
 
 
-[[! -e nextdex_config.json ]] && echo "please run the script once before updating the data or hardcode the project path" && exit
-[[! $(command -v jq) ]] && echo "please install the jq command, or hardcode the project path" && exit
+[[ ! -e nextdex_config.json ]] && echo "please run the script once before updating the data or hardcode the project path" && exit
+[[ ! $(command -v jq) ]] && echo "please install the jq command, or hardcode the project path" && exit
 prj=cat nextdex_config.json | jq '.project_root'
 
 : '
