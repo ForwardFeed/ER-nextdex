@@ -34,7 +34,7 @@ main{
 }
 
 #top-header {
-    height: 8vh;
+    height: 8%;
     display: flex;
     align-items: center;
     box-shadow: inset 0 0 1vmax var(--shadow);
@@ -289,7 +289,7 @@ input[type="text"] {
     aside {
         display: flex;
         flex-direction: row;
-        min-height: 8vh;
+        min-height: 8%;
         overflow: auto;
         position: sticky;
         bottom: 0;

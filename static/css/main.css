@@ -603,7 +603,7 @@ span{
         overflow-x: auto;
         overflow-y: hidden;
         flex-direction: row;
-        min-height: 12vh;
+        min-height: 12%;
     }
     .data-list-row{
         padding: 0 10px;
@@ -732,8 +732,8 @@ span{
 #settings-frame{
     z-index: 100;
     width: 80vw;
-    height: 80vh;
-    margin: 10vh 10vh 10vw 10vw;
+    height: 80%;
+    margin: 10% 10% 10vw 10vw;
     background-color: var(--colorA);
     position: absolute;
     top: 0;
@@ -905,17 +905,17 @@ span{
 @media (orientation: landscape) {
     #filter-frame{
         font-size: 2vmax;
-        top: 10vh;
+        top: 10%;
         left: 15vw;
         width: 70vw;
-        height: 90vh;
+        height: 90%;
     }
 }
 
 @media (orientation: portrait) {
     #filter-frame{
-        top: 8vh;
-        height: 92vh;
+        top: 8%;
+        height: 92%;
         width: 100vw;
     }
 }
