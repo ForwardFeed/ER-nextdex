@@ -136,7 +136,11 @@ main{
 #search-suggestion > div{
     background-color: var(--selNActive);
     text-align: center;
-    cursor: pointer;
+    cursor: pointer; 
+    border: 3px solid var(--selActive);
+    border-top: 0;
+    border-collapse: collapse;
+    box-sizing: border-box;
 }
 
 #filter-icon, #settings-btn {
