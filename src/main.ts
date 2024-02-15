@@ -14,6 +14,8 @@ import * as Additionnal from './additional_data/additional'
 import * as InternalID from './internal_id'
 import { CompactGameData, compactify } from './compactify';
 import * as Configuration from './configuration';
+import { comparify } from './comparify';
+
 
 export interface GameData {
     species: Species.Specie[]
@@ -46,6 +48,10 @@ function main(configuration: Configuration.Configuration){
     const OUTPUT_VERSION = process.argv[2] ? "V" + process.argv[2] : ""
     const OUTPUT = `./out/gameData${OUTPUT_VERSION}.json`
     const OUTPUT_ADDITIONNAL = `./out/additional${OUTPUT_VERSION}.json`
+    comparify('./out/gameDataVAlpha.json', './out/gameDataV1.6.1.json')
+        .then((x)=>{console.log(JSON.stringify(x))})
+        .catch((e)=>{console.error(e)})
+    return
     getFileData(Path.join(ROOT_PRJ, 'include/global.h'), {filterComments: true, filterMacros: true, macros: new Map()})
     .then((global_h) => {
         const optionsGlobal_h = {

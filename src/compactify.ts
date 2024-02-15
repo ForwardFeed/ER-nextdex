@@ -4,12 +4,12 @@ import { Xtox } from "./parse_utils";
 import { TrainerPokemon } from "./trainers/teams";
 import { PokePokedex } from "./species/pokedex";
 
-interface CompactedScripted{
+export interface CompactedScripted{
     how: number, // indexed from CompactGameData.ScriptedEncoutersHowT
     map: number, // index from CompactGameData.maps.
 }
 
-interface CompactLocations{
+export interface CompactLocations{
     maps: CompactLocation[],
     landRate: number[],
     waterRate: number[],
@@ -20,7 +20,7 @@ interface CompactLocations{
     rodGrade: number[],
 }
 
-interface CompactLocation{
+export interface CompactLocation{
     name: string,
     land: CompactEncounter[] | undefined,
     landR: number | undefined,
@@ -36,24 +36,24 @@ interface CompactLocation{
     hiddenR: number | undefined,
 }
 
-type CompactEncounter = [
+export type CompactEncounter = [
     number, //min
     number, //max
     number, //specie ID
 ]
 
-interface CompactEvolution{
+export interface CompactEvolution{
     kd: number,
     rs: string,
     in: number,
 }
 
-interface CompactLevelUpMove{
+export interface CompactLevelUpMove{
     lv: number,
     id: number,
 }
 
-interface CompactBaseStats{
+export interface CompactBaseStats{
     base: number[]
     types: number[],
     catchR: number,
@@ -72,7 +72,7 @@ interface CompactBaseStats{
     flags: string,
 }
 
-interface compactMove {
+export interface compactMove {
     name: string,
     NAME: string, // i could compactify this even more by string | undefined where undefined mean you can reconstruct the NAME by the name
     sName: string,
@@ -114,7 +114,7 @@ export interface CompactTrainers{
     map: number,
 }
 
-interface CompactTrainerPokemon{
+export interface CompactTrainerPokemon{
     spc: number,
     abi: number,
     ivs: number[],
@@ -124,12 +124,12 @@ interface CompactTrainerPokemon{
     moves: number[]
 }
 
-interface CompactTrainerRematch{
+export interface CompactTrainerRematch{
     db: boolean,
     party: CompactTrainerPokemon[]
 }
 
-interface CompactBattleItems{
+export interface CompactBattleItems{
     name: string,
     NAME: string,
     //could add it? desc: string,
