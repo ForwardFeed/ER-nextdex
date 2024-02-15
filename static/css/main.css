@@ -605,6 +605,7 @@ span{
         overflow-y: hidden;
         flex-direction: row;
         min-height: 12%;
+        max-height: 12%;
     }
     .data-list-row{
         padding: 0 10px;
