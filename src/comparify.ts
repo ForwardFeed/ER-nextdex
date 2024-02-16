@@ -1,12 +1,9 @@
 import {readFileSync, writeFileSync, existsSync, stat, Stats} from 'fs'
-import { CompactGameData, compactMove} from "./compactify";
+import { CompactGameData, CompactSpecie, compactMove} from "./compactify";
 import { Ability } from './abilities';
 import { types } from 'util';
 
-export type CmpAbi = [
-    boolean, // is a new ability
-    boolean, // has the desc changed
-] | boolean
+export type CmpAbi = string | boolean //if the desc changed
 
 export type CmpMove = {
     //eff: number | undefined,
@@ -25,12 +22,20 @@ export type CmpMove = {
 } | boolean
 
 export type CmpSpecie = {
+    stats: CmpBaseStats | boolean,
+} | boolean
 
+export type CmpBaseStats = {
+    base: Array<number | boolean>,
+    types: Array<number | boolean>,
+    abis: Array<number | boolean>,
+    inns: Array<number | boolean>,
 } | boolean
 
 export interface ComparifyGameData {
     abilities: CmpAbi[],
     moves: CmpMove[],
+    species: CmpSpecie[],
 }
 
 function getFileAsJson(filePath: string): CompactGameData | string{
@@ -70,6 +75,21 @@ function translationTableIndex<Type>(tCalled: Type[], tTarget: Type[]): number[]
     return transTableI
 }
 
+function translationTableIndexByKey<Type>(tCalled: Type[], tTarget: Type[], key: keyof Type): number[]{
+    const reorderMapRef = new Map()
+
+    tCalled.forEach((value, index)=>{
+        //front the index
+        reorderMapRef.set(value[key], index)
+    })
+    const transTableI = new Array(tCalled.length) //if some index don't exist?
+    tTarget.forEach((value)=>{
+        if (!reorderMapRef.has(value[key])) return
+        transTableI.push(reorderMapRef.get(value[key]))
+    })
+    return transTableI
+}
+
 function mapArrayObjWithKey<Type, TypeOut>(arr: Type[], key: keyof Type, transform: {(inT: Type): TypeOut}){
     const keyedMap: Map<string, TypeOut> = new Map()
     arr.forEach((val)=> {
@@ -91,14 +111,13 @@ function newOrHasChanged<Type, OutType>(
 function compareAbilities(cmp: Ability[], asCmp: Ability[]): CmpAbi[]{
     const asCmpMap: Map<string, string> = mapArrayObjWithKey<Ability, string>(asCmp, "name", x => x.desc)
     return cmp.map((val)=>{
-        return  newOrHasChanged(val.desc, asCmpMap.get(val.name), ()=>{return [false, true]})
+        return  newOrHasChanged(val.desc, asCmpMap.get(val.name), ()=>{return asCmpMap.get(val.name)})
     })
 }
 
-
-
 function compareMoves(cmpD: CompactGameData, asCmpD: CompactGameData): Array<CmpMove | null>{
     //const effTtras = translationTableIndex(asCmpD.effT, cmpD.effT)
+    // this is because sometimes the orders gets changed, cannot trust the index
     const targetTrans =  translationTableIndex(asCmpD.targetT, cmpD.targetT)
     const flagsTrans = translationTableIndex(asCmpD.flagsT, cmpD.flagsT)
     const typeTrans = translationTableIndex(asCmpD.typeT, cmpD.typeT)
@@ -108,7 +127,6 @@ function compareMoves(cmpD: CompactGameData, asCmpD: CompactGameData): Array<Cmp
     const asCmp = asCmpD.moves
     const asCmpMap: Map<string, compactMove> = mapArrayObjWithKey<compactMove, compactMove>(asCmp, "NAME", x =>x)
     return cmp.map((cmpVal)=>{
-        // this is because sometimes the orders gets changed, cannot trust the index
         const asCmpVal = asCmpMap.get(cmpVal.NAME)
         if (!asCmpVal) return true
         return {
@@ -116,13 +134,13 @@ function compareMoves(cmpD: CompactGameData, asCmpD: CompactGameData): Array<Cmp
             pwr: newOrHasChanged(cmpVal.pwr, asCmpVal.pwr),
             chance: newOrHasChanged(cmpVal.chance, asCmpVal.chance),
             target: newOrHasChanged(cmpVal.target, targetTrans[asCmpVal.target]),
-            types: cmpVal.types.map((type, ti) => {
-                return newOrHasChanged(type, typeTrans[asCmpVal.types[ti]])
+            types: cmpVal.types.map((type, tI) => {
+                return newOrHasChanged(type, typeTrans[asCmpVal.types[tI]])
             }),
             acc: newOrHasChanged(cmpVal.acc, asCmpVal.acc),
             pp: newOrHasChanged(cmpVal.pp, asCmpVal.pp),
-            flags: cmpVal.flags.map((flag, fi) => {
-                return newOrHasChanged(flag, flagsTrans[asCmpVal.flags[fi]])
+            flags: cmpVal.flags.map((flag, fI) => {
+                return newOrHasChanged(flag, flagsTrans[asCmpVal.flags[fI]])
             }),
             split: newOrHasChanged(cmpVal.split, splitTrans[asCmpVal.split]),
         } as CmpMove
@@ -130,6 +148,41 @@ function compareMoves(cmpD: CompactGameData, asCmpD: CompactGameData): Array<Cmp
         if (typeof x === "boolean") return x
         if (x.prio || x.pwr || x.chance || x.target || x.types.filter(x => x).length || 
             x.acc || x.pp || x.flags.filter(x => x).length || x.split) return x
+        return null
+        
+    })
+}
+
+function compareSpecies(cmpD: CompactGameData, asCmpD: CompactGameData): Array<CmpSpecie | null>{
+    const abiTrans = translationTableIndexByKey(cmpD.abilities, asCmpD.abilities, "name")
+    const typeTrans = translationTableIndex(asCmpD.typeT, cmpD.typeT)
+
+    const cmp = cmpD.species
+    const asCmp = asCmpD.species
+    const asCmpMap: Map<string, CompactSpecie> = mapArrayObjWithKey<CompactSpecie, CompactSpecie>(asCmp, "NAME", x =>x)
+    return cmp.map((cmpVal)=>{
+        const asCmpVal = asCmpMap.get(cmpVal.NAME)
+        if (!asCmpVal) return true
+        return {
+            stats: {
+                base: cmpVal.stats.base.map((statVal, sI) => {
+                    return newOrHasChanged(statVal, asCmpVal.stats.base[sI])
+                }),
+                types: cmpVal.stats.types.map((type, tI) => {
+                    return newOrHasChanged(type, typeTrans[asCmpVal.stats.types[tI]])
+                }),
+                abis: cmpVal.stats.abis.map((statVal, aI) => {
+                    return newOrHasChanged(statVal, abiTrans[asCmpVal.stats.abis[aI]])
+                }),
+                inns: cmpVal.stats.inns.map((statVal, aI) => {
+                    return newOrHasChanged(statVal, abiTrans[asCmpVal.stats.inns[aI]])
+                }),
+            }
+        } as CmpSpecie
+    }).map((x)=>{
+        if (typeof x === "boolean" || typeof x.stats === "boolean") return x
+        if (x.stats.base.filter(x => x).length || x.stats.types.filter(x => x).length ||
+        x.stats.abis.filter(x => x).length || x.stats.inns.filter(x => x).length) return x
         return null
         
     })
@@ -149,6 +202,7 @@ export function comparify(filepathToBeCompared: string, filepathToCompareWith: s
         const final = {} as ComparifyGameData
         final.abilities = compareAbilities(beCompared.abilities, compareWith.abilities)
         final.moves = compareMoves(beCompared, compareWith)
+        final.species = compareSpecies(beCompared, compareWith)
         resolved(final)
     })   
 }
