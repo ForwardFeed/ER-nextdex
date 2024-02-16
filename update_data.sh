@@ -1,9 +1,33 @@
 #/bin/bash
 
+#exit on a single error
+set -e
 
 [[ ! -e nextdex_config.json ]] && echo "please run the script once before updating the data or hardcode the project path" && exit
 [[ ! $(command -v jq) ]] && echo "please install the jq command, or hardcode the project path" && exit
-prj=cat nextdex_config.json | jq '.project_root'
+prj=$(cat nextdex_config.json | jq -r '.project_root')
+curr=$(pwd)
+
+# fetch the multiples version
+cd "${prj}"
+git checkout origin/ReduxForms
+cd "${curr}"
+npm run run Alpha
+cd "${prj}"
+git switch -
+cd "${curr}"
+npm run run 1.6.1
+
+cp out/gameDataV1.6.1.json static/js/data/gameDataV1.6.1.json
+cp out/gameDataVAlpha.json static/js/data/gameDataVAlpha.json
+
+# update the version
+version=$(grep "%%VERSION%%" static/js/data_version.js | grep -Eo '"[^"]+"' | grep -Eo '[^"]+')
+next_version=$((version + 1))
+sed -i "s/const LATEST_DATA_VERSION = \"${version}\"/const LATEST_DATA_VERSION = \"${next_version}\"/" static/js/data_version.js
+
+
+# to calculate the whole data size parsed
 
 : '
 size list of all read files in bash
@@ -36,22 +60,3 @@ size list of all read files in bash
     echo "Total size is ${sum} KB"
 */
 '
-curr=$(pwd)
-
-# fetch the multiples version
-cd ${prj}
-git checkout origin/ReduxForms
-cd ${curr}
-npm run run Alpha
-cd ${prj}
-git switch -
-cd ${curr}
-npm run run 1.6.1
-
-cp out/gameDataV1.6.1.json static/js/data/gameDataV1.6.1.json
-cp out/gameDataVAlpha.json static/js/data/gameDataVAlpha.json
-
-# update the version
-version=$(grep "%%VERSION%%" static/js/data_version.js | grep -Eo '"[^"]+"' | grep -Eo '[^"]+')
-next_version=$((version + 1))
-sed -i "s/const LATEST_DATA_VERSION = \"${version}\"/const LATEST_DATA_VERSION = \"${next_version}\"/" static/js/data_version.js
