@@ -50,7 +50,7 @@ function main(configuration: Configuration.Configuration){
     const OUTPUT_VERSION = process.argv[2] ? "V" + process.argv[2] : ""
     const OUTPUT = `./out/gameData${OUTPUT_VERSION}.json`
     const OUTPUT_ADDITIONNAL = `./out/additional${OUTPUT_VERSION}.json`
-    comparify('./out/gameDataVAlpha.json', './out/gameDataV1.6.1.json')
+    /*comparify('./out/gameDataVAlpha.json', './out/gameDataV1.6.1.json')
         .then((x)=>{
             const output = `./out/comparify${"Alpha"}${"1.6.1"}.json`
             FS.writeFile(output, JSON.stringify(x) , (err_exist)=>{
@@ -60,7 +60,7 @@ function main(configuration: Configuration.Configuration){
             })
         })
         .catch((e)=>{console.error(e)})
-    return
+    return*/
     getFileData(Path.join(ROOT_PRJ, 'include/global.h'), {filterComments: true, filterMacros: true, macros: new Map()})
     .then((global_h) => {
         const optionsGlobal_h = {

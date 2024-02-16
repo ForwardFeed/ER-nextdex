@@ -14,7 +14,7 @@ git checkout origin/ReduxForms
 cd "${curr}"
 npm run run Alpha
 cd "${prj}"
-git switch -
+git checkout origin/master
 cd "${curr}"
 npm run run 1.6.1
 
