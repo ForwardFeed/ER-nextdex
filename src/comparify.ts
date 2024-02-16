@@ -8,8 +8,8 @@ export type CmpAbi = [
 ] | boolean
 
 export type CmpMove = {
-    /*eff: number | undefined,
-    pwr: number | undefined,
+    //eff: number | undefined,
+    pwr: number | boolean,/*
     types: Array<number | undefined>,
     acc: number | undefined,
     pp: number | undefined,
@@ -73,8 +73,12 @@ function mapArrayObjWithKey<Type, TypeOut>(arr: Type[], key: keyof Type, transfo
     return keyedMap
 }
 
-function newOrHasChanged<Type, OutType>(cmp: Type, asCmp: Type, transform: (x:unknown)=>OutType = (x)=>{return x as OutType}): boolean | OutType{
-    if (!asCmp) return true //brand new
+function newOrHasChanged<Type, OutType>(
+            cmp: Type,
+            asCmp: Type,
+            transform: (x:unknown)=>OutType = (x)=>{return x as OutType}
+        ): boolean | OutType{
+    if (asCmp === undefined || asCmp === null) return true //brand new
     if (cmp === asCmp) return false // didn't changed
     return transform(asCmp) //this was the change
 }
@@ -82,25 +86,31 @@ function newOrHasChanged<Type, OutType>(cmp: Type, asCmp: Type, transform: (x:un
 function compareAbilities(cmp: Ability[], asCmp: Ability[]): CmpAbi[]{
     const asCmpMap: Map<string, string> = mapArrayObjWithKey<Ability, string>(asCmp, "name", x => x.desc)
     return cmp.map((val)=>{
-        return  newOrHasChanged(val.name, asCmpMap.get(val.name), ()=>{return [false, true]})
+        return  newOrHasChanged(val.desc, asCmpMap.get(val.name), ()=>{return [false, true]})
     })
 }
 
 
 
-function compareMoves(cmpD: CompactGameData, asCmpD: CompactGameData): CmpMove[] | undefined{
+function compareMoves(cmpD: CompactGameData, asCmpD: CompactGameData): Array<CmpMove | null>{
     //const effT = translationTableIndex(asCmpD.effT, cmpD.effT)
     const cmp = cmpD.moves
     const asCmp = asCmpD.moves
-
     const asCmpMap: Map<string, compactMove> = mapArrayObjWithKey<compactMove, compactMove>(asCmp, "NAME", x =>x)
     return cmp.map((cmpVal)=>{
         // this is because sometimes the orders gets changed, cannot trust the index
-        const asCmpVal = asCmpMap.get(cmpVal.name)
+        const asCmpVal = asCmpMap.get(cmpVal.NAME)
         if (!asCmpVal) return true
         return {
-            prio: newOrHasChanged(cmpVal.prio, asCmpVal.prio)
+            prio: newOrHasChanged(cmpVal.prio, asCmpVal.prio),
+            pwr: newOrHasChanged(cmpVal.pwr, asCmpVal.pwr),
         } as CmpMove
+    }).map((x)=>{
+        console.log(x)
+        if (typeof x === "boolean") return x
+        if (!x.prio && !x.pwr) return null
+
+        return x
     })
 }
 
@@ -119,7 +129,5 @@ export function comparify(filepathToBeCompared: string, filepathToCompareWith: s
         final.abilities = compareAbilities(beCompared.abilities, compareWith.abilities)
         final.moves = compareMoves(beCompared, compareWith)
         resolved(final)
-    })
-    
-    
+    })   
 }

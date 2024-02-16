@@ -59,16 +59,26 @@ export function saveToLocalstorage(key, value){
             cleanLocalStorage()
         }
     } else {
-        window.localStorage.setItem(appName + key, value)
+        try{
+            window.localStorage.setItem(appName + key, value)
+        } catch(_e){
+            // no localstorage for ou i guess
+        }
+        
     }
 }
 
 export function fetchFromLocalstorage(key){
-    //disabled fetch from local storage if it does not support it
-    if (typeof window.localStorage === 'undefined') return undefined
-    const returnedValue = window.localStorage.getItem(appName + key)
-    // sometimes it's "null" stringified, which is very fun
-    return returnedValue === "null" ? undefined : returnedValue
+    try {
+        //disabled fetch from local storage if it does not support it
+        if (typeof window.localStorage === 'undefined') return undefined
+        const returnedValue = window.localStorage.getItem(appName + key)
+        // sometimes it's "null" stringified, which is very fun
+        return returnedValue === "null" ? undefined : returnedValue
+    } catch(_e){
+        return undefined
+    }
+    
 }
 
 function changeTheme(){
@@ -129,6 +139,7 @@ export function setupSettings(){
  * when the localStorage is too full
  */
 function cleanLocalStorage(){
+    if (!localStorage) return // dunno
     console.log('cleaned the local storage of data')
     const keys = Object.keys(localStorage) 
     for (const key of keys){

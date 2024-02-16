@@ -33,15 +33,18 @@ function changeVersion(version){
         return console.warn(`no such version : ${version}`)
     }
     const savedVersion = fetchFromLocalstorage("dataversion"+version)
-    //deactivate fetching from localstorage for iOS product
-    // as it has an unknown device, i would gladly have someone with an Apple to help me fixing it out
+
     if (savedVersion && savedVersion == LATEST_DATA_VERSION &&
         $('#enable-storage')[0].checked ){
-        gameData = JSON.parse(fetchFromLocalstorage("data"+version))
-        if (gameData) {
-            console.log("took gamedata from storage")
-            hydrate()
-            return
+        try{
+            gameData = JSON.parse(fetchFromLocalstorage("data"+version))
+            if (gameData) {
+                console.log("took gamedata from storage")
+                hydrate()
+                return
+            }
+        } catch(_e){
+
         }
     }
     //fetch remotely
