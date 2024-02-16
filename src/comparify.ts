@@ -1,6 +1,7 @@
 import {readFileSync, writeFileSync, existsSync, stat, Stats} from 'fs'
 import { CompactGameData, compactMove} from "./compactify";
 import { Ability } from './abilities';
+import { types } from 'util';
 
 export type CmpAbi = [
     boolean, // is a new ability
@@ -9,18 +10,22 @@ export type CmpAbi = [
 
 export type CmpMove = {
     //eff: number | undefined,
-    pwr: number | boolean,/*
-    types: Array<number | undefined>,
-    acc: number | undefined,
-    pp: number | undefined,
-    chance: number | undefined,
-    target: number | undefined,*/
-    prio: number | boolean,/*
-    flags: Array<number | undefined>,
-    split: number | undefined,
-    arg: string | undefined,
-    desc: string | undefined,
-    lDesc: string | undefined,*/
+    pwr: number | boolean,
+    types: Array<number | boolean>,
+    acc: number | boolean,
+    pp: number | boolean,
+    chance: number | boolean,
+    target: number | boolean,
+    prio: number | boolean,
+    flags: Array<number | boolean>,
+    split: number | boolean,
+    //arg: string | undefined,
+    //desc: string | undefined,
+    //lDesc: string | undefined,
+} | boolean
+
+export type CmpSpecie = {
+
 } | boolean
 
 export interface ComparifyGameData {
@@ -93,7 +98,12 @@ function compareAbilities(cmp: Ability[], asCmp: Ability[]): CmpAbi[]{
 
 
 function compareMoves(cmpD: CompactGameData, asCmpD: CompactGameData): Array<CmpMove | null>{
-    //const effT = translationTableIndex(asCmpD.effT, cmpD.effT)
+    //const effTtras = translationTableIndex(asCmpD.effT, cmpD.effT)
+    const targetTrans =  translationTableIndex(asCmpD.targetT, cmpD.targetT)
+    const flagsTrans = translationTableIndex(asCmpD.flagsT, cmpD.flagsT)
+    const typeTrans = translationTableIndex(asCmpD.typeT, cmpD.typeT)
+    const splitTrans = translationTableIndex(asCmpD.splitT, cmpD.splitT)
+
     const cmp = cmpD.moves
     const asCmp = asCmpD.moves
     const asCmpMap: Map<string, compactMove> = mapArrayObjWithKey<compactMove, compactMove>(asCmp, "NAME", x =>x)
@@ -104,13 +114,24 @@ function compareMoves(cmpD: CompactGameData, asCmpD: CompactGameData): Array<Cmp
         return {
             prio: newOrHasChanged(cmpVal.prio, asCmpVal.prio),
             pwr: newOrHasChanged(cmpVal.pwr, asCmpVal.pwr),
+            chance: newOrHasChanged(cmpVal.chance, asCmpVal.chance),
+            target: newOrHasChanged(cmpVal.target, targetTrans[asCmpVal.target]),
+            types: cmpVal.types.map((type, ti) => {
+                return newOrHasChanged(type, typeTrans[asCmpVal.types[ti]])
+            }),
+            acc: newOrHasChanged(cmpVal.acc, asCmpVal.acc),
+            pp: newOrHasChanged(cmpVal.pp, asCmpVal.pp),
+            flags: cmpVal.flags.map((flag, fi) => {
+                return newOrHasChanged(flag, flagsTrans[asCmpVal.flags[fi]])
+            }),
+            split: newOrHasChanged(cmpVal.split, splitTrans[asCmpVal.split]),
         } as CmpMove
     }).map((x)=>{
-        console.log(x)
         if (typeof x === "boolean") return x
-        if (!x.prio && !x.pwr) return null
-
-        return x
+        if (x.prio || x.pwr || x.chance || x.target || x.types.filter(x => x).length || 
+            x.acc || x.pp || x.flags.filter(x => x).length || x.split) return x
+        return null
+        
     })
 }
 
