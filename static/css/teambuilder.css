@@ -38,9 +38,9 @@
     border-width: 2px;
     margin: auto;
     display: flex;
-    flex-direction: column;
-    width: 100%;
+    width: calc(50% - 4px);
     min-height: 3.5em;
+    font-size: 0.8;
 }
 .builder-placeholder{
     border-radius: 10px;

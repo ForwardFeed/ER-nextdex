@@ -194,7 +194,7 @@ span{
 .xlarge-row > span{
     padding-right: 0.5em;
 }
-#moves-split, #species-front, .pixelated{
+#moves-split, #species-front, .pixelated, .trainer-poke-sprite {
     image-rendering:optimizeSpeed;             /* Legal fallback */
     image-rendering:-moz-crisp-edges;          /* Firefox        */
     image-rendering:-o-crisp-edges;            /* Opera          */
@@ -684,6 +684,8 @@ span{
 }
 #trainers-team{
     overflow-y: scroll;
+    display: flex;
+    flex-wrap: wrap;
 }
 .trainers-pokemon{
     margin-left: 0.5vw;
@@ -697,6 +699,8 @@ span{
     border-bottom-style: dashed;
     border-bottom-width: 1px;
     cursor: pointer;
+    width: calc(50% - 1vw);
+    font-size: 0.7em;
 }
 .trainers-pokemon-left{
     width: 30%;
@@ -715,13 +719,27 @@ span{
 .trainers-poke-ivs, .trainers-poke-evs, .trainers-poke-move{
     text-align: left;
     padding-left: 0.3em;
-
+}
+.trainers-poke-ivs, .trainers-poke-evs{
+    font-size: 0.8em;
 }
 .trainers-poke-moves{
     margin: auto;
 }
 .trainer-map-list-name{
     background-color: var(--colorA);
+}
+.trainer-go-edition{
+    margin: 0 auto;
+    border: var(--font-color) double 1px;
+    border-radius: 10px;
+    width: fit-content;
+}
+.trainer-redirect-arrow{
+    font-size: 1.5em;
+}
+.trainer-poke-sprite{
+    width: 100%;
 }
 @media (orientation: landscape) {
     

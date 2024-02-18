@@ -197,7 +197,7 @@ function updateBaseStats(stats) {
         '#BST',
     ]
     for (const i in baseStatsTable) {
-        changeBaseStat($(baseStatsTable[i]), stats[i], i, compareData.species[currentSpecieID].stats?.base[i])
+        changeBaseStat($(baseStatsTable[i]), stats[i], i, compareData?.species?.[currentSpecieID].stats?.base[i])
     }
 }
 

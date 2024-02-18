@@ -99,7 +99,7 @@ class PokeNodeView {
 
 const teamView = []
 
-const teamData = [...Array(6).keys()].map((_) => {
+export const teamData = [...Array(6).keys()].map((_) => {
     return new Pokemon()
 })
 // this can be called only when gamedata is loaded
@@ -107,12 +107,17 @@ export function restoreSave(){
     const savedString = fetchFromLocalstorage("team-builder")
     if (!savedString) return
     const saveObj = JSON.parse(savedString)
-    saveObj.forEach((val, index)=>{
+    setFullTeam(saveObj)
+}
+
+export function setFullTeam(party){
+    party.forEach((val, index)=>{
         if (!val.spc) return
         teamData[index].fromSave(val)
         createPokeView($('#builder-data').find('.builder-mon').eq(index), index)
     })
 }
+
 function save(){
     const saveObj = teamData.map(x=>x.save())
     saveToLocalstorage("team-builder", saveObj)

@@ -2,6 +2,7 @@ import { getSpritesURL, redirectSpecie, getSpritesShinyURL } from "./species_pan
 import { queryFilter2} from "../filters.js"
 import { gameData } from "../data_version.js"
 import { AisInB, e, JSHAC } from "../utils.js"
+import { setFullTeam } from "./team_builder.js"
 
 const trainerParam = {
     elite: false
@@ -20,6 +21,7 @@ export function feedPanelTrainers(trainerID){
     setRematchesBar(trainer.rem)
     setInsane(trainer)
     setPartyPanel(trainer.party)
+    
 }
 
 function setDouble(double){
@@ -107,7 +109,7 @@ function setPartyPanel(party){
         }
         frag.append(pokeDiv)
     }
-    $('#trainers-team').empty().append(frag)
+    $('#trainers-team').empty().append(frag).append(getNodeRedirectToEditorPokemon(party))
 }
 
 export function createPokemon(poke){
@@ -192,6 +194,19 @@ const natureMap = {
 
 export function getTextNature(nature){
     return `${nature} (${natureMap[nature]})`
+}
+
+function getNodeRedirectToEditorPokemon(party){
+    const redirectTeamBuilder = ()=>{
+        setFullTeam(party)
+        $('#btn-species').click()
+        if ($('#btn-species').find('.big-select').text() === "Species") $('#btn-species').click()
+    }
+    return JSHAC([
+        e('div', 'trainer-go-edition',null,{onclick: redirectTeamBuilder}), [
+            e('div', 'trainer-redirect-arrow', 'Edit In Builder →')
+        ]
+    ])
 }
 
 export const queryMapTrainers = {
