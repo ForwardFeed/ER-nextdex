@@ -3,7 +3,7 @@ import { matchedMoves, moveOverlay } from "./moves_panel.js"
 import { addTooltip, capitalizeFirstLetter, AisInB, e, JSHAC, reorderNodeList } from "../utils.js"
 import { search } from "../search.js"
 import { queryFilter2, longClickToFilter } from "../filters.js"
-import { gameData } from "../data_version.js"
+import { gameData, compareData } from "../data_version.js"
 import { createInformationWindow, removeInformationWindow } from "../window.js"
 import { getDefensiveCoverage, abilitiesToAddedType} from "../weakness.js"
 import { nodeLists } from "../hydrate.js"
@@ -197,7 +197,7 @@ function updateBaseStats(stats) {
         '#BST',
     ]
     for (const i in baseStatsTable) {
-        changeBaseStat($(baseStatsTable[i]), stats[i], i)
+        changeBaseStat($(baseStatsTable[i]), stats[i], i, compareData.species[currentSpecieID].stats?.base[i])
     }
 }
 
@@ -210,8 +210,16 @@ export function getSpritesShinyURL(NAME) {
     return `./sprites/SHINY_${NAME}.png`
 }
 
-function changeBaseStat(node, value, statID) {
-    node.find('.stat-num').text(value)
+function changeBaseStat(node, value, statID, cmp) {
+
+    if (cmp && !isNaN(+cmp)){
+        node.find('.stat-num').html(`${value}→<br>${cmp}`)
+        node.find('.stat-num').css('font-size', '0.5em').css('width', '3em')
+    } else {
+        node.find('.stat-num').text(value)
+        node.find('.stat-num').css('font-size', '1em').css('width', '')
+    }
+    
     let color = "gray"
     for (const colorMapped of [
         [gameData.speciesStats.result.min5[statID], "#ff3300"],

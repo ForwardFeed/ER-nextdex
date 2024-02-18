@@ -220,7 +220,7 @@ comparify('./out/gameDataVAlpha.json', './out/gameDataV1.6.1.json')
 
 comparify('./out/gameDataVAlpha.json', './out/gameDataVanilla.json')
 .then((x)=>{
-    const output = `./out/comparify${"Alpha"}${"1.6.1"}.json`
+    const output = `./out/comparify${"Alpha"}${"Vanilla"}.json`
     writeFile(output, JSON.stringify(x) , (err_exist)=>{
         if (err_exist){
             console.error(`couldn't write the gamedata output to ${output}`)
@@ -231,7 +231,7 @@ comparify('./out/gameDataVAlpha.json', './out/gameDataVanilla.json')
 
 comparify('./out/gameDataV1.6.1.json', './out/gameDataVanilla.json')
 .then((x)=>{
-    const output = `./out/comparify${"Alpha"}${"1.6.1"}.json`
+    const output = `./out/comparify${"1.6.1"}${"Vanilla"}.json`
     writeFile(output, JSON.stringify(x) , (err_exist)=>{
         if (err_exist){
             console.error(`couldn't write the gamedata output to ${output}`)

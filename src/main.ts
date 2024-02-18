@@ -14,7 +14,7 @@ import * as Additionnal from './additional_data/additional'
 import * as InternalID from './internal_id'
 import { CompactGameData, compactify } from './compactify';
 import * as Configuration from './configuration';
-import { comparify } from './comparify';
+//import { comparify } from './comparify';
 
 
 export interface GameData {

@@ -391,6 +391,7 @@ span{
 }
 .stat-num{
     width: 1.5em;
+    height: 100%;
     margin-left: 2%;
     border-radius: 2px;
     color: black;

@@ -5,6 +5,7 @@ import { saveToLocalstorage, fetchFromLocalstorage } from './settings.js';
  */
 /**@type {import('./compactify.js').CompactGameData} */
 export let gameData;
+/**@type {import('./compactify.js').CompactGameData} */
 export let compareData;
 
 // each time the data is modified, this is updated
@@ -33,6 +34,8 @@ function changeVersion(version){
     if (!version || allVersions.indexOf(version) == -1){
         return console.warn(`no such version : ${version}`)
     }
+    changeCompareData(version, "Vanilla") //TODO, make it so you can target other things
+
     const savedVersion = fetchFromLocalstorage("dataversion"+version)
 
     if (savedVersion && savedVersion == LATEST_DATA_VERSION &&
@@ -64,10 +67,16 @@ function changeCompareData(currentVersion, versionTarget){
     //fetch remotely
     fetch(`js/data/comparify${currentVersion}${versionTarget}.json`)
         .then((response) => response.json())
-        .then((data) => {
-            console.log("took compareData from server")
-            compareData = data
-    })
+            .then((data) => {
+                console.log("took compareData from server")
+                compareData = data
+            })
+            .catch((e)=>{
+                console.warn(e)
+            })
+        .catch((e)=>{
+            console.warn(e)
+        })
 }
 
 export function setupDataVersionning(){
@@ -78,6 +87,5 @@ export function setupDataVersionning(){
     })
     const lastUsedVersion = fetchFromLocalstorage("lastusedversion")
     $('#versions').val(lastUsedVersion || defaultVersion).change()
-    changeCompareData($('#versions').val(), "1.6.1")
 }
 
