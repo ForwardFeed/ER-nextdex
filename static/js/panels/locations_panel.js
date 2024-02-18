@@ -4,7 +4,7 @@ import { queryFilter2 } from "../filters.js"
 import { gameData } from "../data_version.js"
 import { AisInB } from "../utils.js"
 
-let currentLocID = 0
+export let currentLocID = 0
 export function feedPanelLocations(mapID){
     currentLocID = mapID
     const map = gameData.locations.maps[mapID]

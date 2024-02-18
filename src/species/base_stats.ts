@@ -137,9 +137,8 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
         } else if (line.match('};')){
             if (context.current.baseSpeed != 0){
                 context.baseStats.set(context.currKey, context.current)
-                context.stopRead = true
             }
-            
+            context.stopRead = true
         }
     }
 }

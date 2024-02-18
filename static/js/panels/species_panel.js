@@ -318,7 +318,7 @@ function convertMapName(word) {
     return word.replace('MAPSEC_', '').split('_').map(toLowerButFirstCase).join(' ')
 }
 
-function setEvos(evos) {
+export function setEvos(evos) {
     const frag = document.createDocumentFragment()
     for (const evo of evos) {
         if (evo.in == -1) continue //not set yet

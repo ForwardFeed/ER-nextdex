@@ -1,4 +1,4 @@
-import {readFileSync, writeFileSync, existsSync, stat, Stats} from 'fs'
+import {readFileSync, writeFileSync, existsSync, stat, Stats, writeFile} from 'fs'
 import { CompactGameData, CompactSpecie, compactMove} from "./compactify";
 import { Ability } from './abilities';
 import { types } from 'util';
@@ -206,3 +206,36 @@ export function comparify(filepathToBeCompared: string, filepathToCompareWith: s
         resolved(final)
     })   
 }
+
+comparify('./out/gameDataVAlpha.json', './out/gameDataV1.6.1.json')
+.then((x)=>{
+    const output = `./out/comparify${"Alpha"}${"1.6.1"}.json`
+    writeFile(output, JSON.stringify(x) , (err_exist)=>{
+        if (err_exist){
+            console.error(`couldn't write the gamedata output to ${output}`)
+        }
+    })
+})
+.catch((e)=>{console.error(e)})
+
+comparify('./out/gameDataVAlpha.json', './out/gameDataVanilla.json')
+.then((x)=>{
+    const output = `./out/comparify${"Alpha"}${"1.6.1"}.json`
+    writeFile(output, JSON.stringify(x) , (err_exist)=>{
+        if (err_exist){
+            console.error(`couldn't write the gamedata output to ${output}`)
+        }
+    })
+})
+.catch((e)=>{console.error(e)})
+
+comparify('./out/gameDataV1.6.1.json', './out/gameDataVanilla.json')
+.then((x)=>{
+    const output = `./out/comparify${"Alpha"}${"1.6.1"}.json`
+    writeFile(output, JSON.stringify(x) , (err_exist)=>{
+        if (err_exist){
+            console.error(`couldn't write the gamedata output to ${output}`)
+        }
+    })
+})
+.catch((e)=>{console.error(e)})
