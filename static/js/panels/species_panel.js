@@ -213,7 +213,7 @@ export function getSpritesShinyURL(NAME) {
 function changeBaseStat(node, value, statID, cmp) {
 
     if (cmp && !isNaN(+cmp)){
-        node.find('.stat-num').html(`${value}→<br>${cmp}`)
+        node.find('.stat-num').html(`${cmp}→<br>${value}`)
         node.find('.stat-num').css('font-size', '0.5em').css('width', '3em')
     } else {
         node.find('.stat-num').text(value)
