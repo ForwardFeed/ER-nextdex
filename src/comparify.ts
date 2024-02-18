@@ -162,7 +162,9 @@ function compareSpecies(cmpD: CompactGameData, asCmpD: CompactGameData): Array<C
     const asCmpMap: Map<string, CompactSpecie> = mapArrayObjWithKey<CompactSpecie, CompactSpecie>(asCmp, "NAME", x =>x)
     return cmp.map((cmpVal)=>{
         const asCmpVal = asCmpMap.get(cmpVal.NAME)
-        if (!asCmpVal) return true
+        if (!asCmpVal) {
+            return true
+        }
         return {
             stats: {
                 base: cmpVal.stats.base.map((statVal, sI) => {

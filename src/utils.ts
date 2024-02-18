@@ -113,6 +113,7 @@ export function filterMacros(data: string, macros: MacroMap = defaultMacroMap())
     let isIncluded = true
     let hasBeenIncluded = false
     let filteredData = ""
+    data = data.replace(/\\\n/g, '')
     const lines = data.split("\n");
     for (let line of lines){
         if (line.includes("#define"))
