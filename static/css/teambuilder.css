@@ -52,6 +52,9 @@
     cursor: pointer;
     background-color: var(--selHover);
 }
+.trainers-pokemon-builder{
+    width: unset;
+}
 .builder-mon-delete{
     position: absolute;
     top: 0;

@@ -166,7 +166,8 @@ function createPokeView(jNode, viewID) {
         deletePokemon(jNode, viewID)
     }
     jNode.empty().append(createPokemon(teamData[viewID])).append(deleteBtn)
-
+    jNode.children().eq(0).attr('class', 'trainers-pokemon trainers-pokemon-builder')
+    console.log(jNode.children().eq(0))
     jNode[0].onmouseover = () => {
         $(deleteBtn).show()
     }
