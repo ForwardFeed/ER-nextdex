@@ -708,7 +708,7 @@ span{
     cursor: pointer;
     width: calc(50% - 1vw);
 }
-.trainers-pokemon-left, .trainers-pokemon-right, .trainers-pokemon-mid, .trainers-poke-moves{
+.trainers-pokemon-left, .trainers-pokemon-right, .trainers-poke-nature, .trainers-poke-moves{
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -728,12 +728,14 @@ span{
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    border-left: 0;
-    border-right: 0;
-    border-top: 0;
 }
 .trainers-poke-specie{
     width: 6em;
+    display: flex;
+    flex-direction: column;
+}
+.trainers-poke-ability{
+    flex-grow: 1;
 }
 .trainers-stats-row{
     display: flex;

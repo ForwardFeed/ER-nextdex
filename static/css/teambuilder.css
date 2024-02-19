@@ -25,7 +25,6 @@
 }
 .builder-bot{
     background-color:  var(--colorB);
-    height: 70%;
     overflow: scroll;
     display: flex;
     flex-wrap: wrap;

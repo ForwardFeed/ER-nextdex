@@ -179,8 +179,8 @@ export function createPokemon(poke){
             ],
             rightPanel, [
                 midPanel, [
-                    pokeItem,
                     pokeMoves,
+                    pokeItem,
                     pokeNature
                 ],
                 pokeStats

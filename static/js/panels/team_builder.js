@@ -191,9 +191,7 @@ function createPokeView(jNode, viewID) {
             isSwiping = false;
         }
     }
-    jNode[0].onclick = () => {
-        feedPokemonEdition(viewID)
-    }
+    feedPokemonEdition(jNode, viewID)
     teamView[viewID].init()
     save()
 }
@@ -222,41 +220,25 @@ function addPlaceholder(jNode, viewID) {
     jNode.append(placeholder)
 }
 
-function feedPokemonEdition(viewID) {
+function feedPokemonEdition(jNode, viewID) {
     const poke = teamData[viewID]
     const view = teamView[viewID]
 
-    const leftDiv = e("div", "builder-editor-left")
-    //const specieDiv = e("div", "builder-editor-specie", poke.spcName)
-    const spriteDiv = e("img", "builder-editor-sprite pixelated")
-    spriteDiv.src = poke.getSpritesURL()
-
-    const leftMidDiv = e('div', "builder-editor-abilities")
-    const abilityDiv = e("div", "builder-editor-ability", poke.abiName)
-    const innateDivs = poke.innsNames.map(x => e("div", "builder-editor-ability", x))
-    const midDiv = e("div", "builder-editor-mid")
-    const moveDivs = poke.moves.map((x) => {
-        return e("div", "builder-editor-move", gameData.moves[x].name)
-    })
+    const spriteDiv = jNode.find('.trainer-poke-sprite')[0]
+    const abilityDiv = jNode.find('.trainers-poke-ability')[0]
+    const moveDiv = jNode.find('.trainers-poke-moves')[0]
 
     const rightDiv = e("div", "builder-editor-right")
-    const itemDiv = e("div", "builder-editor-right", gameData.items[poke.item]?.name)
-    const natureDiv = e("div", "builder-editor-nature", gameData.natureT[poke.nature])
-    const EVsRow = e("div", "builder-editor-statsrow")
-    const EVs = poke.evs.map((x) => {
-        return e("div", "", x)
-    })
-    const IVsRow = e("div", "builder-editor-statsrow")
-    const IVs = poke.ivs.map((x) => {
-        return e("div", "", x)
-    })
+    const itemDiv = jNode.find('.trainers-poke-item')[0]
+    const natureDiv = jNode.find('.trainers-poke-nature')[0]
+    const statsDiv = jNode.find('.trainers-stats-row')[0]
 
     spriteDiv.onclick = () => {
         poke.isShiny = !poke.isShiny
-        spriteDiv.src = view.sprite[0].src = poke.getSpritesURL()
+        view.sprite[0].src = poke.getSpritesURL()
         save()
     }
-    leftMidDiv.onclick = (ev) => {
+    abilityDiv.onclick = (ev) => {
         ev.stopPropagation() //if you forget this the window will instantly close
         const overlayNode = overlayEditorAbilities(viewID, (abiID) => {
             poke.abi = abiID
@@ -267,7 +249,7 @@ function feedPokemonEdition(viewID) {
         })
         createInformationWindow(overlayNode, ev)
     }
-    midDiv.onclick = (ev) => {
+    moveDiv.onclick = (ev) => {
         ev.stopPropagation()
         const overlayNode = cubicRadial(
             poke.moves.map((x, index)=>{
@@ -277,7 +259,7 @@ function feedPokemonEdition(viewID) {
                         const moveCallback = (moveID) => {
                             poke.moves[index] = poke.allMoves[moveID]
                             const moveName = poke.allMovesName[moveID]
-                            view.moves.eq(index).text(moveDivs[index].innerText = moveName)
+                            view.moves.eq(index).text(moveName)
                             save()
                         }
                         createInformationWindow(
@@ -292,27 +274,20 @@ function feedPokemonEdition(viewID) {
     }
     const itemCallback = (itemID) => {
         poke.item = itemID
-        view.item.text(itemDiv.innerText = gameData.items[itemID].name)
+        createPokeView(view.node, viewID)
         save()
     }
     const natureCallback = (natureID) => {
         poke.nature = natureID
-        view.nature.text(natureDiv.innerText = getTextNature(gameData.natureT[natureID]))
+        createPokeView(view.node, viewID)
         save()
     }
     const statsCallback = (field, index, value) => {
         poke[field][index] = value
         createPokeView(view.node, viewID)
-        let div
-        if (field === "ivs"){
-            div = IVs
-        } else {
-            div = EVs
-        }
-        div[index].innerText = value
         save()
     }
-    rightDiv.onclick = (ev) => {
+    statsDiv.onclick = itemDiv.onclick = natureDiv.onclick = (ev) => {
         ev.stopPropagation()
         const overlayNode = cubicRadial([
             ["Items", (ev) => {
@@ -332,27 +307,6 @@ function feedPokemonEdition(viewID) {
         ], "6em", "1em")
         createInformationWindow(overlayNode, ev, "mid")
     }
-    $('#builder-editor').empty().append(JSHAC([
-        leftDiv, [
-            //specieDiv,
-            spriteDiv,
-            leftMidDiv, [
-                abilityDiv
-                //innateDiv vv
-            ].concat(innateDivs),
-        ],
-        midDiv, [
-            //moves vv
-        ].concat(moveDivs),
-        rightDiv, [
-            itemDiv,
-            natureDiv,
-            EVsRow,
-            EVs,
-            IVsRow,
-            IVs
-        ]
-    ]))
 }
 
 function overlayEditorAbilities(viewID, callbackOnclick) {
