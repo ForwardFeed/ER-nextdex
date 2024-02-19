@@ -9,12 +9,14 @@ import { setupTeamBuilder } from "./panels/team_builder.js"
 import { activateInsanity } from "./insanity.js"
 import { setupMoves} from "./panels/moves_panel.js"
 import { load } from "./loading.js"
+import { e } from "./utils.js"
+
+window.onerror = function(msg, url, lineN){
+    //document.getElementById('ugly-error-span').innerText += 
+    $('#debug').append(e('span', 'debug-error', `in ${url.replace(/[^/]+\//g, '')} ${lineN}: ${msg}`))
+}
 
 document.addEventListener("DOMContentLoaded", function(){
-    window.onerror = function(msg, url, lineN){
-        //document.getElementById('ugly-error-span').innerText += `in ${url.replace(/[^/]+\//g, '')} ${lineN}: ${msg}`
-    }
-
     const setupSteps = [
         [setupSettings, "settings"],
         [setupPanels, "side bar"],

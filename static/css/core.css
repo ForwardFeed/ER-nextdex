@@ -168,6 +168,8 @@ main{
     height: 92%;
     display: flex;
     background-color: var(--background);
+    display: flex;
+    flex-direction: column;
 }
 
 #loading{
@@ -177,6 +179,17 @@ main{
     height: 90%;
     background-color: var(--colorA);
 }
+
+#debug{
+    margin: auto;
+    background-color: var(--colorD);
+    display: flex;
+    flex-direction: column;
+    max-height: 50%;
+    width: 60%;
+    overflow: scroll;
+}
+
 .loading-row{
     display: flex;
 }
