@@ -715,7 +715,7 @@ span{
     border: dotted 1px;
 }
 .trainers-pokemon-left{
-    width: 30%;
+    width: 6em;
 }
 .trainers-pokemon-right{
     width: 100%;
@@ -730,6 +730,9 @@ span{
     border-left: 0;
     border-right: 0;
     border-top: 0;
+}
+.trainers-poke-specie{
+    
 }
 .trainers-stats-row{
     display: flex;
