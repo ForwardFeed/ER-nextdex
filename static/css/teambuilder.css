@@ -87,17 +87,20 @@
     /*height: calc(100% - 1em); this is if there the name of the specie*/
     width: 6em;
 }
-.builder-editor-abilities, .builder-overlay-abilities{
+.builder-overlay-abis-inns{
+    display: flex;
+}
+.builder-editor-abilities, .builder-overlay-abilities, .builder-overlay-innates{
     display: flex;
     flex-grow: 1;
     text-align: left;
     flex-direction: column;
     margin: auto;
 }
-.builder-overlay-abilities{
+.builder-overlay-abilities, .builder-overlay-innates{
     height: 6em;
 }
-.builder-editor-ability, .builder-overlay-ability{
+.builder-editor-ability, .builder-overlay-ability, .builder-overlay-innate{
     width: 100%;
     margin: auto;
 }

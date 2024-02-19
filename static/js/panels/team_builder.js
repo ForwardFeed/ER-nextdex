@@ -274,7 +274,7 @@ function feedPokemonEdition(jNode, viewID) {
     }
     const itemCallback = (itemID) => {
         poke.item = itemID
-        createPokeView(view.node, viewID)
+        view.item.text(itemDiv.innerText = gameData.items[itemID].name)
         save()
     }
     const natureCallback = (natureID) => {
@@ -310,7 +310,8 @@ function feedPokemonEdition(jNode, viewID) {
 }
 
 function overlayEditorAbilities(viewID, callbackOnclick) {
-    const core = e('div', 'builder-overlay-abilities')
+    const core = e('div', 'builder-overlay-abis-inns')
+    const abilitiesRow = e('div', 'builder-overlay-abilities')
     const abilities = [...new Set(teamData[viewID].baseSpc.stats.abis)] //remove duplicates
         .map((x, index) => {
             const abilityNode = e('div', 'builder-overlay-ability', gameData.abilities[x].name)
@@ -320,9 +321,18 @@ function overlayEditorAbilities(viewID, callbackOnclick) {
             }
             return abilityNode
         })
+    const innatesRow = e('div', 'builder-overlay-innates')
+    const innates = teamData[viewID].baseSpc.stats.inns.map((x, index) =>{
+        return e('div', 'builder-overlay-innate', gameData.abilities[x].name)
+    })
     return JSHAC([
-        core,
-        abilities
+        core, [
+            abilitiesRow,
+                abilities,
+            innatesRow,
+                innates
+        ]
+        
     ])
 }
 
