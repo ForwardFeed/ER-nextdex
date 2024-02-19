@@ -39,7 +39,6 @@ export function createInformationWindow(node, ev, cursorPlacement, transparency=
     }
     windowFrame.style.left = x + "px"
     windowFrame.style.top = y + "px"
-    console.log("window created", windowFrame)
     if (cursorPlacement === "focus"){
         $(windowFrame).find('input').focus()
     }
