@@ -762,10 +762,11 @@ span{
     background-color: var(--colorA);
 }
 .trainer-go-edition{
-    margin: 0 auto;
+    margin: auto;
     border: var(--font-color) double 1px;
     border-radius: 10px;
     width: fit-content;
+    height: fit-content;
 }
 .trainer-redirect-arrow{
     font-size: 1.5em;
