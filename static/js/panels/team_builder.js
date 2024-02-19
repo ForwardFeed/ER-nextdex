@@ -311,26 +311,42 @@ function feedPokemonEdition(jNode, viewID) {
 
 function overlayEditorAbilities(viewID, callbackOnclick) {
     const core = e('div', 'builder-overlay-abis-inns')
+    const abiDesc = e('div', 'builder-overlay-abis-desc')
     const abilitiesRow = e('div', 'builder-overlay-abilities')
     const abilities = [...new Set(teamData[viewID].baseSpc.stats.abis)] //remove duplicates
         .map((x, index) => {
-            const abilityNode = e('div', 'builder-overlay-ability', gameData.abilities[x].name)
-            abilityNode.onclick = (ev) => {
-                ev.stopPropagation() // not to trigger the window to close
-                callbackOnclick(index)
-            }
-            return abilityNode
+            const abi = gameData.abilities[x]
+            return e('div', 'builder-overlay-ability', abi.name,{
+                onclick: (ev) => {
+                    ev.stopPropagation() // not to trigger the window to close
+                    callbackOnclick(index)
+                    abiDesc.innerText = abi.desc
+                },
+                mouseover: () =>{
+                    abiDesc.innerText = abi.desc
+                }
+            })
         })
     const innatesRow = e('div', 'builder-overlay-innates')
     const innates = teamData[viewID].baseSpc.stats.inns.map((x, index) =>{
-        return e('div', 'builder-overlay-innate', gameData.abilities[x].name)
+        const abi = gameData.abilities[x]
+        return e('div', 'builder-overlay-innate', abi.name, {
+            onclick: (ev) => {
+                ev.stopPropagation() // not to trigger the window to close
+                abiDesc.innerText = abi.desc
+            },
+            mouseover: () =>{
+                abiDesc.innerText = abi.desc
+            }
+        })
     })
     return JSHAC([
         core, [
             abilitiesRow,
                 abilities,
             innatesRow,
-                innates
+                innates,
+            abiDesc
         ]
         
     ])
