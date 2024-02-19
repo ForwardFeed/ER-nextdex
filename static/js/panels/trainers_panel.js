@@ -141,9 +141,30 @@ export function createPokemon(poke){
     }
     const rightPanel = e('div', "trainers-pokemon-right")
     const pokeItem = e('div', "trainers-poke-item", item)
-    const pokeNature = e('div', "trainers-poke-nature", getTextNature(nature))
-    const pokeIVs = e('div',"trainers-poke-ivs", 'IVs: ' + poke.ivs.join(' '))
-    const pokeEVs = e('div', "trainers-poke-evs", 'EVs: ' + poke.evs.join(' '))
+    const textNature = getTextNature(nature)
+    const pokeNature = e('div', "trainers-poke-nature", textNature)
+    const statsOrder = [
+        "HP",
+        "Atk",
+        "Def",
+        "SpA",
+        "SpD",
+        "Spe",
+    ]
+    const pokeStats = e('div', "trainers-stats-row")
+    const statBuffed = textNature.match(/(?<=\+)\w+/)?.[0]
+    const statNerfed = textNature.match(/(?<=\-)\w+/)?.[0]
+    for (const statIndex in statsOrder){
+        const stat = statsOrder[statIndex]
+        const nerfedOrbuffed = stat === statBuffed ? "buffed" : stat === statNerfed ? "nerfed" : ""
+        pokeStats.append(JSHAC([
+            e('div', 'trainers-stats-col'), [
+                e('div', `trainers-stats-name ${nerfedOrbuffed}`, stat),
+                e('div', `trainers-poke-ivs ${nerfedOrbuffed}`, poke.ivs[statIndex]),
+                e('div', `trainers-poke-evs ${nerfedOrbuffed}`, poke.evs[statIndex]),
+            ]
+        ]))
+    }
 
     return JSHAC([
         core, [
@@ -152,14 +173,13 @@ export function createPokemon(poke){
                 pokeImg,
                 pokeAbility
             ],
-            midPanel, [
-                pokeMoves
-            ],
             rightPanel, [
-                pokeItem,
-                pokeNature,
-                pokeIVs,
-                pokeEVs
+                midPanel, [
+                    pokeItem,
+                    pokeMoves,
+                    pokeNature
+                ],
+                pokeStats
             ]
         ]
     ])

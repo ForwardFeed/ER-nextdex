@@ -39,6 +39,13 @@
 .steel-t{color: #aab;}
 .fairy-t{color: #e9e;}
 
+.buffed{
+    color: rgb(76, 219, 19);
+}
+.nerfed{
+    color: rgb(233, 64, 13);
+}
+
 .normal-t, .fire-t, .water-t, .electric-t, .grass-t, .ice-t, .fighting-t, .poison-t, .ground-t, .flying-t, .bug-t, .rock-t, .ghost-t, .dragon-t, .dark-t, .steel-t, .fairy-t{
     filter: var(--filter);
 }
@@ -700,23 +707,29 @@ span{
     border-bottom-width: 1px;
     cursor: pointer;
     width: calc(50% - 1vw);
-    font-size: 0.7em;
 }
 .trainers-pokemon-left{
     width: 30%;
 }
-.trainers-pokemon-mid{
-    width: 30%;
-    display: flex;
-}
 .trainers-pokemon-right{
-    width: 40%;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    height: fit-content;
+}
+.trainers-pokemon-mid{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.trainers-stats-row{
+    display: flex;
+}
+.trainers-stats-col{
+    display: flex;
+    flex-direction: column;
     margin: auto;
 }
-.trainers-poke-ivs, .trainers-poke-evs, .trainers-poke-move{
+.trainers-poke-ivs, .trainers-poke-evs{
     text-align: left;
     padding-left: 0.3em;
 }
@@ -725,6 +738,12 @@ span{
 }
 .trainers-poke-moves{
     margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+.trainers-poke-move{
+    width: 50%;
+    text-align: center;
 }
 .trainer-map-list-name{
     background-color: var(--colorA);
