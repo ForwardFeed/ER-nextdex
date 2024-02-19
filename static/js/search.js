@@ -90,6 +90,9 @@ export const search = {
             this.suggestionInput.blur()
             return
         }
+        if(this.suggestions.length == 1){
+            this.clearSuggestion()
+        }
         this.suggestionNode.innerText = "" //remove all previous suggestions
         for (const suggestion of this.suggestions){
             const option = document.createElement('div')
