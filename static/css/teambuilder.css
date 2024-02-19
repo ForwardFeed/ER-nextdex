@@ -40,7 +40,7 @@
     display: flex;
     width: calc(50% - 4px);
     min-height: 3.5em;
-    font-size: 0.8;
+    height: 10em;
 }
 .builder-placeholder{
     border-radius: 10px;

@@ -167,7 +167,6 @@ function createPokeView(jNode, viewID) {
     }
     jNode.empty().append(createPokemon(teamData[viewID])).append(deleteBtn)
     jNode.children().eq(0).attr('class', 'trainers-pokemon trainers-pokemon-builder')
-    console.log(jNode.children().eq(0))
     jNode[0].onmouseover = () => {
         $(deleteBtn).show()
     }
@@ -299,15 +298,13 @@ function feedPokemonEdition(viewID) {
     }
     const statsCallback = (field, index, value) => {
         poke[field][index] = value
-        let text, div
+        createPokeView(view.node, viewID)
+        let div
         if (field === "ivs"){
-            text = 'IVs: ' + poke.ivs.join(' ')
             div = IVs
         } else {
-            text = 'EVs: ' + poke.evs.join(' ')
             div = EVs
         }
-        view[field].text(text)
         div[index].innerText = value
         save()
     }
@@ -413,12 +410,12 @@ const statsOrder = [
 ]
 const statFieldInputControl = {
     "ivs": (value) => {
-        value = +value.replace(/\D/g, "")
+        value = +value.replace(/[^0-9-]/g, "")
         if (isNaN(value)) return 0
         return Math.min(Math.max(0,value),31)  
     },
     "evs": (value) => {
-        value = +value.replace(/\D/g, "");
+        value = +value.replace(/[^0-9-]/g, "");
         if (isNaN(value)) return 0
         return Math.min(Math.max(0,Math.round(value / 4) * 4),252)        
     }
@@ -455,9 +452,4 @@ function editionStats(statField, viewID, callback){
             rowDiv,
         ]
     ])
-}
-
-function editionMoves(viewID){
-    const poke = teamData[viewID]
-
 }

@@ -157,11 +157,15 @@ export function createPokemon(poke){
     for (const statIndex in statsOrder){
         const stat = statsOrder[statIndex]
         const nerfedOrbuffed = stat === statBuffed ? "buffed" : stat === statNerfed ? "nerfed" : ""
+        const evVal = poke.evs[statIndex]
+        const evBuffd = evVal >= 200 ? "buffed" : ""
+        const ivVal = poke.ivs[statIndex]
+        const ivValNerfed = ivVal == 0 ? "nerfed" : ""
         pokeStats.append(JSHAC([
             e('div', 'trainers-stats-col'), [
                 e('div', `trainers-stats-name ${nerfedOrbuffed}`, stat),
-                e('div', `trainers-poke-ivs ${nerfedOrbuffed}`, poke.ivs[statIndex]),
-                e('div', `trainers-poke-evs ${nerfedOrbuffed}`, poke.evs[statIndex]),
+                e('div', `trainers-poke-ivs ${ivValNerfed}`, ivVal),
+                e('div', `trainers-poke-evs ${evBuffd}`, evVal),
             ]
         ]))
     }

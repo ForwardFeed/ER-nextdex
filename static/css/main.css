@@ -727,12 +727,13 @@ span{
     width: 100%;
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
     border-left: 0;
     border-right: 0;
     border-top: 0;
 }
 .trainers-poke-specie{
-    
+    width: 6em;
 }
 .trainers-stats-row{
     display: flex;
@@ -753,6 +754,7 @@ span{
     margin: auto;
     display: flex;
     flex-wrap: wrap;
+    flex-grow: 1;
     border-left: 0;
     border-right: 0;
 }
