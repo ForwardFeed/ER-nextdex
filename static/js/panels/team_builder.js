@@ -322,8 +322,11 @@ function overlayEditorAbilities(viewID, callbackOnclick) {
                     callbackOnclick(index)
                     abiDesc.innerText = abi.desc
                 },
-                mouseover: () =>{
+                onmouseover: () =>{
                     abiDesc.innerText = abi.desc
+                },
+                onmouseleave: () =>{
+                    abiDesc.innerText = ""
                 }
             })
         })
@@ -335,8 +338,11 @@ function overlayEditorAbilities(viewID, callbackOnclick) {
                 ev.stopPropagation() // not to trigger the window to close
                 abiDesc.innerText = abi.desc
             },
-            mouseover: () =>{
+            onmouseover: () =>{
                 abiDesc.innerText = abi.desc
+            },
+            onmouseleave: () =>{
+                abiDesc.innerText = ""
             }
         })
     })
