@@ -15,6 +15,7 @@
   "author": "ForwardFeed",
   "license": "MIT",
   "devDependencies": {
+    "@types/jquery": "^3.5.29",
     "@types/node": "^20.10.5",
     "typescript": "^5.3.3"
   }

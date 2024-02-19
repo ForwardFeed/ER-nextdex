@@ -8,22 +8,46 @@ import { setupFilters } from "./filters.js"
 import { setupTeamBuilder } from "./panels/team_builder.js"
 import { activateInsanity } from "./insanity.js"
 import { setupMoves} from "./panels/moves_panel.js"
+import { loaded, load, onErrorAskContinue } from "./loading.js"
 
-$(document).ready(function(){
+document.addEventListener("DOMContentLoaded", function(){
     window.onerror = function(msg, url, lineN){
         //document.getElementById('ugly-error-span').innerText += `in ${url.replace(/[^/]+\//g, '')} ${lineN}: ${msg}`
     }
+
+    const setupSteps = [
+        [setupSettings, "settings"],
+        [setupPanels, "side bar"],
+        [setupMoves, "panel moves"],
+        [setupSpeciesPanel, "panel species"],
+        [setupTeamBuilder, "panel builder"], // the team builder BEFORE data version is Important
+        [setupDataVersionning, "data loader"],
+        [setupSearch, "search frame"],
+        [setupFilters, "filter frame"],
+    ]
+    let error = false
+    for (const step of setupSteps){
+        try{
+            load(step[1])
+            step[0]()
+            loaded(step[1], true)
+        }catch(e){
+            error = true
+            loaded(step[1], false)
+        }
+        
+    }
+    if (!error) {
+        $('#loading-screen').hide()
+    } else {
+        onErrorAskContinue()
+    }
+    //misc
     setupHeader()
-    setupSettings()
-    setupPanels()
-    setupMoves()
-    setupSpeciesPanel()
-    setupTeamBuilder() // the team builder BEFORE data version is Important
-    setupDataVersionning()
-    setupSearch()
-    setupFilters()
     addTooltip($('.main-title')[0], 'Berkay, the dex is up btw')
     $('#insanity').on('click', activateInsanity)
+
+    
     
 })
 
