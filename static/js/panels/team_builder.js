@@ -111,11 +111,14 @@ export function restoreSave(){
 }
 
 export function setFullTeam(party){
-    party.forEach((val, index)=>{
-        if (!val.spc) return
-        teamData[index].fromSave(val)
-        createPokeView($('#builder-data').find('.builder-mon').eq(index), index)
-    })
+    for (let i = 0; i < 6; i++){
+        const val = party[i]
+        if (!val || !val.spc) {
+            return deletePokemon($('#builder-data').find('.builder-mon').eq(i), i)
+        }
+        teamData[i].fromSave(val)
+        createPokeView($('#builder-data').find('.builder-mon').eq(i), i)
+    }
 }
 
 function save(){
@@ -200,6 +203,7 @@ function deletePokemon(jNode, viewID) {
     $('#builder-editor').empty()
     addPlaceholder(jNode, viewID)
     teamData[viewID] = new Pokemon()
+    save()
 }
 
 function addPlaceholder(jNode, viewID) {
