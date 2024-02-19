@@ -8,7 +8,7 @@ import { setupFilters } from "./filters.js"
 import { setupTeamBuilder } from "./panels/team_builder.js"
 import { activateInsanity } from "./insanity.js"
 import { setupMoves} from "./panels/moves_panel.js"
-import { load, endLoad } from "./loading.js"
+import { load } from "./loading.js"
 
 document.addEventListener("DOMContentLoaded", function(){
     window.onerror = function(msg, url, lineN){

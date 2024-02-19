@@ -5,7 +5,7 @@ import { feedPanelTrainers } from "./panels/trainers_panel.js"
 import { gameData } from "./data_version.js"
 import { restoreSave } from "./panels/team_builder.js"
 import { e, JSHAC } from "./utils.js"
-import { load, endLoad} from "./loading.js"
+import { load } from "./loading.js"
 
 export const nodeLists = {
     species: [],
@@ -51,14 +51,15 @@ export function hydrate(firstLoad=false) {
         [hydrateItems, "items data"],
         [restoreSave, "save"], // also restore the save of the team builder
     ]
-    for (const step of steps){
+    const stepLen = steps.length
+    for (let i = 0; i < stepLen; i++){
+        const step = steps[i]
         if (firstLoad){
-            load(step[0], step[1])
+            load(step[0], step[1], i == stepLen - 1)
         } else {
             step[0]()
         }
-    }
-    if (firstLoad) endLoad()
+    } 
 }
 
 function feedBaseStatsStats(statID, value) {

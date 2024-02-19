@@ -1,28 +1,6 @@
 #builder-data{
     overflow: scroll;
 }
-
-.builder-top{
-    background-color:  var(--colorA);
-    height: 30%;
-    display: flex;
-}
-.builder-select{
-    width: 2em;
-    display: flex;
-    flex-direction: column;
-}
-.builder-select > div{
-    flex-grow: 1;
-    display: flex;
-    text-align: center;
-}
-.builder-select > div > span{
-    width: 100%;
-}
-.builder-top-data{
-    flex-grow: 1;
-}
 .builder-bot{
     background-color:  var(--colorB);
     overflow: scroll;

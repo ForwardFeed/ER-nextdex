@@ -174,7 +174,7 @@ main{
     overflow-y: scroll;
     margin: auto;
     width: 60%;
-    height: 60%;
+    height: 90%;
     background-color: var(--colorA);
 }
 .loading-row{

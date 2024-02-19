@@ -91,6 +91,7 @@ function changeTheme(){
 }
 
 export function setupSettings(){
+    z
     $('#settings-btn').on('click', function(){
         $('#settings-frame').toggle()
     })
