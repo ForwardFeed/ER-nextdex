@@ -57,8 +57,8 @@ function changeVersion(version){
         .then((data) => {
             console.log("took gamedata from server")
             gameData = data
-            saveToLocalstorage("data"+version, gameData)
             hydrate()
+            saveToLocalstorage("data"+version, gameData)
             saveToLocalstorage("dataversion"+version, LATEST_DATA_VERSION)
     })
 }
