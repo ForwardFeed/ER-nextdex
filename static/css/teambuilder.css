@@ -92,8 +92,9 @@
 }
 .builder-overlay-abis-desc{
     height: fit-content;
+    background-color: var(--colorC);
 }
-.builder-editor-abilities, .builder-overlay-abilities, .builder-overlay-innates, .builder-overlay-abis-desc{
+.builder-editor-abilities, .builder-overlay-abilities, .builder-overlay-innates{
     display: flex;
     flex-grow: 1;
     text-align: left;
