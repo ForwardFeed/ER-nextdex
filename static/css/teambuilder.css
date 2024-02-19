@@ -90,18 +90,22 @@
 .builder-overlay-abis-inns{
     display: flex;
 }
-.builder-editor-abilities, .builder-overlay-abilities, .builder-overlay-innates{
+.builder-overlay-abis-desc{
+    height: fit-content;
+}
+.builder-editor-abilities, .builder-overlay-abilities, .builder-overlay-innates, .builder-overlay-abis-desc{
     display: flex;
     flex-grow: 1;
     text-align: left;
     flex-direction: column;
     margin: auto;
+    background-color: var(--colorA);
 }
 .builder-overlay-abilities, .builder-overlay-innates{
     height: 6em;
 }
 .builder-editor-ability, .builder-overlay-ability, .builder-overlay-innate{
-    width: 100%;
+    width: 6em;
     margin: auto;
 }
 .builder-overlay-ability:hover{

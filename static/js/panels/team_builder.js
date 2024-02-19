@@ -247,7 +247,7 @@ function feedPokemonEdition(jNode, viewID) {
             abilityDiv.innerText = poke.abiName
             save()
         })
-        createInformationWindow(overlayNode, ev)
+        createInformationWindow(overlayNode, ev, "", true)
     }
     moveDiv.onclick = (ev) => {
         ev.stopPropagation()
