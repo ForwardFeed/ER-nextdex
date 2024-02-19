@@ -5,7 +5,7 @@ import { feedPanelTrainers } from "./panels/trainers_panel.js"
 import { gameData } from "./data_version.js"
 import { restoreSave } from "./panels/team_builder.js"
 import { e, JSHAC } from "./utils.js"
-
+import { load, endLoad} from "./loading.js"
 
 export const nodeLists = {
     species: [],
@@ -15,7 +15,7 @@ export const nodeLists = {
     trainers: [],
 }
 
-export function hydrate() {
+export function hydrate(firstLoad=false) {
     if (!gameData) {
         return console.warn("couldn't find gameData")
     }
@@ -42,13 +42,23 @@ export function hydrate() {
     }
 
     // hydrate the UI with the data
-    hydrateAbilities()
-    hydrateMoves()
-    hydrateSpecies()
-    hydrateLocation()
-    hydrateTrainers()
-    hydrateItems()
-    restoreSave() // also restore the save of the team builder
+    const steps = [
+        [hydrateAbilities, "abilities data"],
+        [hydrateMoves, "moves data"],
+        [hydrateSpecies, "species  data"],
+        [hydrateLocation, "locations  data"],
+        [hydrateTrainers, "trainers data"],
+        [hydrateItems, "items data"],
+        [restoreSave, "save"], // also restore the save of the team builder
+    ]
+    for (const step of steps){
+        if (firstLoad){
+            load(step[0], step[1])
+        } else {
+            step[0]()
+        }
+    }
+    if (firstLoad) endLoad()
 }
 
 function feedBaseStatsStats(statID, value) {

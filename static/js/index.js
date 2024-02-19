@@ -1,14 +1,14 @@
 import setupPanels from "./sidebar.js"
 import { setupSpeciesPanel } from "./panels/species_panel.js"
-import { setupDataVersionning } from "./data_version.js"
+import { setupDataVersionning, changeVersion } from "./data_version.js"
 import { setupSearch } from "./search.js"
 import { addTooltip } from "./utils.js"
-import { setupSettings } from "./settings.js"
+import { setupSettings, fetchFromLocalstorage } from "./settings.js"
 import { setupFilters } from "./filters.js"
 import { setupTeamBuilder } from "./panels/team_builder.js"
 import { activateInsanity } from "./insanity.js"
 import { setupMoves} from "./panels/moves_panel.js"
-import { loaded, load, onErrorAskContinue } from "./loading.js"
+import { load, endLoad } from "./loading.js"
 
 document.addEventListener("DOMContentLoaded", function(){
     window.onerror = function(msg, url, lineN){
@@ -21,26 +21,15 @@ document.addEventListener("DOMContentLoaded", function(){
         [setupMoves, "panel moves"],
         [setupSpeciesPanel, "panel species"],
         [setupTeamBuilder, "panel builder"], // the team builder BEFORE data version is Important
-        [setupDataVersionning, "data loader"],
         [setupSearch, "search frame"],
         [setupFilters, "filter frame"],
+        [setupDataVersionning, "gamedata loader"],
+        [function(){
+            changeVersion(fetchFromLocalstorage("lastusedversion"), true)
+        }, "loading gamedata"],
     ]
-    let error = false
     for (const step of setupSteps){
-        try{
-            load(step[1])
-            step[0]()
-            loaded(step[1], true)
-        }catch(e){
-            error = true
-            loaded(step[1], false)
-        }
-        
-    }
-    if (!error) {
-        $('#loading-screen').hide()
-    } else {
-        onErrorAskContinue()
+        load(step[0], step[1])
     }
     //misc
     setupHeader()

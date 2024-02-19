@@ -30,13 +30,14 @@ function setAvailableVersion(){
 
 }
 
-function changeVersion(version){
+export function changeVersion(version=defaultVersion, firstLoad=false){
     if (!version || allVersions.indexOf(version) == -1){
         return console.warn(`no such version : ${version}`)
     }
     changeCompareData(version, "Vanilla") //TODO, make it so you can target other things
 
     const savedVersion = fetchFromLocalstorage("dataversion"+version)
+    saveToLocalstorage("lastusedversion", version)
 
     if (savedVersion && savedVersion == LATEST_DATA_VERSION &&
         $('#enable-storage')[0].checked ){
@@ -44,7 +45,7 @@ function changeVersion(version){
             gameData = JSON.parse(fetchFromLocalstorage("data"+version))
             if (gameData) {
                 console.log("took gamedata from storage")
-                hydrate()
+                hydrate(firstLoad)
                 return
             }
         } catch(_e){
@@ -57,7 +58,7 @@ function changeVersion(version){
         .then((data) => {
             console.log("took gamedata from server")
             gameData = data
-            hydrate()
+            hydrate(firstLoad)
             try{
                 saveToLocalstorage("data"+version, gameData)
                 saveToLocalstorage("dataversion"+version, LATEST_DATA_VERSION)
@@ -88,9 +89,6 @@ export function setupDataVersionning(){
     setAvailableVersion()
     $('#versions').on('change', function(){
         changeVersion($(this).val())
-        saveToLocalstorage("lastusedversion", $(this).val())
     })
-    const lastUsedVersion = fetchFromLocalstorage("lastusedversion")
-    $('#versions').val(lastUsedVersion || defaultVersion).change()
 }
 
