@@ -744,6 +744,7 @@ span{
 .trainers-poke-move{
     width: 50%;
     text-align: center;
+    font-size: 0.9em;
 }
 .trainer-map-list-name{
     background-color: var(--colorA);
