@@ -35,6 +35,7 @@ export function feedPanelSpecies(id) {
     setAllMoves(specie)
     setEvos(specie.evolutions)
     setLocations(specie.locations, specie.SEnc)
+    $('#species-misc').text(specie.dex.desc)
     $('#species-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
     nodeLists.species[id - 1].classList.replace("sel-n-active", "sel-active")
 }
@@ -290,6 +291,7 @@ export function setupSpeciesPanel() {
     const subPanelsAndBtns = [
         ["#switch-moves", "#species-moves"],
         ["#switch-evos-locs", "#species-evos-locs"],
+        ["#switch-misc", "#species-misc"],
     ]
     subPanelsAndBtns.forEach((x) => {
         $(x[0]).on('click', () => {
