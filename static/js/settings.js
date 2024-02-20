@@ -74,7 +74,7 @@ export function fetchFromLocalstorage(key){
         if (typeof window.localStorage === 'undefined') return undefined
         const returnedValue = window.localStorage.getItem(appName + key)
         // sometimes it's "null" stringified, which is very fun
-        return returnedValue === "null" ? undefined : returnedValue
+        return returnedValue === "null" || returnedValue === null ? undefined : returnedValue
     } catch(_e){
         return undefined
     }
