@@ -5,24 +5,20 @@ let error = false
 
 export function load(callback, msg, lastOne=false){
     loadMsgs.push(msg)
-    setTimeout(()=>{
-        try{
-            $('#loading').append(JSHAC([
-                e('div', 'loading-row'),[ 
-                    e('div', 'loading-text', `loading ${msg}`),
-                    e('div', 'loading-icons', '⟳'),
-                ]
-            ]))
-            callback()
-            loaded(msg, true)
-        } catch(_e){
-            loaded(msg, false)
-        } finally{
-            if (lastOne) endLoad()
-        }
-    }) //this settimeout is to escape fastdom forcing the render into a single frame
-    
-    
+    try{
+        $('#loading').append(JSHAC([
+            e('div', 'loading-row'),[ 
+                e('div', 'loading-text', `loading ${msg}`),
+                e('div', 'loading-icons', '⟳'),
+            ]
+        ]))
+        callback()
+        loaded(msg, true)
+    } catch(_e){
+        loaded(msg, false)
+    } finally{
+        if (lastOne) endLoad()
+    }
 }
 
 function loaded(msg, success){
