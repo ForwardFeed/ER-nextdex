@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function(){
         [setupSpeciesPanel, "panel species"],
         [setupTeamBuilder, "panel builder"], // the team builder BEFORE data version is Important
         [setupSearch, "search frame"],
-        [setupFzilters, "filter frame"],
+        [setupFilters, "filter frame"],
         [setupDataVersionning, "gamedata loader"],
         [function(){
             changeVersion(fetchFromLocalstorage("lastusedversion"), true)
