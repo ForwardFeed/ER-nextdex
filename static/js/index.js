@@ -17,6 +17,7 @@ window.onerror = function(msg, url, lineN){
 }
 
 document.addEventListener("DOMContentLoaded", function(){
+    load(()=>{}, "start")
     const setupSteps = [
         [setupSettings, "settings"],
         [setupPanels, "side bar"],
@@ -24,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function(){
         [setupSpeciesPanel, "panel species"],
         [setupTeamBuilder, "panel builder"], // the team builder BEFORE data version is Important
         [setupSearch, "search frame"],
-        [setupFilters, "filter frame"],
+        [setupFzilters, "filter frame"],
         [setupDataVersionning, "gamedata loader"],
         [function(){
             changeVersion(fetchFromLocalstorage("lastusedversion"), true)
