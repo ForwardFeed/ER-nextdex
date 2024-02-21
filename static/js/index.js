@@ -9,12 +9,7 @@ import { setupTeamBuilder } from "./panels/team_builder.js"
 import { activateInsanity } from "./insanity.js"
 import { setupMoves} from "./panels/moves_panel.js"
 import { load } from "./loading.js"
-import { e } from "./utils.js"
 
-window.onerror = function(msg, url, lineN){
-    //document.getElementById('ugly-error-span').innerText += 
-    $('#debug').append(e('span', 'debug-error', `in ${url.replace(/[^/]+\//g, '')} ${lineN}: ${msg}`))
-}
 
 document.addEventListener("DOMContentLoaded", function(){
     load(()=>{}, "start")
@@ -28,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function(){
         [setupFilters, "filter frame"],
         [setupDataVersionning, "gamedata loader"],
         [function(){
-            changeVersion(fetchFromLocalstorage("lastusedversion"), true)
+            changeVersion(fetchFromLocalstorage("lastusedvqersion"), true)
         }, "loading gamedata"],
     ]
     for (const step of setupSteps){

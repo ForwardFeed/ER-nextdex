@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "run": "node ./target/main.js",
-    "sprites": "node ./target/main.js sprites"
+    "sprites": "node ./target/main.js sprites",
+    "webpack": "npx webpack --config webpack.config.js"
   },
   "keywords": [
     "pokemon"
@@ -17,6 +18,8 @@
   "devDependencies": {
     "@types/jquery": "^3.5.29",
     "@types/node": "^20.10.5",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "webpack": "^5.90.3",
+    "webpack-cli": "^5.1.4"
   }
 }

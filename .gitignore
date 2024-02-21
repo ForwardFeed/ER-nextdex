@@ -4,6 +4,7 @@ target/
 debug.txt
 nextdex_config.json
 build
+dist/
 
 # nodejs related
 node_modules/
