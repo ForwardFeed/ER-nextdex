@@ -14,7 +14,9 @@ export function load(callback, msg, lastOne=false){
         ]))
         callback()
         loaded(msg, true)
-    } catch(_e){
+    } catch(err){
+        const err_msg = err.stack.replaceAll(window.location.origin, "")
+        document.getElementById('debug').append(e('div', 'debug-error', err_msg))
         loaded(msg, false)
     } finally{
         if (lastOne) endLoad()

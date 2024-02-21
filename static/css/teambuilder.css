@@ -108,12 +108,15 @@
 }
 .builder-tools{
     display: flex;
+    flex-direction: column;
     width: 100%;
-    height: 4em;
+    height: 6em;
+}
+.builder-tools > *{
+    flex-grow: 1;
 }
 #builder-screenshot{
     display: flex;
-    flex-grow: 1;
 }
 #builder-screenshot > span{
     margin: auto;

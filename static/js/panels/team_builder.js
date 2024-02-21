@@ -174,16 +174,39 @@ export function setupTeamBuilder() {
         document.body.append(window)
     })
     $('#builder-weaknesses').on('click', ()=>{
+        const defCoverage = {}
+        gameData.typeT.forEach((val)=>{
+            defCoverage[val] = {
+                "0": 0,
+                "0.25": 0,
+                "0.5": 0,
+                "1": 0,
+                "2": 0,
+                "4": 0,
+            }
+        })
         teamData.forEach((val)=>{
             const specie = gameData.species[val.spc]
             const abis = [specie.stats.abis[val.abi], ...specie.stats.inns]
             const types= [...new Set(specie.stats.types), abilitiesToAddedType(abis)].filter(x => x)
-            console.log(getDefensiveCoverage(
+            const monDef = getDefensiveCoverage(
                 types.map(x => gameData.typeT[x]), abis
-            ))
-            
+            )
+            Object.keys(monDef).forEach((val)=>{
+                const types = monDef[val]
+                for (const type of types){
+                    defCoverage[type][val] += 1
+                }
+            })
         })
+        console.log(defCoverage)
     })
+    //setup the row of the defensive coverage
+    const typesRow = e('div', 'builder-type-row')
+    gameData?.typeT.forEach((val)=>{
+        console.log(val)
+    })
+    $('#builder-weaknesses').append(typesRow)
 }
 
 function createPokeView(jNode, viewID) {
