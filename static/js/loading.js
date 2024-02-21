@@ -29,6 +29,7 @@ function loaded(msg, success){
 }
 
 function onErrorAskContinue(){
+    $('#loading-screen').show()
     $('#loading').append(e('div', 'loading-ask', 'An error occured, click to continue'))
     
     $('#loading').on('click', function(){

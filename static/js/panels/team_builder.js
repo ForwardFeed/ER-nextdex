@@ -5,6 +5,7 @@ import { getSpritesURL, getSpritesShinyURL } from "./species_panel.js";
 import { createInformationWindow } from "../window.js";
 import { cubicRadial } from "../radial.js";
 import { saveToLocalstorage, fetchFromLocalstorage } from "../settings.js";
+import { getDefensiveCoverage, abilitiesToAddedType} from "../weakness.js"
 
 const saveKeysPokemon = [
     "spc",
@@ -171,6 +172,17 @@ export function setupTeamBuilder() {
         window.querySelectorAll('.builder-placeholder').forEach(x => x.remove())
         ev.stopPropagation()
         document.body.append(window)
+    })
+    $('#builder-weaknesses').on('click', ()=>{
+        teamData.forEach((val)=>{
+            const specie = gameData.species[val.spc]
+            const abis = [specie.stats.abis[val.abi], ...specie.stats.inns]
+            const types= [...new Set(specie.stats.types), abilitiesToAddedType(abis)].filter(x => x)
+            console.log(getDefensiveCoverage(
+                types.map(x => gameData.typeT[x]), abis
+            ))
+            
+        })
     })
 }
 
