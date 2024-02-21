@@ -308,7 +308,14 @@ span{
     padding-top: 0
 }
 /* SPECIES */
-
+#species-desc{
+    text-align: left;
+    padding: 0.5em;
+    background-color: var(--colorA);
+}
+#species-hw:hover{
+    background-color: var(--selHover);
+}
 .species-list-sprite{
     height:70%;
 }

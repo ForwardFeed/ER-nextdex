@@ -143,6 +143,7 @@ function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo) {
     if (!currentSpecie.eggMoves.length) currentSpecie.eggMoves = previousSpecie.eggMoves
     if (!currentSpecie.TMHMMoves.length) currentSpecie.TMHMMoves = previousSpecie.TMHMMoves
     if (!currentSpecie.tutor.length) currentSpecie.tutor = previousSpecie.tutor
+    if (!currentSpecie.dex.hw) currentSpecie.dex.hw = previousSpecie.dex.hw
     //import evolution
     currentSpecie.evolutions.push({
         kd: currentEvo.kd,
