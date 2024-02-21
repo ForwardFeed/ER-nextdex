@@ -14,20 +14,26 @@
     <link rel="stylesheet" href="./css/themes/blahaj.css" id="styles-blahaj" disabled>
     <link rel="stylesheet" href="./css/themes/wood.css" id="styles-wood" disabled>
     <link rel="icon" type="image/x-icon" href="./icons/favicon.webp">
+</head>
+
+<body>
+    <div id="loading-screen">
+        <div id="loading">
+
+        </div>
+        <div id="debug"></div>
+    </div>
     <script type="module" src="./js/settings.js"></script>
     <script type="module">
         window.onerror = function(msg, url, lineN){
             const e = document.createElement("div")
             e.className = 'debug-error'
             e.innerText = `in ${url.replace(/[^/]+\//g, '')} ${lineN}: ${msg}`
-            $('#debug').append(e)
+            document.getElementById('debug').append(e)
         }
         import { initAppSettings } from './js/settings.js'
         initAppSettings()
     </script>
-</head>
-
-<body>
     <div id="top-header" class="header-gradient-ER">
         <span class="main-title">
             Elite Redux Nextdex
@@ -385,12 +391,6 @@
             <input type="radio" name="settings-storage" id="enable-storage" checked>
         </div>
         <button id="insanity">ACTIVATE INSANITY WARNING EPILEPSY</button>
-    </div>
-    <div id="loading-screen">
-        <div id="loading">
-
-        </div>
-        <div id="debug"></div>
     </div>
     <script src="./vendor/fastdom.js"></script>
     <script src="./vendor/jquery3.7.1.min.js"></script>
