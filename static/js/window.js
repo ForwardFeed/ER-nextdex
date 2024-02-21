@@ -14,7 +14,7 @@ let windowFrame, callbackDelete
 export function createInformationWindow(node, ev, cursorPlacement, transparency=false, absorb = true) {
     // remove previous window
     removeInformationWindow()
-
+    if (!node) return
     let x = ev.clientX
     let y = ev.clientY
     windowFrame = document.createElement('div')
@@ -37,6 +37,10 @@ export function createInformationWindow(node, ev, cursorPlacement, transparency=
     if (windowFrame.offsetHeight + y > document.body.offsetHeight) {
         y = document.body.offsetHeight - windowFrame.offsetHeight // no overflow
     }
+    if (cursorPlacement === "absolute") {
+        x = 0
+        y = 0
+    }
     windowFrame.style.left = x + "px"
     windowFrame.style.top = y + "px"
     if (cursorPlacement === "focus"){
@@ -46,6 +50,7 @@ export function createInformationWindow(node, ev, cursorPlacement, transparency=
 
 export function removeInformationWindow(ev){
     // remove previous window
+    console.log("remove")
     if (ev && callbackDelete) callbackDelete(ev)
     if (windowFrame) windowFrame.remove()
 }

@@ -160,6 +160,18 @@ export function setupTeamBuilder() {
         }
         teamView.push(new PokeNodeView($(this)))
     })
+    $('#builder-screenshot').on('click', function(ev){
+        const window = e('div', 'builder-screen-window')
+        window.onclick = function(){
+            window.remove()
+        }
+        $('#builder-data').find('.builder-mon').each(function (index, value) {
+            window.innerHTML += value.innerHTML
+        })
+        window.querySelectorAll('.builder-placeholder').forEach(x => x.remove())
+        ev.stopPropagation()
+        document.body.append(window)
+    })
 }
 
 function createPokeView(jNode, viewID) {

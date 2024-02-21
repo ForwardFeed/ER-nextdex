@@ -695,8 +695,7 @@ span{
     flex-wrap: wrap;
 }
 .trainers-pokemon{
-    margin-left: 0.5vw;
-    margin-right: 0.5vw;
+    margin: auto;
     background-color: var(--colorD);
     text-align: center;
     display: flex;
@@ -707,6 +706,7 @@ span{
     border-bottom-width: 1px;
     cursor: pointer;
     width: calc(50% - 1vw);
+    height: 11em;
 }
 .trainers-pokemon-left, .trainers-pokemon-right, .trainers-poke-nature, .trainers-poke-moves{
     box-sizing: border-box;
@@ -718,7 +718,7 @@ span{
     width: 6em;
 }
 .trainers-pokemon-right{
-    width: 100%;
+    width: 11em;
     display: flex;
     flex-direction: column;
     border-left: 0;
@@ -772,7 +772,7 @@ span{
     margin: auto;
     border: var(--font-color) double 1px;
     border-radius: 10px;
-    width: fit-content;
+    width: calc(50% - 1vw);
     height: fit-content;
 }
 .trainer-redirect-arrow{
