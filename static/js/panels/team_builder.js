@@ -224,11 +224,10 @@ function updateTeamWeaknesses(){
                     })
                 }
                 if (hideRow){
-                    let toggle = false
+                    let toggle = true
                     return e('div', 'builder-nb-weakness', data, {
                         onclick: ()=>{
                             toggle = !toggle
-                            console.log('clicked', $('#builder-weaknesses').find('.bnw-' + indexData))
                             $('#builder-weaknesses').find('.bnw-' + indexData).css('filter', `opacity(${toggle?100:0})`)
                         }
                     })
