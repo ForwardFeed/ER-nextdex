@@ -112,14 +112,19 @@ export function restoreSave() {
 }
 
 export function setFullTeam(party) {
+    updateTeamWeaknessesLock = true
     for (let i = 0; i < 6; i++) {
         const val = party[i]
         if (!val || !val.spc) {
+            updateTeamWeaknessesLock = false
+            updateTeamWeaknesses()
             return deletePokemon($('#builder-data').find('.builder-mon').eq(i), i)
         }
         teamData[i].fromSave(val)
         createPokeView($('#builder-data').find('.builder-mon').eq(i), i)
     }
+    updateTeamWeaknessesLock = false
+    updateTeamWeaknesses()
 }
 
 function save() {
@@ -158,6 +163,7 @@ export function setupTeamBuilder() {
             const pokeID = ev.dataTransfer.getData("id");
             teamData[index].init(pokeID)
             createPokeView($(this), index)
+            updateTeamWeaknesses()
         }
         teamView.push(new PokeNodeView($(this)))
     })
@@ -173,8 +179,12 @@ export function setupTeamBuilder() {
         ev.stopPropagation()
         document.body.append(window)
     })
-    $('#builder-weaknesses').on('click', () => {
-        const defCoverage = {}
+}
+
+let updateTeamWeaknessesLock = false
+function updateTeamWeaknesses(){
+    if (updateTeamWeaknessesLock) return
+    const defCoverage = {}
         gameData.typeT.forEach((val) => {
             defCoverage[val] = {
                 "0": 0,
@@ -187,6 +197,7 @@ export function setupTeamBuilder() {
         })
         teamData.forEach((val) => {
             const specie = gameData.species[val.spc]
+            if (!specie) return
             const abis = [specie.stats.abis[val.abi], ...specie.stats.inns]
             const types = [...new Set(specie.stats.types), abilitiesToAddedType(abis)].filter(x => x)
             const monDef = getDefensiveCoverage(
@@ -200,32 +211,39 @@ export function setupTeamBuilder() {
             })
         })
         const effectivenessToShow = ["0", "0.25", "0.5", "2", "4"]
-        function weaknessCol(data) {
-            let dataIndex = 0
-            const type = data[dataIndex++]
+        function weaknessCol(data, hideRow=false) {
+            const type = data[0]
             const colRow = e('div', 'builder-type-col')
-            return JSHAC([colRow, [
-                e('div', `builder-type ${type.toLowerCase()}`, type.substring(0, 6), {
-                    onclick: (ev) => {
-                        ev.stopPropagation()
-                        console.log($(colRow))
-                        $(colRow).find('.builder-nb-weakness').toggle()
-                    }
-                }),
-                e('div', 'builder-nb-weakness', data[dataIndex++]),
-                e('div', 'builder-nb-weakness', data[dataIndex++]),
-                e('div', 'builder-nb-weakness', data[dataIndex++]),
-                e('div', 'builder-nb-weakness', data[dataIndex++]),
-                e('div', 'builder-nb-weakness', data[dataIndex++]),
-            ]])
+            const colData = data.map((data, indexData)=>{
+                if (!indexData){
+                    return e('div', `builder-type ${type.toLowerCase()}`, type.substring(0, 6), {
+                        onclick: (ev) => {
+                            ev.stopPropagation()
+                            $(colRow).find('.builder-nb-weakness').toggle()
+                        }
+                    })
+                }
+                if (hideRow){
+                    let toggle = false
+                    return e('div', 'builder-nb-weakness', data, {
+                        onclick: ()=>{
+                            toggle = !toggle
+                            console.log('clicked', $('#builder-weaknesses').find('.bnw-' + indexData))
+                            $('#builder-weaknesses').find('.bnw-' + indexData).css('filter', `opacity(${toggle?100:0})`)
+                        }
+                    })
+                } else {
+                    return e('div', 'builder-nb-weakness bnw-' + indexData, data)
+                }
+            })
+            return JSHAC([colRow, colData])
         }
         //setup the row of the defensive coverage
         const typesRow = e('div', 'builder-type-row')
         gameData.typeT.forEach((type, index) => {
-            console.log(index,)
             if (!(index % 9)) {
                 typesRow.append(
-                    weaknessCol(["Type", ...effectivenessToShow.map(x => x)])
+                    weaknessCol(["Type", ...effectivenessToShow.map(x => x)], true)
                 )
             }
             typesRow.append(
@@ -233,8 +251,8 @@ export function setupTeamBuilder() {
             )
         })
         $('#builder-weaknesses').empty().append(typesRow)
-    })
 }
+
 
 function createPokeView(jNode, viewID) {
     const deleteBtn = e("div", "builder-mon-delete", "Delete")
@@ -276,6 +294,7 @@ function deletePokemon(jNode, viewID) {
     addPlaceholder(jNode, viewID)
     teamData[viewID] = new Pokemon()
     save()
+    updateTeamWeaknesses()
 }
 
 function addPlaceholder(jNode, viewID) {
@@ -290,6 +309,7 @@ function addPlaceholder(jNode, viewID) {
         const pokeID = $('#species-list .sel-active')[0].dataset.id
         teamData[viewID].init(pokeID)
         createPokeView(jNode, viewID)
+        updateTeamWeaknesses()
     }
     jNode.append(placeholder)
 }
@@ -319,6 +339,7 @@ function feedPokemonEdition(jNode, viewID) {
             poke.abiName = gameData.abilities[poke.baseSpc.stats.abis[abiID]].name
             view.abi.text(poke.abiName)
             abilityDiv.innerText = poke.abiName
+            updateTeamWeaknesses()
             save()
         })
         createInformationWindow(overlayNode, ev, "", true)
@@ -353,12 +374,12 @@ function feedPokemonEdition(jNode, viewID) {
     }
     const natureCallback = (natureID) => {
         poke.nature = natureID
-        createPokeView(view.node, viewID)
+        createPokeView(view.node, viewID) //because nature has the coloring to reproduce, it's simpler to simply redo
         save()
     }
     const statsCallback = (field, index, value) => {
         poke[field][index] = value
-        createPokeView(view.node, viewID)
+        createPokeView(view.node, viewID) //same reason as nature
         save()
     }
     statsDiv.onclick = itemDiv.onclick = natureDiv.onclick = (ev) => {

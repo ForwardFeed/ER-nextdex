@@ -30,6 +30,7 @@
             e.className = 'debug-error'
             e.innerText = `in ${url.replace(/[^/]+\//g, '')} ${lineN}: ${msg}`
             document.getElementById('debug').append(e)
+            document.getElementById('loading-screen').style.display="block"
         }
         import { initAppSettings } from './js/settings.js'
         initAppSettings()

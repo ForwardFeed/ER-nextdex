@@ -176,7 +176,7 @@ main{
     overflow-y: scroll;
     margin: auto;
     width: 60%;
-    height: 90%;
+    height: fit-content;
     background-color: var(--colorA);
 }
 
@@ -185,7 +185,7 @@ main{
     background-color: var(--colorD);
     display: flex;
     flex-direction: column;
-    max-height: 50%;
+    flex-grow: 1;
     width: 60%;
     overflow: scroll;
 }
