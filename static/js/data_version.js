@@ -32,7 +32,8 @@ function setAvailableVersion(){
 
 export function changeVersion(version=defaultVersion, firstLoad=false){
     if (!version || allVersions.indexOf(version) == -1){
-        return console.warn(`no such version : ${version}`)
+        console.warn(`no such version : ${version}, defaulting to ${defaultVersion}`)
+        version = defaultVersion
     }
     changeCompareData(version, "Vanilla") //TODO, make it so you can target other things
 
