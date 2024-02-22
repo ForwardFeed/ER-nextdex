@@ -152,8 +152,9 @@ export function createPokemon(poke){
         "Spe",
     ]
     const pokeStats = e('div', "trainers-stats-row")
-    const statBuffed = textNature.match(/(?<=\+)\w+/)?.[0]
-    const statNerfed = textNature.match(/(?<=\-)\w+/)?.[0]
+    const nerfedBuffed = textNature.match(/((Def)|(SpA)|(Atk)|(SpD)|(Spe))/g)
+    const statBuffed = nerfedBuffed?.[0]
+    const statNerfed = nerfedBuffed?.[1]
     for (const statIndex in statsOrder){
         const stat = statsOrder[statIndex]
         const nerfedOrbuffed = stat === statBuffed ? "buffed" : stat === statNerfed ? "nerfed" : ""
