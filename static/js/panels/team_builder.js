@@ -199,7 +199,7 @@ function updateTeamWeaknesses(){
             const specie = gameData.species[val.spc]
             if (!specie) return
             const abis = [specie.stats.abis[val.abi], ...specie.stats.inns]
-            const types = [...new Set(specie.stats.types), abilitiesToAddedType(abis)].filter(x => x)
+            const types = [...new Set(specie.stats.types), abilitiesToAddedType(abis)].filter(x => x != undefined)
             const monDef = getDefensiveCoverage(
                 types.map(x => gameData.typeT[x]), abis
             )
