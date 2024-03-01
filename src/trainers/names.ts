@@ -78,7 +78,7 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
                         
                     }
                 } else {
-                    context.trainers.set(context.key, context.current)
+                    context.trainers.set(context.key + " " + trainerNumber, context.current)
                 }
                 context.current = initBaseTrainer()
             }

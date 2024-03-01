@@ -569,13 +569,12 @@ export const queryMapSpecies = {
 }
 export function updateSpecies(searchQuery) {
     const species = gameData.species
-    const nodeList = $('#species-list').children()
     const matched = queryFilter2(searchQuery, species, queryMapSpecies)
     let validID;
     const specieLen = species.length
     for (let i = 0; i < specieLen; i++) {
         if (i == 0) continue
-        const node = nodeList.eq(i)
+        const node = $(nodeLists.species[i - 1])
         if (!matched || matched.indexOf(i) != -1) {
             if (!validID) validID = i
             node.show()
