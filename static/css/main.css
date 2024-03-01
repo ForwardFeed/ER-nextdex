@@ -339,7 +339,8 @@ span{
     min-height: 64px;
     margin: auto;
 }
-#species-front:hover, #species-coverage:hover, #species-basestats:hover{
+#species-front:hover, #species-coverage:hover, #species-basestats:hover, #species-name:hover
+,#moves-name:hover{
     box-shadow: inset 2px 0px 10px var(--font-color);
 }
 .species-abi-inn{
