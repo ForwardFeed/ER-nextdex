@@ -25,11 +25,18 @@ function parse(fileData: string): Map<string, Trainer>{
     const TrainerNamesResult = TrainerNames.parse(lines,0)
     //const RematchesResult = Rematches.parse(lines, TrainerNamesResult.fileIterator)
     const TrainersTeamResult = TrainersTeam.parse(lines, TrainerNamesResult.fileIterator)
-    // put all rematches right
-    const rematchIntegratedTrainers: Map<string, TrainerNames.BaseTrainer> = new Map()
 
     const trainers: Map<string, Trainer> = new Map()
     TrainerNamesResult.trainers.forEach((value, key)=>{
+        if (!value) return
+        if (!value.NAME){
+            for (const remI in value.rematches){
+                const rem = value.rematches[remI]
+                if (rem && rem.NAME){
+                    value = value.rematches.splice(+remI, 1)[0]
+                }
+            } 
+        }
         trainers.set(value.NAME, {
             name: key,
             category: value.category,
