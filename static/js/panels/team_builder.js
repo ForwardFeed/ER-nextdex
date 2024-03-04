@@ -190,14 +190,16 @@ export function setupTeamBuilder() {
         $(this)[0].ondrop = (ev) => {
             ev.preventDefault()
             const pokeID = ev.dataTransfer.getData("id")
-            if (!pokeID === "") {
-                teamData[index].init(pokeID)
+            if (pokeID !== "") {
+                teamData[index].init(+pokeID)
                 createPokeView($(this), index)
                 updateTeamWeaknesses()
                 return
             }
-            const viewID = +ev.dataTransfer.getData("v-id")
-            swapAndRefresh(index, viewID)
+            const viewID = ev.dataTransfer.getData("v-id")
+            if (viewID !== ""){
+                swapAndRefresh(index, +viewID)
+            }
         }
         $(this)[0].setAttribute('draggable', true);
         $(this)[0].ondragstart = (ev) => {
