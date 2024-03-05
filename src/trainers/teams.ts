@@ -104,9 +104,8 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
             context.currentPokemon.nature !== ""){
                 context.currentTrainer.push(context.currentPokemon)
                 context.currentPokemon = initTrainerPokemon()
-                context.execFlag = "main"
             }
-            
+            context.execFlag = "main"
         }
     }
 }
