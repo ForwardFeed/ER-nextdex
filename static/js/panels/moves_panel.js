@@ -241,9 +241,29 @@ export const queryMapMoves = {
             return moveSplit
         }
     },
+    "prio": (queryData, move) => {
+        return queryData == move.prio
+    },
+    "<prio": (queryData, move) => {
+        return  move.prio < queryData
+    },
+    "<=prio": (queryData, move) => {
+        return  move.prio <= queryData 
+    },
+    ">prio": (queryData, move) => {
+        return  move.prio > queryData
+    },
+    ">=prio": (queryData, move) => {
+        return  move.prio >= queryData
+    },
 }
 export function updateMoves(searchQuery) {
     const moves = gameData.moves
+    if (typeof searchQuery.data === "string"){
+        const hOp = searchQuery.data?.match(/^[><=]+/)?.[0] //hidden operator
+        searchQuery.data = searchQuery.data.replace(hOp, '')
+        searchQuery.k = hOp + searchQuery.k
+    }
     const nodeList = $('#moves-list').children()
     matchedMoves = queryFilter2(searchQuery, moves, queryMapMoves)
     let validID;

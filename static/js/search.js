@@ -51,6 +51,7 @@ export const search = {
         "Move",
         "Move-effect",
         "category",
+        "prio",
         "specie",
         "map",
         "region",
