@@ -403,13 +403,22 @@
             <select name="versions" id="versions"></select>
             <span id="ugly-error-span" style="color: red;"></span>
         </div>
-        <div class="setting-radio">
+        <hr id="settings-main">
+        <div class="settings-row">
             <span>store gamedata locally: </span>
             <label for="disable-storage">Disable</label>
             <input type="radio" name="settings-storage" id="disable-storage">
             <label for="enable-storage">Enable</label>
             <input type="radio" name="settings-storage" id="enable-storage" checked>
         </div>
+        <div class="settings-row">
+            <span>mode monotype: </span>
+            <label for="disable-monotype">Disable</label>
+            <input type="radio" name="settings-monotype" id="disable-monotype" checked>
+            <label for="enable-monotype">Enable</label>
+            <input type="radio" name="settings-monotype" id="enable-monotype">
+        </div>
+        <hr>
         <button id="insanity">ACTIVATE INSANITY WARNING EPILEPSY</button>
     </div>
     <script src="./vendor/fastdom.js"></script>

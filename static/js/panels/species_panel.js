@@ -8,6 +8,7 @@ import { createInformationWindow, removeInformationWindow } from "../window.js"
 import { getDefensiveCoverage, abilitiesToAddedType} from "../weakness.js"
 import { nodeLists } from "../hydrate.js"
 import { cubicRadial } from "../radial.js"
+import { settings } from "../settings.js"
 
 export let currentSpecieID = 1
 
@@ -531,8 +532,9 @@ export const queryMapSpecies = {
     },
     "type": (queryData, specie) => {
         const types = specie.stats.types.map((x) => gameData.typeT[x].toLowerCase())
+        if (settings.monotype && types[0]) return AisInB(queryData, types[0]) && types[0] == types[1]
         for (const type of types) {
-            if (AisInB(queryData, type)) return type
+            if (AisInB(queryData, type)) return type   
         }
         return false
     },

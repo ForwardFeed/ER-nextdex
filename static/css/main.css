@@ -59,7 +59,19 @@
 .sta{
     color: rgb(71, 71, 73);
 }
-
+input[type='radio'] {
+    box-sizing: border-box;
+    appearance: none;
+    background: var(--colorB);
+    outline: 2px solid var(--colorA);
+    border: 2px solid var(--shadow);
+    width: 1em;
+    height: 1em;
+}
+  
+input[type='radio']:checked {
+    background: var(--font-color);
+}
 .colorA{
     background-color: var(--colorA);
 }
@@ -91,6 +103,7 @@
 .sel-n-active:hover{
     background-color: var(--selHover);
 }
+
 
 .data-list{
     text-align: center;

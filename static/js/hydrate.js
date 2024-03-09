@@ -112,10 +112,13 @@ function hydrateAbilities(abilities = gameData.abilities) {
 }
 
 function hydrateMoves(moves = gameData.moves) {
+    gameData.flagsT.push('Technician', 'Perfectionnist')
     const fragment = document.createDocumentFragment();
     for (const i in moves) {
         if (i == 0) continue
         const mv = moves[i]
+        if (mv.pwr > 0 && mv.pwr <= 60) mv.flags.push(gameData.flagsT.indexOf('Technician'))
+        if (mv.pwr > 0 && mv.pwr < 50) mv.flags.push(gameData.flagsT.indexOf('Perfectionnist'))
         const core = document.createElement('div')
         core.className = "btn data-list-row sel-n-active"
         const name = document.createElement('span')
