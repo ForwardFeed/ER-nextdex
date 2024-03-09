@@ -48,6 +48,7 @@ export const search = {
         "Name",
         "Type",
         "Ability",
+        "resist",
         "Move",
         "Move-effect",
         "category",

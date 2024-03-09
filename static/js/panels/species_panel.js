@@ -295,7 +295,7 @@ function setInnates(innates) {
 }
 
 function abilitiesExtraType(abilityID, specie) {
-    return abilitiesToAddedType([specie.stats.abis[abilityID], ...specie.stats.inns])
+    return abilitiesToAddedType([specie.stats.abis[abilityID], ...specie.stats.inns].filter(x => x))
 }
 
 export function setupSpeciesPanel() {
@@ -523,6 +523,14 @@ export function setupReorderBtn() {
     return row
 }
 
+function buildResist(specie){
+    const types = [...new Set(specie.stats.types), abilitiesExtraType(0, specie)]
+    const weaknesses = getDefensiveCoverage(
+        types.map(x => gameData.typeT[x]).filter(x => x), [specie.stats.abis[0], ...specie.stats.inns].filter(x => x)
+    )
+    specie.resist = [...[].concat(weaknesses["0.5"]?.concat(weaknesses["0.25"]?.concat(weaknesses["0.25"])))].filter(x => x)
+}
+
 export const queryMapSpecies = {
     "name": (queryData, specie) => {
         const specieName = specie.name.toLowerCase()
@@ -567,6 +575,13 @@ export const queryMapSpecies = {
         if (AisInB(queryData, specieRegion)) {
             return specie.region
         }
+    },
+    "resist": (queryData, specie) => {
+        if (!specie.resist) buildResist(specie)
+        for (const typeR of specie.resist){
+            if (AisInB(queryData.toLowerCase(), typeR.toLowerCase())) return typeR
+        }
+        return false
     },
 }
 export function updateSpecies(searchQuery) {
