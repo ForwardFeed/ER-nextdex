@@ -111,12 +111,9 @@
     flex-direction: column;
     width: 100%;
 }
-#builder-screenshot{
+#builder-screenshot, #builder-import{
     display: flex;
     min-height: 3em;
-}
-#builder-screenshot > span{
-    margin: auto;
 }
 .builder-screen-window{
     height: 100%;
@@ -171,6 +168,7 @@
     width: 3em;
     text-align: center;
 }
+
 @media (orientation: landscape) {
     .builder-editor-left{
         flex-direction: row;
@@ -196,19 +194,54 @@
     }
 }
 
-
-
-/*
-.rotate {
-    animation: rotate 2s infinite;
+.showdown-block{
+    width: 70vw;
+    height: 70vh;
+    background-color: var(--colorC);
 }
-@keyframes rotate {
-    0% {
-      transform: rotate(-45deg)
-    }
-    100% {
-      transform: rotate(45deg)
-    }
-  }
+.showdown-block, .showdown-left, .showdown-right{
+    display: flex;
+}
+.showdown-left, .showdown-right{
+    flex-direction: column;
+    width: 50%;
+}
+.showdown-top{
+    height: 1em;
+    width: 100%;
+    display: flex;
+}
 
-*/
+.showdown-bot{
+    width: 100%;
+    flex-grow: 1;
+    font-size: 0.8em;
+    user-select: text;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    overflow-wrap: break-word;
+}
+textarea.showdown-bot{
+    background-color: var(--colorD);
+}
+textarea, pre{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: var(--colorB);
+    color: var(--font-color);
+    word-wrap: break-word;
+}
+.showdown-confirm{
+    min-height: 3em;
+}
+@media (orientation: portrait) {
+    .showdown-block{
+        flex-direction: column;
+    }
+    .showdown-left, .showdown-right{
+        width: 100%;
+        height: 50%;
+    }
+}

@@ -117,6 +117,9 @@
 
 span{
     height: fit-content;
+}
+
+.span-a{
     margin: auto 0;
 }
 

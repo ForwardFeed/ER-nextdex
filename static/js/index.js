@@ -9,6 +9,7 @@ import { setupTeamBuilder } from "./panels/team_builder.js"
 import { activateInsanity } from "./insanity.js"
 import { setupMoves} from "./panels/moves_panel.js"
 import { load } from "./loading.js"
+import { setupFormatShowdown } from "./format_showdown.js"
 
 
 document.addEventListener("DOMContentLoaded", function(){
@@ -21,6 +22,7 @@ document.addEventListener("DOMContentLoaded", function(){
         [setupTeamBuilder, "panel builder"], // the team builder BEFORE data version is Important
         [setupSearch, "search frame"],
         [setupFilters, "filter frame"],
+        [setupFormatShowdown, "Showdown format"],
         [setupDataVersionning, "gamedata loader"],
         [function(){
             changeVersion(fetchFromLocalstorage("lastusedvqersion"), true)

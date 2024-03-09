@@ -6,6 +6,7 @@ import { gameData } from "./data_version.js"
 import { restoreSave } from "./panels/team_builder.js"
 import { e, JSHAC } from "./utils.js"
 import { load } from "./loading.js"
+import { initFormatShowdown } from "./format_showdown.js"
 
 export const nodeLists = {
     species: [],
@@ -43,6 +44,7 @@ export function hydrate(firstLoad=false) {
 
     // hydrate the UI with the data
     const steps = [
+        [initFormatShowdown, "showdown data"],
         [hydrateAbilities, "abilities data"],
         [hydrateMoves, "moves data"],
         [hydrateSpecies, "species  data"],
@@ -224,7 +226,7 @@ function hydrateSpecies() {
         image.loading = "lazy"
         row.appendChild(image)
 
-        const name = e('span', "species-name", spec.name)
+        const name = e('span', "species-name span-a", spec.name)
         row.append(name)
         row.dataset.id = i
         $(row).on('click', function () {

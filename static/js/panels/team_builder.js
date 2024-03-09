@@ -124,7 +124,12 @@ export function restoreSave() {
     const savedString = fetchFromLocalstorage("team-builder")
     if (!savedString) return
     const saveObj = JSON.parse(savedString)
-    setFullTeam(saveObj)
+    try{
+        setFullTeam(saveObj)
+    }catch(_e){
+        saveToLocalstorage("team-builder", null)
+    }
+    
 }
 
 export function setFullTeam(party) {
@@ -134,7 +139,8 @@ export function setFullTeam(party) {
         if (!val || !val.spc) {
             updateTeamWeaknessesLock = false
             updateTeamWeaknesses()
-            return deletePokemon($('#builder-data').find('.builder-mon').eq(i), i)
+            deletePokemon($('#builder-data').find('.builder-mon').eq(i), i)
+            continue
         }
         teamData[i].fromSave(val)
         createPokeView($('#builder-data').find('.builder-mon').eq(i), i)
@@ -196,6 +202,7 @@ export function setupTeamBuilder() {
                 updateTeamWeaknesses()
                 return
             }
+            if (ev.target.className === "builder-placeholder") return
             const viewID = ev.dataTransfer.getData("v-id")
             if (viewID !== ""){
                 swapAndRefresh(index, +viewID)

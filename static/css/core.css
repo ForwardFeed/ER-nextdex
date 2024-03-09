@@ -243,12 +243,13 @@ input[type="text"] {
     
 }
 
-.btn,
-.side-btn {
+.btn, .side-btn {
     box-shadow: inset 0 0 1vmax var(--shadow);
-    ;
     cursor: pointer;
 } 
+.btn-hover:hover{
+    background-color: var(--selHover);
+}
 #to-filter{
     height: fit-content;
     margin: auto;
@@ -260,21 +261,8 @@ input[type="text"] {
 
 }
 
-.selectable-wrapper{
-    display: flex;
-    position: relative;
-    font-size: 2vmax;
-}
-.selectable-input{
-    width: 100%;
-    background: rgba(0, 0, 0, 0);
-    color: var(--font-color);
-    user-select: none;
-    cursor: pointer;
-}
-.selectable-selections{
-    position: absolute;
-    display: none!important;
+span{
+    margin: auto;
 }
 @media (orientation: landscape) {
     .search-keys-wrapper{
