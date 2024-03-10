@@ -261,11 +261,14 @@ export function updateMoves(searchQuery) {
     const moves = gameData.moves
     if (typeof searchQuery.data === "string"){
         const hOp = searchQuery.data?.match(/^[><=]+/)?.[0] //hidden operator
-        searchQuery.data = searchQuery.data.replace(hOp, '')
-        searchQuery.k = hOp + searchQuery.k
+        if (hOp){
+            searchQuery.data = searchQuery.data.replace(hOp, '')
+            searchQuery.k = hOp + searchQuery.k
+        }
     }
     const nodeList = $('#moves-list').children()
     matchedMoves = queryFilter2(searchQuery, moves, queryMapMoves)
+    console.log(matchedMoves)
     let validID;
     const movesLen = moves.length
     for (let i  = 0; i < movesLen; i++) {

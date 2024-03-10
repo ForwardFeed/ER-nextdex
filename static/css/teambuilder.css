@@ -125,7 +125,7 @@
     background-color: var(--background);
     font-size: 1.8vmax;
 }
-#builder-weaknesses{
+#builder-def-cov{
     min-height: 3em;
 }
 .builder-type-row{
@@ -244,4 +244,14 @@ textarea, pre{
         width: 100%;
         height: 50%;
     }
+}
+
+.bi-btn-row{
+    display: flex;
+    min-height: 2em;
+}
+.bi-btn-row>div{
+    width: 50%;
+    height: 100%;
+    display: flex;
 }

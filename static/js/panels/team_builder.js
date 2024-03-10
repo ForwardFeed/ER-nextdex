@@ -5,7 +5,7 @@ import { getSpritesURL, getSpritesShinyURL } from "./species_panel.js";
 import { createInformationWindow } from "../window.js";
 import { cubicRadial } from "../radial.js";
 import { saveToLocalstorage, fetchFromLocalstorage } from "../settings.js";
-import { getDefensiveCoverage, abilitiesToAddedType } from "../weakness.js"
+import { getDefensiveCoverage, abilitiesToAddedType, getOffensiveCoverage } from "../weakness.js"
 
 const saveKeysPokemon = [
     "spc",
@@ -22,17 +22,17 @@ class Pokemon {
     constructor() {
         this.node = null
         this.baseSpc = null
-        this.spc = null // specie id
+        this.spc = 0 // specie id
         this.spcName = ""
         this.isShiny = false
-        this.abi = null
+        this.abi = 0
         this.abiName = ""
         this.inns = Array(3)
         this.moves = [
-            null,
-            null,
-            null,
-            null
+            0,
+            0,
+            0,
+            0
         ]
         this.item = -1
         this.nature = null
@@ -137,8 +137,6 @@ export function setFullTeam(party) {
     for (let i = 0; i < 6; i++) {
         const val = party[i]
         if (!val || !val.spc) {
-            updateTeamWeaknessesLock = false
-            updateTeamWeaknesses()
             deletePokemon($('#builder-data').find('.builder-mon').eq(i), i)
             continue
         }
@@ -226,6 +224,10 @@ export function setupTeamBuilder() {
         ev.stopPropagation()
         document.body.append(window)
     })
+    $('#defensive-cov, #offensive-cov').on('click', function(){
+        $('#defensive-cov, #offensive-cov').toggleClass('sel-active sel-n-active')
+        $('#builder-off-cov, #builder-def-cov').toggle()
+    })
 }
 
 let updateTeamWeaknessesLock = false
@@ -243,10 +245,11 @@ function updateTeamWeaknesses(){
             }
         })
         teamData.forEach((val) => {
+            if (!val.spc) return
             const specie = gameData.species[val.spc]
-            if (!specie) return
-            const abis = [specie.stats.abis[val.abi], ...specie.stats.inns]
+            const abis = [specie.stats.abis[val.abi], ...specie.stats.inns].filter(x => x)
             const types = [...new Set(specie.stats.types), abilitiesToAddedType(abis)].filter(x => x != undefined)
+            
             const monDef = getDefensiveCoverage(
                 types.map(x => gameData.typeT[x]), abis
             )
@@ -256,6 +259,8 @@ function updateTeamWeaknesses(){
                     defCoverage[type][val] += 1
                 }
             })
+            const movesT = [...new Set(val.moves.map(x => gameData.moves[x].types.map(y => gameData.typeT[y])))]
+            console.log(getOffensiveCoverage(movesT))
         })
         const effectivenessToShow = ["0", "0.25", "0.5", "2", "4"]
         function weaknessCol(data, hideRow=false) {
@@ -275,7 +280,7 @@ function updateTeamWeaknesses(){
                     return e('div', 'builder-nb-weakness', data, {
                         onclick: ()=>{
                             toggle = !toggle
-                            $('#builder-weaknesses').find('.bnw-' + indexData).css('filter', `opacity(${toggle?100:0})`)
+                            $('#builder-def-cov').find('.bnw-' + indexData).css('filter', `opacity(${toggle?100:0})`)
                         }
                     })
                 } else {
@@ -296,7 +301,8 @@ function updateTeamWeaknesses(){
                 weaknessCol([type, ...effectivenessToShow.map(x => defCoverage[type][x])])
             )
         })
-        $('#builder-weaknesses').empty().append(typesRow)
+        $('#builder-def-cov').empty().append(typesRow)
+        
 }
 
 

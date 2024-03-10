@@ -235,6 +235,17 @@ function abilityModifiesTypeChart(abis){
 /**
  * 
  */
-export function getOffensiveCoverage(){
-
+export function getOffensiveCoverage(atkTypes, abis){
+    const offensiveCoverage = []
+    for (const defT of gameData.typeT){
+        for (const atkT of atkTypes){
+            let typeEffectiveness = 1
+            for (const subAtkT of atkT){
+                typeEffectiveness *= getTypeEffectiveness(subAtkT, defT)
+            }
+            offensiveCoverage.push(typeEffectiveness)
+        }
+        
+    }
+    return offensiveCoverage
 }
