@@ -159,18 +159,22 @@ export function createPokemon(poke){
     const nerfedBuffed = textNature.match(/((Def)|(SpA)|(Atk)|(SpD)|(Spe))/g)
     const statBuffed = nerfedBuffed?.[0]
     const statNerfed = nerfedBuffed?.[1]
+    let fontRgb =  window.getComputedStyle(document.body).color.match(/\d+/g)
+    if (!fontRgb || fontRgb.length != 3) fontRgb = [255,255,255]
+
     for (const statIndex in statsOrder){
         const stat = statsOrder[statIndex]
         const nerfedOrbuffed = stat === statBuffed ? "buffed" : stat === statNerfed ? "nerfed" : ""
         const evVal = poke.evs[statIndex]
-        const evBuffd = evVal >= 200 ? "buffed" : ""
+        const evRow = e('div', `trainers-poke-evs`, evVal)
+        evRow.style.color = `rgb(0, ${evVal}, 0)`
         const ivVal = poke.ivs[statIndex]
         const ivValNerfed = ivVal == 0 ? "nerfed" : ""
         pokeStats.append(JSHAC([
             e('div', 'trainers-stats-col'), [
                 e('div', `trainers-stats-name ${nerfedOrbuffed}`, stat),
                 e('div', `trainers-poke-ivs ${ivValNerfed}`, ivVal),
-                e('div', `trainers-poke-evs ${evBuffd}`, evVal),
+                evRow,
             ]
         ]))
     }

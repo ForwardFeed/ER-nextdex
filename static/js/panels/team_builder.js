@@ -545,15 +545,43 @@ const statsOrder = [
     "Spe",
 ]
 const statFieldInputControl = {
-    "ivs": (value) => {
-        value = +value.replace(/[^0-9-]/g, "")
+    "ivs": (value, evKey) => {
+        if (value.includes('+') || evKey === "ArrowRight" || evKey === "ArrowUp") {
+            value = 31
+        } else if (value.includes('-') || evKey === "ArrowLeft"  || evKey === "ArrowDown"){
+            value = 0
+        } else {
+            value = +value.replace(/[^0-9-]/g, "")
+        }
+        
         if (isNaN(value)) return 0
         return Math.min(Math.max(0, value), 31)
     },
-    "evs": (value) => {
-        value = +value.replace(/[^0-9-]/g, "");
-        if (isNaN(value)) return 0
-        return Math.min(Math.max(0, Math.round(value / 4) * 4), 252)
+    "evs": (value, evKey, prevValue, evs) => {
+        if (value.includes('+') || evKey === "ArrowRight") {
+            value = prevValue + 32
+        } else if (value.includes('-') || evKey === "ArrowLeft"){
+            value = prevValue - 32
+        } else if (evKey === "ArrowUp"){
+            value = 252
+        } else if (evKey === "ArrowDown"){
+            value = 0
+        } else {
+            value = +value.replace(/[^0-9]/g, "");
+            if (isNaN(value)) return 0
+        }
+        evs.forEach((x, i, evs)=>{
+            if (i == 6) return
+            if (!i) evs[6] = 0
+            evs[6] += +x
+        })
+        value = Math.min(Math.max(0, Math.round(value / 4) * 4), 252)
+        const valDiff = value - prevValue
+        if (evs[6] + valDiff > 510){
+            const maxRow = (evs[6] + valDiff) - 510
+            value -= Math.min(Math.max(0, Math.ceil(maxRow / 4) * 4), 252)
+        }
+        return  value
     }
 }
 function editionStats(statField, viewID, callback) {
@@ -567,10 +595,14 @@ function editionStats(statField, viewID, callback) {
         const statStat = e("input", "overlay-stats-edit")
         statStat.id = `overlay-stats-edit${index}`
         statStat.value = poke[statField][index]
-        statStat.type = "number"
-        statStat.onclick = statStat.onchange = () => {
-            statStat.value = statFieldInputControl[statField](statStat.value)
-            callback(statField, index, statStat.value,)
+        statStat.type = "text"
+        let prevValue =  statStat.value 
+        statStat.onkeyup = (evKey) => {
+            prevValue = 
+                statStat.value =
+                    statFieldInputControl[statField](statStat.value, evKey.key, +prevValue, poke[statField])
+
+            callback(statField, index, statStat.value)
         }
         rowDiv.append(JSHAC([
             statColumn, [
