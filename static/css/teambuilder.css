@@ -274,3 +274,17 @@ textarea, pre{
     box-sizing: border-box;
     border: 0.5vmax solid var(--positive);
 }
+
+.builder-type-strength-4{
+    background-color: rgba(32, 187, 45, 0.85);
+}
+.builder-type-strength-3{
+    background-color: rgba(131, 192, 51, 0.85);
+}
+
+.builder-type-strength-1{
+    background-color: rgba(133, 69, 39, 0.85);
+}
+.builder-type-strength-0{
+    background-color: rgba(75, 5, 5, 0.85);
+}

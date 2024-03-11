@@ -235,7 +235,9 @@ let updateTeamWeaknessesLock = false
 function updateTeamWeaknesses(){
     if (updateTeamWeaknessesLock) return
     const defCoverage = {}
+    const defValues = {}
     gameData.typeT.forEach((val) => {
+        defValues[val] = 0
         defCoverage[val] = {
             "0": 0,
             "0.25": 0,
@@ -245,6 +247,7 @@ function updateTeamWeaknesses(){
             "4": 0,
         }
     })
+    const effectivenessToShow = ["0", "0.25", "0.5", "2", "4"]
     teamData.forEach((val) => {
         if (!val.spc) return
         const specie = gameData.species[val.spc]
@@ -257,16 +260,30 @@ function updateTeamWeaknesses(){
         Object.keys(monDef).forEach((val) => {
             const types = monDef[val]
             for (const type of types) {
+                if (val === '4') val = '2'
+                if (val === '0.125') val = '0.25'
                 defCoverage[type][val] += 1
+                let indexEff = effectivenessToShow.indexOf(val)
+                if (indexEff == -1) continue
+                if (indexEff == 0){
+                    defValues[type] += 2
+                } else if (indexEff <= 2){
+                    defValues[type] += 2 * ( 1 / indexEff)
+                } else if (indexEff > 2){
+                    defValues[type] -= indexEff - 2
+                }
+                
             }
         })
     })
-    const effectivenessToShow = ["0", "0.25", "0.5", "2", "4"]
+    const colorNbIndex = ["_","4","4","3","1","0"]
     function weaknessCol(data, hideRow=false) {
         const type = data[0]
-        const colRow = e('div', 'builder-type-col')
+        const typeStrength = Math.max(-2, Math.min(defValues[type], 2)) + 2
+        const colRow = e('div', `builder-type-col builder-type-strength-${typeStrength}`)
         const colData = data.map((data, indexData)=>{
             if (!indexData){
+                
                 return e('div', `builder-type ${type.toLowerCase()}`, type.substring(0, 6), {
                     onclick: (ev) => {
                         ev.stopPropagation()
@@ -275,8 +292,9 @@ function updateTeamWeaknesses(){
                 })
             }
             if (hideRow){
+
                 let toggle = true
-                return e('div', 'builder-nb-weakness', data, {
+                return e('div', `builder-nb-weakness builder-type-strength-${colorNbIndex[indexData]}`, data, {
                     onclick: ()=>{
                         toggle = !toggle
                         $('#builder-def-cov').find('.bnw-' + indexData).css('filter', `opacity(${toggle?100:0})`)
