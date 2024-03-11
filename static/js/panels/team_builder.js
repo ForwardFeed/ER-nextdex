@@ -6,6 +6,7 @@ import { createInformationWindow } from "../window.js";
 import { cubicRadial } from "../radial.js";
 import { saveToLocalstorage, fetchFromLocalstorage } from "../settings.js";
 import { getDefensiveCoverage, abilitiesToAddedType, getMoveEffectiveness } from "../weakness.js"
+import { longClickToFilter } from "../filters.js";
 
 const saveKeysPokemon = [
     "spc",
@@ -283,13 +284,14 @@ function updateTeamWeaknesses(){
         const colRow = e('div', `builder-type-col builder-type-strength-${typeStrength}`)
         const colData = data.map((data, indexData)=>{
             if (!indexData){
-                
-                return e('div', `builder-type ${type.toLowerCase()}`, type.substring(0, 6), {
+                const typeNode = e('div', `builder-type ${type.toLowerCase()}`, type.substring(0, 6), {
                     onclick: (ev) => {
-                        ev.stopPropagation()
+                        ev?.stopPropagation()
                         $(colRow).find('.builder-nb-weakness').toggle()
                     }
                 })
+                longClickToFilter(0, typeNode, 'resist')
+                return typeNode   
             }
             if (hideRow){
 
