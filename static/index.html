@@ -391,19 +391,30 @@
             </p>
             <li>- The search <strong>operator</strong></li>
             <p> If you have multiple filters on, you may want to have all to Match </p>
-            <li>AND</li>
-            <p>Matches all filters with no exception, if you ask for water type AND ground type
+            <li><strong>AND</strong></li>
+            <p> AND matches all filters included with no exception, if you ask for water type AND ground type
                 ,only pokemons that have this double typing will show
             </p>
-            <li>OR</li>
-            <p>which means that for one specie to show up it has
+            <li><strong>OR</strong></li>
+            <p> OR means that for one specie to show up it has
                 to at least get 1 of right, it can be 1 in 500 filters as long 1 matches
             </p>
-            <li>XOR</li>
+            <li><strong>XOR</strong></li>
             <p>
-                means that you're asking for only 1 filter to match, not 2, not 0, 1.
+                XOR means that you're asking for only 1 filter to match, not 2, not 0, 1.
                 You may ask for a water type or for a grass type, but not both at the same type. I don't expect
                 people to use this operator that said.
+            </p>
+            <hr>
+            <p>Please note that each panel (Specie, Abilities, Moves) are separate search, 
+                so if you look at abilities by name in the panel ability, it will not affect
+                the species panel, if you want to sort out pokemon species by abilities, you have to 
+                affect it from the species related search.
+            </p>
+            <hr>
+            <p>
+                the mode monotype settings is there for the type selection to match only monotyped pokemons,
+                (abilities induced types aren't taken in consideration)
             </p>
         </div>
     </div>
