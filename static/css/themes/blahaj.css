@@ -16,4 +16,5 @@
     --headerBGL: linear-gradient(0deg, #5BCEFA 10%, #F5A9B8 30%, white 50%, #F5A9B8 70%, #5BCEFA 90%);
     --font-color: black;
     --filter: contrast(1000%) saturate(900%) brightness(0.3);
+    --positive: #1fc990;
 }

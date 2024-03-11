@@ -5,7 +5,7 @@ import { getSpritesURL, getSpritesShinyURL } from "./species_panel.js";
 import { createInformationWindow } from "../window.js";
 import { cubicRadial } from "../radial.js";
 import { saveToLocalstorage, fetchFromLocalstorage } from "../settings.js";
-import { getDefensiveCoverage, abilitiesToAddedType, getOffensiveCoverage } from "../weakness.js"
+import { getDefensiveCoverage, abilitiesToAddedType, getMoveEffectiveness } from "../weakness.js"
 
 const saveKeysPokemon = [
     "spc",
@@ -113,7 +113,7 @@ class PokeNodeView {
         this.evs = this.node.find('.trainers-poke-evs')
     }
 }
-
+/** @type PokeNodeView[] */
 const teamView = []
 
 export const teamData = [...Array(6).keys()].map((_) => {
@@ -145,6 +145,7 @@ export function setFullTeam(party) {
     }
     updateTeamWeaknessesLock = false
     updateTeamWeaknesses()
+    updateOffensiveTypes()
 }
 
 function swapAndRefresh(a, b){
@@ -234,75 +235,72 @@ let updateTeamWeaknessesLock = false
 function updateTeamWeaknesses(){
     if (updateTeamWeaknessesLock) return
     const defCoverage = {}
-        gameData.typeT.forEach((val) => {
-            defCoverage[val] = {
-                "0": 0,
-                "0.25": 0,
-                "0.5": 0,
-                "1": 0,
-                "2": 0,
-                "4": 0,
-            }
-        })
-        teamData.forEach((val) => {
-            if (!val.spc) return
-            const specie = gameData.species[val.spc]
-            const abis = [specie.stats.abis[val.abi], ...specie.stats.inns].filter(x => x)
-            const types = [...new Set(specie.stats.types), abilitiesToAddedType(abis)].filter(x => x != undefined)
-            
-            const monDef = getDefensiveCoverage(
-                types.map(x => gameData.typeT[x]), abis
-            )
-            Object.keys(monDef).forEach((val) => {
-                const types = monDef[val]
-                for (const type of types) {
-                    defCoverage[type][val] += 1
-                }
-            })
-            const movesT = [...new Set(val.moves.map(x => gameData.moves[x].types.map(y => gameData.typeT[y])))]
-            console.log(getOffensiveCoverage(movesT))
-        })
-        const effectivenessToShow = ["0", "0.25", "0.5", "2", "4"]
-        function weaknessCol(data, hideRow=false) {
-            const type = data[0]
-            const colRow = e('div', 'builder-type-col')
-            const colData = data.map((data, indexData)=>{
-                if (!indexData){
-                    return e('div', `builder-type ${type.toLowerCase()}`, type.substring(0, 6), {
-                        onclick: (ev) => {
-                            ev.stopPropagation()
-                            $(colRow).find('.builder-nb-weakness').toggle()
-                        }
-                    })
-                }
-                if (hideRow){
-                    let toggle = true
-                    return e('div', 'builder-nb-weakness', data, {
-                        onclick: ()=>{
-                            toggle = !toggle
-                            $('#builder-def-cov').find('.bnw-' + indexData).css('filter', `opacity(${toggle?100:0})`)
-                        }
-                    })
-                } else {
-                    return e('div', 'builder-nb-weakness bnw-' + indexData, data)
-                }
-            })
-            return JSHAC([colRow, colData])
+    gameData.typeT.forEach((val) => {
+        defCoverage[val] = {
+            "0": 0,
+            "0.25": 0,
+            "0.5": 0,
+            "1": 0,
+            "2": 0,
+            "4": 0,
         }
-        //setup the row of the defensive coverage
-        const typesRow = e('div', 'builder-type-row')
-        gameData.typeT.forEach((type, index) => {
-            if (!(index % 9)) {
-                typesRow.append(
-                    weaknessCol(["Type", ...effectivenessToShow.map(x => x)], true)
-                )
-            }
-            typesRow.append(
-                weaknessCol([type, ...effectivenessToShow.map(x => defCoverage[type][x])])
-            )
-        })
-        $('#builder-def-cov').empty().append(typesRow)
+    })
+    teamData.forEach((val) => {
+        if (!val.spc) return
+        const specie = gameData.species[val.spc]
+        const abis = [specie.stats.abis[val.abi], ...specie.stats.inns].filter(x => x)
+        const types = [...new Set(specie.stats.types), abilitiesToAddedType(abis)].filter(x => x != undefined)
         
+        const monDef = getDefensiveCoverage(
+            types.map(x => gameData.typeT[x]), abis
+        )
+        Object.keys(monDef).forEach((val) => {
+            const types = monDef[val]
+            for (const type of types) {
+                defCoverage[type][val] += 1
+            }
+        })
+    })
+    const effectivenessToShow = ["0", "0.25", "0.5", "2", "4"]
+    function weaknessCol(data, hideRow=false) {
+        const type = data[0]
+        const colRow = e('div', 'builder-type-col')
+        const colData = data.map((data, indexData)=>{
+            if (!indexData){
+                return e('div', `builder-type ${type.toLowerCase()}`, type.substring(0, 6), {
+                    onclick: (ev) => {
+                        ev.stopPropagation()
+                        $(colRow).find('.builder-nb-weakness').toggle()
+                    }
+                })
+            }
+            if (hideRow){
+                let toggle = true
+                return e('div', 'builder-nb-weakness', data, {
+                    onclick: ()=>{
+                        toggle = !toggle
+                        $('#builder-def-cov').find('.bnw-' + indexData).css('filter', `opacity(${toggle?100:0})`)
+                    }
+                })
+            } else {
+                return e('div', 'builder-nb-weakness bnw-' + indexData, data)
+            }
+        })
+        return JSHAC([colRow, colData])
+    }
+    //setup the row of the defensive coverage
+    const typesRow = e('div', 'builder-type-row')
+    gameData.typeT.forEach((type, index) => {
+        if (!(index % 9)) {
+            typesRow.append(
+                weaknessCol(["Type", ...effectivenessToShow.map(x => x)], true)
+            )
+        }
+        typesRow.append(
+            weaknessCol([type, ...effectivenessToShow.map(x => defCoverage[type][x])])
+        )
+    })
+    $('#builder-def-cov').empty().append(typesRow)
 }
 
 
@@ -408,6 +406,7 @@ function feedPokemonEdition(jNode, viewID) {
                             const moveName = poke.allMovesName[moveID]
                             view.moves.eq(index).text(moveName)
                             save()
+                            updateOffensiveTypes()
                         }
                         createInformationWindow(
                             overlayList(moveCallback, poke.allMovesName),
@@ -589,4 +588,40 @@ function editionStats(statField, viewID, callback) {
             rowDiv,
         ]
     ])
+}
+
+function updateOffensiveTypes(){
+    $('.off-effective').removeClass('off-effective')
+    teamData.forEach((poke, pokeIndex) => {
+        if (!poke) return
+        poke.moves.forEach((move, moveIndex) =>{
+            const typesOff = gameData.moves[move].types.map(x => gameData.typeT[x])
+            const typeEff = getMoveEffectiveness(activeOffensiveTypes, typesOff)
+            if (typeEff > 1){
+                teamView[pokeIndex].moves[moveIndex].classList.add('off-effective')
+            }
+        })
+    })
+    
+}
+const activeOffensiveTypes = []
+export function setupOffensiveTeam(){
+    $('#builder-off-types').append(
+        gameData.typeT.map((x) => JSHAC([
+            e('div', 'off-type'),[
+                e('div', `builder-off-type builder-off-type-n-active ${x.toLowerCase()}`, x.substring(0, 6), {
+                    onclick: (ev)=>{
+                        ev.target.classList.toggle('builder-off-type-n-active')
+                        const indexT = activeOffensiveTypes.indexOf(x) 
+                        if (indexT == -1) {
+                            activeOffensiveTypes.push(x)
+                        } else {
+                            activeOffensiveTypes.splice(indexT, 1)
+                        }
+                        updateOffensiveTypes()
+                    }
+                })
+            ]
+        ]))
+    )
 }

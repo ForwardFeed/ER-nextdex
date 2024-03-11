@@ -3,7 +3,7 @@ import { feedPanelMoves } from "./panels/moves_panel.js"
 import { feedPanelLocations } from "./panels/locations_panel.js"
 import { feedPanelTrainers } from "./panels/trainers_panel.js"
 import { gameData } from "./data_version.js"
-import { restoreSave } from "./panels/team_builder.js"
+import { restoreSave, setupOffensiveTeam } from "./panels/team_builder.js"
 import { e, JSHAC } from "./utils.js"
 import { load } from "./loading.js"
 import { initFormatShowdown } from "./format_showdown.js"
@@ -44,6 +44,7 @@ export function hydrate(firstLoad=false) {
 
     // hydrate the UI with the data
     const steps = [
+        [setupOffensiveTeam, "builder panel"],
         [initFormatShowdown, "showdown data"],
         [hydrateAbilities, "abilities data"],
         [hydrateMoves, "moves data"],

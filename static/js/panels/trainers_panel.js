@@ -137,7 +137,11 @@ export function createPokemon(poke){
     for (const move of moves){
         if (!move) continue
         const type1 = gameData.typeT[move.types[0]].toLowerCase()
-        pokeMoves.append(e('div', `trainers-poke-move ${type1}-t`, move.name))
+        pokeMoves.append(JSHAC([
+            e('div', `trainers-poke-move ${type1}-t`),[
+                e('span', '',  move.name)
+            ] 
+        ]))
     }
     const rightPanel = e('div', "trainers-pokemon-right")
     const pokeItem = e('div', "trainers-poke-item", item)

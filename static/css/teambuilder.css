@@ -255,3 +255,22 @@ textarea, pre{
     height: 100%;
     display: flex;
 }
+
+.off-type{
+    width: calc(100% / 6);
+    text-align: center;
+}
+
+.builder-off-type{
+    padding: 0.2em;
+}
+.builder-off-type-n-active{
+    filter: invert(40%);
+}
+.builder-off-type-n-active:hover{
+    filter: none;
+}
+.off-effective{
+    box-sizing: border-box;
+    border: 0.5vmax solid var(--positive);
+}

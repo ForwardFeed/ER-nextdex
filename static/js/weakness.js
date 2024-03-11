@@ -235,17 +235,34 @@ function abilityModifiesTypeChart(abis){
 /**
  * 
  */
-export function getOffensiveCoverage(atkTypes, abis){
-    const offensiveCoverage = []
-    for (const defT of gameData.typeT){
-        for (const atkT of atkTypes){
-            let typeEffectiveness = 1
-            for (const subAtkT of atkT){
-                typeEffectiveness *= getTypeEffectiveness(subAtkT, defT)
-            }
-            offensiveCoverage.push(typeEffectiveness)
-        }
-        
+export function getOffensiveCoverage(moves, abis){
+    const typesLen = gameData.typeT.length
+    const offensiveCoverage = new Array(typesLen).fill(0)
+    for (let i = 0; i < typesLen; i++){
+        const defT = gameData.typeT[i]
+        moves.forEach((moveTypes)=>{
+            moveTypes.forEach((atkT)=>{
+                const typeEffectiveness = getTypeEffectiveness(atkT, defT)
+                if (typeEffectiveness >= 1) offensiveCoverage[i]++
+            })
+        })
     }
     return offensiveCoverage
+}
+
+/**
+ * 
+ * @param {string[]} defTs 
+ * @param {string[]} offTs 
+ * @returns {number}
+ */
+export function getMoveEffectiveness(defTs, offTs){
+    let typeEff = 1
+    for (const defT of defTs){
+        for (const offT of offTs){
+            
+            typeEff *= getTypeEffectiveness(offT, defT)
+        }
+    }
+    return typeEff
 }

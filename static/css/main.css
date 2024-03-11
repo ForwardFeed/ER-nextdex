@@ -730,7 +730,7 @@ span{
     border-bottom-width: 1px;
     cursor: pointer;
     width: calc(50% - 1vw);
-    height: 11em;
+    height: 10em;
 }
 .trainers-pokemon-left, .trainers-pokemon-right, .trainers-poke-nature, .trainers-poke-moves{
     box-sizing: border-box;
@@ -785,6 +785,7 @@ span{
     border-right: 0;
 }
 .trainers-poke-move{
+    display: flex;
     width: 50%;
     text-align: center;
     font-size: 0.9em;
