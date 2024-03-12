@@ -3,14 +3,13 @@ import { saveToLocalstorage, fetchFromLocalstorage } from './settings.js';
 /**
  * To select which version of the game data to have
  */
-/**@type {import('./compactify.js').CompactGameData} */
-export let gameData;
-/**@type {import('./compactify.js').CompactGameData} */
+/**@type {import('../../src/compactify.js').CompactGameData} */
 export let compareData;
-
+/**@type {import('../../src/compactify.js').CompactGameData} */
+export let gameData;
 // each time the data is modified, this is updated
 // so the client checks if it have the latest version by checking lo
-const LATEST_DATA_VERSION = "12"/*%%VERSION%%*/
+const LATEST_DATA_VERSION = "15"/*%%VERSION%%*/
 
 const allVersions = [
     "1.6.1",

@@ -8,6 +8,9 @@ set -e
 prj=$(cat nextdex_config.json | jq -r '.project_root')
 curr=$(pwd)
 
+# if i don't compile i 100% forget because je suis un âne
+tsc
+
 # fetch the multiples version
 cd "${prj}"
 git checkout origin/ReduxForms

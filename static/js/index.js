@@ -10,6 +10,7 @@ import { activateInsanity } from "./insanity.js"
 import { setupMoves} from "./panels/moves_panel.js"
 import { load } from "./loading.js"
 import { setupFormatShowdown } from "./format_showdown.js"
+import { setupLoadSave } from "./load_save.js"
 
 
 document.addEventListener("DOMContentLoaded", function(){
@@ -23,6 +24,7 @@ document.addEventListener("DOMContentLoaded", function(){
         [setupSearch, "search frame"],
         [setupFilters, "filter frame"],
         [setupFormatShowdown, "Showdown format"],
+        [setupLoadSave, "save loader"],
         [setupDataVersionning, "gamedata loader"],
         [function(){
             changeVersion(fetchFromLocalstorage("lastusedvqersion"), true)

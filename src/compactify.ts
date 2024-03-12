@@ -173,7 +173,7 @@ function initCompactGameData(): CompactGameData{
         colT: [],
         evoKindT: [],
         items: [],
-        natureT: [],
+        natureT: ["Hardy","Lonely","Brave","Adamant","Naughty","Bold","Docile","Relaxed","Impish","Lax","Timid","Hasty","Serious","Jolly","Naive","Modest","Mild","Quiet","Bashful","Rash","Calm","Gentle","Sassy","Careful","Quirky"],
         scriptedEncoutersHowT: [],
         mapsT: []
     }
@@ -382,11 +382,7 @@ export function compactify(gameData: GameData): CompactGameData{
             ivs: poke.ivs,
             evs: poke.evs,
             item: tablize(poke.item, itemT),
-            nature: ((nat)=>{
-                nat = Xtox('NATURE_', nat)
-                if (!compacted.natureT.includes(nat))compacted.natureT.push(nat)
-                return compacted.natureT.indexOf(nat)
-            })(poke.nature),
+            nature: compacted.natureT.indexOf(Xtox('NATURE_', poke.nature)),
             moves: poke.moves.map((mv)=>{
                 return tablize(mv, movesT)
             })
