@@ -22,6 +22,17 @@ export function setupLoadSave(){
         ev.preventDefault();  
         ev.stopPropagation();
     })
+    $('#open-team-savefile').on('click', function(){
+        var input = document.createElement("input");
+        input.id = "savefile-upload";
+        input.type = "file";
+        input.accept = ".sav";
+        input.style.display = "none";
+        input.onchange = parseFile;
+        $('#open-team-savefile').before(input).on('click', function(){
+            input.click()
+        })
+    })
 }
 
 // LITTLE ENDIAN !
