@@ -1,5 +1,18 @@
 /* GENERAL */
 
+.left{
+    margin: auto;
+    margin-left: 0;
+}
+.right{
+    margin: auto;
+    margin-right: 0;
+}
+.row{
+    margin: auto;
+    width: 100%;
+}
+/* Pokmns*/
 .normal{background-color: #aa9; color:rgb(44, 44, 39);}
 .fire{background-color: #f42; color:rgb(73, 23, 14);}
 .water{background-color: #39f; color:rgb(14, 32, 49);}
@@ -339,7 +352,9 @@ span{
 .species-name{
     width: min-content;
 }
-
+#species-name{
+    padding-right: 1em;
+}
 .species-mid-stats{
     display: flex;
 }
@@ -355,8 +370,7 @@ span{
     min-height: 64px;
     margin: auto;
 }
-#species-front:hover, #species-coverage:hover, #species-basestats:hover, #species-name:hover
-,#moves-name:hover{
+#species-front:hover, #species-coverage:hover, #species-basestats:hover, #moves-name:hover{
     box-shadow: inset 2px 0px 10px var(--font-color);
 }
 .species-abi-inn{
@@ -467,14 +481,16 @@ span{
     flex-direction: column;
     flex-grow: 1;
     background-color: var(--colorD);
-    overflow-y: scroll;
 }
 
 .species-mid{
     display: flex;
     position: relative;
+    flex-direction: column;
 }
-
+.species-mid > div{
+    margin: auto;
+}
 #specie-name{
     padding-left: 2%;
 }
@@ -544,6 +560,9 @@ span{
 #species-evos{
     display: flex;
     flex-direction: column;
+}
+.evo-parent{
+    border-bottom: solid 1px;
 }
 .evo-into{
     display: flex;
@@ -617,13 +636,6 @@ span{
     #species-front{
         height: 15vw;
         width: 15vw;
-    }
-    .species-mid{
-        flex-direction: row;
-    }
-    .species-mid > :last-child{
-        margin: auto;
-        margin-right: 0;
     }
 }
 
@@ -702,6 +714,10 @@ span{
 /* Trainers */
 .trainers-infobar{
     display: flex;
+    
+}
+.trainers-infobar > * {
+    user-select: text;
 }
 #trainers-rematch{
     margin-left: auto;

@@ -1,4 +1,4 @@
-import { updateSpecies,queryMapSpecies } from "./panels/species_panel.js"
+import { updateSpecies,queryMapSpecies } from "./panels/species/species_panel.js"
 import { filterAbilities, queryMapAbilities} from "./panels/abilities_panel.js"
 import { updateMoves, queryMapMoves} from "./panels/moves_panel.js"
 import { updateLocations, queryMapLocations } from "./panels/locations_panel.js"

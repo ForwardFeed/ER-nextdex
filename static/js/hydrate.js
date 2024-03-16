@@ -1,4 +1,4 @@
-import { feedPanelSpecies, getSpritesURL, setupReorderBtn } from "./panels/species_panel.js"
+import { feedPanelSpecies, getSpritesURL, setupReorderBtn } from "./panels/species/species_panel.js"
 import { feedPanelMoves } from "./panels/moves_panel.js"
 import { feedPanelLocations } from "./panels/locations_panel.js"
 import { feedPanelTrainers } from "./panels/trainers_panel.js"
@@ -7,6 +7,7 @@ import { restoreSave, setupOffensiveTeam } from "./panels/team_builder.js"
 import { e, JSHAC } from "./utils.js"
 import { load } from "./loading.js"
 import { initFormatShowdown } from "./format_showdown.js"
+import { setUpComSets } from "./panels/species/community_sets.js"
 
 export const nodeLists = {
     species: [],
@@ -46,6 +47,7 @@ export function hydrate(firstLoad=false) {
     const steps = [
         [setupOffensiveTeam, "builder panel"],
         [initFormatShowdown, "showdown data"],
+        [setUpComSets, "Import Community sets"],
         [hydrateAbilities, "abilities data"],
         [hydrateMoves, "moves data"],
         [hydrateSpecies, "species  data"],
@@ -150,6 +152,12 @@ function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo) {
     if (!currentSpecie.TMHMMoves.length) currentSpecie.TMHMMoves = previousSpecie.TMHMMoves
     if (!currentSpecie.tutor.length) currentSpecie.tutor = previousSpecie.tutor
     if (!currentSpecie.dex.hw) currentSpecie.dex.hw = previousSpecie.dex.hw
+    //do not add if it was already added
+    for (const evo of currentSpecie.evolutions){
+        if (evo.kd === currentEvo.kd) return
+        if (evo.rs === currentEvo.rs) return
+        if (evo.in === currentEvo.in) return
+    }
     //import evolution
     currentSpecie.evolutions.push({
         kd: currentEvo.kd,

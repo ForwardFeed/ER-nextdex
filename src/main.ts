@@ -23,8 +23,7 @@ export interface GameData {
     moves:Map<string, Moves.Move>,
     locations: Locations.Locations
     trainers: Map<string, Trainers.Trainer>
-    speciesScripted: Map<string, ScriptedData.SpeciesScripted[]>
-    trainersScripted: Map<string, ScriptedData.TrainersScriped>
+    dataScripted: ScriptedData.Result[]
     mapTable: string[], 
     battleItems: Map<string, BattleItems.BattleItem>
     speciesInternalID: Map<string, number>,
@@ -37,8 +36,7 @@ const gameData: GameData = {
     moves: new Map(),
     locations: {} as Locations.Locations,
     trainers: new Map(),
-    speciesScripted: new Map(),
-    trainersScripted: new Map(),
+    dataScripted: [],
     mapTable: [],
     battleItems: new Map(),
     speciesInternalID: new Map(),

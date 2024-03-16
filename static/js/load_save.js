@@ -1,24 +1,28 @@
 import { gameData } from "./data_version.js";
 import { setFullTeam } from "./panels/team_builder.js";
 
-
 export function setupLoadSave(){
+    let timeoutDropper
     $(document.body).on('dragover', function(ev){
         for (const item of ev.originalEvent.dataTransfer.items){
             if (item.kind !== "file") return
         }
         $('#drop-savefile-frame').show()
+        timeoutDropper = setTimeout(function(){
+            $('#drop-savefile-frame').hide()
+        }, 2500)
+       
         ev.preventDefault();  
         ev.stopPropagation();
     })
     $(document.body).on('drop', function(ev){
-        
+        $('#drop-savefile-frame').hide()
+        clearTimeout(timeoutDropper)
         for (const item of ev.originalEvent.dataTransfer.items){
             if (item.kind !== "file") return
             const file = item.getAsFile();
             parseFile(file)
         }
-        $('#drop-savefile-frame').hide()
         ev.preventDefault();  
         ev.stopPropagation();
     })
@@ -334,44 +338,27 @@ function getGEN3Nature(mon){
     }
     return gameData.natureT[mon.hiddenNature]
 }
-
+const HPTYPE = [
+    "Fighting",
+    "Flying",
+    "Poison",
+    "Ground",
+    "Rock",
+    "Bug",
+    "Ghost",
+    "Steel",
+    "Fire",
+    "Water",
+    "Grass",
+    "Electric",
+    "Psychic",
+    "Ice",
+    "Dragon",
+    "Dark",
+]
 function getGEN3HP(mon) {
-    var hptype = ((mon.hpIV%2 + (2*(mon.attackIV%2))+(4*(mon.defenseIV%2))+(8*(mon.speedIV%2))+(16*(mon.spAttackIV%2))+(32*(mon.spDefenseIV%2)))*5)/21
-    hptype = Math.floor(hptype)
-    switch(hptype){
-        case 0:
-		    return "Fighting";
-        case 1:
-		    return "Flying";
-        case 2:
-		    return "Poison";
-        case 3:
-            return "Ground";
-        case 4:
-            return "Rock";
-        case 5:
-            return "Bug";
-        case 6:
-            return "Ghost";
-        case 7:
-            return "Steel";
-        case 8:
-            return "Fire";
-        case 9:
-            return "Water";
-        case 10:
-            return "Grass";
-        case 11:
-            return "Electric";
-        case 12:
-            return "Psychic";
-        case 13:
-            return "Ice";
-        case 14:
-            return "Dragon";
-        case 15:
-            return "Dark";
-    }
+    var hptype = ((mon.hpIV%2 + (2*(mon.attackIV%2))+(4*(mon.defenseIV%2))+(8*(mon.speedIV%2))+(16*(mon.spAttackIV%2))+(32*(mon.spDefenseIV%2)))*5)/21 
+    return HPTYPE[Math.floor(hptype)]
 }
 function createGEN3mon(mon){
     var poke = {};

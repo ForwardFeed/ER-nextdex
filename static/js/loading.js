@@ -16,7 +16,7 @@ export function load(callback, msg, lastOne=false){
         loaded(msg, true)
     } catch(err){
         const err_msg = err.stack.replaceAll(window.location.origin, "")
-        document.getElementById('debug').append(e('div', 'debug-error', err_msg))
+        document.getElementById('debug').append(e('div', 'debug-error', `${err}: ${err_msg}`))
         loaded(msg, false)
     } finally{
         if (lastOne) endLoad()
@@ -42,7 +42,10 @@ function onErrorAskContinue(){
 
 function endLoad(){
     if (!error) {
-        $('#loading-screen').hide()
+        //$('#loading-screen').hide()
+        $('#loading-screen').remove()
+        $('#window-debug-menu').remove()
+        window.onerror = null
     } else {
         onErrorAskContinue()
     }

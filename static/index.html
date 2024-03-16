@@ -24,7 +24,7 @@
         </div>
         <div id="debug"></div>
     </div>
-    <script type="module">
+    <script id="window-debug-menu" type="module">
         window.onerror = function(msg, url, lineN){
             const e = document.createElement("div")
             e.className = 'debug-error'
@@ -122,7 +122,7 @@
                     <div class="species-mid">
                         <div class="species-mid-stats">
                             <div id="species-name"></div>
-                            <div id="species-id" style="display: none;"></div>
+                            <div id="species-id"></div>
                             <div id="species-types">
                                 <div class="type"><span></span></div>
                                 <div class="type"><span></span></div>
@@ -133,6 +133,7 @@
                             <div id="switch-moves" class="btn sel-active">Moves</div>
                             <div id="switch-evos-locs" class="btn sel-n-active">Evo & Loca</div>
                             <div id="switch-misc" class="btn sel-n-active">Misc</div>
+                            <div id="switch-sets" class="btn sel-n-active">Sets</div>
                         </div>
                     </div>
                     <div id="species-bot" class="species-bot">
@@ -183,6 +184,12 @@
                                     <span id="species-height"></span>
                                     <span id="species-weight"></span>
                                 </div>
+                            </div>
+                        </div>
+                        <div id="species-sets" class="species-sub-pannel" style="display: none;">
+                            <div class="species-sets-block">
+                            </div>
+                            <div class="species-sets-block">
                             </div>
                         </div>
                     </div>
@@ -325,6 +332,9 @@
                         <div id="trainers-normal"></div>
                         <div id="trainers-elite"></div>
                         <div id="trainers-rematch"></div>
+                    </div>
+                    <div id="trainers-infobar2" class="trainers-infobar">
+                        <div id="trainers-map"></div>
                     </div>
                     <div id="trainers-team"></div>
                 </div>

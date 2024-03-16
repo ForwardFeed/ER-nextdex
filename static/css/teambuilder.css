@@ -288,3 +288,122 @@ textarea, pre{
 .builder-type-strength-0{
     background-color: rgba(75, 5, 5, 0.85);
 }
+
+
+
+#species-sets{
+    flex-wrap: nowrap;
+    border-top: solid 1px var(--headerBG);
+    border-bottom: solid 1px var(--headerBG);
+}
+
+.species-sets-block{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 50%;
+    height: 100%;
+}
+
+.species-sets-bot{
+    display: flex;
+}
+.species-sets-selection{
+    display: flex;
+    margin: auto;
+    width: 100%;
+    height: 2em;
+}
+.species-sets-selection > div{
+    margin: auto;
+    font-size: 1.1em;
+    height: fit-content;
+}
+@media (orientation: portrait) {
+    #species-sets{
+        flex-direction: column;
+    }
+    .species-sets-block{
+        height: 50%;
+        width: 100%;
+    }
+    .species-sets-block:first-child{
+        border-bottom: solid 1px var(--headerBG);
+    }
+}
+@media (orientation: landscape) {
+    .species-sets-block:first-child{
+        border-right: solid 1px var(--headerBG);
+    }
+}
+
+.species-sets-previous{
+    margin: auto;
+    margin-right: 0;
+}
+.species-sets-next{
+    margin: auto;
+    margin-left: 0;
+}
+
+.species-sets-mid{
+    display: flex;
+    flex-grow: 1;
+    border-left: 0;
+    height: fit-content;
+    border-top: dashed 1px var(--font-color);
+    border-bottom: dashed 1px var(--font-color);
+}
+
+.species-sets-delete{
+    width: fit-content;
+    position: absolute;
+    background-color: red;
+    top: 0;
+    left: 0;
+}
+.species-sets-notes-btn{
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.species-sets-notes{
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+}
+.species-sets-notes-text{
+    flex-grow: 1;
+    resize: none;
+    font-size: 0.75em;
+}
+.species-sets-mid-left{
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    border-right: dashed 1px var(--font-color);
+}
+
+.species-sets-mid-right{
+    display: flex;
+    flex-wrap: wrap;
+    width: 60%;
+}
+
+.species-sets-stats{
+    display: flex;
+    border-bottom: dashed 1px var(--font-color);
+}
+
+.species-sets-data{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    flex-grow: 1;
+}
+.species-sets-placeholder{
+    margin: auto;  
+}
+.species-sets-top{
+   height: 2em; 
+}

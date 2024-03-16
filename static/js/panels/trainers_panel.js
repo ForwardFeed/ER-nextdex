@@ -1,5 +1,5 @@
-import { getSpritesURL, redirectSpecie, getSpritesShinyURL } from "./species_panel.js"
-import { queryFilter2} from "../filters.js"
+import { getSpritesURL, redirectSpecie, getSpritesShinyURL } from "./species/species_panel.js"
+import { queryFilter2 } from "../filters.js"
 import { gameData } from "../data_version.js"
 import { AisInB, e, JSHAC } from "../utils.js"
 import { setFullTeam } from "./team_builder.js"
@@ -9,30 +9,29 @@ const trainerParam = {
 }
 
 let currentTrainerID = 0
-export function feedPanelTrainers(trainerID){
+export function feedPanelTrainers(trainerID) {
     currentTrainerID = trainerID
     $('#trainers-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
     $('#trainers-list > .btn').eq(trainerID - 1).addClass("sel-active").removeClass("sel-n-active")
-
     const trainer = gameData.trainers[trainerID]
     $('#trainers-name').text(trainer.name)
-
+    $('#trainers-map').text(gameData.mapsT[trainer.map] || "Unknown location")
     setBaseTrainer(trainer)
     setRematchesBar(trainer.rem)
     setInsane(trainer)
     setPartyPanel(trainer.party)
-    
+
 }
 
-function setDouble(double){
-    if (double){
+function setDouble(double) {
+    if (double) {
         $('#trainers-double').show()
     } else {
         $('#trainers-double').hide()
     }
 }
 
-function setBaseTrainer(trainer){
+function setBaseTrainer(trainer) {
     const party = trainer.party
     if (!party || party.length < 1) {
         $('#trainers-normal').empty()
@@ -41,7 +40,7 @@ function setBaseTrainer(trainer){
     const nodeNormal = e('div')
     nodeNormal.innerText = "Normal"
     nodeNormal.className = "trainer-match-btn sel-active"
-    nodeNormal.onclick = ()=>{
+    nodeNormal.onclick = () => {
         trainerParam.elite = false
         setPartyPanel(party)
         $('#trainers-infobar').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
@@ -51,7 +50,7 @@ function setBaseTrainer(trainer){
     setDouble(trainer.db)
 }
 
-function setInsane(trainer){
+function setInsane(trainer) {
     const insaneTeam = trainer.insane
     if (!insaneTeam || insaneTeam.length < 1) {
         $('#trainers-elite').empty()
@@ -60,7 +59,7 @@ function setInsane(trainer){
     const nodeElite = e('div')
     nodeElite.innerText = "Elite"
     nodeElite.className = "trainer-match-btn sel-n-active"
-    nodeElite.onclick = ()=>{
+    nodeElite.onclick = () => {
         trainerParam.elite = true
         setPartyPanel(insaneTeam)
         $('#trainers-infobar').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
@@ -68,25 +67,25 @@ function setInsane(trainer){
     }
     $('#trainers-elite').empty().append(nodeElite)
     setDouble(trainer.db)
-    if (trainerParam.elite){
+    if (trainerParam.elite) {
         nodeElite.onclick()
     }
 }
 
-function setRematchesBar(rematches){
-    if (rematches.length < 1){
+function setRematchesBar(rematches) {
+    if (rematches.length < 1) {
         return $('#trainers-rematch').empty()
     }
     const frag = document.createDocumentFragment()
     const spanInfo = e('span')
     spanInfo.innerText = "Rematches :"
     frag.append(spanInfo)
-    for (const remI in rematches){
+    for (const remI in rematches) {
         const rem = rematches[remI]
         const nodeRem = e('div')
         nodeRem.innerText = +remI + 1
         nodeRem.className = "trainer-match-btn sel-n-active"
-        nodeRem.onclick = ()=>{
+        nodeRem.onclick = () => {
             setPartyPanel(rem.party)
             $('#trainers-infobar').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
             $('#trainers-rematch').children().eq(+remI + 1).addClass("sel-active").removeClass("sel-n-active")
@@ -97,12 +96,12 @@ function setRematchesBar(rematches){
     $('#trainers-rematch').empty().append(frag)
 }
 
-function setPartyPanel(party){
-    if (party.length < 1 ){
+function setPartyPanel(party) {
+    if (party.length < 1) {
         return console.warn('party had team ' + party)
     }
     const frag = document.createDocumentFragment()
-    for (const poke of party){
+    for (const poke of party) {
         const pokeDiv = createPokemon(poke)
         pokeDiv.firstChild.onclick = () => {
             redirectSpecie(poke.spc)
@@ -111,11 +110,18 @@ function setPartyPanel(party){
     }
     $('#trainers-team').empty().append(frag).append(getNodeRedirectToEditorPokemon(party))
 }
-
-export function createPokemon(poke){
+export const statsOrder = [
+    "HP",
+    "Atk",
+    "Def",
+    "SpA",
+    "SpD",
+    "Spe",
+]
+export function createPokemon(poke) {
     const specie = gameData.species[poke.spc]
     const ability = gameData.abilities[specie.stats.abis[poke.abi]]
-    const moves = poke.moves.map((x)=>{
+    const moves = poke.moves.map((x) => {
         return gameData.moves[x]
     })
     const item = gameData.items[poke.item]?.name
@@ -125,7 +131,7 @@ export function createPokemon(poke){
     const leftPanel = e('div', "trainers-pokemon-left")
     const pokeName = e('div', "trainers-poke-specie", specie.name)
     const pokeImg = e('img', "trainer-poke-sprite")
-    if (poke.isShiny){
+    if (poke.isShiny) {
         pokeImg.src = getSpritesShinyURL(specie.NAME)
     } else {
         pokeImg.src = getSpritesURL(specie.NAME)
@@ -134,35 +140,28 @@ export function createPokemon(poke){
     const pokeAbility = e('div', "trainers-poke-ability", ability?.name)
     const midPanel = e('div', "trainers-pokemon-mid")
     const pokeMoves = e('div', "trainers-poke-moves")
-    for (const move of moves){
+    for (const move of moves) {
         if (!move) continue
         const type1 = gameData.typeT[move.types[0]].toLowerCase()
         pokeMoves.append(JSHAC([
-            e('div', `trainers-poke-move ${type1}-t`),[
-                e('span', '',  move.name)
-            ] 
+            e('div', `trainers-poke-move ${type1}-t`), [
+                e('span', '', move.name)
+            ]
         ]))
     }
     const rightPanel = e('div', "trainers-pokemon-right")
     const pokeItem = e('div', "trainers-poke-item", item)
     const textNature = getTextNature(nature)
     const pokeNature = e('div', "trainers-poke-nature", textNature)
-    const statsOrder = [
-        "HP",
-        "Atk",
-        "Def",
-        "SpA",
-        "SpD",
-        "Spe",
-    ]
+    
     const pokeStats = e('div', "trainers-stats-row")
     const nerfedBuffed = textNature.match(/((Def)|(SpA)|(Atk)|(SpD)|(Spe))/g)
     const statBuffed = nerfedBuffed?.[0]
     const statNerfed = nerfedBuffed?.[1]
-    let fontRgb =  window.getComputedStyle(document.body).color.match(/\d+/g)
-    if (!fontRgb || fontRgb.length != 3) fontRgb = [255,255,255]
+    let fontRgb = window.getComputedStyle(document.body).color.match(/\d+/g)
+    if (!fontRgb || fontRgb.length != 3) fontRgb = [255, 255, 255]
 
-    for (const statIndex in statsOrder){
+    for (const statIndex in statsOrder) {
         const stat = statsOrder[statIndex]
         const nerfedOrbuffed = stat === statBuffed ? "buffed" : stat === statNerfed ? "nerfed" : ""
         const evVal = poke.evs[statIndex]
@@ -223,20 +222,20 @@ const natureMap = {
     "Mild": "+SpA -Def",
     "Quirky": "--",
     "Serious": "--",
-  }
+}
 
-export function getTextNature(nature){
+export function getTextNature(nature) {
     return `${nature} (${natureMap[nature]})`
 }
 
-function getNodeRedirectToEditorPokemon(party){
-    const redirectTeamBuilder = ()=>{
+function getNodeRedirectToEditorPokemon(party) {
+    const redirectTeamBuilder = () => {
         setFullTeam(party)
         $('#btn-species').click()
         if ($('#btn-species').find('.big-select').text() === "Species") $('#btn-species').click()
     }
     return JSHAC([
-        e('div', 'trainer-go-edition',null,{onclick: redirectTeamBuilder}), [
+        e('div', 'trainer-go-edition', null, { onclick: redirectTeamBuilder }), [
             e('div', 'trainer-redirect-arrow', 'Edit In Builder →')
         ]
     ])
@@ -255,34 +254,33 @@ export const queryMapTrainers = {
     "specie": (queryData, trainer) => {
         const trainerMons = [].concat.apply(
             [], [
-                    trainer.party,
-                    [].concat.apply([], trainer.rem.map(x => x.party)),
-                    trainer.insane
-                ]
-            )
-        for (const mon of trainerMons){
-            const pokemon = gameData.species[mon.spc].name.toLowerCase() 
-            if (AisInB(queryData, pokemon))  return pokemon
+            trainer.party,
+            [].concat.apply([], trainer.rem.map(x => x.party)),
+            trainer.insane
+        ]
+        )
+        for (const mon of trainerMons) {
+            const pokemon = gameData.species[mon.spc].name.toLowerCase()
+            if (AisInB(queryData, pokemon)) return pokemon
         }
-        
+
         return false
     },
 }
-export function updateTrainers(searchQuery){
+export function updateTrainers(searchQuery) {
     const trainers = gameData.trainers
     const nodeList = $('#trainers-list > .btn')
     let validID;
     const matched = queryFilter2(searchQuery, trainers, queryMapTrainers)
     const trainersLen = trainers.length
-    for (let i  = 0; i < trainersLen; i++) {
-        if (i == 0 ) continue
+    for (let i = 0; i < trainersLen; i++) {
+        if (i == 0) continue
         const node = nodeList.eq(i - 1)
-        if (!matched || matched.indexOf(i) != -1)
-        {
-                if (!validID) validID = i
-                node.show()
+        if (!matched || matched.indexOf(i) != -1) {
+            if (!validID) validID = i
+            node.show()
         } else {
-                node.hide()
+            node.hide()
         }
     }
     //if the current selection isn't in the list then change

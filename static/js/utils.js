@@ -86,12 +86,18 @@ export function e(tag = "div", classname = "", innerText = "", events = {}){
     const htmlElement = document.createElement(tag)
     if (id) htmlElement.id = id
     if (classname) htmlElement.className = classname
-    if (tag === "input"){
-        htmlElement.value = innerText
-    } else {
-        htmlElement.innerText = innerText
+    if (innerText && typeof innerText === "object"){
+        // useful if you like to embed span for text
+        for (const subElement of innerText){
+            htmlElement.append(subElement)
+        }
+    } else { 
+        if (tag === "input"){
+            htmlElement.value = innerText
+        } else {
+            htmlElement.innerText = innerText
+        }
     }
-    
     for (const event in events){
         htmlElement[event] = events[event]
     }
@@ -106,6 +112,7 @@ export function JSHAC(htmlArray){
     const frag = document.createDocumentFragment()
     for (let i = 0; i < htmlArray.length; i++){
         const element = htmlArray[i]
+        if (!element) continue
         if (element.constructor.name !== "Array"){
             // It means it is a children
             frag.append(element)

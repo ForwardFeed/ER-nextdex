@@ -155,6 +155,7 @@ export interface CompactGameData{
     natureT: string[],
     scriptedEncoutersHowT: string[],
     mapsT: string[],
+    MAPST: string[],
 }
 function initCompactGameData(): CompactGameData{
     return {
@@ -175,7 +176,8 @@ function initCompactGameData(): CompactGameData{
         items: [],
         natureT: ["Hardy","Lonely","Brave","Adamant","Naughty","Bold","Docile","Relaxed","Impish","Lax","Timid","Hasty","Serious","Jolly","Naive","Modest","Mild","Quiet","Bashful","Rash","Calm","Gentle","Sassy","Careful","Quirky"],
         scriptedEncoutersHowT: [],
-        mapsT: []
+        mapsT: [],
+        MAPST: [],
     }
 }
 
@@ -235,15 +237,6 @@ export function compactify(gameData: GameData): CompactGameData{
     compacted.mapsT = gameData.mapTable
     gameData.species.forEach((val)=>{
         const bs = val.baseStats
-        let sEnc: CompactedScripted[] = []
-        if (gameData.speciesScripted.has(val.NAME)){
-            gameData.speciesScripted.get(val.NAME).forEach((value)=>{
-                sEnc.push({
-                    how: tablize(value.how, compacted.scriptedEncoutersHowT),
-                    map: tablize(value.map, compacted.mapsT)
-                })
-            })
-        }
         compacted.species.push({
             name: ((x, X)=>{
                 if (nameT.includes(x)){ // because megas are the same names as the non-megas
@@ -332,7 +325,7 @@ export function compactify(gameData: GameData): CompactGameData{
             forms: val.forms.map((x)=>{
                 return NAMET.indexOf(x)
             }),
-            SEnc: sEnc,
+            SEnc: [],
             dex: val.dex,
             id: gameData.speciesInternalID.get(val.NAME) || -1
         })
@@ -388,12 +381,9 @@ export function compactify(gameData: GameData): CompactGameData{
             })
         }
     }
+    const trainerT: string[] = []
     gameData.trainers.forEach((trainer, key)=>{
         let category = Xtox('TRAINER_CLASS_', trainer.category)
-        let mapName
-        if (gameData.trainersScripted.has(key)){
-            mapName = gameData.trainersScripted.get(key).map
-        }
         if (!trainer.party.length){
             return
         }
@@ -408,16 +398,38 @@ export function compactify(gameData: GameData): CompactGameData{
                     party: rem.party.map(compactPoke)
                 }
             }),
-            map: tablize(mapName, compacted.mapsT)
+            map: -1
         })
+        trainerT.push(key)
+    })
+    gameData.dataScripted.forEach((val)=>{
+        if (!val.species.length && !val.trainers.length) return
+        const idMap = compacted.mapsT.push(val.name .replace(/_/g, ' ')
+                                                    .replace(/(?<=[a-z])(?=[A-Z])/g, ' ')
+                                                    .replace(/(?<=[a-z])(?=[0-9])/g, ' '))
+        compacted.MAPST.push(val.id)
+        val.species.forEach((value)=>{
+            if (!compacted.species[NAMET.indexOf(value.spc)]) return
+            compacted.species[NAMET.indexOf(value.spc)].SEnc.push({
+                map: idMap,
+                how: tablize(value.how, compacted.scriptedEncoutersHowT),
+            })
+        })
+        val.trainers.forEach((value)=>{
+            if (!compacted.trainers[trainerT.indexOf(value)] || compacted.trainers[trainerT.indexOf(value)].map == undefined) return
+            compacted.trainers[trainerT.indexOf(value)].map = idMap
+        })
+        
     })
     compacted.trainers = compacted.trainers.sort((a, b)=>{
+        if (a.map == b.map) return 0
+        if (a.map == -1) return 1
+        if (b.map == -1) return -1
         if (a.map < b.map){
             return -1
         } else if (a.map > b.map){
             return 1
         }
-        return 0
     })
     return compacted
 }

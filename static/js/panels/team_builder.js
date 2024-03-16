@@ -1,7 +1,7 @@
 import { gameData } from "../data_version.js";
 import { e, JSHAC } from "../utils.js";
 import { createPokemon, getTextNature } from "./trainers_panel.js";
-import { getSpritesURL, getSpritesShinyURL } from "./species_panel.js";
+import { getSpritesURL, getSpritesShinyURL } from "./species/species_panel.js";
 import { createInformationWindow } from "../window.js";
 import { cubicRadial } from "../radial.js";
 import { saveToLocalstorage, fetchFromLocalstorage } from "../settings.js";
@@ -404,7 +404,7 @@ function feedPokemonEdition(jNode, viewID) {
     }
     abilityDiv.onclick = (ev) => {
         ev.stopPropagation() //if you forget this the window will instantly close
-        const overlayNode = overlayEditorAbilities(viewID, (abiID) => {
+        const overlayNode = overlayEditorAbilities(teamData[viewID].baseSpc, (abiID) => {
             poke.abi = abiID
             poke.abiName = gameData.abilities[poke.baseSpc.stats.abis[abiID]].name
             view.abi.text(poke.abiName)
@@ -424,7 +424,7 @@ function feedPokemonEdition(jNode, viewID) {
                         const moveCallback = (moveID) => {
                             poke.moves[index] = poke.allMoves[moveID]
                             const moveName = poke.allMovesName[moveID]
-                            view.moves.eq(index).text(moveName)
+                            view.moves.eq(index).children().eq(0).text(moveName)
                             save()
                             updateOffensiveTypes()
                         }
@@ -457,7 +457,7 @@ function feedPokemonEdition(jNode, viewID) {
         ev.stopPropagation()
         const overlayNode = cubicRadial([
             ["Items", (ev) => {
-                createInformationWindow(overlayList(itemCallback, gameData.itemT), ev, "focus")
+                createInformationWindow(overlayList(itemCallback, gameData.items), ev, "focus")
             }],
             ["Nature", (ev) => {
                 createInformationWindow(overlayList(natureCallback,
@@ -465,21 +465,21 @@ function feedPokemonEdition(jNode, viewID) {
                     ev, "focus")
             }],
             ["IVs", (ev) => {
-                createInformationWindow(editionStats("ivs", viewID, statsCallback), ev)
+                createInformationWindow(editionStats("ivs", teamData[viewID], statsCallback), ev)
             }],
             ["EVs", (ev) => {
-                createInformationWindow(editionStats("evs", viewID, statsCallback), ev)
+                createInformationWindow(editionStats("evs", teamData[viewID], statsCallback), ev)
             }],
         ], "6em", "1em")
         createInformationWindow(overlayNode, ev, "mid")
     }
 }
 
-function overlayEditorAbilities(viewID, callbackOnclick) {
+export function overlayEditorAbilities(pokebase, callbackOnclick) {
     const core = e('div', 'builder-overlay-abis-inns')
     const abiDesc = e('div', 'builder-overlay-abis-desc')
     const abilitiesRow = e('div', 'builder-overlay-abilities')
-    const abilities = [...new Set(teamData[viewID].baseSpc.stats.abis)] //remove duplicates
+    const abilities = [...new Set(pokebase.stats.abis)] //remove duplicates
         .map((x, index) => {
             const abi = gameData.abilities[x]
             return e('div', 'builder-overlay-ability', abi.name, {
@@ -497,7 +497,7 @@ function overlayEditorAbilities(viewID, callbackOnclick) {
             })
         })
     const innatesRow = e('div', 'builder-overlay-innates')
-    const innates = teamData[viewID].baseSpc.stats.inns.map((x, index) => {
+    const innates = pokebase.stats.inns.map((x, index) => {
         const abi = gameData.abilities[x]
         return e('div', 'builder-overlay-innate', abi.name, {
             onclick: (ev) => {
@@ -524,7 +524,13 @@ function overlayEditorAbilities(viewID, callbackOnclick) {
     ])
 }
 
-function overlayList(callback, list) {
+export function enterToClose(ev){
+    if (ev.key === "Enter"){
+        $('body').trigger('click')
+    }
+}
+
+export function overlayList(callback, list) {
     let artificialClickToClose = false // if set to true you can click to close
     const input = e("input", "builder-overlay-list")
     input.setAttribute('list', "item-datalist")
@@ -538,6 +544,7 @@ function overlayList(callback, list) {
     input.onclick = function (ev) {
         if (!artificialClickToClose) ev.stopPropagation()
     }
+    input.onkeydown = enterToClose
     input.onkeyup = input.onchange = (ev) => {
         const itemID = list.indexOf(input.value)
         if (itemID != -1) {
@@ -604,8 +611,7 @@ const statFieldInputControl = {
         return  value
     }
 }
-function editionStats(statField, viewID, callback) {
-    const poke = teamData[viewID]
+export function editionStats(statField, poke, callback) {
     const core = e("div", "overlay-stats-edition")
     const rowDiv = e("div", "overlay-stats-row")
     statsOrder.forEach((value, index) => {

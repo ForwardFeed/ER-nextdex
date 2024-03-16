@@ -1,6 +1,6 @@
 import { search, onkeySearchFilter } from "./search.js"
 import { e, JSHAC, clickOutsideToHide, setLongClickSelection } from "./utils.js"
-import { setAllMoves } from "./panels/species_panel.js"
+import { setAllMoves } from "./panels/species/species_panel.js"
 import { capitalizeFirstLetter } from "./utils.js"
 // Sync it with search.js => panelUpdatesTable
 export const filterDatas = [

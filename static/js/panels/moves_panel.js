@@ -3,7 +3,7 @@ import { search } from "../search.js"
 import { queryFilter2, longClickToFilter, trickFilterSearch} from "../filters.js"
 import { AisInB, e, JSHAC } from "../utils.js"
 import { removeInformationWindow } from "../window.js"
-import { setAllMoves } from "./species_panel.js"
+import { setAllMoves } from "./species/species_panel.js"
 
 export let matchedMoves
 let currentMoveID = 0

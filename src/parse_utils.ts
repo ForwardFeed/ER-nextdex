@@ -3,6 +3,12 @@ export function regexGrabStr(line: string, regex: RegExp | string, byDefault = "
     return grabbed ? grabbed[0] : byDefault
 }
 
+export function regexGrabAllStr(line: string, regex: RegExp, byDefault = "Default"): string[]{
+    const grabbed = line.match(regex)
+    return grabbed ? grabbed : [byDefault]
+}
+
+
 export function regexGrabNum(line: string, regex: RegExp | string, byDefault = 0): number{
     const grabbed = line.match(regex)
     if (!grabbed){

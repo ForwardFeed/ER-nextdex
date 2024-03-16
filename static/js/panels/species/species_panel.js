@@ -1,14 +1,14 @@
-import { redirectLocation } from "./locations_panel.js"
-import { matchedMoves, moveOverlay } from "./moves_panel.js"
-import { addTooltip, capitalizeFirstLetter, AisInB, e, JSHAC, reorderNodeList } from "../utils.js"
-import { search } from "../search.js"
-import { queryFilter2, longClickToFilter } from "../filters.js"
-import { gameData, compareData } from "../data_version.js"
-import { createInformationWindow, removeInformationWindow } from "../window.js"
-import { getDefensiveCoverage, abilitiesToAddedType} from "../weakness.js"
-import { nodeLists } from "../hydrate.js"
-import { cubicRadial } from "../radial.js"
-import { settings } from "../settings.js"
+import { redirectLocation } from "../locations_panel.js"
+import { matchedMoves, moveOverlay } from "../moves_panel.js"
+import { addTooltip, capitalizeFirstLetter, AisInB, e, JSHAC, reorderNodeList } from "../../utils.js"
+import { search } from "../../search.js"
+import { queryFilter2, longClickToFilter } from "../../filters.js"
+import { gameData, compareData } from "../../data_version.js"
+import { createInformationWindow, removeInformationWindow } from "../../window.js"
+import { getDefensiveCoverage, abilitiesToAddedType} from "../../weakness.js"
+import { nodeLists } from "../../hydrate.js"
+import { cubicRadial } from "../../radial.js"
+import { settings } from "../../settings.js"
 
 export let currentSpecieID = 1
 
@@ -16,7 +16,7 @@ export function feedPanelSpecies(id) {
     currentSpecieID = id
     const specie = gameData.species[id]
     $('#species-name').text(`${specie.name}#${specie.dex.id || "??"}`)
-    $('#species-id').text(`ingame ID: ${specie.id}`)
+    $('#species-id').text(`ID: ${specie.id}`)
     updateBaseStats(specie.stats.base)
     $('#species-front').attr('src', getSpritesURL(specie.NAME))
     $('#species-front')[0].onclick = () => {
@@ -303,6 +303,7 @@ export function setupSpeciesPanel() {
         ["#switch-moves", "#species-moves"],
         ["#switch-evos-locs", "#species-evos-locs"],
         ["#switch-misc", "#species-misc"],
+        ["#switch-sets", "#species-sets"],
     ]
     subPanelsAndBtns.forEach((x) => {
         $(x[0]).on('click', () => {
@@ -317,9 +318,6 @@ export function setupSpeciesPanel() {
     })
     $('#species-types').children().each((index, val) => {
         longClickToFilter(0, val, "type")
-    })
-    $('#species-id, #species-name').on('click', function () {
-        $('#species-id, #species-name').toggle()
     })
     $('#species-hw').on('click', ()=>{
         freedom = !freedom

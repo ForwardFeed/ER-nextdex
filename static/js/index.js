@@ -1,5 +1,5 @@
 import setupPanels from "./sidebar.js"
-import { setupSpeciesPanel } from "./panels/species_panel.js"
+import { setupSpeciesPanel } from "./panels/species/species_panel.js"
 import { setupDataVersionning, changeVersion } from "./data_version.js"
 import { setupSearch } from "./search.js"
 import { addTooltip } from "./utils.js"

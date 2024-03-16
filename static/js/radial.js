@@ -28,7 +28,7 @@ export function quadriRadial(buttons, buttonWidth, buttonHeight){
 }
 
 export function cubicRadial(buttons, buttonWidth, buttonHeight){
-    const nbSides = Math.round(Math.sqrt(buttons.length))
+    const nbSides = Math.ceil(Math.sqrt(buttons.length))
     const core = e("div", "cubic-radial")
     core.style.width = `calc(${buttonWidth} * ${nbSides})`
     core.style.height = `calc(${buttonHeight} * ${nbSides})`
