@@ -134,10 +134,11 @@ class BlockComSets {
                     this.pokeData.notes = this.notes.value = vals.join('')
                     ev.stopPropagation()
                     ev.preventDefault()
-                } else {
-                    this.pokeData.notes = this.notes.value
                 }
                 $(this.save).show()
+            },
+            onkeyup : (ev) =>{
+                this.pokeData.notes = this.notes.value
             }
         })
 
@@ -153,6 +154,7 @@ class BlockComSets {
                     input, ev, "focus", true, true, ()=>{
                         this.pokeData.name = input.value
                         t(this.name, input.value)
+                        $(this.save).show()
                     })
             }
         })
@@ -193,12 +195,16 @@ class BlockComSets {
         }
         const natureCallback = (natureID) => {
             this.pokeData.nature = natureID
-            t(this.nature, gameData.natureT[natureID])
+            this.updateNature()
             $(this.save).show()
         }
         const statsCallback = (field, index, value) => {
             this.pokeData[field][index] = value
-            t(this[field][index], value)
+            if (field === "evs"){
+                this.updateEv(index, value)
+            } else {
+                this.updateIv(index, value)
+            }
             $(this.save).show()
         }
         this.mid = e('div', 'species-sets-mid')
@@ -262,16 +268,19 @@ class BlockComSets {
                 createInformationWindow(overlayNode, ev, "mid", true)
             } 
         })
+        this.statsNames = []
         this.evs = []
         this.ivs = []
         statsOrder.map((x, i)=>{
+            const col = e('div', `trainers-stats-name`, x)
             const ev = e('div', `trainers-poke-evs`, 0)
             const iv = e('div', `trainers-poke-ivs`, 0)
+            this.statsNames.push(col)
             this.evs.push(ev)
             this.ivs.push(iv)
             this.statsRow.append(JSHAC([
                 e('div', 'trainers-stats-col'), [
-                    e('div', `trainers-stats-name`, x),
+                    col,
                     iv,
                     ev
                 ]
@@ -357,10 +366,10 @@ class BlockComSets {
         this.baseSpc = gameData.species[pokeData.spc]
         t(this.ability, gameData.abilities[this.baseSpc.stats.abis[pokeData.abi]].name)
         t(this.item, gameData.items[pokeData.item]?.name || 'no item')
-        t(this.nature, gameData.natureT[pokeData.nature])
+        this.updateNature()
         for (let i=0; i<6; i++){
-            t(this.evs[i], pokeData.evs[i])
-            t(this.ivs[i], pokeData.ivs[i])
+            this.updateEv(i, pokeData.evs[i])
+            this.updateIv(i, pokeData.ivs[i])
         }
         for (let i=0; i<4; i++){
             t(this.movesSpan[i], gameData.moves[pokeData.moves[i]]?.name || "-")
@@ -370,17 +379,60 @@ class BlockComSets {
         this.allMovesName = this.baseSpc.allMoves.map(x => gameData.moves[x].name)
         this.updateCounter()
     }
+    updateNature(){
+        const textNature = getTextNature(gameData.natureT[this.pokeData.nature])
+        t(this.nature, textNature)
+        const nerfedBuffed = textNature.match(/((Def)|(SpA)|(Atk)|(SpD)|(Spe))/g)
+        const statBuffed = nerfedBuffed?.[0]
+        const statNerfed = nerfedBuffed?.[1]
+        $(this.statsRow).find('.trainers-stats-name.nerfed, .trainers-stats-name.buffed').removeClass("nerfed buffed")
+        if (statBuffed && statNerfed){
+            const buffedRowIndex = statsOrder.indexOf(statBuffed)
+            const nerfedRowIndex = statsOrder.indexOf(statNerfed)
+            this.statsNames[buffedRowIndex].classList.add('buffed')
+            this.statsNames[nerfedRowIndex].classList.add('nerfed')
+        } else {
+            
+        }
+    }
+    updateEv(index, evVal){
+        t(this.evs[index], +evVal)
+        let fontRgb = window.getComputedStyle(document.body).color.match(/\d+/g)
+        if (!fontRgb || fontRgb.length != 3) fontRgb = [255, 255, 255]
+        this.evs[index].style.color = `rgb(0, ${evVal}, 0)`
+    }
+    updateIv(index, ivVal){
+        t(this.ivs[index], +ivVal)
+        if (ivVal == 0){
+            this.ivs[index].classList.add("nerfed")
+        } else {
+            this.ivs[index].classList.remove("nerfed")
+        }
+    }
     updateCounter(){
         t(this.counter, `${this.pokeDataID + 1}/${pokeDatas.length}`)
     }
     showBlock(){
         $(this.dataDiv).show()
         $(this.placeholder).hide()
+        const oppositeBlockID = this.blockID == 1 ? 0 : 1
+        const oppositeBlock = blocks[oppositeBlockID]
+        if (oppositeBlock.dataDiv.style.display === "none"){
+            $(this.new).hide()
+        } else {
+            $(this.new).show()
+            $(oppositeBlock.new).show()
+        }
+
     }
     hideBlock(){
         $(this.dataDiv).hide()
         $(this.placeholder).show()
+        $(this.notesDiv).hide()
         this.pokeDataID = -1
+        const oppositeBlockID = this.blockID == 1 ? 0 : 1
+        const oppositeBlock = blocks[oppositeBlockID]
+        $(oppositeBlock.new).hide()
     }
     /**
      * @returns {pokeData}

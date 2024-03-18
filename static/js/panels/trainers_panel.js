@@ -222,6 +222,7 @@ const natureMap = {
     "Mild": "+SpA -Def",
     "Quirky": "--",
     "Serious": "--",
+    "Docile": "--",
 }
 
 export function getTextNature(nature) {

@@ -268,7 +268,6 @@ export function updateMoves(searchQuery) {
     }
     const nodeList = $('#moves-list').children()
     matchedMoves = queryFilter2(searchQuery, moves, queryMapMoves)
-    console.log(matchedMoves)
     let validID;
     const movesLen = moves.length
     for (let i  = 0; i < movesLen; i++) {

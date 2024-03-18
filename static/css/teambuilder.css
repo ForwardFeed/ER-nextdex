@@ -385,7 +385,7 @@ textarea, pre{
     border-right: dashed 1px var(--font-color);
 }
 .species-sets-mid-left > div{
-    margin: 0.4em auto;
+    margin: auto;
 }
 .species-sets-mid-right{
     display: flex;
