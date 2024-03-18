@@ -4,15 +4,11 @@ import { setFullTeam } from "./panels/team_builder.js";
 export function setupLoadSave(){
     let timeoutDropper
     $(document.body).on('dragover', function(ev){
+        if (ev.originalEvent.dataTransfer.items.length < 1) return
         for (const item of ev.originalEvent.dataTransfer.items){
             if (item.kind !== "file") return
         }
-        console.log(ev.originalEvent.dataTransfer.items)
         $('#drop-savefile-frame').show()
-        timeoutDropper = setTimeout(function(){
-            $('#drop-savefile-frame').hide()
-        }, 2500)
-       
         ev.preventDefault();  
         ev.stopPropagation();
     })
@@ -22,6 +18,7 @@ export function setupLoadSave(){
         for (const item of ev.originalEvent.dataTransfer.items){
             if (item.kind !== "file") return
             const file = item.getAsFile();
+            //file.name
             parseFile(file)
         }
         ev.preventDefault();  
@@ -203,7 +200,7 @@ function readSubStructure(OTID, personV, start, bytes){
     
     flags = ss3[2]
     mon.pokeball = flags & 0xF;
-    mon.altAbility = (flags >> 5);
+    mon.altAbility = (flags >> 5) & 3;
 	mon.coolRibbon = flags & 7
 	mon.beautyRibbon = (flags >> 3) & 7
 	mon.cuteRibbon = (flags >> 6) & 7
