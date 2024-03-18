@@ -86,7 +86,7 @@ export function parseShowdownFormat(text){
         },
         (line)=>{
             if (!line.match(/\/\//)) return next()
-            poke.notes += line.match(/(?<=\/\/).*/)[0] + "\n"
+            poke.notes += line.replace(/^\/\//, '')[0] + "\n"
         }
     ]
     for (const line of lines){
