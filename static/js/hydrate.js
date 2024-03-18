@@ -55,7 +55,8 @@ export function hydrate(firstLoad=false) {
         [hydrateLocation, "locations  data"],
         [hydrateTrainers, "trainers data"],
         [restoreSave, "save"], // also restore the save of the team builder
-        [setLists, "init some lists"]
+        [setLists, "init some lists"],
+        [addAllOtherEveeMoves, "adding ER eevees moves"]
     ]
     const stepLen = steps.length
     for (let i = 0; i < stepLen; i++){
@@ -159,6 +160,10 @@ function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo) {
     if (!currentSpecie.TMHMMoves.length) currentSpecie.TMHMMoves = previousSpecie.TMHMMoves
     if (!currentSpecie.tutor.length) currentSpecie.tutor = previousSpecie.tutor
     if (!currentSpecie.dex.hw) currentSpecie.dex.hw = previousSpecie.dex.hw
+    currentSpecie.preevomoves = previousSpecie.allMoves.filter(
+        x => currentSpecie.allMoves.indexOf(x) == -1
+    )
+    currentSpecie.allMoves =  [... new Set(currentSpecie.allMoves.concat(...currentSpecie.preevomoves))]
     //do not add if it was already added
     for (const evo of currentSpecie.evolutions){
         if (evo.kd === currentEvo.kd) return
@@ -174,6 +179,21 @@ function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo) {
     })
     //import region for megas
     if (!currentSpecie.region) currentSpecie.region = previousSpecie.region
+}
+// a weird mechanic from ER that makes any evee evo line learn any other move from any other evo line
+// it is so weird that i'm using a pointer for that
+function addAllOtherEveeMoves(){
+    const Eevee = gameData.species.find(x => x.name === "Eevee")
+    let moveListPointer = Eevee.allMoves
+    let allMoves = []
+    for (const evo of Eevee.evolutions){
+        const nextEvo = gameData.species[evo.in]
+        allMoves = [... new Set(allMoves.concat(nextEvo.allMoves))]
+        nextEvo.allMoves = moveListPointer
+    }
+    moveListPointer.splice(0)
+    moveListPointer.push(...allMoves)
+    console.log(moveListPointer)
 }
 
 function hydrateSpecies() {
