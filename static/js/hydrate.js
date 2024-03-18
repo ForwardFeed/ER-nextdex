@@ -185,7 +185,11 @@ function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo) {
 function addAllOtherEveeMoves(){
     const Eevee = gameData.species.find(x => x.name === "Eevee")
     if (!Eevee) return
-    let moveListPointer = Eevee.allMoves || []
+    let moveListPointer = Eevee.allMoves
+    if (!moveListPointer) {
+        console.warn('unexplainable problem in addAllOtherEveeMoves')
+        return
+    }
     let allMoves = []
     for (const evo of Eevee.evolutions){
         const nextEvo = gameData.species[evo.in]
