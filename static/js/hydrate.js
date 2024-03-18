@@ -302,9 +302,10 @@ function hydrateLocation() {
             for (const monID of mons) {
                 const specieID = monID[2]
                 if (specieID < 1) continue
-                map.speciesSet.add(gameData.species[specieID].name.toLowerCase())
+                if (!gameData.species[specieID].locations) continue //what?
+                map.speciesSet.add(gameData.species[specieID]?.name.toLowerCase())
                 if (!gameData.species[specieID].locations.get(mapID))
-                    gameData.species[specieID]?.locations.set(mapID, new Set())
+                    gameData.species[specieID].locations.set(mapID, new Set())
                 gameData.species[specieID].locations.get(mapID).add(locName)
             }
         }
