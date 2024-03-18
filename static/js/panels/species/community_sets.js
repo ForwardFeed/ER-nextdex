@@ -6,7 +6,7 @@ import { createInformationWindow } from "../../window.js";
 import { cubicRadial } from "../../radial.js";
 import { overlayList, editionStats, overlayEditorAbilities, enterToClose} from "../team_builder.js";
 import { fetchFromLocalstorage, saveToLocalstorage } from "../../settings.js";
-import { exportDataShowdownFormat, parseShowdownFormat } from "../../format_showdown.js";
+import { exportDataShowdownFormat, parseShowdownFormat } from "../../format_showdown_.js";
 import { itemList } from "../../hydrate.js";
 
 /** @type {Map<string, pokeData[]>} */

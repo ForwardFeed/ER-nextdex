@@ -6,7 +6,7 @@ import { gameData } from "./data_version.js"
 import { restoreSave, setupOffensiveTeam } from "./panels/team_builder.js"
 import { e, JSHAC } from "./utils.js"
 import { load } from "./loading.js"
-import { initFormatShowdown } from "./format_showdown.js"
+import { initFormatShowdown } from "./format_showdown_.js"
 import { getCommunitySetsFromStorage, setUpComSets } from "./panels/species/community_sets.js"
 
 export const nodeLists = {
