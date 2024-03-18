@@ -7,7 +7,7 @@ import { restoreSave, setupOffensiveTeam } from "./panels/team_builder.js"
 import { e, JSHAC } from "./utils.js"
 import { load } from "./loading.js"
 import { initFormatShowdown } from "./format_showdown.js"
-import { setUpComSets } from "./panels/species/community_sets.js"
+import { getCommunitySetsFromStorage, setUpComSets } from "./panels/species/community_sets.js"
 
 export const nodeLists = {
     species: [],
@@ -45,6 +45,7 @@ export function hydrate(firstLoad=false) {
 
     // hydrate the UI with the data
     const steps = [
+        [getCommunitySetsFromStorage, "community sets"],
         [setupOffensiveTeam, "builder panel"],
         [initFormatShowdown, "showdown data"],
         [setUpComSets, "Import Community sets"],
@@ -53,8 +54,8 @@ export function hydrate(firstLoad=false) {
         [hydrateSpecies, "species  data"],
         [hydrateLocation, "locations  data"],
         [hydrateTrainers, "trainers data"],
-        [hydrateItems, "items data"],
         [restoreSave, "save"], // also restore the save of the team builder
+        [setLists, "init some lists"]
     ]
     const stepLen = steps.length
     for (let i = 0; i < stepLen; i++){
@@ -65,6 +66,12 @@ export function hydrate(firstLoad=false) {
             step[0]()
         }
     } 
+}
+
+export let itemList = []
+function setLists(){
+    itemList = gameData.items.map(x => x.name)
+    
 }
 
 function feedBaseStatsStats(statID, value) {
@@ -396,13 +403,6 @@ function hydrateTrainers() {
     }
     $('#trainers-list').empty().append(frag)
     feedPanelTrainers(1)
-}
-
-function hydrateItems() {
-    gameData.itemT = []
-    gameData.items.forEach((val) => {
-        gameData.itemT.push(val.name)
-    })
 }
 
 export default hydrate

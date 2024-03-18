@@ -309,6 +309,7 @@ textarea, pre{
     display: flex;
 }
 .species-sets-selection{
+    flex-grow: 1;
     display: flex;
     margin: auto;
     width: 100%;
@@ -364,7 +365,7 @@ textarea, pre{
 }
 .species-sets-notes-btn{
     position: absolute;
-    top: 0;
+    bottom: 0;
     right: 0;
 }
 .species-sets-notes{
@@ -383,7 +384,9 @@ textarea, pre{
     width: 40%;
     border-right: dashed 1px var(--font-color);
 }
-
+.species-sets-mid-left > div{
+    margin: 0.4em auto;
+}
 .species-sets-mid-right{
     display: flex;
     flex-wrap: wrap;
@@ -394,16 +397,27 @@ textarea, pre{
     display: flex;
     border-bottom: dashed 1px var(--font-color);
 }
-
+.species-sets-stats > div{
+    margin: 0.4em auto;
+}
 .species-sets-data{
     display: flex;
     flex-direction: column;
     position: relative;
     flex-grow: 1;
 }
+
 .species-sets-placeholder{
     margin: auto;  
 }
 .species-sets-top{
-   height: 2em; 
+    position: relative;
+    height: 2em;
+    display: flex;
+}
+.species-sets-name{
+    height: 100%;
+    min-width: 4em;
+    background-color: var(--colorD);
+    margin: auto;
 }

@@ -2,6 +2,7 @@ import { e, JSHAC } from "./utils.js"
 import { createInformationWindow, removeInformationWindow } from "./window.js"
 import { setFullTeam, teamData } from "./panels/team_builder.js"
 import { gameData } from "./data_version.js"
+import { itemList } from "./hydrate.js"
 
 
 
@@ -10,12 +11,12 @@ const statsN = [
 ]
 
 
-function parseData(){
-    const text = $('#showdown-text').val()
+export function parseShowdownFormat(text){
     const lines = text.split('\n')
     const party = []
     let poke = {
-        moves: []
+        moves: [],
+        notes: "",
     }
     let parsePtr = 0
     const next = () => {
@@ -27,7 +28,7 @@ function parseData(){
             const spcItem = line.split(' @ ')
             poke.spc = spcNameList.indexOf(spcItem[0])
             if (poke.spc == -1) invalid = true //
-            if (spcItem[1] != undefined) poke.item = gameData.itemT[spcItem[1]]
+            if (spcItem[1] != undefined) poke.item = itemList.indexOf(spcItem[1])
             next()
         },
         (line)=>{
@@ -69,16 +70,26 @@ function parseData(){
             next()
         },
         (line)=>{
+            if (!line.match(/^- /)) {
+                next()
+                parseSteps[parsePtr](line)
+                return
+            }
             const moveName = line.replace(/- /, '')
             poke.moves.push(moveNameList.indexOf(moveName))
         },
+        (line)=>{
+            if (!line.match(/\/\//)) return next()
+            poke.notes += line.match(/(?<=\/\/).*/)[0] + "\n"
+        }
     ]
     for (const line of lines){
         if (!line) {
             invalid = false
             party.push(poke)
             poke = {
-                moves: []
+                moves: [],
+                notes: "",
             }
             parsePtr = 0
             continue
@@ -87,20 +98,22 @@ function parseData(){
         try{
             parseSteps[parsePtr](line)
         } catch(e){
-            //console.warn(e, line)
+            console.warn(e, line)
         }
     }
-    setFullTeam(party)
+    return party
 }
 
 function getAbi(spc, abiD){
     return abiNameList[gameData.species[spc].stats.abis[abiD]]
 }
-function showData(){
+
+export function exportDataShowdownFormat(party){
     let text = []
-    for (const poke of teamData){
+    for (const poke of party){
         if (!poke.spc) continue
-        const item = gameData.itemT[poke.item] 
+        const item = itemList[poke.item]
+        poke.evs.splice(6)
         text.push(`${spcNameList[poke.spc]}${item?` @ ${item}`:""}
 Level: 1
 ${gameData.natureT[poke.nature]} Nature
@@ -108,6 +121,7 @@ Ability: ${getAbi(poke.spc, poke.abi)}
 ${`EVS: ${poke.evs.map((x, i) => x?`${x} ${statsN[i]}`:"").filter(x => x).join(' / ')}`.replace(/EVS: $/, '')}
 ${`IVS: ${poke.ivs.map((x, i) => !x?`${x} ${statsN[i]}`:"").filter(x => x).join(' / ')}`.replace(/IVS: $/, '')}
 ${poke.moves.map(x => moveNameList[x]).filter(x => x != "-").map(x => `- ${x}`).join('\n')}
+${poke.notes ? `//${poke.notes}` : ''}
 `.replace(/\n[\n]+/g, '\n'))
     }
     return text.join('\n')
@@ -124,11 +138,11 @@ function showFormatWindow(ev){
     })
     const right = e('div', 'showdown-right')
     const rightTop = e('div', 'showdown-top')
-    const text = showData()
+    const text = exportDataShowdownFormat(teamData)
     const rightBot = e('pre', 'showdown-bot', text)
     const bottomConfirm = e('div', 'showdown-confirm btn-btn-hover', null, {
         onclick: (ev_cb)=>{
-            parseData()
+            setFullTeam(parseShowdownFormat($('#showdown-text').val()))
             bottomConfirm.style.display = "none"
             removeInformationWindow(ev_cb, true)
         }

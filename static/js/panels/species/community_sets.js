@@ -1,16 +1,18 @@
 import { gameData } from "../../data_version.js";
-import { JSHAC, e } from "../../utils.js";
+import { JSHAC, e, t} from "../../utils.js";
 import { getTextNature, statsOrder } from "../trainers_panel.js";
 import { currentSpecieID } from "./species_panel.js";
 import { createInformationWindow } from "../../window.js";
 import { cubicRadial } from "../../radial.js";
 import { overlayList, editionStats, overlayEditorAbilities, enterToClose} from "../team_builder.js";
+import { fetchFromLocalstorage, saveToLocalstorage } from "../../settings.js";
+import { exportDataShowdownFormat, parseShowdownFormat } from "../../format_showdown.js";
+import { itemList } from "../../hydrate.js";
 
-/** @type {string[]} */
-export let communitySets;
-/** @type BlockView[]*/
-const blockViews = []
-
+/** @type {Map<string, pokeData[]>} */
+let communitySets = new Map();
+/** @type BlockComSets[]*/
+const blocks = []
 /**
  * @typedef pokeData
  * @prop {string} name
@@ -21,6 +23,7 @@ const blockViews = []
  * @prop {number} nature
  * @prop {number[]} evs
  * @prop {number[]} ivs
+ * @prop {string} notes
  * @returns {pokeData}
  */
 function emptyData(specieID){
@@ -33,29 +36,81 @@ function emptyData(specieID){
         nature: 0,
         evs: [0,0,0,0,0,0],
         ivs: [31,31,31,31,31,31],
+        notes: "",
     }
 }
+
+function importFromCommunitySet(file){
+    if (!file) return
+    if (file.target) file = file.target.files[0]
+    var reader = new FileReader();
+    reader.onload = (result) => {
+        const fullSet = parseShowdownFormat(result.target.result)
+        for (const set of fullSet){
+            const specie = gameData.species[set.spc]
+            // don't overwrite, add to the previous set
+            if (communitySets.has(specie.NAME)){
+                const previous = communitySets.get(specie.NAME)
+                //prevent total duplicates (if one value changed, then it is no longer considered as such)
+                let isDuplicate = false
+                for (const prevSet of previous){
+                    if (JSON.stringify(prevSet) === JSON.stringify(set)) isDuplicate = true
+                }
+                if (isDuplicate) continue
+                previous.push(set)
+                communitySets.set(specie.NAME, previous)
+            } else {
+                communitySets.set(specie.NAME, [set])
+            }
+        }
+        feedCommunitySets(gameData.species[currentSpecieID].NAME)
+        saveCommunitySets()
+    }
+    reader.readAsText(file, 'UTF-8')
+}
 export function setUpComSets() {
-    blockViews.push(new BlockView(0), new BlockView(1))
+    blocks.push(new BlockComSets(0), new BlockComSets(1))
+    $('#export-comsets').on('click', function(){
+        const allPokimons = []
+        communitySets.forEach(val=>{
+            allPokimons.push(...val)
+        })
+        const element = document.createElement('a')
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(exportDataShowdownFormat(allPokimons)))
+        element.setAttribute('download', 'communitySets.txt')
+        element.style.display = 'none'
+        document.body.appendChild(element)
+        element.click();
+        document.body.removeChild(element);
+    })
+    var input = document.createElement("input");
+    input.id = "savefile-upload";
+    input.type = "file";
+    input.accept = ".txt";
+    input.style.display = "none";
+    input.onchange = importFromCommunitySet;
+    $('#import-comsets').before(input).on('click', function(){
+        input.click()
+    })
 }
 
 
-class BlockView {
+class BlockComSets {
     /**
-     * 
      * @param {pokeData} data 
      * @param {number} blockID 
      */
     constructor(blockID) {
         this.allMovesName = []
+        this.multiplePokedatas = []
 
+        this.blockID = blockID
         this.block = $('.species-sets-block').eq(blockID)
         
         this.placeholder = e('div', 'species-sets-placeholder', null, {
             onclick: ()=>{
-                $(this.dataDiv).toggle()
-                $(this.placeholder).toggle()
-                this.feed(emptyData(currentSpecieID))
+                this.showBlock()
+                addSets(this.blockID)
             }
         })
 
@@ -69,37 +124,55 @@ class BlockView {
         })
         this.notesDiv.style.display = 'none'
         /* var suggests = ["hello", "world"];
-$("#text-area1").asuggest(suggests);s*/
+        $("#text-area1").asuggest(suggests);s*/
         this.notes = e('textarea', 'species-sets-notes-text', null, {
             onkeydown : (ev)=>{
                 //tab to indent
                 if (ev.key === "Tab"){
                     const vals = this.notes.value.split('')
                     vals.splice(this.notes.selectionStart, 0, " ".repeat(4 - (this.notes.selectionStart % 4)))
-                    this.notes.value = vals.join('')
+                    this.pokeData.notes = this.notes.value = vals.join('')
                     ev.stopPropagation()
                     ev.preventDefault()
+                } else {
+                    this.pokeData.notes = this.notes.value
                 }
+                $(this.save).show()
             }
         })
 
         this.dataDiv = e('div', 'species-sets-data')
         this.dataDiv.style.display = "none"
-        this.top = e('div', 'species-sets-top', 'Name of the sets', {
+        this.top = e('div', 'species-sets-top')
+        this.name = e('div', 'species-sets-name', 'Name of the sets', {
             onclick: (ev)=>{
                 const input = e('input',null, this.pokeData.name, {
                     onkeydown: enterToClose
                 })
                 createInformationWindow(
                     input, ev, "focus", true, true, ()=>{
-                        t(this.top,input.value)
+                        this.pokeData.name = input.value
+                        t(this.name, input.value)
                     })
             }
         })
         this.delete = e('div', 'species-sets-delete btn', 'Delete', {
             onclick: ()=>{
-                $(this.dataDiv).toggle()
-                $(this.placeholder).toggle()
+                pokeDatas.splice(this.pokeDataID, 1)
+                this.pokeDataID = getPreviousPokeID(this.pokeDataID)
+                const oppositeBlockID = blockID == 1 ? 0 : 1
+                const oppBlock =  blocks[oppositeBlockID]
+                if (this.pokeDataID < oppBlock.pokeDataID){
+                    oppBlock.pokeDataID -= 1
+                }
+                
+                if (this.pokeDataID == null){
+                    this.hideBlock()
+                } else {
+                    this.feed(this.pokeDataID)
+                }
+                oppBlock.updateCounter()
+                saveCommunitySets()
             }
         })
         this.notesBtn = e('div', 'species-sets-notes-btn btn', 'notes', {
@@ -109,21 +182,24 @@ $("#text-area1").asuggest(suggests);s*/
             }
         })
         const abiCallback = (abiID) => {
-            t(this.ability, gameData.abilities[gameData.species[this.pokeData.spc].stats.abis[abiID]].name)
-            // this.save()
+            this.pokeData.abi = abiID
+            t(this.ability, gameData.abilities[this.baseSpc.stats.abis[abiID]].name)
+            $(this.save).show()
         }
         const itemCallback = (itemID) => {
-            console.log(itemID, this.item)
+            this.pokeData.item = itemID
             t(this.item, gameData.items[itemID].name)
-            //this.save()
+            $(this.save).show()
         }
         const natureCallback = (natureID) => {
+            this.pokeData.nature = natureID
             t(this.nature, gameData.natureT[natureID])
-            //this.save()
+            $(this.save).show()
         }
         const statsCallback = (field, index, value) => {
+            this.pokeData[field][index] = value
             t(this[field][index], value)
-            //this.save()
+            $(this.save).show()
         }
         this.mid = e('div', 'species-sets-mid')
         this.midLeft = e('div', 'species-sets-mid-left', null, {
@@ -131,23 +207,17 @@ $("#text-area1").asuggest(suggests);s*/
                 ev.stopPropagation()
                 const overlayNode = cubicRadial([
                     ["Abilities", (ev) => {
-                        const overlayNode = overlayEditorAbilities(gameData.species[this.pokeData.spc], abiCallback)
+                        const overlayNode = overlayEditorAbilities(this.baseSpc, abiCallback)
                         createInformationWindow(overlayNode, ev, "", true)
                     }],
                     ["Items", (ev) => {
-                        createInformationWindow(overlayList(itemCallback, gameData.items.map(x => x.name)), ev, "focus")
+                        createInformationWindow(overlayList(itemCallback, itemList), ev, "focus")
                     }],
                     ["Nature", (ev) => {
                         createInformationWindow(overlayList(natureCallback,
                             gameData.natureT.map(x => getTextNature(x))),
                             ev, "focus")
-                    }],
-                    ["IVs", (ev) => {
-                        createInformationWindow(editionStats("ivs", this.pokeData, statsCallback), ev)
-                    }],
-                    ["EVs", (ev) => {
-                        createInformationWindow(editionStats("evs", this.pokeData, statsCallback), ev)
-                    }],
+                    }]
                 ], "6em", "1em")
                 createInformationWindow(overlayNode, ev, "mid", true)
             }
@@ -161,8 +231,9 @@ $("#text-area1").asuggest(suggests);s*/
         for (let i = 0; i < 4; i++){
             const moveSpan = e('span', null, '-')
             const moveCallback = (moveID) => {
+                this.pokeData.moves[i] = this.baseSpc.allMoves[moveID]
                 t(moveSpan, this.allMovesName[moveID])
-                //this.save()
+                $(this.save).show()
             }
             this.movesSpan.push(moveSpan)
             this.movesDiv.push(e('div', 'trainers-poke-move', [moveSpan], {
@@ -177,7 +248,20 @@ $("#text-area1").asuggest(suggests);s*/
         this.moves = [0,1,2,3].map(x => {
                 
         })
-        this.statsRow = e('div', 'species-sets-stats')
+        this.statsRow = e('div', 'species-sets-stats', null,{
+            onclick: (ev)=>{
+                ev.stopPropagation()
+                const overlayNode = cubicRadial([
+                    ["IVs", (ev) => {
+                        createInformationWindow(editionStats("ivs", this.pokeData, statsCallback), ev)
+                    }],
+                    ["EVs", (ev) => {
+                        createInformationWindow(editionStats("evs", this.pokeData, statsCallback), ev)
+                    }],
+                ], "6em", "1em")
+                createInformationWindow(overlayNode, ev, "mid", true)
+            } 
+        })
         this.evs = []
         this.ivs = []
         statsOrder.map((x, i)=>{
@@ -195,15 +279,35 @@ $("#text-area1").asuggest(suggests);s*/
         })
 
         this.bot = e('div', 'species-sets-selection')
-        this.edit = e('div', 'btn species-sets-edit', 'Edit', {
+        this.new = e('div', 'btn species-sets-new', 'New', {
             onclick: () => {
-                return
+                addSets(this.blockID)
             }
         })
-        this.prev = e('div', 'species-sets-previous btn', 'Previous')
+        this.prev = e('div', 'species-sets-previous btn', 'Previous', {
+            onclick: ()=>{
+                const prevPokeID = getPreviousPokeID(this.pokeDataID - 1)
+                if (prevPokeID == null) return 
+                this.feed(prevPokeID)
+            }
+        })
         this.counter = e('div', 'species-sets-counter', '0/0')
-        this.next = e('div', 'species-sets-next btn left', 'Next')
-        this.newD = e('div', 'btn species-sets-new right', 'New')
+        this.next = e('div', 'species-sets-next btn left', 'Next', {
+            onclick: ()=>{
+                const nextPokeID = getNextPokeID(this.pokeDataID + 1)
+                if (nextPokeID == null) return
+                this.feed(nextPokeID)
+            }
+        })
+        this.save = e('div', 'btn species-sets-save right', 'Save', {
+            onclick: ()=>{
+                this.savedPokeData = structuredClone(this.toPokeData())
+                communitySets.set(this.baseSpc.NAME, pokeDatas)
+                saveCommunitySets()
+                $(this.save).hide()
+            }
+        })
+        this.save.style.display = "none"
 
         this.block.empty().append(JSHAC([
             this.placeholder, [
@@ -218,6 +322,7 @@ $("#text-area1").asuggest(suggests);s*/
             this.dataDiv,[
                 this.top, [
                     this.delete,
+                    this.name,
                     this.notesBtn
                 ],
                 this.mid, [
@@ -230,41 +335,135 @@ $("#text-area1").asuggest(suggests);s*/
                 ],
                 this.statsRow,
                 this.bot, [
-                    blockID ? this.edit : this.newD,
+                    blockID ? this.new : this.save,
                     this.prev,
                     this.counter,
                     this.next,
-                    blockID ? this.newD : this.edit
+                    blockID ? this.save : this.new
                 ]
             ]
         ]))
     }
     /**
-     * @param {pokeData} pokeData 
+     * @param {number | pokeData} pokeData 
      */
-    feed(pokeData){
+    feed(pokeDataID){
+        const pokeData = this.pokeData = pokeDatas[pokeDataID]
+        if (!pokeData) return
+        this.pokeDataID = pokeDataID
+        this.showBlock()
+        this.savedPokeData = structuredClone(pokeData)
         this.pokeData = pokeData
-        const spc = gameData.species[pokeData.spc]
-        t(this.ability, gameData.abilities[spc.stats.abis[pokeData.abi]].name)
-        t(this.item, gameData.items[pokeData.item] || 'no item')
+        this.baseSpc = gameData.species[pokeData.spc]
+        t(this.ability, gameData.abilities[this.baseSpc.stats.abis[pokeData.abi]].name)
+        t(this.item, gameData.items[pokeData.item]?.name || 'no item')
         t(this.nature, gameData.natureT[pokeData.nature])
         for (let i=0; i<6; i++){
             t(this.evs[i], pokeData.evs[i])
             t(this.ivs[i], pokeData.ivs[i])
         }
         for (let i=0; i<4; i++){
-            t(this.movesSpan[i], gameData.moves[pokeData.moves[i]].name)
+            t(this.movesSpan[i], gameData.moves[pokeData.moves[i]]?.name || "-")
         }
-        t(this.top, pokeData.name || 'Name of the sets')
-        this.allMovesName = spc.allMoves.map(x => gameData.moves[x].name)
+        t(this.name, pokeData.name || 'Name of the sets')
+        this.notes.value = pokeData.notes || ""
+        this.allMovesName = this.baseSpc.allMoves.map(x => gameData.moves[x].name)
+        this.updateCounter()
     }
-
+    updateCounter(){
+        t(this.counter, `${this.pokeDataID + 1}/${pokeDatas.length}`)
+    }
+    showBlock(){
+        $(this.dataDiv).show()
+        $(this.placeholder).hide()
+    }
+    hideBlock(){
+        $(this.dataDiv).hide()
+        $(this.placeholder).show()
+        this.pokeDataID = -1
+    }
+    /**
+     * @returns {pokeData}
+     */
+    toPokeData(){
+        return{
+            name:   this.pokeData.name,
+            spc:    this.pokeData.spc,
+            moves:  this.pokeData.moves,
+            abi:    this.pokeData.abi,
+            item:   this.pokeData.item,
+            nature: this.pokeData.nature,
+            evs:    this.pokeData.evs,
+            ivs:    this.pokeData.ivs,
+            notes:  this.pokeData.notes
+        }
+    }
+    
 }
+/** @type {pokeData[]} pokeData  */
+let pokeDatas = []
 /**
- * shamelessly lazy wrapper
- * @param {HTMLElement} node
- * @param {string} text 
+ * @param {string} specieNAME 
  */
-function t(node, text){
-    node.innerText = text
+export function feedCommunitySets(specieNAME){
+    if (!communitySets.has(specieNAME)){
+        for (let i = 0; i < 2; i++){
+            blocks[i].hideBlock()
+        }
+    } else {
+        pokeDatas = communitySets.get(specieNAME)
+        for (let i = 0; i < 2; i++){
+            const pokeData = pokeDatas[i]
+
+            if (!pokeData){
+                blocks[i].hideBlock()
+            } else {
+                blocks[i].feed(i)
+            }
+        }
+    }
+    
+}
+function addSets(blockID){
+    const oppositeBlockID = blockID == 1 ? 0 : 1
+    const oppositeBlock = blocks[oppositeBlockID]
+    const block = blocks[blockID]
+    block.pokeDataID = pokeDatas.push(emptyData(currentSpecieID)) - 1
+    block.feed(block.pokeDataID)
+    oppositeBlock.updateCounter()
+}
+
+function isIdInUse(dataID){
+    const allIdsInUse = blocks.map(x => x.pokeDataID)
+    return allIdsInUse.indexOf(dataID) != -1
+}
+
+function getNextPokeID(nextPokeDataID){
+    if (isIdInUse(nextPokeDataID)) {
+        nextPokeDataID = getNextPokeID(nextPokeDataID + 1)
+    }
+    if (nextPokeDataID >= pokeDatas.length) return null
+    return nextPokeDataID
+}
+
+function getPreviousPokeID(PreviousPokeDataID){
+    if (isIdInUse(PreviousPokeDataID)) {
+        PreviousPokeDataID = getPreviousPokeID(PreviousPokeDataID - 1)
+    }
+    if (PreviousPokeDataID < 0) return null
+    return PreviousPokeDataID
+}
+
+export function getCommunitySetsFromStorage(){
+    let comSets = fetchFromLocalstorage("communitySets")
+    if (!comSets) return communitySets = new Map()
+    return communitySets = new Map(JSON.parse(comSets));
+}
+
+function saveCommunitySets(){
+    saveToLocalstorage("communitySets", JSON.stringify(Array.from(communitySets.entries())))
+}
+
+window.clearCom = function(){
+    saveToLocalstorage("communitySets", "")
 }

@@ -4,12 +4,12 @@ import { Xtox } from "./parse_utils";
 import { TrainerPokemon } from "./trainers/teams";
 import { PokePokedex } from "./species/pokedex";
 
-export interface CompactedScripted{
+export interface CompactedScripted {
     how: number, // indexed from CompactGameData.ScriptedEncoutersHowT
     map: number, // index from CompactGameData.maps.
 }
 
-export interface CompactLocations{
+export interface CompactLocations {
     maps: CompactLocation[],
     landRate: number[],
     waterRate: number[],
@@ -20,7 +20,7 @@ export interface CompactLocations{
     rodGrade: number[],
 }
 
-export interface CompactLocation{
+export interface CompactLocation {
     name: string,
     land: CompactEncounter[] | undefined,
     landR: number | undefined,
@@ -42,18 +42,18 @@ export type CompactEncounter = [
     number, //specie ID
 ]
 
-export interface CompactEvolution{
+export interface CompactEvolution {
     kd: number,
     rs: string,
     in: number,
 }
 
-export interface CompactLevelUpMove{
+export interface CompactLevelUpMove {
     lv: number,
     id: number,
 }
 
-export interface CompactBaseStats{
+export interface CompactBaseStats {
     base: number[]
     types: number[],
     catchR: number,
@@ -63,7 +63,7 @@ export interface CompactBaseStats{
     gender: number,
     eggC: number,
     fren: number,
-    grow: number, 
+    grow: number,
     eggG: number[],
     abis: number[],
     inns: number[],
@@ -91,7 +91,7 @@ export interface compactMove {
     lDesc: string,
     id: number,
 }
-export interface CompactSpecie{
+export interface CompactSpecie {
     NAME: string,
     name: string,
     stats: CompactBaseStats,
@@ -101,12 +101,12 @@ export interface CompactSpecie{
     TMHMMoves: number[],
     tutor: number[],
     forms: number[],
-    SEnc:CompactedScripted[], // scripted encounters
+    SEnc: CompactedScripted[], // scripted encounters
     dex: PokePokedex,
     id: number,
 }
 
-export interface CompactTrainers{
+export interface CompactTrainers {
     name: string,
     db: boolean,
     party: CompactTrainerPokemon[],
@@ -115,7 +115,7 @@ export interface CompactTrainers{
     map: number,
 }
 
-export interface CompactTrainerPokemon{
+export interface CompactTrainerPokemon {
     spc: number,
     abi: number,
     ivs: number[],
@@ -125,18 +125,18 @@ export interface CompactTrainerPokemon{
     moves: number[]
 }
 
-export interface CompactTrainerRematch{
+export interface CompactTrainerRematch {
     db: boolean,
     party: CompactTrainerPokemon[]
 }
 
-export interface CompactBattleItems{
+export interface CompactBattleItems {
     name: string,
     NAME: string,
     //could add it? desc: string,
 }
 
-export interface CompactGameData{
+export interface CompactGameData {
     abilities: Ability[],
     moves: compactMove[],
     species: CompactSpecie[],
@@ -157,7 +157,7 @@ export interface CompactGameData{
     mapsT: string[],
     MAPST: string[],
 }
-function initCompactGameData(): CompactGameData{
+function initCompactGameData(): CompactGameData {
     return {
         abilities: [],
         moves: [],
@@ -174,7 +174,7 @@ function initCompactGameData(): CompactGameData{
         colT: [],
         evoKindT: [],
         items: [],
-        natureT: ["Hardy","Lonely","Brave","Adamant","Naughty","Bold","Docile","Relaxed","Impish","Lax","Timid","Hasty","Serious","Jolly","Naive","Modest","Mild","Quiet","Bashful","Rash","Calm","Gentle","Sassy","Careful","Quirky"],
+        natureT: ["Hardy", "Lonely", "Brave", "Adamant", "Naughty", "Bold", "Docile", "Relaxed", "Impish", "Lax", "Timid", "Hasty", "Serious", "Jolly", "Naive", "Modest", "Mild", "Quiet", "Bashful", "Rash", "Calm", "Gentle", "Sassy", "Careful", "Quirky"],
         scriptedEncoutersHowT: [],
         mapsT: [],
         MAPST: [],
@@ -182,27 +182,28 @@ function initCompactGameData(): CompactGameData{
 }
 
 
-export function compactify(gameData: GameData): CompactGameData{
+export function compactify(gameData: GameData): CompactGameData {
     const compacted = initCompactGameData()
     const tablize = ((x: unknown, table: unknown[]) => {
         if (!table.includes(x)) table.push(x)
         return table.indexOf(x)
     })
     const abiT: string[] = []
-    gameData.abilities.forEach((val, key)=>{
+    gameData.abilities.forEach((val, key) => {
         abiT.push(key)
         compacted.abilities.push(val)
     })
     const itemT: string[] = []
-    gameData.battleItems.forEach((val, key)=>{
+    gameData.battleItems.forEach((val, key) => {
         itemT.push(key)
         compacted.items.push({
             name: val.name,
             NAME: key
         })
     })
+    console.log(compacted.items)
     const movesT: string[] = []
-    gameData.moves.forEach((val, key)=>{
+    gameData.moves.forEach((val, key) => {
         movesT.push(key)
         const move = val
         compacted.moves.push({
@@ -230,16 +231,16 @@ export function compactify(gameData: GameData): CompactGameData{
         })
     })
     const NAMET: string[] = []
-    gameData.species.forEach((val)=>{
+    gameData.species.forEach((val) => {
         NAMET.push(val.NAME)
     })
     const nameT: string[] = []
     compacted.mapsT = gameData.mapTable
-    gameData.species.forEach((val)=>{
+    gameData.species.forEach((val) => {
         const bs = val.baseStats
         compacted.species.push({
-            name: ((x, X)=>{
-                if (nameT.includes(x)){ // because megas are the same names as the non-megas
+            name: ((x, X) => {
+                if (nameT.includes(x)) { // because megas are the same names as the non-megas
                     x = Xtox('SPECIES_', X)
                 }
                 nameT.push(x)
@@ -247,21 +248,21 @@ export function compactify(gameData: GameData): CompactGameData{
             })(val.name, val.NAME),
             NAME: val.NAME,
             stats: {
-                base:[  bs.baseHP,
-                        bs.baseAttack,
-                        bs.baseDefense,
-                        bs.baseSpAttack,
-                        bs.baseSpDefense,
-                        bs.baseSpeed,
-                    ],
+                base: [bs.baseHP,
+                bs.baseAttack,
+                bs.baseDefense,
+                bs.baseSpAttack,
+                bs.baseSpDefense,
+                bs.baseSpeed,
+                ],
                 types: bs.types.map((x) => {
                     return tablize(x, compacted.typeT)
                 }),
                 catchR: bs.catchRate,
                 exp: bs.expYield,
                 EVY: [bs.evYield_HP, bs.evYield_Attack, bs.evYield_Defense, bs.evYield_SpAttack, bs.evYield_SpDefense, bs.evYield_Speed],
-                items: ((x)=>{
-                    if (!x.length){
+                items: ((x) => {
+                    if (!x.length) {
                         return undefined
                     } else {
                         return x
@@ -270,7 +271,7 @@ export function compactify(gameData: GameData): CompactGameData{
                 gender: bs.genderRatio,
                 eggC: bs.eggCycles,
                 fren: bs.friendship,
-                grow: tablize(bs.growthRate, compacted.growT), 
+                grow: tablize(bs.growthRate, compacted.growT),
                 eggG: bs.eggGroup.map((x) => {
                     if (!compacted.eggT.includes(x)) compacted.eggT.push(x)
                     return compacted.eggT.indexOf(x)
@@ -285,9 +286,9 @@ export function compactify(gameData: GameData): CompactGameData{
                 }),
                 col: tablize(bs.bodyColor, compacted.colT),
                 noFlip: bs.noFlip,
-                flags: bs.flags, 
+                flags: bs.flags,
             },
-            evolutions: val.evolutions.map((x)=>{
+            evolutions: val.evolutions.map((x) => {
                 const evo = {} as CompactEvolution
                 if (!compacted.evoKindT.includes(x.kind)) compacted.evoKindT.push(x.kind)
                 evo.kd = compacted.evoKindT.indexOf(x.kind)
@@ -297,11 +298,11 @@ export function compactify(gameData: GameData): CompactGameData{
             }),
             eggMoves: val.eggMoves.map((x) => {
                 if (!movesT.includes(x)) return 0
-                    return movesT.indexOf(x)
+                return movesT.indexOf(x)
             }),
             levelUpMoves: val.levelUpMoves.map((x) => {
                 return {
-                    id: ((y)=>{
+                    id: ((y) => {
                         if (!movesT.includes(y)) return 0
                         return movesT.indexOf(y)
                     })(x.move),
@@ -322,7 +323,7 @@ export function compactify(gameData: GameData): CompactGameData{
                 }
                 return movesT.indexOf(x)
             }),
-            forms: val.forms.map((x)=>{
+            forms: val.forms.map((x) => {
                 return NAMET.indexOf(x)
             }),
             SEnc: [],
@@ -333,42 +334,42 @@ export function compactify(gameData: GameData): CompactGameData{
     compacted.locations = {
         landRate: gameData.locations.landRate,
         waterRate: gameData.locations.waterRate,
-        fishRate:gameData.locations.fishRate,
+        fishRate: gameData.locations.fishRate,
         honeyRate: gameData.locations.honeyRate,
         rockRate: gameData.locations.rockRate,
         hiddenRate: gameData.locations.hiddenRate,
         rodGrade: gameData.locations.rodGrade,
-        maps: gameData.locations.maps.map((map)=>{
+        maps: gameData.locations.maps.map((map) => {
             return {
                 name: map.name,
-                land: map.land ? map.land.map((x)=>{
+                land: map.land ? map.land.map((x) => {
                     return [x.min, x.max, NAMET.indexOf(x.specie)]
                 }) : undefined,
                 landR: map.landR,
-                water: map.water ? map.water.map((x)=>{
+                water: map.water ? map.water.map((x) => {
                     return [x.min, x.max, NAMET.indexOf(x.specie)]
                 }) : undefined,
                 waterR: map.waterR,
-                fish: map.fish ? map.fish.map((x)=>{
+                fish: map.fish ? map.fish.map((x) => {
                     return [x.min, x.max, NAMET.indexOf(x.specie)]
                 }) : undefined,
                 fishR: map.fishR,
-                honey: map.honey ? map.honey.map((x)=>{
+                honey: map.honey ? map.honey.map((x) => {
                     return [x.min, x.max, NAMET.indexOf(x.specie)]
                 }) : undefined,
                 honeyR: map.honeyR,
-                rock: map.rock ? map.rock.map((x)=>{
+                rock: map.rock ? map.rock.map((x) => {
                     return [x.min, x.max, NAMET.indexOf(x.specie)]
                 }) : undefined,
                 rockR: map.rockR,
-                hidden: map.hidden ? map.hidden.map((x)=>{
+                hidden: map.hidden ? map.hidden.map((x) => {
                     return [x.min, x.max, NAMET.indexOf(x.specie)]
                 }) : undefined,
                 hiddenR: map.hiddenR,
             }
         })
     }
-    const compactPoke = (poke: TrainerPokemon)=>{
+    const compactPoke = (poke: TrainerPokemon) => {
         return {
             spc: NAMET.indexOf(poke.specie),
             abi: poke.ability,
@@ -376,15 +377,15 @@ export function compactify(gameData: GameData): CompactGameData{
             evs: poke.evs,
             item: tablize(poke.item, itemT),
             nature: compacted.natureT.indexOf(Xtox('NATURE_', poke.nature)),
-            moves: poke.moves.map((mv)=>{
+            moves: poke.moves.map((mv) => {
                 return tablize(mv, movesT)
             })
         }
     }
     const trainerT: string[] = []
-    gameData.trainers.forEach((trainer, key)=>{
+    gameData.trainers.forEach((trainer, key) => {
         let category = Xtox('TRAINER_CLASS_', trainer.category)
-        if (!trainer.party.length){
+        if (!trainer.party.length) {
             return
         }
         compacted.trainers.push({
@@ -392,7 +393,7 @@ export function compactify(gameData: GameData): CompactGameData{
             db: trainer.double,
             party: trainer.party.map(compactPoke),
             insane: trainer.insane.map(compactPoke),
-            rem: trainer.rematches.map((rem)=>{
+            rem: trainer.rematches.map((rem) => {
                 return {
                     db: rem.double,
                     party: rem.party.map(compactPoke)
@@ -402,32 +403,32 @@ export function compactify(gameData: GameData): CompactGameData{
         })
         trainerT.push(key)
     })
-    gameData.dataScripted.forEach((val)=>{
+    gameData.dataScripted.forEach((val) => {
         if (!val.species.length && !val.trainers.length) return
-        const idMap = compacted.mapsT.push(val.name .replace(/_/g, ' ')
-                                                    .replace(/(?<=[a-z])(?=[A-Z])/g, ' ')
-                                                    .replace(/(?<=[a-z])(?=[0-9])/g, ' '))
+        const idMap = compacted.mapsT.push(val.name.replace(/_/g, ' ')
+            .replace(/(?<=[a-z])(?=[A-Z])/g, ' ')
+            .replace(/(?<=[a-z])(?=[0-9])/g, ' '))
         compacted.MAPST.push(val.id)
-        val.species.forEach((value)=>{
+        val.species.forEach((value) => {
             if (!compacted.species[NAMET.indexOf(value.spc)]) return
             compacted.species[NAMET.indexOf(value.spc)].SEnc.push({
                 map: idMap,
                 how: tablize(value.how, compacted.scriptedEncoutersHowT),
             })
         })
-        val.trainers.forEach((value)=>{
+        val.trainers.forEach((value) => {
             if (!compacted.trainers[trainerT.indexOf(value)] || compacted.trainers[trainerT.indexOf(value)].map == undefined) return
             compacted.trainers[trainerT.indexOf(value)].map = idMap
         })
-        
+
     })
-    compacted.trainers = compacted.trainers.sort((a, b)=>{
+    compacted.trainers = compacted.trainers.sort((a, b) => {
         if (a.map == b.map) return 0
         if (a.map == -1) return 1
         if (b.map == -1) return -1
-        if (a.map < b.map){
+        if (a.map < b.map) {
             return -1
-        } else if (a.map > b.map){
+        } else if (a.map > b.map) {
             return 1
         }
     })

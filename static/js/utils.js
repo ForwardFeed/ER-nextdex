@@ -190,3 +190,12 @@ export function reorderNodeList(list, sortFn, direction = "<"){
         }
     })
 }
+
+/**
+ * shamelessly lazy wrapper
+ * @param {HTMLElement} node
+ * @param {string} text 
+ */
+export function t(node, text){
+    node.innerText = text
+}

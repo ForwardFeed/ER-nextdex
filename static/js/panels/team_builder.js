@@ -7,6 +7,7 @@ import { cubicRadial } from "../radial.js";
 import { saveToLocalstorage, fetchFromLocalstorage } from "../settings.js";
 import { getDefensiveCoverage, abilitiesToAddedType, getMoveEffectiveness } from "../weakness.js"
 import { longClickToFilter } from "../filters.js";
+import { itemList } from "../hydrate.js";
 
 const saveKeysPokemon = [
     "spc",
@@ -137,7 +138,7 @@ export function setFullTeam(party) {
     updateTeamWeaknessesLock = true
     for (let i = 0; i < 6; i++) {
         const val = party[i]
-        if (!val || !val.spc) {
+        if (!val || !val.spc || val.spc == -1) {
             deletePokemon($('#builder-data').find('.builder-mon').eq(i), i)
             continue
         }
@@ -449,7 +450,7 @@ function feedPokemonEdition(jNode, viewID) {
         save()
     }
     const statsCallback = (field, index, value) => {
-        poke[field][index] = value
+        poke[field][index] = +value
         createPokeView(view.node, viewID) //same reason as nature
         save()
     }
@@ -457,7 +458,7 @@ function feedPokemonEdition(jNode, viewID) {
         ev.stopPropagation()
         const overlayNode = cubicRadial([
             ["Items", (ev) => {
-                createInformationWindow(overlayList(itemCallback, gameData.items), ev, "focus")
+                createInformationWindow(overlayList(itemCallback, itemList), ev, "focus")
             }],
             ["Nature", (ev) => {
                 createInformationWindow(overlayList(natureCallback,
@@ -622,10 +623,9 @@ export function editionStats(statField, poke, callback) {
         statStat.id = `overlay-stats-edit${index}`
         statStat.value = poke[statField][index]
         statStat.type = "text"
-        let prevValue =  statStat.value 
+        let prevValue = +statStat.value 
         statStat.onkeyup = (evKey) => {
-            prevValue = 
-                statStat.value =
+            statStat.value = prevValue = 
                     statFieldInputControl[statField](statStat.value, evKey.key, +prevValue, poke[statField])
 
             callback(statField, index, statStat.value)

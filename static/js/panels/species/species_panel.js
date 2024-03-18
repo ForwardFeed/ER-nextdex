@@ -9,6 +9,7 @@ import { getDefensiveCoverage, abilitiesToAddedType} from "../../weakness.js"
 import { nodeLists } from "../../hydrate.js"
 import { cubicRadial } from "../../radial.js"
 import { settings } from "../../settings.js"
+import { feedCommunitySets } from "./community_sets.js"
 
 export let currentSpecieID = 1
 
@@ -40,6 +41,8 @@ export function feedPanelSpecies(id) {
     setSpecieHeightWeight()
     $('#species-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
     nodeLists.species[id - 1].classList.replace("sel-n-active", "sel-active")
+
+    feedCommunitySets(specie.NAME)
 }
 
 export function redirectSpecie(specieId) {
