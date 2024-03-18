@@ -56,7 +56,8 @@ export function hydrate(firstLoad=false) {
         [hydrateTrainers, "trainers data"],
         [restoreSave, "save"], // also restore the save of the team builder
         [setLists, "init some lists"],
-        [addAllOtherEveeMoves, "adding ER eevees moves"]
+        [takeMovesFromPreEvolution, "take moves from evo"],
+        [addAllOtherEveeMoves, "adding ER eevees moves"],
     ]
     const stepLen = steps.length
     for (let i = 0; i < stepLen; i++){
@@ -147,7 +148,20 @@ function hydrateMoves(moves = gameData.moves) {
     $("#moves-list").empty().append(fragment);
     feedPanelMoves(1)
 }
-
+function takeMovesFromPreEvolution(){
+    const speciesLen = gameData.species.length
+    for(let i=0; i < speciesLen; i++){
+        const specie = gameData.species[i]
+        for(const evo of specie.evolutions){
+            if (!evo.from) continue
+            const previousSpecie = gameData.species[evo.in]
+            specie.preevomoves = previousSpecie.allMoves.filter(
+                x => specie.allMoves.indexOf(x) == -1
+            )
+            specie.allMoves =  [... new Set(specie.allMoves.concat(...specie.preevomoves))]
+        }
+    }
+}
 
 /**
  * Not a fully functionnally recursive way to add specie evolution
@@ -163,10 +177,6 @@ function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo) {
     if (!currentSpecie.tutor.length) currentSpecie.tutor = previousSpecie.tutor
     if (!currentSpecie.dex.hw) currentSpecie.dex.hw = previousSpecie.dex.hw
 
-    /*currentSpecie.preevomoves = previousSpecie.allMoves.filter(
-        x => currentSpecie.allMoves.indexOf(x) == -1
-    )
-    currentSpecie.allMoves =  [... new Set(currentSpecie.allMoves.concat(...currentSpecie.preevomoves))]*/
     //do not add if it was already added
     for (const evo of currentSpecie.evolutions){
         if (evo.kd === currentEvo.kd) return
