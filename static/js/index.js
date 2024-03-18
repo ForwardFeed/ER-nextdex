@@ -9,7 +9,7 @@ import { setupTeamBuilder } from "./panels/team_builder.js"
 import { activateInsanity } from "./insanity.js"
 import { setupMoves} from "./panels/moves_panel.js"
 import { load } from "./loading.js"
-import { setupFormatShowdown } from "./format_showdown_.js"
+import { setupFormatShowdown } from "./format_showdown.js"
 import { setupLoadSave } from "./load_save.js"
 
 
