@@ -194,7 +194,6 @@ function addAllOtherEveeMoves(){
     }
     moveListPointer.splice(0)
     moveListPointer.push(...allMoves)
-    console.log(moveListPointer)
 }
 
 function hydrateSpecies() {
@@ -305,7 +304,7 @@ function hydrateLocation() {
                 if (specieID < 1) continue
                 map.speciesSet.add(gameData.species[specieID].name.toLowerCase())
                 if (!gameData.species[specieID].locations.get(mapID))
-                    gameData.species[specieID].locations.set(mapID, new Set())
+                    gameData.species[specieID]?.locations.set(mapID, new Set())
                 gameData.species[specieID].locations.get(mapID).add(locName)
             }
         }
