@@ -147,6 +147,8 @@ function hydrateMoves(moves = gameData.moves) {
     $("#moves-list").empty().append(fragment);
     feedPanelMoves(1)
 }
+
+
 /**
  * Not a fully functionnally recursive way to add specie evolution
  * @param {number} currentSpecieID - species into what the pokemon is evolving
@@ -160,10 +162,11 @@ function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo) {
     if (!currentSpecie.TMHMMoves.length) currentSpecie.TMHMMoves = previousSpecie.TMHMMoves
     if (!currentSpecie.tutor.length) currentSpecie.tutor = previousSpecie.tutor
     if (!currentSpecie.dex.hw) currentSpecie.dex.hw = previousSpecie.dex.hw
-    currentSpecie.preevomoves = previousSpecie.allMoves.filter(
+
+    /*currentSpecie.preevomoves = previousSpecie.allMoves.filter(
         x => currentSpecie.allMoves.indexOf(x) == -1
     )
-    currentSpecie.allMoves =  [... new Set(currentSpecie.allMoves.concat(...currentSpecie.preevomoves))]
+    currentSpecie.allMoves =  [... new Set(currentSpecie.allMoves.concat(...currentSpecie.preevomoves))]*/
     //do not add if it was already added
     for (const evo of currentSpecie.evolutions){
         if (evo.kd === currentEvo.kd) return
