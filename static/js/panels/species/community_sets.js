@@ -72,7 +72,11 @@ export function setUpComSets() {
     blocks.push(new BlockComSets(0), new BlockComSets(1))
     $('#export-comsets').on('click', function(){
         const allPokimons = []
-        communitySets.forEach(val=>{
+        communitySets.forEach((val, key, map)=>{
+            if (val.length < 1){
+                map.delete(key)
+                return
+            }
             allPokimons.push(...val)
         })
         const element = document.createElement('a')
@@ -450,14 +454,15 @@ class BlockComSets {
             notes:  this.pokeData.notes
         }
     }
-    
 }
+
 /** @type {pokeData[]} pokeData  */
 let pokeDatas = []
 /**
  * @param {string} specieNAME 
  */
 export function feedCommunitySets(specieNAME){
+    pokeDatas = []
     if (!communitySets.has(specieNAME)){
         for (let i = 0; i < 2; i++){
             blocks[i].hideBlock()
