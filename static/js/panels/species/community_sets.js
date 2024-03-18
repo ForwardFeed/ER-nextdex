@@ -348,11 +348,11 @@ class BlockComSets {
                 ],
                 this.statsRow,
                 this.bot, [
-                    blockID ? this.new : this.save,
+                    this.save,
                     this.prev,
                     this.counter,
                     this.next,
-                    blockID ? this.save : this.new
+                    this.new
                 ]
             ]
         ]))

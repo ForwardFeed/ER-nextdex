@@ -7,7 +7,7 @@ export function setupLoadSave(){
         for (const item of ev.originalEvent.dataTransfer.items){
             if (item.kind !== "file") return
         }
-        console.log(item)
+        console.log(ev.originalEvent.dataTransfer.items)
         $('#drop-savefile-frame').show()
         timeoutDropper = setTimeout(function(){
             $('#drop-savefile-frame').hide()

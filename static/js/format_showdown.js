@@ -132,7 +132,7 @@ Ability: ${getAbi(poke.spc, poke.abi)}
 ${`EVS: ${poke.evs.map((x, i) => x?`${x} ${statsN[i]}`:"").filter(x => x).join(' / ')}`.replace(/EVS: $/, '')}
 ${`IVS: ${poke.ivs.map((x, i) => !+x?`${x} ${statsN[i]}`:"").filter(x => x).join(' / ')}`.replace(/IVS: $/, '')}
 ${poke.moves.map(x => moveNameList[x]).filter(x => x != "-").map(x => `- ${x}`).join('\n')}
-${poke.notes ? `//${poke.notes}` : ''}
+${poke.notes ? `${poke.notes.split('\n').map(x =>`//${x}\n`).join('')}` : ''}
 `.replace(/\n[\n]+/g, '\n'))
     }
     return text.join('\n')
