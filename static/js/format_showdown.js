@@ -17,6 +17,8 @@ export function parseShowdownFormat(text){
     let poke = {
         moves: [],
         notes: "",
+        ivs: [31,31,31,31,31,31],
+        evs: [0,0,0,0,0,0],
     }
     let parsePtr = 0
     const next = () => {
