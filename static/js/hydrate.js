@@ -184,6 +184,7 @@ function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo) {
 // it is so weird that i'm using a pointer for that
 function addAllOtherEveeMoves(){
     const Eevee = gameData.species.find(x => x.name === "Eevee")
+    if (!Eevee) return
     let moveListPointer = Eevee.allMoves
     let allMoves = []
     for (const evo of Eevee.evolutions){
