@@ -1,4 +1,4 @@
-import { feedPanelSpecies, getSpritesURL, matchedSpecies, setupReorderBtn } from "./panels/species/species_panel.js"
+import { buildSpeciesPrefixTrees, feedPanelSpecies, getSpritesURL, matchedSpecies, setupReorderBtn } from "./panels/species/species_panel.js"
 import { feedPanelMoves } from "./panels/moves_panel.js"
 import { feedPanelLocations } from "./panels/locations_panel.js"
 import { feedPanelTrainers } from "./panels/trainers_panel.js"
@@ -306,6 +306,7 @@ function hydrateSpecies() {
     setMeanBaseStats()
     $("#species-list").empty().append(fragment);
     feedPanelSpecies(1)
+    buildSpeciesPrefixTrees()
 }
 
 function hydrateLocation() {

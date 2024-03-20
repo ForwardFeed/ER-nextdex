@@ -242,6 +242,7 @@ export function appendFilter(panelID, initKey = "", initData = ""){
 }
 
 /**
+ * 
  * @callback searchAssertion - compare the data from the query and the data from the data
  * @param {unknow} data -- data from the data
  * @param {string} queryData -- data from the query
@@ -253,7 +254,7 @@ export function appendFilter(panelID, initKey = "", initData = ""){
  * @typedef {Object} Query - a query
  * @property {string} op - Operation to do to all direct sub element
  * @property {keyof SearchMap} k - a key for the searchmap
- * @property {Query} queryData - data of the query
+ * @property {string | query} queryData - data of the query
  * @property {boolean} suggestion - should it add to suggestions?
  * @property {boolean} [not=false] - should it not match
  * 
@@ -411,6 +412,145 @@ export function queryFilter2(query, datas, keymap){
     }
 }
 
+const cacheFilters = []
+let cacheIndex = 0
+
+function clearUnusedCache(isEntryPoint){
+    //only the parent of all queries may ask for it (don't clear while in use)
+    if (!isEntryPoint) return
+    cacheFilters.splice(cacheIndex)
+}
+
+function retrieveFromCache(query){
+    const cached = cacheFilters[cacheIndex]
+    if (!cached || !cached.data.length) return null
+    const strCaching = query.k + query.data + (query.not ? "0" : "1")
+    return cached.strCaching == strCaching ? cached.data : null
+}
+
+function putToCache(query, data){
+    cacheFilters[cacheIndex] = {
+        strCaching: query.k + query.data + (query.not ? "0" : "1"),
+        data: data
+    }
+    cacheIndex += 1
+    return data
+}
+
+/**
+ * query filter 2 but introduce cache to speed up
+ * @param {Query | Query[]} query content of the query, might be an array of query
+ * @param {data} datas what to query on 
+ * @param {SearchMap} keymap functions to compare the data and the query data 
+ * @param {boolean} entrypoint is this call the entrypoint
+ * @returns {number[]}the list of element that matched by index
+ */
+export function queryFilter3(query, datas, keymap, prefixedTree = {} , entrypoint = true){
+    if (entrypoint) cacheIndex = 0
+    const queryNot = (notFlag, value) => {
+        // if a filter has been removed in the query, this will be kicked
+        clearUnusedCache(entrypoint)
+        return notFlag ? !value : value
+    }
+    if (query.data.constructor === Array){
+        // break it down until it is no longer an array
+        // resolve all using the parent operator
+        const subQueriesAnswers = query.data.map((subQuery)=>{
+            return queryFilter3(subQuery, datas, keymap, {} ,false)
+        }).filter(x => x)
+        // if the is nothing to compare to, then just shrug
+
+        if (subQueriesAnswers.length < 1) return undefined
+        // just one?
+        if (subQueriesAnswers.length == 1) return subQueriesAnswers[0]
+        // okay now it's we get to use our operators
+        let allIndexes = subQueriesAnswers.splice(0,1)[0]
+        const subQlen = subQueriesAnswers.length
+        for (let i = 0; i < subQlen; i++){
+            const answers = subQueriesAnswers[i]
+            allIndexes.push(...answers)
+            if (query.op === "OR"){
+                // or is basically a concatenation + a unique values
+                allIndexes = [...new Set(allIndexes)]
+            } else if (query.op === "XOR"){
+                const onlyUniq = []
+                const len = allIndexes.length
+                for (let i = 0; i < len; i++){
+                    const checkUniq = allIndexes.splice(0,1)[0]
+                    if (allIndexes.indexOf(checkUniq) == -1) onlyUniq.push(checkUniq)
+                    allIndexes.push(checkUniq)
+                }
+                allIndexes = onlyUniq
+            } else { //Default AND
+                // concatenation + only duplicate
+                const duplicates = []
+                const len = allIndexes.length
+                for (let i = 0; i < len; i++){
+                    const checkDupli = allIndexes.splice(0,1)[0]
+                    if (allIndexes.indexOf(checkDupli) != -1) duplicates.push(checkDupli)
+                }
+                allIndexes = duplicates
+            }
+        }
+        return allIndexes
+    } else {
+        const cached = retrieveFromCache(query)
+        if (cached) return cached
+        const execFn = keymap[query.k]
+        // if the is nothing to compare to, then just shrug
+        if (!execFn) return undefined
+        const allElementsIndexesThatMatched = []
+        const perfectMatches = [] //for not unique properties like abilities or move that can be shared by multiple pokemons
+        //prefixed tree (trie) makes the whole algo going at least 5 times faster for common uses
+        const prefixedData = prefixedTree[query.k]?.[query.data.charAt(0)]
+        if (prefixedData && query.data.length == 1 ) {
+            return putToCache(query, prefixedData)
+        }
+        datas =  prefixedData?.map(x => datas[x]) || datas
+        const dataLen = datas.length
+        for (let i = 0; i < dataLen; i++){
+            const data = datas[i]
+            const answer = execFn(query.data, data)
+            let suggestion
+            // when asking for object it's because the function may support perfect matching
+            // Which means that ignore any other, this is to fix this case:
+            // powder and powder poison, if the string is "pow" both may trigger
+            // but if it's "powder" then no, only powder may show
+            // in the case of generator or generator as abilities, it's the ability that should be uniq
+            // not the first pokemon to hit it, that's why there is isNotUnique
+            if (typeof answer === "object"){
+                const perfectMatch = answer[0]
+                suggestion = answer[1]
+                if (perfectMatch) {
+                    const isUnique = answer[2]
+                    // a name is unique
+                    if (isUnique) {
+                        // invert the unique search
+                        if (query.not){
+                            const inverted = [...Array(dataLen).keys()]
+                            inverted.splice(i, 1)
+                            return inverted
+                        }
+                        return [prefixedData ? prefixedData[i] : i]
+                    }
+                    // an ability or a move isn't
+                    perfectMatches.push(prefixedData ? prefixedData[i] : i)
+
+                }
+            } else {
+                suggestion = answer
+            }
+            if (queryNot(query.not, suggestion)){
+                allElementsIndexesThatMatched.push(prefixedData ? prefixedData[i] : i)
+                if (query.suggestion){
+                    search.addSuggestion(suggestion)
+                }
+            }
+        }
+        const returnData = perfectMatches.length ? perfectMatches : allElementsIndexesThatMatched
+        return putToCache(query, returnData)
+    }
+}
 function removeAllFilters(){
     $('#filter-frame').find('.filter-field').remove()
     spinOnRemoveFilter()

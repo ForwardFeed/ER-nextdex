@@ -204,6 +204,11 @@ export function moveOverlay(moveId) {
     ])
 }
 
+// would be a function to have an upgraded move picker
+export function movePicker(){
+    return
+}
+
 export const queryMapMoves = {
     "name": (queryData, move) => {
         const moveName = move.name.toLowerCase()

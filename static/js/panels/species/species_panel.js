@@ -2,7 +2,7 @@ import { redirectLocation } from "../locations_panel.js"
 import { matchedMoves, moveOverlay } from "../moves_panel.js"
 import { addTooltip, capitalizeFirstLetter, AisInB, e, JSHAC, reorderNodeList } from "../../utils.js"
 import { search } from "../../search.js"
-import { queryFilter2, longClickToFilter } from "../../filters.js"
+import { queryFilter2, longClickToFilter, queryFilter3 } from "../../filters.js"
 import { gameData, compareData } from "../../data_version.js"
 import { createInformationWindow, removeInformationWindow } from "../../window.js"
 import { getDefensiveCoverage, abilitiesToAddedType} from "../../weakness.js"
@@ -112,11 +112,17 @@ function setTypes(types, specie) {
 }
 
 export function setAllMoves(specie = gameData.species[currentSpecieID]){
-    setLevelUpMoves($('#learnset'), specie.levelUpMoves)
-    setMoves($('#tmhm'), specie.TMHMMoves, $('#tmhm').parent())
-    setMoves($('#tutor'), specie.tutor, $('#tmhm').parent())
+    setLevelUpMoves($('#learnset'), specie.levelUpMoves, $('#learnset-title'))
+    setMoves($('#tmhm'), specie.TMHMMoves, $('#tmhm-title'))
+    setMoves($('#tutor'), specie.tutor, $('#tutor-title'))
     setMoves($('#eggmoves'), specie.eggMoves,$('#eggmoves-title'))
     setMoves($('#preevomoves'), specie.preevomoves || [], $('#preevomoves-title'))
+    
+    if ($('#eggmoves-title').css('display') === 'none' && $('#preevomoves-title').css('display') === 'none') {
+        $('#eggpreevo-title').hide()
+    } else {
+        $('#eggpreevo-title').show()
+    }
 }
 
 function filterMoves(moveIDlist) {
@@ -189,8 +195,16 @@ function setMoves(core, moves, title) {
     }
     core.append(frag)
 }
-function setLevelUpMoves(core, moves) {
+function setLevelUpMoves(core, moves, title) {
     core.empty()
+    if (!moves.length){
+        core.hide()
+        title.hide()
+        return
+    } else {
+        core.show()
+        title.show()
+    }
     const frag = document.createDocumentFragment()
     for (const { lv: lvl, id: id } of moves) {
         if (matchedMoves && matchedMoves.indexOf(id) == -1) continue
@@ -542,6 +556,17 @@ function buildResist(specie){
     specie.resist = [...[].concat(weaknesses["0.5"]?.concat(weaknesses["0.25"]?.concat(weaknesses["0.25"])))].filter(x => x)
 }
 
+const prefixTree = {}
+
+export function buildSpeciesPrefixTrees(){
+    prefixTree.name = {}
+    gameData.species.forEach((x, i)=>{
+        const prefix = x.name.charAt(0).toLowerCase()
+        if (!prefixTree.name[prefix]) prefixTree.name[prefix] = []
+        prefixTree.name[prefix].push(i)
+    })
+}
+
 export const queryMapSpecies = {
     "name": (queryData, specie) => {
         const specieName = specie.name.toLowerCase()
@@ -597,10 +622,9 @@ export const queryMapSpecies = {
 }
 
 export let matchedSpecies = []
-
 export function updateSpecies(searchQuery) {
     const species = gameData.species
-    const matched = queryFilter2(searchQuery, species, queryMapSpecies)
+    const matched = queryFilter3(searchQuery, species, queryMapSpecies, prefixTree)
     let validID;
     const specieLen = species.length
     for (let i = 0; i < specieLen; i++) {
