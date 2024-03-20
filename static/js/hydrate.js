@@ -148,20 +148,6 @@ function hydrateMoves(moves = gameData.moves) {
     $("#moves-list").empty().append(fragment);
     feedPanelMoves(1)
 }
-function takeMovesFromPreEvolution(){
-    const speciesLen = gameData.species.length
-    for(let i=0; i < speciesLen; i++){
-        const specie = gameData.species[i]
-        for(const evo of specie.evolutions){
-            if (!evo.from) continue
-            const previousSpecie = gameData.species[evo.in]
-            specie.preevomoves = previousSpecie.allMoves.filter(
-                x => specie.allMoves.indexOf(x) == -1
-            )
-            specie.allMoves =  [... new Set(specie.allMoves.concat(...specie.preevomoves))]
-        }
-    }
-}
 
 /**
  * Not a fully functionnally recursive way to add specie evolution
@@ -193,6 +179,21 @@ function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo) {
     //import region for megas
     if (!currentSpecie.region) currentSpecie.region = previousSpecie.region
 }
+function takeMovesFromPreEvolution(){
+    const speciesLen = gameData.species.length
+    for(let i=0; i < speciesLen; i++){
+        const specie = gameData.species[i]
+        for(const evo of specie.evolutions){
+            if (!evo.from) continue
+            const previousSpecie = gameData.species[evo.in]
+            specie.preevomoves = previousSpecie.allMoves.filter(
+                x => specie.allMoves.indexOf(x) == -1
+            )
+            specie.allMoves =  [... new Set(specie.allMoves.concat(...specie.preevomoves))]
+        }
+    }
+}
+
 // a weird mechanic from ER that makes any evee evo line learn any other move from any other evo line
 // it is so weird that i'm using a pointer for that
 function addAllOtherEveeMoves(){
@@ -204,12 +205,20 @@ function addAllOtherEveeMoves(){
         return
     }
     let allMoves = []
+    // add all moves uniquely into a shared object 
     for (const evo of Eevee.evolutions){
         const nextEvo = gameData.species[evo.in]
         allMoves = [... new Set(allMoves.concat(nextEvo.allMoves))]
         nextEvo.allMoves = moveListPointer
     }
-    moveListPointer.splice(0)
+    // show it shows into pree evo moves too
+    for (const evo of Eevee.evolutions){
+        const nextEvo = gameData.species[evo.in]
+        nextEvo.preevomoves = nextEvo.preevomoves.concat(allMoves.filter(
+            x => nextEvo.allMoves.indexOf(x) == -1
+        ))
+    }
+    moveListPointer.splice(0) // i delete everything inside to keep the pointer alive
     moveListPointer.push(...allMoves)
 }
 

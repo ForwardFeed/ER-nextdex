@@ -551,7 +551,8 @@ span{
     border-bottom-width: 1px;
 }
 .species-move-row{
-    width: 11em;
+    width: 100%;
+    min-height: 15px;
     display: flex;
     cursor: pointer;
     align-items: center;
@@ -576,13 +577,18 @@ span{
 }
 
 .species-levelup-lvl{
-    width: 1.5em;
-    background-color: var(--colorC);
+    display: flex;
+    height: 100%;
+    min-width: 1.5em;
+    background-color: var(--colorE);
 }
 .species-move-name{
     width: 100%;
 }
-
+.species-move-pwr{
+    font-size: 0.8em;
+    min-width: 1.8em;
+}
 
 .specie-locs, .specie-locs-scripted{
     cursor: pointer;
@@ -608,13 +614,16 @@ span{
 #eggmoves{
     background-color: var(--colorD);
 }
-
+#preevomoves{
+    background-color: var(--colorE);
+}
 .sprite{
     height: 30px;
 }
 
 .species-move-sprite{
-    height: 15px;
+    min-height: 15px;
+    max-height: 1em;
 }
 
 @media (orientation: landscape) {

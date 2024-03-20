@@ -113,9 +113,10 @@ function setTypes(types, specie) {
 
 export function setAllMoves(specie = gameData.species[currentSpecieID]){
     setLevelUpMoves($('#learnset'), specie.levelUpMoves)
-    setMoves($('#tmhm'), specie.TMHMMoves)
-    setMoves($('#tutor'), specie.tutor)
-    setMoves($('#eggmoves'), specie.eggMoves)
+    setMoves($('#tmhm'), specie.TMHMMoves, $('#tmhm').parent())
+    setMoves($('#tutor'), specie.tutor, $('#tmhm').parent())
+    setMoves($('#eggmoves'), specie.eggMoves,$('#eggmoves-title'))
+    setMoves($('#preevomoves'), specie.preevomoves || [], $('#preevomoves-title'))
 }
 
 function filterMoves(moveIDlist) {
@@ -144,6 +145,9 @@ function setMoveName(move) {
     nodeMoveName.className = `species-move-name ${type1}-t`
     return nodeMoveName
 }
+function setMovePower(move){
+    return e('div', 'species-move-pwr', move.pwr ? move.pwr : null)
+}
 /**
  * 
  * @returns an HTML node
@@ -159,8 +163,16 @@ function setMoveRow(moveID) {
     return row
 }
 
-function setMoves(core, moves) {
+function setMoves(core, moves, title) {
     core.empty()
+    if (!moves.length){
+        core.hide()
+        title.hide()
+        return
+    } else {
+        core.show()
+        title.show()
+    }
     const frag = document.createDocumentFragment()
     moves = filterMoves(moves)
     for (const moveID of moves) {
@@ -172,6 +184,7 @@ function setMoves(core, moves) {
         const row = setMoveRow(moveID)
         row.append(setSplitMove(move, moveID))
         row.append(setMoveName(move))
+        row.append(setMovePower(move))
         frag.append(row)
     }
     core.append(frag)
@@ -186,17 +199,14 @@ function setLevelUpMoves(core, moves) {
             console.warn(`unable to find move with ID ${id}`)
             continue
         }
-        const row = setMoveRow(id)
-
-        const nodeMoveLvl = document.createElement('div')
-        nodeMoveLvl.innerText = +lvl || "Ev"
-        nodeMoveLvl.className = "species-levelup-lvl"
-        row.append(nodeMoveLvl)
-        row.append(setSplitMove(move))
-
-
-        row.append(setMoveName(move))
-        frag.append(row)
+        frag.append(JSHAC([
+            setMoveRow(id), [
+                e('div', "species-levelup-lvl"), [e('span', null, +lvl || "Ev")],
+                setSplitMove(move),
+                setMoveName(move),
+                setMovePower(move)
+            ]
+        ]))
     }
     core.append(frag)
 }
