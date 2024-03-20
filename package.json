@@ -8,7 +8,8 @@
     "build": "tsc",
     "run": "node ./target/main.js",
     "sprites": "node ./target/main.js sprites",
-    "webpack": "npx webpack --config webpack.config.js"
+    "webpack": "npx webpack --config webpack.config.js",
+    "comparify": "node ./target/comparify.js"
   },
   "keywords": [
     "pokemon"

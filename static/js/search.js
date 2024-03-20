@@ -114,7 +114,6 @@ export const search = {
             return search.panelUpdatesIndex != index
         })
     }
-
 }
 
 export function onkeySearchFilter(ev, divSuggestions, inputSearch, callback){

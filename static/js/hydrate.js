@@ -1,4 +1,4 @@
-import { feedPanelSpecies, getSpritesURL, setupReorderBtn } from "./panels/species/species_panel.js"
+import { feedPanelSpecies, getSpritesURL, matchedSpecies, setupReorderBtn } from "./panels/species/species_panel.js"
 import { feedPanelMoves } from "./panels/moves_panel.js"
 import { feedPanelLocations } from "./panels/locations_panel.js"
 import { feedPanelTrainers } from "./panels/trainers_panel.js"
@@ -214,6 +214,7 @@ function addAllOtherEveeMoves(){
 }
 
 function hydrateSpecies() {
+    //matchedSpecies.splice(0, matchedSpecies.length, ...gameData.species)
     nodeLists.species = [] // reset
     const fragment = document.createDocumentFragment();
     const species = gameData.species

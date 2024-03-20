@@ -14,12 +14,16 @@ const statsN = [
 export function parseShowdownFormat(text){
     const lines = text.split('\n')
     const party = []
-    let poke = {
-        moves: [],
-        notes: "",
-        ivs: [31,31,31,31,31,31],
-        evs: [0,0,0,0,0,0],
+    function defaultPokemon(){
+        return {
+            spc: -1,
+            moves: [],
+            notes: "",
+            ivs: [31,31,31,31,31,31],
+            evs: [0,0,0,0,0,0],
+        }
     }
+    let poke = defaultPokemon()
     let parsePtr = 0
     const next = () => {
         parsePtr += 1
@@ -91,18 +95,16 @@ export function parseShowdownFormat(text){
     ]
     for (const line of lines){
         if (!line) {
+            if (poke.spc != -1) party.push(poke)
             invalid = false
-            party.push(poke)
-            poke = {
-                moves: [],
-                notes: "",
-                ivs: [31,31,31,31,31,31],
-                evs: [0,0,0,0,0,0],
-            }
+            poke = defaultPokemon()
             parsePtr = 0
             continue
         }
-        if (invalid) continue
+        if (invalid) {
+            console.warn('invalid', line)
+            continue
+        }
         try{
             parseSteps[parsePtr](line)
             while(sameLineNextStepFlag){
@@ -113,6 +115,7 @@ export function parseShowdownFormat(text){
             console.warn(e, line)
         }
     }
+    if (poke.spc != -1) party.push(poke)
     return party
 }
 

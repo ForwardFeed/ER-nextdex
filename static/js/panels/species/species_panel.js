@@ -585,6 +585,9 @@ export const queryMapSpecies = {
         return false
     },
 }
+
+export let matchedSpecies = []
+
 export function updateSpecies(searchQuery) {
     const species = gameData.species
     const matched = queryFilter2(searchQuery, species, queryMapSpecies)
