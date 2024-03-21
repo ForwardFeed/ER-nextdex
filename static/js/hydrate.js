@@ -162,7 +162,10 @@ function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo) {
     if (!currentSpecie.TMHMMoves.length) currentSpecie.TMHMMoves = previousSpecie.TMHMMoves
     if (!currentSpecie.tutor.length) currentSpecie.tutor = previousSpecie.tutor
     if (!currentSpecie.dex.hw) currentSpecie.dex.hw = previousSpecie.dex.hw
-
+    if (previousSpecie.typeEvosSet) {
+        console.log(...currentSpecie.stats.types)
+        currentSpecie.typeEvosSet = previousSpecie.typeEvosSet.add(...currentSpecie.stats.types)
+    }
     //do not add if it was already added
     for (const evo of currentSpecie.evolutions){
         if (evo.kd === currentEvo.kd) return
@@ -272,7 +275,11 @@ function hydrateSpecies() {
             if (specie.id <= regionsMapped[0]) break
             specie.region = regionsMapped[1]
         }
-        //share the eggmoves to the evolutions !TODO recursively
+        // track all types on all evolutions lines
+        if (!specie.typeEvosSet){
+            specie.typeEvosSet = new Set(specie.stats.types)
+        }
+        // share the eggmoves to the evolutions !TODO recursively
         for (const evo of specie.evolutions) {
             hydrateNextEvolutionWithMoves(i, evo)
         }

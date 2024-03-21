@@ -16,6 +16,7 @@ export let currentSpecieID = 1
 export function feedPanelSpecies(id) {
     currentSpecieID = id
     const specie = gameData.species[id]
+    console.log(specie.typeEvosSet)
     $('#species-name').text(`${specie.name}#${specie.dex.id || "??"}`)
     $('#species-id').text(`ID: ${specie.id}`)
     updateBaseStats(specie.stats.base)
