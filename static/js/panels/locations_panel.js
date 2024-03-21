@@ -1,22 +1,23 @@
 import { createSpeciesBlock, redirectSpecie } from "./species/species_panel.js"
 import { search } from "../search.js"
-import { queryFilter2 } from "../filters.js"
+import { queryFilter2, queryFilter3 } from "../filters.js"
 import { gameData } from "../data_version.js"
 import { AisInB } from "../utils.js"
+import { settings } from "../settings.js"
 
 export let currentLocID = 0
+const xrateTable = [
+    "land",
+    "water",
+    "fish",
+    "honey",
+    "rock",
+    "hidden",
+    "given",
+]
 export function feedPanelLocations(mapID){
     currentLocID = mapID
     const map = gameData.locations.maps[mapID]
-    const xrateTable = [
-        "land",
-        "water",
-        "fish",
-        "honey",
-        "rock",
-        "hidden",
-        "given",
-    ]
     for (const rateName of xrateTable){
         const rates = map[rateName]
         const node = $('#locations-' + rateName)
@@ -49,6 +50,23 @@ export function redirectLocation(mapId)
    
 
 }
+const prefixTree = {}
+
+export function buildlocationPrefixTrees(){
+    prefixTree.specie = {}
+    prefixTree.name = {}
+    gameData.locations.maps.forEach((x, i)=>{
+        for (const specie of x.speciesSet){
+            const prefix = specie.name.charAt(0).toLowerCase()
+            if (!prefixTree.specie[prefix]) prefixTree.specie[prefix] = []
+            prefixTree.specie[prefix].push(i)
+        }
+        const prefix = gameData.mapsT[x.id].charAt(0).toLowerCase()
+        if (!prefixTree.name[prefix]) prefixTree.name[prefix] = []
+        prefixTree.name[prefix].push(i)
+    })
+}
+
 
 export const queryMapLocations = {
     "name": (queryData, map) => {
@@ -59,8 +77,19 @@ export const queryMapLocations = {
         return false
     },
     "specie": (queryData, map) => {
-        for (const specie of map.speciesSet){
+        for (let specie of map.speciesSet){
+            specie = specie?.name.toLowerCase()
             if (AisInB(queryData, specie)) return specie
+        }
+        return false
+    },
+    "type": (queryData, map) => {
+        for (const specie of map.speciesSet){
+            const types = specie.stats.types.map((x) => gameData.typeT[x].toLowerCase())
+            if (settings.monotype && types[0]) return AisInB(queryData, types[0]) && types[0] == types[1]
+            for (const type of types){
+                if (AisInB(queryData, type)) return type
+            }
         }
         return false
     }
@@ -68,7 +97,7 @@ export const queryMapLocations = {
 export function updateLocations(searchQuery){
     const maps = gameData.locations.maps
     const nodeList = $('#locations-list').children()
-    const matched = queryFilter2(searchQuery, maps, queryMapLocations)
+    const matched = queryFilter3(searchQuery, maps, queryMapLocations)
     let validID;
     const mapsLen = maps.length
     for (let i  = 0; i < mapsLen; i++) {

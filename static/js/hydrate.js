@@ -1,6 +1,6 @@
 import { buildSpeciesPrefixTrees, feedPanelSpecies, getSpritesURL, matchedSpecies, setupReorderBtn } from "./panels/species/species_panel.js"
 import { feedPanelMoves } from "./panels/moves_panel.js"
-import { feedPanelLocations } from "./panels/locations_panel.js"
+import { buildlocationPrefixTrees, feedPanelLocations } from "./panels/locations_panel.js"
 import { feedPanelTrainers } from "./panels/trainers_panel.js"
 import { gameData } from "./data_version.js"
 import { restoreSave, setupOffensiveTeam } from "./panels/team_builder.js"
@@ -292,6 +292,8 @@ function hydrateSpecies() {
                 }
                 if (!locaObj) continue
                 if (!locaObj.given) locaObj.given = []
+                if (!locaObj.speciesSet) locaObj.speciesSet = new Set()
+                locaObj.speciesSet.add(gameData.species[i])
                 locaObj.given.push(['??','??',i])
             }
         }
@@ -338,12 +340,11 @@ function hydrateLocation() {
         "hidden",
     ]
     gameData.locations.given = []
-    console.log(gameData.locations)
     const fragmentList = document.createDocumentFragment();
     const maps = gameData.locations.maps
     for (const mapID in maps) {
         const map = maps[mapID]
-        map.speciesSet = new Set() // new variable that store pokemon names
+        if (!map.speciesSet) map.speciesSet = new Set() // new variable that store pokemon names
         // FEED the pokemons location
         for (const locName of xmapTable) {
             const mons = map[locName]
@@ -352,7 +353,7 @@ function hydrateLocation() {
                 const specieID = monID[2]
                 if (specieID < 1) continue
                 if (!gameData.species[specieID].locations) continue //what?
-                map.speciesSet.add(gameData.species[specieID]?.name.toLowerCase())
+                map.speciesSet.add(gameData.species[specieID])
                 if (!gameData.species[specieID].locations.get(mapID))
                     gameData.species[specieID].locations.set(mapID, new Set())
                 gameData.species[specieID].locations.get(mapID).add(locName)
@@ -392,6 +393,7 @@ function hydrateLocation() {
         $('#locations-' + rateName).empty().append(fragmentRate)
     }
     feedPanelLocations(0)
+    buildlocationPrefixTrees()
 }
 
 function addFishingTable(rates) {
