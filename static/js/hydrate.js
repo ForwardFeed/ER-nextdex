@@ -162,9 +162,9 @@ function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo) {
     if (!currentSpecie.TMHMMoves.length) currentSpecie.TMHMMoves = previousSpecie.TMHMMoves
     if (!currentSpecie.tutor.length) currentSpecie.tutor = previousSpecie.tutor
     if (!currentSpecie.dex.hw) currentSpecie.dex.hw = previousSpecie.dex.hw
-    if (previousSpecie.typeEvosSet) {
-        console.log(...currentSpecie.stats.types)
-        currentSpecie.typeEvosSet = previousSpecie.typeEvosSet.add(...currentSpecie.stats.types)
+    if (previousSpecie.typeEvosSet && !currentSpecie.typeEvosSet) {
+        currentSpecie.stats.types.forEach(x => previousSpecie.typeEvosSet.add(x))
+        currentSpecie.typeEvosSet = previousSpecie.typeEvosSet
     }
     //do not add if it was already added
     for (const evo of currentSpecie.evolutions){

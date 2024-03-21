@@ -85,7 +85,7 @@ export const queryMapLocations = {
     },
     "type": (queryData, map) => {
         for (const specie of map.speciesSet){
-            const types = specie.stats.types.map((x) => gameData.typeT[x].toLowerCase())
+            const types = [...specie.typeEvosSet].map((x) => gameData.typeT[x].toLowerCase())
             if (settings.monotype && types[0]) return AisInB(queryData, types[0]) && types[0] == types[1]
             for (const type of types){
                 if (AisInB(queryData, type)) return type
