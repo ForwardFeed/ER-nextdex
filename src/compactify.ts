@@ -201,7 +201,6 @@ export function compactify(gameData: GameData): CompactGameData {
             NAME: key
         })
     })
-    console.log(compacted.items)
     const movesT: string[] = []
     gameData.moves.forEach((val, key) => {
         movesT.push(key)
@@ -407,7 +406,7 @@ export function compactify(gameData: GameData): CompactGameData {
         if (!val.species.length && !val.trainers.length) return
         const idMap = compacted.mapsT.push(val.name.replace(/_/g, ' ')
             .replace(/(?<=[a-z])(?=[A-Z])/g, ' ')
-            .replace(/(?<=[a-z])(?=[0-9])/g, ' '))
+            .replace(/(?<=[a-z])(?=[0-9])/g, ' ')) - 1
         compacted.MAPST.push(val.id)
         val.species.forEach((value) => {
             if (!compacted.species[NAMET.indexOf(value.spc)]) return
