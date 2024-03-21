@@ -443,7 +443,7 @@ function setLocations(locations, SEnc) {
         if (!loc) continue
         const node = document.createElement('div')
         node.className = "specie-locs"
-        let locationString = `Can be found at ${loc.id}`
+        let locationString = `Can be found at ${gameData.mapsT[loc.id]}`
 
         let first = true
         for (const field of value) {
