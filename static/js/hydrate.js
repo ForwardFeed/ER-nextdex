@@ -299,7 +299,7 @@ function hydrateSpecies() {
                 }
                 if (!locaObj) continue
                 if (!locaObj.given) locaObj.given = []
-                if (!locaObj.speciesSet) locaObj.speciesSet = new Set()
+                if (!locaObj.speciesSet || locaObj.speciesSet.constructor.name === "Object") locaObj.speciesSet = new Set()
                 locaObj.speciesSet.add(gameData.species[i])
                 locaObj.given.push(['??','??',i])
             }
@@ -351,7 +351,7 @@ function hydrateLocation() {
     const maps = gameData.locations.maps
     for (const mapID in maps) {
         const map = maps[mapID]
-        if (!map.speciesSet) map.speciesSet = new Set() // new variable that store pokemon names
+        if (!map.speciesSet || map.speciesSet.constructor.name === "Object") map.speciesSet = new Set() // new variable that store pokemon names
         // FEED the pokemons location
         for (const locName of xmapTable) {
             const mons = map[locName]
@@ -359,7 +359,7 @@ function hydrateLocation() {
             for (const monID of mons) {
                 const specieID = monID[2]
                 if (specieID < 1) continue
-                if (!gameData.species[specieID].locations) continue //what?
+                if (gameData.species[specieID].locations === undefined) continue //what?
                 map.speciesSet.add(gameData.species[specieID])
                 if (!gameData.species[specieID].locations.get(mapID))
                     gameData.species[specieID].locations.set(mapID, new Set())
