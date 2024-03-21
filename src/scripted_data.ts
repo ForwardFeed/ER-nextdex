@@ -23,13 +23,29 @@ function readAllFiles(rootFolder: string, subPaths: string[]): Promise<PromiseSe
     return Promise.allSettled(promises)
 }
 
+function readMapJson(filepath: string){
+
+}
+
 function readPoryFile(filepath: string): Promise<Result>{ 
     const poryPath = join(filepath, 'scripts.pory')
     return new Promise((resolved: (data: Result) => void, rejected)=>{
         access(poryPath, (err_exist)=>{
             if (err_exist){
                 const err = `file: ${poryPath} has not been found`
-                rejected(err)
+                access(join(filepath, 'map.json'), (err_exist_2)=>{
+                    if (err_exist_2){
+                        rejected(err)
+                    } else {
+                        const mapData = JSON.parse(readFileSync(join(filepath, 'map.json'), {encoding: 'utf-8', flag: 'r'}))
+                        resolved({
+                            id: mapData.id,
+                            name: mapData.name,
+                            trainers: [],
+                            species: []
+                        })
+                    }
+                })
             } else{
                 readFile(poryPath, 'utf8', (err_exist, data: string) => {
                     if (err_exist){

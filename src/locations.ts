@@ -76,7 +76,7 @@ function parse(data: string): Locations{
     for (const locationJSON of locationsEncountersJSON){
         const location = {} as Location 
         if (locationJSON.map) {
-            location.name = Xtox('MAP_', locationJSON.map)
+            location.name = locationJSON.map
         } else {
             location.name = locationJSON.base_label.replace('gBerry', 'Tree ')
         }

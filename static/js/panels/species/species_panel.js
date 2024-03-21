@@ -443,7 +443,7 @@ function setLocations(locations, SEnc) {
         if (!loc) continue
         const node = document.createElement('div')
         node.className = "specie-locs"
-        let locationString = `Can be found at ${loc.name}`
+        let locationString = `Can be found at ${loc.id}`
 
         let first = true
         for (const field of value) {
@@ -459,29 +459,20 @@ function setLocations(locations, SEnc) {
         }
         frag.append(node)
     }
-    for (const enc of SEnc) {
-        const node = document.createElement('div')
-        node.className = "specie-locs-scripted"
-        node.innerHTML = `Can be found at ${gameData.mapsT[enc.map]} as a ${gameData.scriptedEncoutersHowT[enc.how]}`
+    for (const {how, map, locaId} of SEnc) {
+        const node = e('div', 'specie-locs-scripted',
+            `Can be found at ${gameData.mapsT[map]} as a ${gameData.scriptedEncoutersHowT[how]}`, {
+            onclick: () => {
+                console.log(locaId, typeof locaId)
+                if (typeof locaId === "undefined") return
+                redirectLocation(locaId)
+                // this may not work because maps for scripted encounters aren't sync with location encounter
+            }
+        }) 
         frag.append(node)
     }
     $('#species-locations').empty().append(frag)
 }
-
-const reorderMapSpecies = {
-    "alphabetical": "",
-    "atk": "",
-    "": "",
-    "": "",
-    "": "",
-    "": "",
-    "": "",
-    "": "",
-    "": "",
-    "": "",
-
-}
-
 
 export function setupReorderBtn() {
     const row = e('div', 'data-list-row', 'reorder')

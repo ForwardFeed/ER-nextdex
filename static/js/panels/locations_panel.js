@@ -15,6 +15,7 @@ export function feedPanelLocations(mapID){
         "honey",
         "rock",
         "hidden",
+        "given",
     ]
     for (const rateName of xrateTable){
         const rates = map[rateName]
@@ -24,11 +25,14 @@ export function feedPanelLocations(mapID){
             continue
         }
         node.parent().show()
+        if (rateName === "given") node.empty()
         for (const i in rates){
             const rate = rates[i]
             const specie = node.find('.location-specie').eq(i)
-            specie.empty().append(createSpeciesBlock(rate[2]))
+            const specieNode = createSpeciesBlock(rate[2])
+            specie.empty().append(specieNode)
             node.children().find('.location-lvl').eq(i).text(rate[0] + "-" + rate[1])
+            if (rateName === "given") node.append(specieNode)
         }
     }
     $('#locations-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
@@ -48,8 +52,9 @@ export function redirectLocation(mapId)
 
 export const queryMapLocations = {
     "name": (queryData, map) => {
-        if (AisInB(queryData, map.name.toLowerCase())){
-            return map.name
+        const mapName = gameData.mapsT[map.id].toLowerCase()
+        if (AisInB(queryData, mapName)){
+            return mapName
         }
         return false
     },

@@ -52,7 +52,7 @@ export function hydrate(firstLoad=false) {
         [hydrateAbilities, "abilities data"],
         [hydrateMoves, "moves data"],
         [hydrateSpecies, "species  data"],
-        [hydrateLocation, "locations  data"],
+        [hydrateLocation, "locations data"],
         [hydrateTrainers, "trainers data"],
         [restoreSave, "save"], // also restore the save of the team builder
         [setLists, "init some lists"],
@@ -230,21 +230,21 @@ function hydrateSpecies() {
     fragment.append(setupReorderBtn())
     for (const i in species) {
         if (i == 0) continue
-        const spec = species[i]
-        spec.stats.base[6] = 0
-        for (const statID in spec.stats.base) {
-            const value = spec.stats.base[statID]
+        const specie = species[i]
+        specie.stats.base[6] = 0
+        for (const statID in specie.stats.base) {
+            const value = specie.stats.base[statID]
             feedBaseStatsStats(statID, value)
-            if (statID < 6) spec.stats.base[6] += + value
+            if (statID < 6) specie.stats.base[6] += + value
         }
         // prepare to be appended a list of location where this pokemon appear
-        spec.locations = new Map();
+        specie.locations = new Map();
         // concatenate all moves into a new variable
         // also remove all duplicates
-        spec.allMoves = [...new Set(spec.eggMoves.concat(
-            spec.levelUpMoves.map(x => x.id).concat(
-                spec.TMHMMoves.concat(
-                    spec.tutor
+        specie.allMoves = [...new Set(specie.eggMoves.concat(
+            specie.levelUpMoves.map(x => x.id).concat(
+                specie.TMHMMoves.concat(
+                    specie.tutor
                 )
             )
         ))]
@@ -269,12 +269,31 @@ function hydrateSpecies() {
             [2300, "Redux"], 
         ]) {
 
-            if (spec.id <= regionsMapped[0]) break
-            spec.region = regionsMapped[1]
+            if (specie.id <= regionsMapped[0]) break
+            specie.region = regionsMapped[1]
         }
         //share the eggmoves to the evolutions !TODO recursively
-        for (const evo of spec.evolutions) {
+        for (const evo of specie.evolutions) {
             hydrateNextEvolutionWithMoves(i, evo)
+        }
+        // list all pokemon if they are given
+        for (const enc of specie.SEnc){
+            if (gameData.scriptedEncoutersHowT[enc.how] === "given"){
+                const maps = gameData.locations.maps
+                const mapLen = maps.length
+                let locaObj
+                for (let i=0; i<mapLen; i++){
+                    const map = maps[i]
+                    if (map.id == enc.map){
+                        enc.locaId = i
+                        locaObj = gameData.locations.maps[i]
+                        break
+                    }
+                }
+                if (!locaObj) continue
+                if (!locaObj.given) locaObj.given = []
+                locaObj.given.push(['??','??',i])
+            }
         }
         // add to the html list 
         const row = e('div', "btn data-list-row sel-n-active")
@@ -283,16 +302,16 @@ function hydrateSpecies() {
             ev.dataTransfer.setData("id", i)
         }
         //Node id because for correlation with nodelist in sorting
-        spec.nodeID = nodeLists.species.length
+        specie.nodeID = nodeLists.species.length
         nodeLists.species.push(row)
 
         const image = e('img', 'species-list-sprite')
-        image.src = getSpritesURL(spec.NAME)
-        image.alt = spec.name
+        image.src = getSpritesURL(specie.NAME)
+        image.alt = specie.name
         image.loading = "lazy"
         row.appendChild(image)
 
-        const name = e('span', "species-name span-a", spec.name)
+        const name = e('span', "species-name span-a", specie.name)
         row.append(name)
         row.dataset.id = i
         $(row).on('click', function () {
@@ -318,6 +337,8 @@ function hydrateLocation() {
         "rock",
         "hidden",
     ]
+    gameData.locations.given = []
+    console.log(gameData.locations)
     const fragmentList = document.createDocumentFragment();
     const maps = gameData.locations.maps
     for (const mapID in maps) {
@@ -342,7 +363,7 @@ function hydrateLocation() {
         const listRow = document.createElement('div')
         listRow.className = "btn data-list-row sel-n-active"
         const name = document.createElement('span')
-        name.innerText = map.name || "unknown"
+        name.innerText = gameData.mapsT[map.id] || "unknown"
         listRow.append(name)
         listRow.dataset.id = mapID
         $(listRow).on('click', function () {
