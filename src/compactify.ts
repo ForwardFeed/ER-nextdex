@@ -344,13 +344,16 @@ export function compactify(gameData: GameData): CompactGameData {
         }
     }
     const trainerT: string[] = []
+    const trainernameT: string[] = []
     gameData.trainers.forEach((trainer, key) => {
-        let category = Xtox('TRAINER_CLASS_', trainer.category)
         if (!trainer.party.length) {
             return
         }
+        let category = Xtox('TRAINER_CLASS_', trainer.category)
+        const trainerName = `${category} ${trainer.name}`
+        trainernameT.push(trainerName)
         compacted.trainers.push({
-            name: `${category} ${trainer.name}`,
+            name: trainerName,
             db: trainer.double,
             party: trainer.party.map(compactPoke),
             insane: trainer.insane.map(compactPoke),
@@ -364,16 +367,16 @@ export function compactify(gameData: GameData): CompactGameData {
         })
         trainerT.push(key)
     })
-    compacted.trainers = compacted.trainers.sort((a, b) => {
-        if (a.map == b.map) return 0
-        if (a.map == -1) return 1
-        if (b.map == -1) return -1
-        if (a.map < b.map) {
-            return -1
-        } else if (a.map > b.map) {
-            return 1
+    gameData.trainerOrder.forEach((x, i)=>{
+        const indexT = trainernameT.indexOf(x)
+        if (indexT == -1) {
+            console.log('miss named in trainer order : ' + x)
+            return
         }
+        const trainerOrdered = compacted.trainers[indexT]
+        compacted.trainers.push(compacted.trainers.splice(i, 1, trainerOrdered)[0])
     })
+    
     gameData.dataScripted.forEach((val) => {
         const mapName = val.name.replace(/_/g, ' ')
             .replace(/(?<=[a-z])(?=[A-Z])/g, ' ')

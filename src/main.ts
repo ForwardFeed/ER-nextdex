@@ -14,6 +14,7 @@ import * as Additionnal from './additional_data/additional'
 import * as InternalID from './internal_id'
 import { CompactGameData, compactify } from './compactify';
 import * as Configuration from './configuration';
+import { getTrainerOrder } from './trainers/trainer_ordering';
 //import { comparify } from './comparify';
 
 
@@ -28,6 +29,7 @@ export interface GameData {
     battleItems: Map<string, BattleItems.BattleItem>
     speciesInternalID: Map<string, number>,
     movesInternalID: Map<string, number>,
+    trainerOrder: string[]
 }
 
 const gameData: GameData = {
@@ -41,6 +43,7 @@ const gameData: GameData = {
     battleItems: new Map(),
     speciesInternalID: new Map(),
     movesInternalID: new Map(),
+    trainerOrder: [],
 }
 
 function main(configuration: Configuration.Configuration){
@@ -79,6 +82,7 @@ function main(configuration: Configuration.Configuration){
             promiseArray.push(BattleItems.getItems(ROOT_PRJ, gameData))
             promiseArray.push(InternalID.getSpeciesInternalID(ROOT_PRJ, gameData))
             promiseArray.push(InternalID.getMovesInternalID(ROOT_PRJ, gameData))
+            promiseArray.push(getTrainerOrder(gameData))
             //promiseArray.push()
             Promise.allSettled(promiseArray)
                 .then((values)=>{
