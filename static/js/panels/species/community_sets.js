@@ -376,7 +376,7 @@ class BlockComSets {
         }
         for (let i=0; i<4; i++){
             t(this.movesSpan[i], gameData.moves[pokeData.moves[i]]?.name || "-")
-            const moveType = gameData.typeT[gameData.moves[this.baseSpc.allMoves[i]].types[0]].toLowerCase()
+            const moveType = gameData.typeT[gameData.moves[pokeData.moves[i]]?.types[0]]?.toLowerCase()
             this.movesDiv[i].className = `trainers-poke-move ${moveType}-t`
         }
         t(this.name, pokeData.name || 'Name of the sets')
