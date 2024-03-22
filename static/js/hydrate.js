@@ -244,13 +244,14 @@ function hydrateSpecies() {
         specie.locations = new Map();
         // concatenate all moves into a new variable
         // also remove all duplicates
+        // also adding move none to it, so it's selectable
         specie.allMoves = [...new Set(specie.eggMoves.concat(
             specie.levelUpMoves.map(x => x.id).concat(
                 specie.TMHMMoves.concat(
                     specie.tutor
                 )
             )
-        ))]
+        )), 0]
         // add the region
         for (const regionsMapped of [
             [0, "Kanto"],

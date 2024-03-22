@@ -243,6 +243,8 @@ class BlockComSets {
             const moveCallback = (moveID) => {
                 this.pokeData.moves[i] = this.baseSpc.allMoves[moveID]
                 t(moveSpan, this.allMovesName[moveID])
+                const moveType = gameData.typeT[gameData.moves[this.baseSpc.allMoves[moveID]].types[0]].toLowerCase()
+                this.movesDiv[i].className = `trainers-poke-move ${moveType}-t`
                 $(this.save).show()
             }
             this.movesSpan.push(moveSpan)
@@ -254,10 +256,7 @@ class BlockComSets {
                     )
                 }
             }))      
-        } 
-        this.moves = [0,1,2,3].map(x => {
-                
-        })
+        }
         this.statsRow = e('div', 'species-sets-stats', null,{
             onclick: (ev)=>{
                 ev.stopPropagation()
@@ -377,6 +376,8 @@ class BlockComSets {
         }
         for (let i=0; i<4; i++){
             t(this.movesSpan[i], gameData.moves[pokeData.moves[i]]?.name || "-")
+            const moveType = gameData.typeT[gameData.moves[this.baseSpc.allMoves[i]].types[0]].toLowerCase()
+            this.movesDiv[i].className = `trainers-poke-move ${moveType}-t`
         }
         t(this.name, pokeData.name || 'Name of the sets')
         this.notes.value = pokeData.notes || ""
