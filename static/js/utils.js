@@ -92,7 +92,7 @@ export function e(tag = "div", classname = "", innerText = "", events = {}){
             htmlElement.append(subElement)
         }
     } else { 
-        if (tag === "input"){
+        if (tag === "input" || tag === "textarea"){
             htmlElement.value = innerText
         } else {
             htmlElement.innerText = innerText

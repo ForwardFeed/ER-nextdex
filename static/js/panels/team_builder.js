@@ -621,23 +621,40 @@ export function editionStats(statField, poke, callback) {
         const statColumn = e("div", "overlay-stats-column")
         const statLabel = e("label", "overlay-stats-label", value)
         statLabel.setAttribute('for', `overlay-stats-edit${index}`)
-        const statStat = e("input", "overlay-stats-edit")
-        statStat.id = `overlay-stats-edit${index}`
-        statStat.value = poke[statField][index]
+        
+        const statStat = e(`input#overlay-stats-edit${index}`, "overlay-stats-edit", poke[statField][index],{
+            onkeyup: (evKey) => {
+                statStat.value = prevValue = 
+                        statFieldInputControl[statField](statStat.value, evKey.key, +prevValue, poke[statField])
+    
+                callback(statField, index, statStat.value)
+            },
+        })
+        let prevValue = +statStat.value
         statStat.type = "text"
-        let prevValue = +statStat.value 
-        statStat.onkeyup = (evKey) => {
-            statStat.value = prevValue = 
-                    statFieldInputControl[statField](statStat.value, evKey.key, +prevValue, poke[statField])
-
-            callback(statField, index, statStat.value)
-        }
         rowDiv.append(JSHAC([
             statColumn, [
                 statLabel,
                 statStat
             ]
         ]))
+        //these only work if you use the event listener, don't ask me why
+        let plusUp = e('div', 'overlay-stats-plusminus btn', [e('span', null, '+')], {
+            onclick: (evClick)=>{
+                statStat.value = prevValue = 
+                        statFieldInputControl[statField](statStat.value + '+', 'Plus', +prevValue, poke[statField])
+                callback(statField, index, statStat.value)
+            }
+        })
+        let minusDown = e('div', 'overlay-stats-plusminus btn', [e('span', null, '-')],{
+            onclick: (evClick)=>{
+                statStat.value = prevValue = 
+                        statFieldInputControl[statField](statStat.value + '-', 'Minus', +prevValue, poke[statField])
+                callback(statField, index, statStat.value)
+            }
+        })
+        statStat.before(plusUp)
+        statStat.after(minusDown)
     })
     rowDiv.onclick = function (ev) {
         ev.stopPropagation()
