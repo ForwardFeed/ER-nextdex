@@ -2,7 +2,7 @@ import { gameData } from "../data_version.js"
 import { search } from "../search.js"
 import { queryFilter2, longClickToFilter, trickFilterSearch} from "../filters.js"
 import { AisInB, e, JSHAC } from "../utils.js"
-import { removeInformationWindow } from "../window.js"
+import { createInformationWindow, removeInformationWindow } from "../window.js"
 import { setAllMoves } from "./species/species_panel.js"
 
 export let matchedMoves
@@ -141,7 +141,7 @@ export function redirectMove(moveId) {
 }
 
 
-export function moveOverlay(moveId) {
+export function moveOverlay(moveId, interactive=true) {
     const triggerMoveRefresh = ()=>{
         trickFilterSearch(2)
         setAllMoves()
@@ -150,11 +150,8 @@ export function moveOverlay(moveId) {
     const core = e("div", "move-overlay")
     const power = e("div", "move-overlay-power")
     const powerTitle = e("div", "move-overlay-top", move.name)
-    powerTitle.onclick = (ev) => {
-        removeInformationWindow(ev)
-        redirectMove(moveId)
-    }
-    longClickToFilter(0, powerTitle, "Move", undefined)
+    
+    
     const powerNumber = e("div", "move-overlay-fill", move.pwr || "?")
     const stats = e("div", "move-overlay-stats")
     const statsAcc = e("div", "move-overlay-acc", `Acc: ${move.acc || "--"}`)
@@ -165,19 +162,28 @@ export function moveOverlay(moveId) {
     const typeDiv = e("div", "move-overlay-types")
     const type1 = gameData.typeT[move.types[0]]
     const type1Div = e("div", `move-overlay-type ${type1.toLowerCase()}`, type1)
-    longClickToFilter(2, type1Div, "type", undefined, triggerMoveRefresh)
+    
     const type2 = move.types[1] ? gameData.typeT[move.types[1]] : ""
     const type2Div = e("div", `move-overlay-type ${type2.toLowerCase()}`, type2)
-    longClickToFilter(2, type2Div, "type", undefined, triggerMoveRefresh)
+    
     const splitDiv = e('div')
     const split = e("img", "move-overlay-img pixelated")
     split.src = `./icons/${gameData.splitT[move.split]}.png`
-    longClickToFilter(2, splitDiv, "category", 
+    
+    const effectsDiv = e("div", "move-overlay-effects")
+    listMoveFlags(move.flags.map((x) => gameData.flagsT[x]), $(effectsDiv), interactive?triggerMoveRefresh:null)
+    if (interactive){
+        powerTitle.onclick = (ev) => {
+        removeInformationWindow(ev)
+            redirectMove(moveId)
+        }
+        longClickToFilter(0, powerTitle, "Move", undefined)
+        longClickToFilter(2, type1Div, "type", undefined, triggerMoveRefresh)
+        longClickToFilter(2, type2Div, "type", undefined, triggerMoveRefresh)
+        longClickToFilter(2, splitDiv, "category", 
             ()=>{ return gameData.splitT[move.split].toLowerCase() || ""}
         , triggerMoveRefresh)
-    const effectsDiv = e("div", "move-overlay-effects")
-    listMoveFlags(move.flags.map((x) => gameData.flagsT[x]), $(effectsDiv), triggerMoveRefresh)
-
+    }
     return JSHAC([
         core, [
             power, [
@@ -206,9 +212,32 @@ export function moveOverlay(moveId) {
 
 // would be a function to have an upgraded move picker
 export function movePicker(){
-    return
+    const parentDiv = e('div', 'move-picker-parent')
+    const dataBlock = e('div', 'move-picker-datablock')
+    const datalist = e('datalist#datalist-movepicker')
+    const opt = e('option',null, "aaa")
+    opt.value = 'AAA'
+    datalist.append(opt)
+    
+    const inputDiv = e('input', 'move-picker-input')
+    inputDiv.append(datalist)
+    inputDiv.setAttribute('list', 'datalist-movepicker')
+    const similarMoves = e('div', 'move-picker-similar')
+    return JSHAC([
+        parentDiv, [
+            dataBlock,
+            inputDiv,
+            similarMoves
+        ]
+    ])
 }
-
+/*
+document.onclick = (ev)=>{
+    createInformationWindow(
+        movePicker(),
+        ev, "focus", true, true
+    )
+}*/
 export const queryMapMoves = {
     "name": (queryData, move) => {
         const moveName = move.name.toLowerCase()

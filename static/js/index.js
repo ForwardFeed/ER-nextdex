@@ -36,10 +36,7 @@ document.addEventListener("DOMContentLoaded", function(){
     //misc
     setupHeader()
     addTooltip($('.main-title')[0], 'Rather than my clothes, I shall reward you with this, the Rain Badge!')
-    $('#insanity').on('click', activateInsanity)
-
-    
-    
+    $('#insanity').on('click', activateInsanity)    
 })
 
 

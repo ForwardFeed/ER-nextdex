@@ -414,6 +414,7 @@ export function queryFilter2(query, datas, keymap){
 
 const cacheFilters = []
 let cacheIndex = 0
+let prevTreeId = ""
 
 function clearUnusedCache(isEntryPoint){
     //only the parent of all queries may ask for it (don't clear while in use)
@@ -421,20 +422,50 @@ function clearUnusedCache(isEntryPoint){
     cacheFilters.splice(cacheIndex)
 }
 
-function retrieveFromCache(query){
+function retrieveFromCache(query, prefixedTree){
+    if (prefixedTree.treeId != prevTreeId){
+        prevTreeId = prefixedTree.treeId
+        clearCache()
+        return
+    }
     const cached = cacheFilters[cacheIndex]
-    if (!cached || !cached.data.length) return null
-    const strCaching = query.k + query.data + (query.not ? "0" : "1")
-    return cached.strCaching == strCaching ? cached.data : null
+    if (!cached || !cached.data.length) return
+    if (cached.k != query.k) return
+    if (cached.not != query.not) return
+    if (cached.data.length > query.data.length){
+        // since data is always expected to be a string here and the
+        // the data request has shrunk (probably hit the backspace)
+        // it means that the cach is no longer relevant
+        return
+    }
+    if (cached.data.length < query.data.length){
+        // since data is always expected to be a string here, and the 
+        // result is always funneling IN and not out, we can expect that
+        // the next result is always a sub part of the cached part, however
+        // we need to indicate that it's just **partially** recovered
+        // i've chosen to do that by wraping it in an object with a prop specific
+        return {
+            result: cached.result,
+            partial: true,
+        }
+    }
+    return cached.result
 }
 
-function putToCache(query, data){
+function putToCache(query, result){
     cacheFilters[cacheIndex] = {
-        strCaching: query.k + query.data + (query.not ? "0" : "1"),
-        data: data
+        k     : query.k,
+        not   : query.not,
+        data : query.data,
+        result  : result,
     }
     cacheIndex += 1
-    return data
+    return result
+}
+
+function clearCache(){
+    cacheFilters.splice(0)
+    cacheIndex = 0
 }
 
 /**
@@ -494,19 +525,33 @@ export function queryFilter3(query, datas, keymap, prefixedTree = {} , entrypoin
         }
         return allIndexes
     } else {
-        const cached = retrieveFromCache(query)
-        if (cached) return cached
+        // data relative to the full data, but it's a collection of indexes
+        let relDataIndex
+        const cached = retrieveFromCache(query, prefixedTree)
+        if (cached) {
+            if (cached.partial){
+                datas = cached.result.map(x => datas[x]) 
+                relDataIndex = cached.result
+            } else {
+                return cached
+            }
+        } else {
+            //prefixed tree (trie) makes the whole algo going at least 5 times faster for common uses
+            const prefixedData = prefixedTree[query.k]?.[query.data.charAt(0)]
+            if (prefixedData) {
+                if (query.data.length == 1){
+                    return putToCache(query, prefixedData)
+                } else {
+                    datas = prefixedData.map(x => datas[x]) 
+                    relDataIndex = prefixedData
+                }
+            }
+        }
         const execFn = keymap[query.k]
         // if the is nothing to compare to, then just shrug
         if (!execFn) return undefined
         const allElementsIndexesThatMatched = []
         const perfectMatches = [] //for not unique properties like abilities or move that can be shared by multiple pokemons
-        //prefixed tree (trie) makes the whole algo going at least 5 times faster for common uses
-        const prefixedData = prefixedTree[query.k]?.[query.data.charAt(0)]
-        if (prefixedData && query.data.length == 1 ) {
-            return putToCache(query, prefixedData)
-        }
-        datas =  prefixedData?.map(x => datas[x]) || datas
         const dataLen = datas.length
         for (let i = 0; i < dataLen; i++){
             const data = datas[i]
@@ -531,17 +576,17 @@ export function queryFilter3(query, datas, keymap, prefixedTree = {} , entrypoin
                             inverted.splice(i, 1)
                             return inverted
                         }
-                        return [prefixedData ? prefixedData[i] : i]
+                        return [relDataIndex ? relDataIndex[i] : i]
                     }
                     // an ability or a move isn't
-                    perfectMatches.push(prefixedData ? prefixedData[i] : i)
+                    perfectMatches.push(relDataIndex ? relDataIndex[i] : i)
 
                 }
             } else {
                 suggestion = answer
             }
             if (queryNot(query.not, suggestion)){
-                allElementsIndexesThatMatched.push(prefixedData ? prefixedData[i] : i)
+                allElementsIndexesThatMatched.push(relDataIndex ? relDataIndex[i] : i)
                 if (query.suggestion){
                     search.addSuggestion(suggestion)
                 }

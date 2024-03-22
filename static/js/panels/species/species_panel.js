@@ -547,7 +547,9 @@ function buildResist(specie){
     specie.resist = [...[].concat(weaknesses["0.5"]?.concat(weaknesses["0.25"]?.concat(weaknesses["0.25"])))].filter(x => x)
 }
 
-const prefixTree = {}
+const prefixTree = {
+    treeId: "species"
+}
 
 export function buildSpeciesPrefixTrees(){
     prefixTree.name = {}

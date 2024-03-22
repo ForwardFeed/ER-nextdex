@@ -1,5 +1,5 @@
 import { getSpritesURL, redirectSpecie, getSpritesShinyURL } from "./species/species_panel.js"
-import { queryFilter2 } from "../filters.js"
+import { queryFilter2, queryFilter3 } from "../filters.js"
 import { gameData } from "../data_version.js"
 import { AisInB, e, JSHAC } from "../utils.js"
 import { setFullTeam } from "./team_builder.js"
@@ -12,7 +12,7 @@ let currentTrainerID = 0
 export function feedPanelTrainers(trainerID) {
     currentTrainerID = trainerID
     $('#trainers-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
-    $('#trainers-list > .btn').eq(trainerID - 1).addClass("sel-active").removeClass("sel-n-active")
+    $('#trainers-list > .btn').eq(trainerID).addClass("sel-active").removeClass("sel-n-active")
     const trainer = gameData.trainers[trainerID]
     $('#trainers-name').text(trainer.name)
     $('#trainers-map').text(gameData.mapsT[trainer.map] || "Unknown location")
@@ -242,9 +242,30 @@ function getNodeRedirectToEditorPokemon(party) {
     ])
 }
 
+const prefixTree = {
+    treeId: "trainer"
+}
+
+export function buildTrainerPrefixTrees(){
+    prefixTree.name = {}
+    gameData.trainers.forEach((x, i, arr)=>{
+        //by the way i'm building the word array so i can match more widely *l*eader *w*inonna
+        x.splicedName = x.name.split(' ').map(x => x.toLowerCase())
+        for (const splice of x.splicedName){
+            const prefix = splice.charAt(0)
+            if (!prefixTree.name[prefix]) prefixTree.name[prefix] = []
+            prefixTree.name[prefix].push(i)
+        }
+        
+    })
+}
+
+
 export const queryMapTrainers = {
     "name": (queryData, trainer) => {
-        if (AisInB(queryData, trainer.name.toLowerCase())) return trainer.name
+        for (const splice of trainer.splicedName){
+            if (AisInB(queryData, splice)) return trainer.name
+        }
         return false
     },
     "map": (queryData, trainer) => {
@@ -272,11 +293,10 @@ export function updateTrainers(searchQuery) {
     const trainers = gameData.trainers
     const nodeList = $('#trainers-list > .btn')
     let validID;
-    const matched = queryFilter2(searchQuery, trainers, queryMapTrainers)
+    const matched = queryFilter3(searchQuery, trainers, queryMapTrainers, prefixTree)
     const trainersLen = trainers.length
     for (let i = 0; i < trainersLen; i++) {
-        if (i == 0) continue
-        const node = nodeList.eq(i - 1)
+        const node = nodeList.eq(i)
         if (!matched || matched.indexOf(i) != -1) {
             if (!validID) validID = i
             node.show()

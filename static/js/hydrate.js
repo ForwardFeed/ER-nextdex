@@ -1,7 +1,7 @@
 import { buildSpeciesPrefixTrees, feedPanelSpecies, getSpritesURL, matchedSpecies, setupReorderBtn } from "./panels/species/species_panel.js"
 import { feedPanelMoves } from "./panels/moves_panel.js"
 import { buildlocationPrefixTrees, feedPanelLocations } from "./panels/locations_panel.js"
-import { feedPanelTrainers } from "./panels/trainers_panel.js"
+import { feedPanelTrainers, buildTrainerPrefixTrees} from "./panels/trainers_panel.js"
 import { gameData } from "./data_version.js"
 import { restoreSave, setupOffensiveTeam } from "./panels/team_builder.js"
 import { e, JSHAC } from "./utils.js"
@@ -454,7 +454,6 @@ function hydrateTrainers() {
     const trainers = gameData.trainers
     //let lastMap = -1
     for (const i in trainers) {
-        if (i == 0) continue
         const trainer = trainers[i]
         //check if it's a new map to add it as a header
         /*if (lastMap != trainer.map){
@@ -482,6 +481,7 @@ function hydrateTrainers() {
     }
     $('#trainers-list').empty().append(frag)
     feedPanelTrainers(1)
+    buildTrainerPrefixTrees()
 }
 
 export default hydrate

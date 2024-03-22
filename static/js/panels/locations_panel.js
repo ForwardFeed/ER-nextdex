@@ -50,7 +50,9 @@ export function redirectLocation(mapId)
    
 
 }
-const prefixTree = {}
+const prefixTree = {
+    treeId: "location"
+}
 
 export function buildlocationPrefixTrees(){
     prefixTree.specie = {}

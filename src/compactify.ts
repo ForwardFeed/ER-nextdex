@@ -373,7 +373,7 @@ export function compactify(gameData: GameData): CompactGameData {
             console.log('miss named in trainer order : ' + x)
             return
         }
-        const trainerOrdered = compacted.trainers[indexT]
+        const trainerOrdered = compacted.trainers.splice(i, 1)[0]
         compacted.trainers.push(compacted.trainers.splice(i, 1, trainerOrdered)[0])
     })
     
