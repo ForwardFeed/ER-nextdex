@@ -9,7 +9,7 @@ export let compareData;
 export let gameData;
 // each time the data is modified, this is updated
 // so the client checks if it have the latest version by checking lo
-const LATEST_DATA_VERSION = "25"/*%%VERSION%%*/
+const LATEST_DATA_VERSION = "27"/*%%VERSION%%*/
 
 const allVersions = [
     "1.6.1",

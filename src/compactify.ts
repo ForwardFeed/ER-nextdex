@@ -367,7 +367,15 @@ export function compactify(gameData: GameData): CompactGameData {
         })
         trainerT.push(key)
     })
-    gameData.trainerOrder.forEach((x, i)=>{
+    compacted.trainers = compacted.trainers.sort(function(a, b){
+        const aOrder = gameData.trainerOrder.indexOf(a.name)
+        const bOrder = gameData.trainerOrder.indexOf(b.name)
+        if (aOrder == -1 && bOrder == -1) return 0
+        if (aOrder == -1) return 1
+        if (bOrder == -1) return -1
+        return aOrder - bOrder
+    })
+    /*gameData.trainerOrder.forEach((x, i)=>{
         const indexT = trainernameT.indexOf(x)
         if (indexT == -1) {
             console.log('miss named in trainer order : ' + x)
@@ -375,7 +383,7 @@ export function compactify(gameData: GameData): CompactGameData {
         }
         const trainerOrdered = compacted.trainers.splice(i, 1)[0]
         compacted.trainers.push(compacted.trainers.splice(i, 1, trainerOrdered)[0])
-    })
+    })*/
     
     gameData.dataScripted.forEach((val) => {
         const mapName = val.name.replace(/_/g, ' ')
