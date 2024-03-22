@@ -263,10 +263,15 @@ export function buildTrainerPrefixTrees(){
 
 export const queryMapTrainers = {
     "name": (queryData, trainer) => {
-        for (const splice of trainer.splicedName){
-            if (AisInB(queryData, splice)) return trainer.name
+        if (trainer.name.toLowerCase().indexOf(queryData) != -1) return [true, trainer.name, false]
+        queryData = queryData.split(' ')
+        for (const subQueryData of queryData){
+            for (const splice of trainer.splicedName){
+                if (AisInB(subQueryData, splice)) return trainer.name
+            }
         }
         return false
+        
     },
     "map": (queryData, trainer) => {
         const map = gameData.mapsT[trainer.map]?.toLowerCase()
