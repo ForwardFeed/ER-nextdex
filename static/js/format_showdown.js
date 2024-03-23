@@ -3,6 +3,7 @@ import { createInformationWindow, removeInformationWindow } from "./window.js"
 import { setFullTeam, teamData } from "./panels/team_builder.js"
 import { gameData } from "./data_version.js"
 import { itemList } from "./hydrate.js"
+import { settings } from "./settings.js"
 
 
 
@@ -154,7 +155,10 @@ function showFormatWindow(ev){
     })
     const right = e('div', 'showdown-right')
     const rightTop = e('div', 'showdown-top')
-    const text = exportDataShowdownFormat(teamData)
+    let text = exportDataShowdownFormat(teamData)
+    if (settings.discordFormat){
+        text = `\`\`\`\n${text}\`\`\``
+    }
     const rightBot = e('pre', 'showdown-bot', text)
     const bottomConfirm = e('div', 'showdown-confirm btn-btn-hover', null, {
         onclick: (ev_cb)=>{
