@@ -33,7 +33,8 @@ export function feedPanelSpecies(id) {
     setAbilities(specie.stats.abis, specie)
     setInnates(specie.stats.inns)
     specie.activeAbi = 0
-    setTypes([...new Set(specie.stats.types), abilitiesExtraType(specie.activeAbi, specie)], specie)
+    specie.thirdType = abilitiesExtraType(specie.activeAbi, specie)
+    setTypes([...new Set(specie.stats.types), specie.thirdType], specie)
     setAllMoves(specie)
     setEvos(specie.evolutions)
     setLocations(specie.locations, specie.SEnc)
@@ -321,7 +322,8 @@ function setInnates(innates) {
     )
 }
 
-function abilitiesExtraType(abilityID, specie) {
+export function abilitiesExtraType(abilityID, specie) {
+    if (abilityID == false) return abilitiesToAddedType(specie.stats.inns.filter(x => x))
     return abilitiesToAddedType([specie.stats.abis[abilityID], ...specie.stats.inns].filter(x => x))
 }
 
@@ -570,6 +572,10 @@ export const queryMapSpecies = {
     "type": (queryData, specie) => {
         const types = specie.stats.types.map((x) => gameData.typeT[x].toLowerCase())
         if (settings.monotype && types[0]) return AisInB(queryData, types[0]) && types[0] == types[1]
+        if (specie.thirdType){
+            const thirdType = gameData.typeT[specie.thirdType].toLowerCase()
+            if(AisInB(queryData, thirdType)) return gameData.typeT[specie.thirdType].toLowerCase()
+        }
         for (const type of types) {
             if (AisInB(queryData, type)) return type   
         }

@@ -1,4 +1,4 @@
-import { buildSpeciesPrefixTrees, feedPanelSpecies, getSpritesURL, matchedSpecies, setupReorderBtn } from "./panels/species/species_panel.js"
+import { abilitiesExtraType, buildSpeciesPrefixTrees, feedPanelSpecies, getSpritesURL, matchedSpecies, setupReorderBtn } from "./panels/species/species_panel.js"
 import { feedPanelMoves } from "./panels/moves_panel.js"
 import { buildlocationPrefixTrees, feedPanelLocations } from "./panels/locations_panel.js"
 import { feedPanelTrainers, buildTrainerPrefixTrees} from "./panels/trainers_panel.js"
@@ -240,6 +240,8 @@ function hydrateSpecies() {
             feedBaseStatsStats(statID, value)
             if (statID < 6) specie.stats.base[6] += + value
         }
+        // set third types for innates
+        specie.thirdType = abilitiesExtraType(false, specie)
         // prepare to be appended a list of location where this pokemon appear
         specie.locations = new Map();
         // concatenate all moves into a new variable
