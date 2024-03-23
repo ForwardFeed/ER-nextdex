@@ -9,7 +9,7 @@ export let compareData;
 export let gameData;
 // each time the data is modified, this is updated
 // so the client checks if it have the latest version by checking lo
-const LATEST_DATA_VERSION = "28"/*%%VERSION%%*/
+const LATEST_DATA_VERSION = "29"/*%%VERSION%%*/
 
 const allVersions = [
     "1.6.1",
@@ -58,13 +58,14 @@ export function changeVersion(version=defaultVersion, firstLoad=false){
         .then((data) => {
             console.log("took gamedata from server")
             gameData = data
-            hydrate(firstLoad)
             try{
+                //save first, because it causes issue after
                 saveToLocalstorage("data"+version, gameData)
                 saveToLocalstorage("dataversion"+version, LATEST_DATA_VERSION)
             }catch(_e){
                 // bruh
             }
+            hydrate(firstLoad)
             
     })
 }

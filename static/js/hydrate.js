@@ -279,7 +279,7 @@ function hydrateSpecies() {
             specie.region = regionsMapped[1]
         }
         // track all types on all evolutions lines
-        if (!specie.typeEvosSet){
+        if (!specie.typeEvosSet || specie.typeEvosSet.constructor.name === "Object"){
             specie.typeEvosSet = new Set(specie.stats.types)
         }
         // share the eggmoves to the evolutions !TODO recursively
