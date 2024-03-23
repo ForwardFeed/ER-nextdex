@@ -868,6 +868,14 @@ span{
 
 
 /* SEARCH */
+.filter-nothing-found{
+    background: rgb(230, 229, 243);
+    background: linear-gradient(90deg, rgb(230, 229, 243) 0%, rgba(190,35,26,1) 100%);
+}
+.filter-something-found{
+    background: rgb(230, 229, 243);
+    background: linear-gradient(90deg, rgb(230, 229, 243) 0%, rgba(22,85,10,1) 100%); 
+}
 #filter-frame{
     position: absolute;
     z-index: 11; /* 10 would be reserved to a invisible click to close filer with 100% height and with */

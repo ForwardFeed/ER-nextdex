@@ -61,11 +61,11 @@ export function buildlocationPrefixTrees(){
         for (const specie of x.speciesSet){
             const prefix = specie.name.charAt(0).toLowerCase()
             if (!prefixTree.specie[prefix]) prefixTree.specie[prefix] = []
-            prefixTree.specie[prefix].push(i)
+            prefixTree.specie[prefix].push({data: i, suggestions: specie.name})
         }
         const prefix = gameData.mapsT[x.id].charAt(0).toLowerCase()
         if (!prefixTree.name[prefix]) prefixTree.name[prefix] = []
-        prefixTree.name[prefix].push(i)
+        prefixTree.name[prefix].push({data: i, suggestions: gameData.mapsT[x.id]})
     })
 }
 

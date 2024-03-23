@@ -83,7 +83,7 @@ export const search = {
             $(this.suggestionNode).empty()
         }
         this.suggestions = []
-        if( this.suggestionNode) this.suggestionNode.dataset.suggestion = null
+        if(this.suggestionNode) this.suggestionNode.dataset.suggestion = null
     },
     showSuggestion: function(){
         if (!this.suggestionNode) return
@@ -92,8 +92,18 @@ export const search = {
             this.suggestionInput.blur()
             return
         }
+        this.suggestions = this.suggestions.filter(x => x)
         if(this.suggestions.length == 1){
-            this.clearSuggestion()
+            $(this.suggestionNode).empty()
+            this.suggestionInput.classList.add('filter-something-found')
+            this.suggestionInput.classList.remove('filter-nothing-found')
+            return
+        } else if(this.suggestions.length == 0 && this.suggestionInput.value){
+            this.suggestionInput.classList.remove('filter-something-found')
+            this.suggestionInput.classList.add('filter-nothing-found')
+        } else {
+            this.suggestionInput.classList.remove('filter-something-found')
+            this.suggestionInput.classList.remove('filter-nothing-found')
         }
         this.suggestionNode.innerText = "" //remove all previous suggestions
         for (const suggestion of this.suggestions){
@@ -190,6 +200,9 @@ const evKeymap = {
 export function setupSearch(){
     $('#search-keys').on('change', activateSearch)
     $('#search-bar').on('keyup search', (ev)=>{
+        if (ev.originalEvent.key === "Tab"){
+            return
+        }
         onkeySearchFilter(ev, $('#search-suggestion')[0], $('#search-bar')[0],
         ()=>{
             const callback = ()=>{
@@ -198,6 +211,15 @@ export function setupSearch(){
             }
             activateSearch(callback)
         })
+    })
+    $('#search-bar').on('keydown', (ev)=>{
+        if (ev.originalEvent.key === "Tab"){
+            ev.originalEvent.stopPropagation()
+            ev.originalEvent.preventDefault()
+            if (search.suggestions[0]){
+                search.suggestionInput.value = search.suggestions[0]
+            }
+        }
     })
     $('#filter-icon').on('click', function(){
         $('#filter-frame').toggle()

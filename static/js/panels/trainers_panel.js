@@ -254,7 +254,7 @@ export function buildTrainerPrefixTrees(){
         for (const splice of x.splicedName){
             const prefix = splice.charAt(0)
             if (!prefixTree.name[prefix]) prefixTree.name[prefix] = []
-            prefixTree.name[prefix].push(i)
+            prefixTree.name[prefix].push({data: i, suggestions: x.name})
         }
         
     })

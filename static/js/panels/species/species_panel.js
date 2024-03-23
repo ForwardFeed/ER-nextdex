@@ -558,7 +558,7 @@ export function buildSpeciesPrefixTrees(){
     gameData.species.forEach((x, i)=>{
         const prefix = x.name.charAt(0).toLowerCase()
         if (!prefixTree.name[prefix]) prefixTree.name[prefix] = []
-        prefixTree.name[prefix].push(i)
+        prefixTree.name[prefix].push({data: i, suggestions: x.name})
     })
 }
 

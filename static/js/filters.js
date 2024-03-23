@@ -447,17 +447,22 @@ function retrieveFromCache(query, prefixedTree){
         return {
             result: cached.result,
             partial: true,
+            suggestions: cached.suggestions,
         }
     }
-    return cached.result
+    return {
+        result: cached.result,
+        suggestions: cached.suggestions,
+    }
 }
 
-function putToCache(query, result){
+function putToCache(query, result, suggestions){
     cacheFilters[cacheIndex] = {
-        k     : query.k,
-        not   : query.not,
-        data : query.data,
-        result  : result,
+        k         : query.k,
+        not       : query.not,
+        data      : query.data,
+        result    : result,
+        suggestions: suggestions,
     }
     cacheIndex += 1
     return result
@@ -531,19 +536,29 @@ export function queryFilter3(query, datas, keymap, prefixedTree = {} , entrypoin
         if (cached) {
             if (cached.partial){
                 datas = cached.result.map(x => datas[x]) 
-                relDataIndex = cached.result
+                relDataIndex = cached.result.map(x => x) 
             } else {
-                return cached
+                if (query.suggestion){
+                    for(let i=0; i < 5; i++){
+                        search.addSuggestion(cached.suggestions[i])
+                    }
+                }
+                return cached.result
             }
         } else {
             //prefixed tree (trie) makes the whole algo going at least 5 times faster for common uses
             const prefixedData = prefixedTree[query.k]?.[query.data.charAt(0)]
             if (prefixedData) {
                 if (query.data.length == 1){
-                    return putToCache(query, prefixedData)
+                    if (query.suggestion){ 
+                        for(let i=0; i < 5; i++){
+                            search.addSuggestion(prefixedData[i]?.suggestions)
+                        }
+                    }
+                    return putToCache(query, prefixedData.map(x => x.data), prefixedData.map(x => x.suggestions))
                 } else {
-                    datas = prefixedData.map(x => datas[x]) 
-                    relDataIndex = prefixedData
+                    datas = prefixedData.map(x => datas[x.data])
+                    relDataIndex = prefixedData.map(x => x.data)
                 }
             }
         }
@@ -553,7 +568,7 @@ export function queryFilter3(query, datas, keymap, prefixedTree = {} , entrypoin
         const allElementsIndexesThatMatched = []
         const perfectMatches = [] //for not unique properties like abilities or move that can be shared by multiple pokemons
         const dataLen = datas.length
-        for (let i = 0; i < dataLen; i++){
+        for (let i = 0; i < dataLen; i++){            
             const data = datas[i]
             const answer = execFn(query.data, data)
             let suggestion
@@ -593,7 +608,7 @@ export function queryFilter3(query, datas, keymap, prefixedTree = {} , entrypoin
             }
         }
         const returnData = perfectMatches.length ? perfectMatches : allElementsIndexesThatMatched
-        return putToCache(query, returnData)
+        return putToCache(query, returnData, search.suggestions)
     }
 }
 function removeAllFilters(){
