@@ -1,9 +1,9 @@
 import { gameData } from "../data_version.js"
 import { search } from "../search.js"
-import { queryFilter2, longClickToFilter, trickFilterSearch} from "../filters.js"
+import { queryFilter2, longClickToFilter, trickFilterSearch, queryFilter3} from "../filters.js"
 import { AisInB, e, JSHAC } from "../utils.js"
 import { createInformationWindow, removeInformationWindow } from "../window.js"
-import { setAllMoves } from "./species/species_panel.js"
+import { setAllMoves, setMoveName, setMovePower, setMoveRow, setSplitMove } from "./species/species_panel.js"
 
 export let matchedMoves
 let currentMoveID = 0
@@ -208,33 +208,75 @@ export function moveOverlay(moveId, interactive=true) {
 }
 
 // would be a function to have an upgraded move picker
-export function movePicker(){
+export function movePicker(moveList, callback){
     const parentDiv = e('div', 'move-picker-parent')
     const dataBlock = e('div', 'move-picker-datablock')
     const datalist = e('datalist#datalist-movepicker')
-    const opt = e('option',null, "aaa")
-    opt.value = 'AAA'
-    datalist.append(opt)
-    
-    const inputDiv = e('input', 'move-picker-input')
+    const datas = moveList.map(x => gameData.moves[x])
+    const movesLen = datas.length
+    for (let i = 0; i < movesLen; i++){
+        const move = datas[i]
+        const opt = e('option', null, move.name)
+        datalist.append(opt)
+    }
+    let matched
+    const inputDiv = e('input', 'move-picker-input', null, {
+        onkeydown: (evKey)=>{
+            if (evKey.key === "Tab"){
+                evKey.stopPropagation()
+                evKey.preventDefault()
+                if (!matched || !matched.length) return
+                inputDiv.value = gameData.moves[moveList[matched[0]]].name
+                callback(matched[0])
+            }
+        },
+        onkeyup: () => {
+            const query = {
+                op: "AND",
+                data: inputDiv.value.toLowerCase(),
+                k: 'name',
+                suggestion: false,
+            }
+            matched = queryFilter2(query, datas, queryMapMoves)
+            if (!matched || !matched.length){
+                return
+            }
+            $(dataBlock).empty().append(moveOverlay(moveList[matched[0]]))
+            $(similarMoves).empty()
+            const toShow = matched.splice(0,8)
+            const toShowLen = toShow.length
+            for (let i = 0; i < toShowLen; i++){
+                const moveIndex = toShow[i]
+                const moveID = moveList[moveIndex]
+                const move = gameData.moves[moveID]
+                const movePickingRow = e('div', 'species-move-row move-picker-selectable', null, {
+                    onclick: (ev)=>{
+                        $(inputDiv).val(move.name)
+                        $(dataBlock).empty().append(moveOverlay(moveID))
+                        ev.stopPropagation()
+                        callback(moveIndex)
+                    }
+                })
+                movePickingRow.append(setSplitMove(move, moveID))
+                movePickingRow.append(setMoveName(move))
+                movePickingRow.append(setMovePower(move))
+                similarMoves.append(movePickingRow)
+            }
+            callback(toShow[0])
+        }
+    })
     inputDiv.append(datalist)
     inputDiv.setAttribute('list', 'datalist-movepicker')
-    const similarMoves = e('div', 'move-picker-similar')
+    const similarMoves = e('div', 'move-picker-similars')
+
     return JSHAC([
         parentDiv, [
-            dataBlock,
             inputDiv,
+            dataBlock,
             similarMoves
         ]
     ])
 }
-/*
-document.onclick = (ev)=>{
-    createInformationWindow(
-        movePicker(),
-        ev, "focus", true, true
-    )
-}*/
 export const queryMapMoves = {
     "name": (queryData, move) => {
         const moveName = move.name.toLowerCase()

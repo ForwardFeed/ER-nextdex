@@ -421,3 +421,36 @@ textarea, pre{
     background-color: var(--colorD);
     margin: auto;
 }
+
+
+/* PICKERS */
+
+.move-picker-parent{
+    background-color: var(--colorD);
+    display: flex;
+    flex-direction: column;
+}
+.move-picker-input{
+    margin: auto;
+}
+.move-picker-datablock{
+    display: flex;
+    width: 23em;
+    height: 6em;
+    background-color: var(--colorE);
+    margin: 0;
+}
+.move-picker-similars{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 23em;
+    height: 4.5em;
+    background-color: var(--colorC);
+}
+.move-picker-selectable{
+    width: 50%;
+}
+.move-picker-selectable:hover{
+    background-color: var(--colorB);
+}

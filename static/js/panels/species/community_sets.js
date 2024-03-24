@@ -8,6 +8,7 @@ import { overlayList, editionStats, overlayEditorAbilities, enterToClose} from "
 import { fetchFromLocalstorage, saveToLocalstorage } from "../../settings.js";
 import { exportDataShowdownFormat, parseShowdownFormat } from "../../format_showdown.js";
 import { itemList } from "../../hydrate.js";
+import { movePicker } from "../moves_panel.js";
 
 /** @type {Map<string, pokeData[]>} */
 let communitySets = new Map();
@@ -251,8 +252,8 @@ class BlockComSets {
             this.movesDiv.push(e('div', 'trainers-poke-move', [moveSpan], {
                 onclick: (ev)=>{
                     createInformationWindow(
-                        overlayList(moveCallback, this.allMovesName),
-                        ev, "focus"
+                        movePicker(this.baseSpc.allMoves, moveCallback),
+                        ev, "focus", true, true
                     )
                 }
             }))      

@@ -8,6 +8,7 @@ import { saveToLocalstorage, fetchFromLocalstorage } from "../settings.js";
 import { getDefensiveCoverage, abilitiesToAddedType, getMoveEffectiveness } from "../weakness.js"
 import { longClickToFilter } from "../filters.js";
 import { itemList } from "../hydrate.js";
+import { movePicker } from "./moves_panel.js";
 
 const saveKeysPokemon = [
     "spc",
@@ -432,8 +433,8 @@ function feedPokemonEdition(jNode, viewID) {
                             updateOffensiveTypes()
                         }
                         createInformationWindow(
-                            overlayList(moveCallback, poke.allMovesName),
-                            ev, "focus"
+                            movePicker(poke.allMoves, moveCallback),
+                            ev, "focus", true, true
                         )
                     }
                 ]

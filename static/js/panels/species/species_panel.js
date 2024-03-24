@@ -134,7 +134,7 @@ function filterMoves(moveIDlist) {
  * @param {Object} move 
  * @returns an HTML node
  */
-function setSplitMove(move) {
+export function setSplitMove(move) {
     const nodeMoveSplit = document.createElement('img')
     nodeMoveSplit.src = `./icons/${gameData.splitT[move.split]}.png`
     nodeMoveSplit.className = "species-move-sprite"
@@ -145,21 +145,21 @@ function setSplitMove(move) {
  * @param {number} moveID
  * @returns an HTML node
  */
-function setMoveName(move) {
+export function setMoveName(move) {
     const type1 = gameData.typeT[move.types[0]].toLowerCase()
     const nodeMoveName = document.createElement('div')
     nodeMoveName.innerText = move.name
     nodeMoveName.className = `species-move-name ${type1}-t`
     return nodeMoveName
 }
-function setMovePower(move){
+export function setMovePower(move){
     return e('div', 'species-move-pwr', move.pwr ? move.pwr : null)
 }
 /**
  * 
  * @returns an HTML node
  */
-function setMoveRow(moveID) {
+export function setMoveRow(moveID) {
     const row = document.createElement('div')
     row.className = "species-move-row"
     row.onclick = function(ev){

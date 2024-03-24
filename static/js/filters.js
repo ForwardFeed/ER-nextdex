@@ -254,7 +254,7 @@ export function appendFilter(panelID, initKey = "", initData = ""){
  * @typedef {Object} Query - a query
  * @property {string} op - Operation to do to all direct sub element
  * @property {keyof SearchMap} k - a key for the searchmap
- * @property {string | query} queryData - data of the query
+ * @property {string | Query[]} data - data of the query
  * @property {boolean} suggestion - should it add to suggestions?
  * @property {boolean} [not=false] - should it not match
  * 
