@@ -59,7 +59,7 @@ export function getQueries(){
         op:"AND",
         not: false, //not yet implemented
         k: $('#search-keys').val().toLowerCase(),
-        data: $('#search-bar').val().toLowerCase(),
+        data: $('#search-bar').val().toLowerCase().trim(),
         suggestion: $('#search-bar')[0] === search.suggestionInput
     }]
     $('.filter-row').map(function(index, row){
@@ -74,7 +74,7 @@ export function getQueries(){
                 //if you use data('state') jquery util here you're fucked for no acceptable reason
                 not: field.querySelector('.filter-not').dataset.state === "on" ? true : false,
                 k: field.querySelector('.filter-key').value.toLowerCase(),
-                data: field.querySelector('.filter-search').value.toLowerCase(),
+                data: field.querySelector('.filter-search').value.toLowerCase().trim(),
                 suggestion: field.querySelector('.filter-search') === search.suggestionInput
             }
             filterDatas[index].filters.push(toAddQuery)
@@ -310,6 +310,9 @@ export function queryFilter(query, data, keymap){
         else return true // true i suppose?
     }
 }
+function isValidWithMaybeNot (notFlag, value){
+    return notFlag ? !value : value
+}
 /**
  * 
  * @param {*} query 
@@ -318,9 +321,6 @@ export function queryFilter(query, data, keymap){
  * @returns {number[]}the list of element that matched by index
  */
 export function queryFilter2(query, datas, keymap){
-    const queryNot = (notFlag, value) => {
-        return notFlag ? !value : value
-    }
     if (query.data.constructor === Array){
         // break it down until it is no longer an array
         // resolve all using the parent operator
@@ -401,7 +401,7 @@ export function queryFilter2(query, datas, keymap){
             } else {
                 suggestion = answer
             }
-            if (queryNot(query.not, suggestion)){
+            if (isValidWithMaybeNot(query.not, suggestion)){
                 allElementsIndexesThatMatched.push(i)
                 if (query.suggestion){
                     search.addSuggestion(suggestion)
@@ -483,11 +483,7 @@ function clearCache(){
  */
 export function queryFilter3(query, datas, keymap, prefixedTree = {} , entrypoint = true){
     if (entrypoint) cacheIndex = 0
-    const queryNot = (notFlag, value) => {
-        // if a filter has been removed in the query, this will be kicked
-        clearUnusedCache(entrypoint)
-        return notFlag ? !value : value
-    }
+    
     if (query.data.constructor === Array){
         // break it down until it is no longer an array
         // resolve all using the parent operator
@@ -600,13 +596,14 @@ export function queryFilter3(query, datas, keymap, prefixedTree = {} , entrypoin
             } else {
                 suggestion = answer
             }
-            if (queryNot(query.not, suggestion)){
+            if (isValidWithMaybeNot(query.not, suggestion)){
                 allElementsIndexesThatMatched.push(relDataIndex ? relDataIndex[i] : i)
                 if (query.suggestion){
                     search.addSuggestion(suggestion)
                 }
             }
         }
+        // clearUnusedCache(entrypoint) // maybe not useful?
         const returnData = perfectMatches.length ? perfectMatches : allElementsIndexesThatMatched
         return putToCache(query, returnData, search.suggestions)
     }

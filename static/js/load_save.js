@@ -482,7 +482,7 @@ function parseFile(file){
                     abi: mon.ability,
                     moves: mon.moves,
                     item: undefined,
-                    ivs: [31, 31, 31, 31, 31, mon.zeroSpe ? 31: 0],
+                    ivs: [31, 31, 31, 31, 31, mon.zeroSpe ? 0 : 31],
                     evs: [evs.hp, evs.at, evs.df, evs.sa, evs.sd, evs.sp],
                     nature: gameData.natureT.indexOf(mon.nature)
                 });

@@ -75,7 +75,6 @@ export const search = {
     addSuggestion : function(suggestion){
         if (this.suggestions.length == this.maxSuggestion) return
         if (this.suggestions.includes(suggestion)) return
-        if (this.suggestionInput.value === suggestion) return
         this.suggestions.push(suggestion)
     },
     clearSuggestion: function(){

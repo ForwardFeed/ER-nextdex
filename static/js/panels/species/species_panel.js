@@ -552,32 +552,53 @@ function buildResist(specie){
 const prefixTree = {
     treeId: "species"
 }
-
 export function buildSpeciesPrefixTrees(){
     prefixTree.name = {}
+    prefixTree.type = {}
     gameData.species.forEach((x, i)=>{
-        const prefix = x.name.charAt(0).toLowerCase()
-        if (!prefixTree.name[prefix]) prefixTree.name[prefix] = []
-        prefixTree.name[prefix].push({data: i, suggestions: x.name})
+        x.splicedName = x.name.split(' ').map(x => x.toLowerCase())
+        for (const splice of x.splicedName){
+            const prefix = splice.charAt(0)
+            if (!prefixTree.name[prefix]) prefixTree.name[prefix] = []
+            prefixTree.name[prefix].push({data: i, suggestions: x.name})
+        }
+        x.allTypesNames = x.stats.types.map((pokeType) => {
+            const typeAsString = gameData.typeT[pokeType].toLowerCase()
+            const prefix = typeAsString.charAt(0)
+            if (!prefixTree.type[prefix]) prefixTree.type[prefix] = []
+            prefixTree.type[prefix].push({data: i, suggestions: typeAsString})
+            return typeAsString
+        })
     })
 }
 
 export const queryMapSpecies = {
     "name": (queryData, specie) => {
-        const specieName = specie.name.toLowerCase()
-        if (AisInB(queryData, specieName)) {
-            return specie.name
+        if (specie.name.toLowerCase() === queryData) return [true, specie.name, false]
+        queryData = queryData.split(' ')
+        if (!queryData.length) return false
+        for (const subQueryData of queryData){
+            let hasSlicedMatched = false
+            for (const splice of specie.splicedName){
+                hasSlicedMatched = AisInB(subQueryData, splice) || hasSlicedMatched
+            }
+            if (!hasSlicedMatched) return false
         }
+        return specie.name
+        
     },
     "type": (queryData, specie) => {
-        const types = specie.stats.types.map((x) => gameData.typeT[x].toLowerCase())
-        if (settings.monotype && types[0]) return AisInB(queryData, types[0]) && types[0] == types[1]
+        if (settings.monotype && specie.allTypesNames[0]) {
+            return AisInB(queryData, specie.allTypesNames[0]) && specie.allTypesNames[0] == specie.existingTypes[1]
+        }
         if (specie.thirdType){
             const thirdType = gameData.typeT[specie.thirdType].toLowerCase()
-            if(AisInB(queryData, thirdType)) return gameData.typeT[specie.thirdType].toLowerCase()
+            if(AisInB(queryData, thirdType)) return thirdType
         }
-        for (const type of types) {
-            if (AisInB(queryData, type)) return type   
+        for (const type of specie.allTypesNames) {
+            if (AisInB(queryData, type)){
+                return type   
+            }
         }
         return false
     },

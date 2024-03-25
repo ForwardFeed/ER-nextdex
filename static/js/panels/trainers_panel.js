@@ -263,14 +263,17 @@ export function buildTrainerPrefixTrees(){
 
 export const queryMapTrainers = {
     "name": (queryData, trainer) => {
-        if (trainer.name.toLowerCase().indexOf(queryData) != -1) return [true, trainer.name, false]
+        if (trainer.name.toLowerCase() === queryData) return [true, trainer.name, true]
         queryData = queryData.split(' ')
+        if (!queryData.length) return false
         for (const subQueryData of queryData){
+            let hasSlicedMatched = false
             for (const splice of trainer.splicedName){
-                if (AisInB(subQueryData, splice)) return trainer.name
+                hasSlicedMatched = AisInB(subQueryData, splice) || hasSlicedMatched
             }
+            if (!hasSlicedMatched) return false
         }
-        return false
+        return trainer.name
         
     },
     "map": (queryData, trainer) => {

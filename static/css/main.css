@@ -226,10 +226,15 @@ span{
     display: flex;
     flex-direction: row;
     flex-grow: 1;
+    
+}
+.xlarge-row > *, .moves-large > *, #moves-internal-id, #moves-name, .move-overlay-stats > *, .move-overlay-fill{
+    user-select: text;
 }
 .xlarge-row > span{
     padding-right: 0.5em;
 }
+
 #moves-split, #species-front, .pixelated, .trainer-poke-sprite {
     image-rendering:optimizeSpeed;             /* Legal fallback */
     image-rendering:-moz-crisp-edges;          /* Firefox        */
@@ -268,7 +273,9 @@ span{
 .moves-bot-info > *{
     margin-left: 2%;
 }
-/*#moves-desc{}*/
+#moves-desc{
+    user-select: text;
+}
 #moves-flags{
     display: flex;
     flex-direction: column;
