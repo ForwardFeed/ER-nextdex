@@ -1,3 +1,7 @@
+#insanity{
+    width: fit-content;
+}
+
 .boink {
     /* animation properties */
     animation-name: boink;
@@ -25,7 +29,6 @@ to {
     width: 2vw;
 }
 }
-
 
 .spinnySkirt {
     animation: spinnySkirt var(--random0) infinite;

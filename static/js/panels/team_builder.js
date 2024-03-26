@@ -8,7 +8,7 @@ import { saveToLocalstorage, fetchFromLocalstorage } from "../settings.js";
 import { getDefensiveCoverage, abilitiesToAddedType, getMoveEffectiveness } from "../weakness.js"
 import { longClickToFilter } from "../filters.js";
 import { itemList } from "../hydrate.js";
-import { movePicker } from "./moves_panel.js";
+import { movePicker, itemPicker} from "../pickers.js";
 
 const saveKeysPokemon = [
     "spc",
@@ -443,6 +443,7 @@ function feedPokemonEdition(jNode, viewID) {
         createInformationWindow(overlayNode, ev, "mid")
     }
     const itemCallback = (itemID) => {
+        console.log(itemID)
         poke.item = itemID
         view.item.text(itemDiv.innerText = gameData.items[itemID].name)
         save()
@@ -461,7 +462,7 @@ function feedPokemonEdition(jNode, viewID) {
         ev.stopPropagation()
         const overlayNode = cubicRadial([
             ["Items", (ev) => {
-                createInformationWindow(overlayList(itemCallback, itemList), ev, "focus")
+                createInformationWindow(itemPicker(itemList, itemCallback), ev, "focus")
             }],
             ["Nature", (ev) => {
                 createInformationWindow(overlayList(natureCallback,

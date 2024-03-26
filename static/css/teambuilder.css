@@ -442,14 +442,15 @@ textarea, pre{
 }
 .move-picker-similars{
     display: flex;
-    flex-direction: column;
     flex-wrap: wrap;
     width: 23em;
     height: 4.5em;
     background-color: var(--colorC);
+    overflow-y: scroll;
 }
 .move-picker-selectable{
     width: 50%;
+    display: flex;
 }
 .move-picker-selectable:hover{
     background-color: var(--colorB);

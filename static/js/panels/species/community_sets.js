@@ -8,7 +8,7 @@ import { overlayList, editionStats, overlayEditorAbilities, enterToClose} from "
 import { fetchFromLocalstorage, saveToLocalstorage } from "../../settings.js";
 import { exportDataShowdownFormat, parseShowdownFormat } from "../../format_showdown.js";
 import { itemList } from "../../hydrate.js";
-import { movePicker } from "../moves_panel.js";
+import { movePicker } from "../../pickers.js";
 
 /** @type {Map<string, pokeData[]>} */
 let communitySets = new Map();

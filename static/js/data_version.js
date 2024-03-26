@@ -44,6 +44,7 @@ export function changeVersion(version=defaultVersion, firstLoad=false){
         try{
             gameData = JSON.parse(fetchFromLocalstorage("data"+version))
             if (gameData) {
+                window.gameData = gameData
                 console.log("took gamedata from storage")
                 hydrate(firstLoad)
                 return
@@ -58,6 +59,7 @@ export function changeVersion(version=defaultVersion, firstLoad=false){
         .then((data) => {
             console.log("took gamedata from server")
             gameData = data
+            window.gameData = gameData
             try{
                 //save first, because it causes issue after
                 saveToLocalstorage("data"+version, gameData)

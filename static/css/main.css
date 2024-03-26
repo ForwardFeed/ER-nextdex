@@ -851,18 +851,24 @@ span{
     z-index: 100;
     width: 80vw;
     height: 80%;
-    margin: 10% 10% 10vw 10vw;
+    top: 10vh;
+    left: 10vw;
     background-color: var(--colorA);
     position: absolute;
-    top: 0;
     border: 5px ridge var(--colorB);
     font-size: 2em;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
 }
 .versionning > select{
     margin-top: -1px;
     vertical-align: middle;
 }
-/*.settings-row{}*/
+.settings-row{
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+}
 .settings-row > input[type='radio'] { 
     transform: scale(2); 
     margin-top: -1px;
@@ -870,10 +876,21 @@ span{
 }
 .settings-row > * {
     margin-right: 2%;
-    height: 100%;
 }
-
-
+.settings-bottom{
+    margin-top: auto;
+}
+a{
+    color: var(--font-color);
+    margin: 0;
+    padding: 0;
+}
+a:hover{
+    text-decoration-style:  dotted;
+}
+.thanks{
+    font-size: 0.7em;
+}
 /* SEARCH */
 .filter-nothing-found{
     background: rgb(230, 229, 243);
