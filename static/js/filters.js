@@ -529,6 +529,7 @@ export function queryFilter3(query, datas, keymap, prefixedTree = {} , entrypoin
         // data relative to the full data, but it's a collection of indexes
         let relDataIndex
         const cached = retrieveFromCache(query, prefixedTree)
+        //retrive from cached
         if (cached) {
             if (cached.partial){
                 datas = cached.result.map(x => datas[x]) 
@@ -544,7 +545,7 @@ export function queryFilter3(query, datas, keymap, prefixedTree = {} , entrypoin
         } else {
             //prefixed tree (trie) makes the whole algo going at least 5 times faster for common uses
             const prefixedData = prefixedTree[query.k]?.[query.data.charAt(0)]
-            if (prefixedData) {
+            if (prefixedData && !query.not) {
                 if (query.data.length == 1){
                     if (query.suggestion){ 
                         for(let i=0; i < 5; i++){
