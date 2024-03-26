@@ -8,7 +8,7 @@ import { overlayList, editionStats, overlayEditorAbilities, enterToClose} from "
 import { fetchFromLocalstorage, saveToLocalstorage } from "../../settings.js";
 import { exportDataShowdownFormat, parseShowdownFormat } from "../../format_showdown.js";
 import { itemList } from "../../hydrate.js";
-import { movePicker } from "../../pickers.js";
+import { movePicker, listPicker } from "../../pickers.js";
 
 /** @type {Map<string, pokeData[]>} */
 let communitySets = new Map();
@@ -222,13 +222,12 @@ class BlockComSets {
                         createInformationWindow(overlayNode, ev, "", true)
                     }],
                     ["Items", (ev) => {
-                        createInformationWindow(overlayList(itemCallback, itemList), ev, "focus")
+                        createInformationWindow(listPicker(itemList, itemCallback), ev, "focus")
                     }],
                     ["Nature", (ev) => {
-                        createInformationWindow(overlayList(natureCallback,
-                            gameData.natureT.map(x => getTextNature(x))),
+                        createInformationWindow(listPicker(gameData.natureT.map(x => getTextNature(x)), natureCallback),
                             ev, "focus")
-                    }]
+                    }],
                 ], "6em", "1em")
                 createInformationWindow(overlayNode, ev, "mid", true)
             }

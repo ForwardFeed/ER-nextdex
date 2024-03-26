@@ -74,7 +74,7 @@ export function movePicker(moveList, callback){
     ])
 }
 
-export function itemPicker(itemList, callback){
+export function listPicker(itemList, callback){
     const parentDiv = e('div', 'move-picker-parent')
     const datalist = e('datalist#datalist-movepicker')
     const datas = itemList
@@ -100,7 +100,6 @@ export function itemPicker(itemList, callback){
             matched = itemList.map((x,i) => {
                 return x.toLowerCase().indexOf(val) != -1 ? i : undefined
             }).filter(x => x != undefined)
-            console.log(matched, itemList)
             if (!matched || !matched.length){
                 return
             }
@@ -111,6 +110,7 @@ export function itemPicker(itemList, callback){
                 similarItems.append(e('div', 'move-picker-selectable', [e('span', null, item)],{
                     onclick: ()=>{
                         inputDiv.value = item.toLowerCase()
+                        callback(matched[i])
                     }
                 }))
             }

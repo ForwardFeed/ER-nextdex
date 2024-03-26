@@ -451,6 +451,7 @@ textarea, pre{
 .move-picker-selectable{
     width: 50%;
     display: flex;
+    cursor: pointer;
 }
 .move-picker-selectable:hover{
     background-color: var(--colorB);
