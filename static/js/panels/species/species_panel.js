@@ -546,7 +546,9 @@ function buildResist(specie){
     const weaknesses = getDefensiveCoverage(
         types.map(x => gameData.typeT[x]).filter(x => x), [specie.stats.abis[0], ...specie.stats.inns].filter(x => x)
     )
-    specie.resist = [...[].concat(weaknesses["0.5"]?.concat(weaknesses["0.25"]?.concat(weaknesses["0.25"])))].filter(x => x)
+    specie.resist = [...[].concat(weaknesses["0.5"]?.concat(weaknesses["0.25"]?.concat(weaknesses["0.25"])))]
+        .filter(x => x)
+        .map(x => x.toLowerCase())
 }
 
 const prefixTree = {
@@ -589,7 +591,7 @@ export const queryMapSpecies = {
     },
     "type": (queryData, specie) => {
         if (settings.monotype && specie.allTypesNames[0]) {
-            return AisInB(queryData, specie.allTypesNames[0]) && specie.allTypesNames[0] == specie.existingTypes[1]
+            return AisInB(queryData, specie.allTypesNames[0]) && specie.allTypesNames[0] == specie.allTypesNames[1]
         }
         const typesQueried = queryData.split(' ').filter(x => x)
         const thirdType = specie.thirdType ? gameData.typeT[specie.thirdType].toLowerCase() : null
@@ -644,11 +646,23 @@ export const queryMapSpecies = {
         }
     },
     "resist": (queryData, specie) => {
-        if (!specie.resist) buildResist(specie)
-        for (const typeR of specie.resist){
-            if (AisInB(queryData.toLowerCase(), typeR.toLowerCase())) return typeR
+        const typesQueried = queryData.split(' ').filter(x => x)
+        let multiSuggestions = []
+        for (const typeQueried of typesQueried){
+            let isValid = false
+            if (!specie.resist) buildResist(specie)
+            for (const typeR of specie.resist){
+                if (AisInB(typeQueried, typeR)) {
+                    multiSuggestions.push(typeR)
+                    isValid = true
+                    break
+                }
+            }
+            if (!isValid) {
+                return false
+            }
         }
-        return false
+        return {multiSuggestions: multiSuggestions}
     },
 }
 
