@@ -492,7 +492,10 @@ export function queryFilter3(query, datas, keymap, prefixedTree = {} , entrypoin
         }).filter(x => x)
         // if the is nothing to compare to, then just shrug
 
-        if (subQueriesAnswers.length < 1) return undefined
+        if (subQueriesAnswers.length < 1) {
+            clearCache()
+            return undefined
+        }
         // just one?
         if (subQueriesAnswers.length == 1) return subQueriesAnswers[0]
         // okay now it's we get to use our operators
@@ -576,24 +579,34 @@ export function queryFilter3(query, datas, keymap, prefixedTree = {} , entrypoin
             // in the case of generator or generator as abilities, it's the ability that should be uniq
             // not the first pokemon to hit it, that's why there is isNotUnique
             if (typeof answer === "object"){
-                const perfectMatch = answer[0]
-                suggestion = answer[1]
-                if (perfectMatch) {
-                    const isUnique = answer[2]
-                    // a name is unique
-                    if (isUnique) {
-                        // invert the unique search
-                        if (query.not){
-                            const inverted = [...Array(dataLen).keys()]
-                            inverted.splice(i, 1)
-                            return inverted
+                if (answer.multiSuggestions){
+                    for (const suggestion of answer.multiSuggestions){
+                        if (query.suggestion){
+                            search.addSuggestion(suggestion)
                         }
-                        return [relDataIndex ? relDataIndex[i] : i]
                     }
-                    // an ability or a move isn't
-                    perfectMatches.push(relDataIndex ? relDataIndex[i] : i)
+                    allElementsIndexesThatMatched.push(relDataIndex ? relDataIndex[i] : i)
+                } else {
+                    const perfectMatch = answer[0]
+                    suggestion = answer[1]
+                    if (perfectMatch) {
+                        const isUnique = answer[2]
+                        // a name is unique
+                        if (isUnique) {
+                            // invert the unique search
+                            if (query.not){
+                                const inverted = [...Array(dataLen).keys()]
+                                inverted.splice(i, 1)
+                                return inverted
+                            }
+                            return [relDataIndex ? relDataIndex[i] : i]
+                        }
+                        // an ability or a move isn't
+                        perfectMatches.push(relDataIndex ? relDataIndex[i] : i)
 
+                    }
                 }
+                
             } else {
                 suggestion = answer
             }

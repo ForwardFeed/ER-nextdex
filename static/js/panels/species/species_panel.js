@@ -591,16 +591,27 @@ export const queryMapSpecies = {
         if (settings.monotype && specie.allTypesNames[0]) {
             return AisInB(queryData, specie.allTypesNames[0]) && specie.allTypesNames[0] == specie.existingTypes[1]
         }
-        if (specie.thirdType){
-            const thirdType = gameData.typeT[specie.thirdType].toLowerCase()
-            if(AisInB(queryData, thirdType)) return thirdType
-        }
-        for (const type of specie.allTypesNames) {
-            if (AisInB(queryData, type)){
-                return type   
+        const typesQueried = queryData.split(' ').filter(x => x)
+        const thirdType = specie.thirdType ? gameData.typeT[specie.thirdType].toLowerCase() : null
+        let multiSuggestions = []
+        for (const typeQueried of typesQueried){
+            let isValid = false
+            if(thirdType && AisInB(typeQueried, thirdType)) {
+                multiSuggestions.push(thirdType)
+                continue
+            }
+            for (const type of specie.allTypesNames) {
+                if (AisInB(typeQueried, type)) {
+                    multiSuggestions.push(type)
+                    isValid = true
+                    break
+                }
+            }
+            if (!isValid) {
+                return false
             }
         }
-        return false
+        return {multiSuggestions: multiSuggestions}
     },
     "ability": (queryData, specie) => {
         let abilities = specie.stats.abis

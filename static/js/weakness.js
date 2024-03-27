@@ -172,8 +172,7 @@ export function getDefensiveCoverage(defTypes, abis){
     })
     return defensiveCoverageSorted
 }
-// misses things like Magma Armor or others that reduce by 35% like Filter
-// or Ice Scales or Fluffy for Physical or other damage
+
 const abilityThatAddsImmunity = {
     "Flash Fire": ["Fire"],
     "Sap Sipper": ["Grass"],
@@ -184,11 +183,12 @@ const abilityThatAddsImmunity = {
     "Dry Skin": ["Water"],
     "Storm Drain": ["Water"],
     "Evaporate": ["Water"],
-    "Wonder Guard": [], //Find a way to put it
+    "Wonder Guard": [], //TODO Find a way to input it
     "Levitate": ["Ground"],
     "Dragonfly": ["Ground"],
     "Mountaineer": ["Rock"],
     "Poison Absorb": ["Poison"],
+    "Aerodynamics": ["Flying"],
 }
 
 const abilityThatAddsNormal = {
@@ -210,6 +210,8 @@ const abilityThatAddsWeakness = {
     "Fluffy": ["Fire"],
     "Liquified": ["Water"],
 }
+// misses things like Magma Armor or others that reduce by 35% like Filter
+// or Ice Scales or Fluffy for Physical or other damage
 
 function abilityModifiesTypeChart(abis){
     abis = abis.map(x => gameData.abilities[x].name)
