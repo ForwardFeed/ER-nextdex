@@ -1,11 +1,5 @@
-@font-face {
-    font-family: "Inconsolata";
-    src: url(../font/Inconsolata-VariableFont_wdth\,wght.ttf) format("truetype");
-}
-
 html {
     background-color: var(--background);
-    font-family: Inconsolata;
     color: var(--font-color);
     height: 100%; 
 

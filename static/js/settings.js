@@ -1,12 +1,19 @@
+import { loadFont } from "./fonts.js"
+
 
 const appName = "ERdex"
 const appSettings = appName + "_settings"
-const settingsVersion = "4" //when changed it will init newly added elements from default to the current settings
-const themesList =  [
+const settingsVersion = "5" //when changed it will init newly added elements from default to the current settings
+// and this automatically to prevent some undefined behavior
+const themeList =  [
     "blueish",
     "rushed",
     "wood",
     "blahaj",
+]
+const fontList = [
+    'basis33',
+    'Inconsolata'
 ]
 export const settings = {
 
@@ -18,6 +25,7 @@ const defaultSettings = {
     storageEnable: true,
     monotype: false,
     discordFormat: true,
+    font: "basis33"
 }
 
 export function initAppSettings(){
@@ -39,6 +47,7 @@ export function initAppSettings(){
         }
     }
     changeTheme()
+    loadFont(settings.font)
 }
 
 export function saveSettings(){
@@ -85,11 +94,39 @@ export function fetchFromLocalstorage(key){
 
 function changeTheme(){
     let settingsTheme = settings.theme
-    if (themesList.indexOf(settingsTheme) == -1) settingsTheme = themesList[0]
-    for (const theme of themesList){
+    if (themeList.indexOf(settingsTheme) == -1) settingsTheme = themeList[0]
+    for (const theme of themeList){
         document.getElementById(`styles-${theme}`).disabled = theme !== settingsTheme
     }
     
+}
+function toUpperCaseFirst(word){
+    return word.charAt(0).toUpperCase() + word.slice(1)
+}
+function setDynamicalRowOfSettings(name, settingsList, onchange){
+    const Name = toUpperCaseFirst(name)
+    const frag = document.createDocumentFragment()
+    const rowCore = document.createElement('div')
+    rowCore.className = 'settings-row'
+    const themeSpan = document.createElement('span')
+    themeSpan.innerText =  Name + ":"
+    frag.append(themeSpan)
+    for (let i = 0 ; i < settingsList.length ; i++){
+        const settingsItem = settingsList[i]
+        const label = document.createElement('label')
+        label.innerText = toUpperCaseFirst(settingsItem)
+        label.htmlFor = `${name}-${settingsItem}`
+        const input = document.createElement('input')
+        input.type = "radio"
+        input.name = name
+        input.id = `${name}-${settingsItem}`
+        if (settings[name] === settingsItem) input.checked = true
+        input.onchange = ()=>{onchange(settingsItem, i)}
+        frag.append(label)
+        frag.append(input)
+    }
+    rowCore.append(frag)
+    $('#settings-main').after(rowCore)
 }
 
 export function setupSettings(){
@@ -122,37 +159,18 @@ export function setupSettings(){
         settings.discordFormat = false
         saveSettings()
     })
+    setDynamicalRowOfSettings("font", fontList, (font)=>{
+        settings.theme = font
+        saveSettings()
+        loadFont(font)
+    })
     if (settings.discordFormat) $('#enable-export-discord').attr('checked', true)
-    const toUpperCaseFirst = (word)=>{
-        return word.charAt(0).toUpperCase() + word.slice(1)
-    }
-    const name = "theme"
-    const Name = toUpperCaseFirst(name)
-    const frag = document.createDocumentFragment()
-    const themeCore = document.createElement('div')
-    themeCore.className = "settings-row"
-    const themeSpan = document.createElement('span')
-    themeSpan.innerText = Name + ":"
-    frag.append(themeSpan)
-    for (const theme of themesList){
-        const themeLabel = document.createElement('label')
-        themeLabel.htmlFor = `${name}-${theme}`
-        themeLabel.innerText = toUpperCaseFirst(theme)
-        const themeInput = document.createElement('input')
-        themeInput.type = "radio"
-        themeInput.name = name
-        themeInput.id = `${name}-${theme}`
-        if (settings[name] === theme) themeInput.checked = true
-        themeInput.onchange = () => {
-            settings.theme = theme
-            saveSettings()
-            changeTheme()
-        }
-        frag.append(themeLabel)
-        frag.append(themeInput)
-    }
-    themeCore.append(frag)
-    $('#settings-main').after(themeCore)
+    setDynamicalRowOfSettings("theme", themeList, (theme) => {
+        settings.theme = theme
+        saveSettings()
+        changeTheme()
+    })
+    
 }
 
 /**
