@@ -207,6 +207,26 @@ export function moveOverlay(moveId, interactive=true) {
     ])
 }
 
+const prefixTree = {
+    treeId: "moves"
+}
+export function buildMovesPrefixTrees(){
+    prefixTree.name = {}
+    prefixTree.type = {}
+    gameData.moves.forEach((move, i)=>{
+        const namePrefix = move.name.charAt(0)
+        if (!prefixTree.name[namePrefix]) prefixTree.name[namePrefix] = []
+        prefixTree.name[prefix].push({data: i, suggestions: move.name})
+        move.types.forEach(pokeTypeId => {
+            const typeName = gameData.typeT[pokeTypeId].toLowerCase()
+            const typePrefix = typeName.charAt(0)
+            if (!prefixTree.type[typePrefix]) prefixTree.type[typePrefix] = []
+            prefixTree.type[typePrefix].push({data: i, suggestions: typeName})
+        })
+    })
+}
+
+
 export const queryMapMoves = {
     "name": (queryData, move) => {
         const moveName = move.name.toLowerCase()
@@ -270,7 +290,7 @@ export function updateMoves(searchQuery) {
         }
     }
     const nodeList = $('#moves-list').children()
-    matchedMoves = queryFilter2(searchQuery, moves, queryMapMoves)
+    matchedMoves = queryFilter3(searchQuery, moves, queryMapMoves, prefixTree)
     let validID;
     const movesLen = moves.length
     for (let i  = 0; i < movesLen; i++) {

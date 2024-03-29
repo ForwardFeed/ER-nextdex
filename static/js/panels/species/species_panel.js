@@ -551,6 +551,7 @@ function buildResist(specie){
         .map(x => x.toLowerCase())
 }
 
+
 const prefixTree = {
     treeId: "species"
 }
@@ -604,7 +605,7 @@ export const queryMapSpecies = {
             }
             for (const type of specie.allTypesNames) {
                 if (AisInB(typeQueried, type)) {
-                    multiSuggestions.push(type)
+                    if (typeQueried !== type ) multiSuggestions.push(type)
                     isValid = true
                     break
                 }
@@ -653,7 +654,7 @@ export const queryMapSpecies = {
             if (!specie.resist) buildResist(specie)
             for (const typeR of specie.resist){
                 if (AisInB(typeQueried, typeR)) {
-                    multiSuggestions.push(typeR)
+                    if (typeQueried !== typeR ) multiSuggestions.push(typeR)
                     isValid = true
                     break
                 }

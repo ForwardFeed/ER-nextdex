@@ -590,6 +590,9 @@ export function queryFilter3(query, datas, keymap, prefixedTree = {} , entrypoin
                     const perfectMatch = answer[0]
                     suggestion = answer[1]
                     if (perfectMatch) {
+                        if (query.suggestion){
+                            search.addSuggestion(suggestion)
+                        }
                         const isUnique = answer[2]
                         // a name is unique
                         if (isUnique) {

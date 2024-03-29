@@ -1,4 +1,4 @@
-import { queryFilter2 } from "../filters.js"
+import { queryFilter2, queryFilter3 } from "../filters.js"
 import { gameData } from "../data_version.js"
 import { AisInB } from "../utils.js"
 
@@ -27,7 +27,7 @@ export function filterAbilities(searchQuery){
     const abis = gameData.abilities
     const nodeList = $('#abis-list').children()
 
-    const matched = queryFilter2(searchQuery, abis, queryMapAbilities)
+    const matched = queryFilter3(searchQuery, abis, queryMapAbilities)
     let colorID = 0 //to continue to repeat good color pattern
     const abisLen = abis.length
     for (let i  = 0; i < abisLen; i++) {
