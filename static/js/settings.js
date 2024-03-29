@@ -13,7 +13,8 @@ const themeList =  [
 ]
 const fontList = [
     'basis33',
-    'Inconsolata'
+    'Inconsolata',
+    'Determination',
 ]
 export const settings = {
 

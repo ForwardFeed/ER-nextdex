@@ -605,7 +605,7 @@ export const queryMapSpecies = {
             }
             for (const type of specie.allTypesNames) {
                 if (AisInB(typeQueried, type)) {
-                    if (typeQueried !== type ) multiSuggestions.push(type)
+                    multiSuggestions.push(type)
                     isValid = true
                     break
                 }
