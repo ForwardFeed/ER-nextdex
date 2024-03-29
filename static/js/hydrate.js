@@ -179,9 +179,6 @@ function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo) {
         in: previousSpecieID,
         from: true// its a added flag so we can know if into into but from
     })
-    if (previousSpecie.name === "Sewaddle"){
-        console.log(previousSpecie, currentSpecie)
-    }
     //import region for megas
     if (!currentSpecie.region) currentSpecie.region = previousSpecie.region
 }
