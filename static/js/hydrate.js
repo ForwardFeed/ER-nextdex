@@ -158,6 +158,7 @@ function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo) {
     if (currentEvo.in == -1 || currentEvo.from) return
     const previousSpecie = gameData.species[previousSpecieID]
     const currentSpecie = gameData.species[currentEvo.in]
+    
     if (!currentSpecie.eggMoves.length) currentSpecie.eggMoves = previousSpecie.eggMoves
     if (!currentSpecie.TMHMMoves.length) currentSpecie.TMHMMoves = previousSpecie.TMHMMoves
     if (!currentSpecie.tutor.length) currentSpecie.tutor = previousSpecie.tutor
@@ -166,11 +167,10 @@ function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo) {
         currentSpecie.stats.types.forEach(x => previousSpecie.typeEvosSet.add(x))
         currentSpecie.typeEvosSet = previousSpecie.typeEvosSet
     }
+    
     //do not add if it was already added
     for (const evo of currentSpecie.evolutions){
-        if (evo.kd === currentEvo.kd) return
-        if (evo.rs === currentEvo.rs) return
-        if (evo.in === currentEvo.in) return
+        if (evo.kd === currentEvo.kd && evo.rs === currentEvo.rs && evo.in === currentEvo.in) return
     }
     //import evolution
     currentSpecie.evolutions.push({
@@ -179,6 +179,9 @@ function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo) {
         in: previousSpecieID,
         from: true// its a added flag so we can know if into into but from
     })
+    if (previousSpecie.name === "Sewaddle"){
+        console.log(previousSpecie, currentSpecie)
+    }
     //import region for megas
     if (!currentSpecie.region) currentSpecie.region = previousSpecie.region
 }

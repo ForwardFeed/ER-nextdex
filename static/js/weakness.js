@@ -198,7 +198,7 @@ const abilityThatAddsNormal = {
 const abilityThatAddsResist = {
     "Well Baked Body": ["Fire"],
     "Water Bubble": ["Fire"],
-    "Sea Weed": ["Fire"],
+    "Seaweed": ["Fire"],
     "Heatproof": ["Fire"],
     "Thick Fat": ["Fire", "Ice"],
     "Immunity": ["Poison"],

@@ -360,6 +360,7 @@ span{
     width: min-content;
 }
 #species-name{
+    user-select: text;
     padding-right: 1em;
 }
 .species-mid-stats{
@@ -436,6 +437,7 @@ span{
     font-size: 1.9vmax;
     text-align: center;
     align-items: center;
+    margin: auto 0;
 }
 .stat-name{
     width: 1.5em;
@@ -453,7 +455,6 @@ span{
     background: linear-gradient(to right, green 100%, white 0%);
     height: 50%;
     flex-grow: 1;
-    margin-top: 0.2em;
 }
 
 .species-coverage-row{
