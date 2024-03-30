@@ -45,10 +45,22 @@ const gameData: GameData = {
     movesInternalID: new Map(),
     trainerOrder: [],
 }
+/**Because code structure can change, the way of parsing it is thus 
+ * mutable, Hence i have a shareable flag that will include the second
+ * CLI argument or put 0
+ * There is no safeguard whatsoever on how what version correpond to what
+ * which i understand isn't pratical
+ */
+export let VERSION_STRUCTURE = 0
 
 function main(configuration: Configuration.Configuration){
     const ROOT_PRJ = configuration.project_root
     const OUTPUT_VERSION = process.argv[2] ? "V" + process.argv[2] : ""
+    if (process.argv[3]) {
+        if (!isNaN(+process.argv[3])){
+            VERSION_STRUCTURE = +process.argv[3]
+        }
+    }
     const OUTPUT = `./out/gameData${OUTPUT_VERSION}.json`
     const OUTPUT_ADDITIONNAL = `./out/additional${OUTPUT_VERSION}.json`
     getFileData(Path.join(ROOT_PRJ, 'include/global.h'), {filterComments: true, filterMacros: true, macros: new Map()})

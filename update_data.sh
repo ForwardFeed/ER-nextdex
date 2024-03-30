@@ -31,6 +31,7 @@ sed -i "s/const LATEST_DATA_VERSION = \"${version}\"/const LATEST_DATA_VERSION =
 
 
 # to calculate the whole data size parsed
+# it's just because i thought it would be funny
 
 : '
 size list of all read files in bash

@@ -30,12 +30,13 @@ function setAvailableVersion(){
 }
 
 export function changeVersion(version=defaultVersion, firstLoad=false){
-    if (!version || allVersions.indexOf(version) == -1){
+    if (!version /*|| allVersions.indexOf(version) == -1*/){
         console.warn(`no such version : ${version}, defaulting to ${defaultVersion}`)
         version = defaultVersion
     }
+    
     changeCompareData(version, "Vanilla") //TODO, make it so you can target other things
-
+    
     const savedVersion = fetchFromLocalstorage("dataversion"+version)
     saveToLocalstorage("lastusedversion", version)
 
@@ -81,9 +82,11 @@ function changeCompareData(currentVersion, versionTarget){
                 compareData = data
             })
             .catch((e)=>{
+                compareData = undefined
                 console.warn(e)
             })
         .catch((e)=>{
+            compareData = undefined
             console.warn(e)
         })
 }

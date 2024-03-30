@@ -1,3 +1,4 @@
+import { VERSION_STRUCTURE } from "../main"
 import { regexGrabNum, regexGrabStr, upperCaseFirst } from "../parse_utils"
 
 export interface Result{
@@ -20,7 +21,7 @@ function initContext(): Context{
         current: [],
         currKey: "",
         tutorMoves: new Map(),
-        execFlag: "awaitForData",
+        execFlag: VERSION_STRUCTURE > 0 ? "awaitForData1" : "awaitForData",
         stopRead: false,
     }
 }
@@ -73,7 +74,29 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
             context.tutorMoves.set(context.currKey, context.current)
             context.stopRead = true
         }
-    }
+    },
+    "awaitForData1": (line, context) => {
+        if (line.match('gTutorLearnsets')){
+            context.execFlag = "newTutor1"
+        }
+    },
+    "newTutor1": (line, context) => {
+        if (line.match('SPECIES_')){
+            if (context.currKey){
+                context.tutorMoves.set(context.currKey, context.current)
+                context.current = []
+            }
+            context.currKey = regexGrabStr(line, /SPECIES_\w+/)
+        } else if (line.match('MOVE_')){
+            const moveName = regexGrabStr(line, /MOVE_\w+/)
+            context.current.push(moveName)
+        } else if (line.match(';')){
+            if (context.currKey){
+                context.tutorMoves.set(context.currKey, context.current)
+            }
+            context.stopRead = true
+        }
+    },
 }
 
 export function parse(lines: string[], fileIterator: number): Result{

@@ -1,4 +1,5 @@
-import { regexGrabNum, regexGrabStr, upperCaseFirst } from "../parse_utils"
+import {regexGrabStr } from "../parse_utils"
+import { VERSION_STRUCTURE } from "../main"
 
 export interface Result{
     fileIterator: number,
@@ -26,7 +27,7 @@ function initContext(): Context{
 const executionMap: {[key: string]: (line: string, context: Context) => void} = {
     "awaitForData": (line, context) => {
         if (line.match('gTMHMLearnsets')){
-            context.execFlag = "main"
+            context.execFlag = VERSION_STRUCTURE > 0 ? "main1" : "main"
         }
     },
     "main": (line, context) =>{
@@ -41,6 +42,23 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
         if (line.match('TMHM')){
             const tmhm = regexGrabStr(line, /\w+(?=\))/)
             if (tmhm === "0") return
+            context.current.push(tmhm)
+        } else if (line.match('};')){
+            context.tmhmLearnsets.set(context.currKey, context.current)
+            context.stopRead = true
+        }
+    },
+    "main1": (line, context) =>{
+        line = line.replace(/\s/g, '')
+        if (line.match(/\[SPECIES_/)){
+            if (context.currKey){
+                context.tmhmLearnsets.set(context.currKey, context.current)
+                context.current = []
+            }
+            context.currKey = regexGrabStr(line, /(?<=^\[)\w+/)
+        } 
+        if (line.match('MOVE_')){
+            const tmhm = regexGrabStr(line, /(?<=TM\()\w+/)
             context.current.push(tmhm)
         } else if (line.match('};')){
             context.tmhmLearnsets.set(context.currKey, context.current)
