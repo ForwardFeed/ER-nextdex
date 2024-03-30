@@ -25,11 +25,11 @@ function setAvailableVersion(){
         option.innerText = version
         fragment.append(option)
     }
-    $('#versions').append(fragment).val(defaultVersion).change()
-
+    $('#versions').append(fragment)
 }
 
 export function changeVersion(version=defaultVersion, firstLoad=false){
+    console.log(version, firstLoad)
     if (!version /*|| allVersions.indexOf(version) == -1*/){
         console.warn(`no such version : ${version}, defaulting to ${defaultVersion}`)
         version = defaultVersion
@@ -51,7 +51,7 @@ export function changeVersion(version=defaultVersion, firstLoad=false){
                 return
             }
         } catch(_e){
-            console.log(_e)
+            console.warn(_e)
         }
     }
     //fetch remotely
@@ -91,10 +91,13 @@ function changeCompareData(currentVersion, versionTarget){
         })
 }
 
-export function setupDataVersionning(){
-    setAvailableVersion()
+export function setupDataVersionning(firstLoad = false){
+    if (firstLoad) setAvailableVersion()
     $('#versions').on('change', function(){
         changeVersion($(this).val())
     })
+    const version = $('#versions').val() || fetchFromLocalstorage("lastusedversion") || defaultVersion
+    $('#versions').val(version)
+    changeVersion(version, firstLoad)
 }
 

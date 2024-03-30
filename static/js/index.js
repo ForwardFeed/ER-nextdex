@@ -25,10 +25,7 @@ document.addEventListener("DOMContentLoaded", function(){
         [setupFilters, "filter frame"],
         [setupFormatShowdown, "Showdown format"],
         [setupLoadSave, "save loader"],
-        [setupDataVersionning, "gamedata loader"],
-        [function(){
-            changeVersion(fetchFromLocalstorage("lastusedvqersion"), true)
-        }, "loading gamedata"],
+        [()=>{setupDataVersionning(true)}, "gamedata loader"],
     ]
     for (const step of setupSteps){
         load(step[0], step[1])
