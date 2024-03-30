@@ -25,11 +25,11 @@ function setAvailableVersion(){
         option.innerText = version
         fragment.append(option)
     }
-    $('#versions').append(fragment)
+    const version = $('#versions').val() || fetchFromLocalstorage("lastusedversion")
+    $('#versions').append(fragment).val(version)
 }
 
 export function changeVersion(version=defaultVersion, firstLoad=false){
-    console.log(version, firstLoad)
     if (!version /*|| allVersions.indexOf(version) == -1*/){
         console.warn(`no such version : ${version}, defaulting to ${defaultVersion}`)
         version = defaultVersion
@@ -93,11 +93,11 @@ function changeCompareData(currentVersion, versionTarget){
 
 export function setupDataVersionning(firstLoad = false){
     if (firstLoad) setAvailableVersion()
-    $('#versions').on('change', function(){
-        changeVersion($(this).val())
+    $('#versions').on('change', () => {
+        changeVersion($('#versions').val(), firstLoad)
+        if (firstLoad) firstLoad = false
     })
-    const version = $('#versions').val() || fetchFromLocalstorage("lastusedversion") || defaultVersion
-    $('#versions').val(version)
-    changeVersion(version, firstLoad)
+    const version = $('#versions').val() || defaultVersion
+    $('#versions').val(version).trigger('change')
 }
 
