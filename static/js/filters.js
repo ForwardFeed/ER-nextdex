@@ -426,9 +426,11 @@ function retrieveFromCache(query, prefixedTree){
     if (prefixedTree.treeId != prevTreeId){
         prevTreeId = prefixedTree.treeId
         clearCache()
+        cacheIndex += 1
         return
     }
     const cached = cacheFilters[cacheIndex]
+    cacheIndex += 1
     if (!cached || !cached.data.length) return
     if (cached.k != query.k) return
     if (cached.not != query.not) return

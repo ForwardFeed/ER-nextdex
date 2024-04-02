@@ -344,30 +344,27 @@ export function compactify(gameData: GameData): CompactGameData {
         }
     }
     const trainerT: string[] = []
-    const trainernameT: string[] = []
-    gameData.trainers.forEach((trainer, key) => {
-        if (!trainer.party.length) {
+    gameData.trainers.forEach((trainer, key)=>{
+        if (!trainer.party.length){
             return
         }
-        let category = Xtox('TRAINER_CLASS_', trainer.category)
-        const trainerName = `${category} ${trainer.name}`
-        trainernameT.push(trainerName)
         compacted.trainers.push({
-            name: trainerName,
+            name: trainer.realName,
             db: trainer.double,
             party: trainer.party.map(compactPoke),
             insane: trainer.insane.map(compactPoke),
-            rem: trainer.rematches.map((rem) => {
+            rem: trainer.rematches.map((rem)=>{
                 return {
                     db: rem.double,
-                    party: rem.party.map(compactPoke)
+                    party: rem.party.map(compactPoke),
+                    ptr: rem.ptr,
+                    NAME: rem.NAME,
                 }
             }),
-            map: -1
+            map: -1,
         })
         trainerT.push(key)
     })
-
     gameData.dataScripted.forEach((val) => {
         const mapName = val.name.replace(/_/g, ' ')
             .replace(/(?<=[a-z])(?=[A-Z])/g, ' ')

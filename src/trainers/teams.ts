@@ -19,7 +19,7 @@ function initTrainerPokemon(): TrainerPokemon{
     return {
         specie: "",
         ability: -1,
-        ivs: [],
+        ivs: [31,31,31,31,31,31],
         evs: [],
         item: "",
         nature: "",
@@ -49,20 +49,12 @@ function initContext(): Context{
         stopRead: false
     }
 }
-
 const executionMap: {[key: string]: (line: string, context: Context) => void} = {
-    "awaitForMain" : (line, context) =>{
-        if (line.match('static const struct TrainerMonItemCustomMoves')){
-            context.execFlag = "main"
-            context.reread = true
-        }
-    },
     "main": (line, context) =>{
         if (!line) return
         if (line.match('TrainerMonItemCustomMoves')){
-            context.key = regexGrabStr(line, /sParty_\w+/)// previous version added => .split(/(?<=[^^])(?=[A-Z])/).join(' ') 
-            return
-        } else  if (line.match('{')){
+            context.key = regexGrabStr(line, /sParty_\w+/)// previous version added => .split(/(?<=[^^])(?=[A-Z])/).join(' ')
+        } else if (line.match('{')){
             context.execFlag = "pokemon"
         } else if (line.match(';')){
             if (context.key){
@@ -79,7 +71,9 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
         } else if (line.match('.heldItem')){
             context.currentPokemon.item = regexGrabStr(line.replace(/\s/g, ''), /(?<==)\w+/)
         } else if (line.match('.ability')){
-            context.currentPokemon.ability = regexGrabNum(line.replace(/\s/g, ''), /(?<==)\d+/)
+            context.currentPokemon.ability = regexGrabNum(line.replace(/\s/g, ''), /(?<==)\d+/, 0)
+        } else if (line.match('.zeroSpeedIvs')){
+            context.currentPokemon.ivs[5] = 0
         } else if (line.match('.ivs')){
             context.currentPokemon.ivs = regexGrabStr(line.replace(/\s/g, ''), /(?<=\{)[^}]+/)
                 .split(',')
@@ -99,8 +93,7 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
         } else if (line.match('.moves')){
             context.currentPokemon.moves = regexGrabStr(line.replace(/\s/g, ''), /(?<==)[\w,]+/).split(',')
         } else if (line.match('}')){
-            if (context.currentPokemon.ability != -1 &&
-            context.currentPokemon.moves.length != 0 &&
+            if (context.currentPokemon.moves.length != 0 &&
             context.currentPokemon.nature !== ""){
                 context.currentTrainer.push(context.currentPokemon)
                 context.currentPokemon = initTrainerPokemon()
@@ -111,16 +104,25 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
 }
 
 export function parse(lines: string[], fileIterator: number): Result{
-    const lineLen = lines.length
     const context = initContext()
-    for (;fileIterator<lineLen; fileIterator++){
-        let line = lines[fileIterator]
-        executionMap[context.execFlag](line, context)
-        if (context.stopRead) break
-        if (context.reread) {
-            context.reread = false
+    lines.splice(0, fileIterator + 1)
+    const blocks = lines.join('\n').split(';')
+    const blocksLen = blocks.length
+    for (let i = 0; i < blocksLen; i++){
+        let block = blocks[i] + ";"
+        let firstP = block.match(/^[^\{]+(?={)/)?.[0]
+        if (!firstP) continue
+        block = block.replace(firstP + "{", firstP)
+        const subLines = block.split('\n')
+        for (const line of subLines){
             executionMap[context.execFlag](line, context)
+            if (context.stopRead) break
+            if (context.reread) {
+                context.reread = false
+                executionMap[context.execFlag](line, context)
+            }
         }
+        
     }
     return {
         fileIterator: fileIterator,
