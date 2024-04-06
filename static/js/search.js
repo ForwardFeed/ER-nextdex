@@ -53,6 +53,7 @@ export const search = {
         "Move-effect",
         "category",
         "prio",
+        "acc",
         "specie",
         "map",
         "region",

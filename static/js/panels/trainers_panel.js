@@ -226,7 +226,7 @@ const natureMap = {
     "Modest": "+SpA -Atk",
     "Timid": "+Spe -Atk",
     "Careful": "+SpD -SpA",
-    "Hasty": "--",
+    "Hasty": "+Spe -Def",
     "Naughty": "+Atk -SpD",
     "Sassy": "+SpD -Spe",
     "Naive": "+Spe -SpD",

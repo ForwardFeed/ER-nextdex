@@ -279,6 +279,21 @@ export const queryMapMoves = {
     ">=prio": (queryData, move) => {
         return  move.prio >= queryData
     },
+    "acc": (queryData, move) => {
+        return move.acc && queryData == move.acc
+    },
+    "<acc": (queryData, move) => {
+        return  move.acc && move.acc < queryData
+    },
+    "<=acc": (queryData, move) => {
+        return  move.acc && move.acc <= queryData 
+    },
+    ">acc": (queryData, move) => {
+        return  move.acc && move.acc > queryData
+    },
+    ">=acc": (queryData, move) => {
+        return  move.acc && move.acc >= queryData
+    },
 }
 export function updateMoves(searchQuery) {
     const moves = gameData.moves
