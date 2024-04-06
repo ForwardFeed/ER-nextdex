@@ -3,6 +3,7 @@ import { queryFilter2, queryFilter3 } from "../filters.js"
 import { gameData } from "../data_version.js"
 import { AisInB, e, JSHAC } from "../utils.js"
 import { setFullTeam } from "./team_builder.js"
+import { getGEN3HP } from "../load_save.js"
 
 const trainerParam = {
     elite: false
@@ -110,6 +111,8 @@ function setPartyPanel(party) {
     }
     $('#trainers-team').empty().append(frag).append(getNodeRedirectToEditorPokemon(party))
 }
+
+
 export const statsOrder = [
     "HP",
     "Atk",
@@ -142,10 +145,24 @@ export function createPokemon(poke) {
     const pokeMoves = e('div', "trainers-poke-moves")
     for (const move of moves) {
         if (!move) continue
-        const type1 = gameData.typeT[move.types[0]].toLowerCase()
+        let type1 = gameData.typeT[move.types[0]].toLowerCase()
+        let moveName = move.name
+        if (move.name === "Hidden Power"){
+            const ivsFormatted = {
+                hpIV: poke.ivs[0],
+                attackIV: poke.ivs[1],
+                defenseIV: poke.ivs[2],
+                spAttackIV: poke.ivs[3],
+                spDefenseIV: poke.ivs[4],
+                speedIV: poke.ivs[5],
+            }
+            const HPType = getGEN3HP(ivsFormatted)
+            moveName = "H.P. " + HPType
+            type1 = HPType.toLowerCase()
+        }
         pokeMoves.append(JSHAC([
             e('div', `trainers-poke-move ${type1}-t`), [
-                e('span', '', move.name)
+                e('span', '', moveName)
             ]
         ]))
     }

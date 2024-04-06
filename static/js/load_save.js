@@ -352,7 +352,7 @@ const HPTYPE = [
     "Dragon",
     "Dark",
 ]
-function getGEN3HP(mon) {
+export function getGEN3HP(mon) {
     var hptype = ((mon.hpIV%2 + (2*(mon.attackIV%2))+(4*(mon.defenseIV%2))+(8*(mon.speedIV%2))+(16*(mon.spAttackIV%2))+(32*(mon.spDefenseIV%2)))*5)/21 
     return HPTYPE[Math.floor(hptype)]
 }
