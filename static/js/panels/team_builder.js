@@ -5,7 +5,7 @@ import { getSpritesURL, getSpritesShinyURL } from "./species/species_panel.js";
 import { createInformationWindow } from "../window.js";
 import { cubicRadial } from "../radial.js";
 import { saveToLocalstorage, fetchFromLocalstorage } from "../settings.js";
-import { getDefensiveCoverage, abilitiesToAddedType, getMoveEffectiveness } from "../weakness.js"
+import { getDefensiveCoverage, getMoveEffectiveness } from "../weakness.js"
 import { longClickToFilter } from "../filters.js";
 import { itemList } from "../hydrate.js";
 import { movePicker, listPicker} from "../pickers.js";
@@ -254,12 +254,8 @@ function updateTeamWeaknesses(){
     teamData.forEach((val) => {
         if (!val.spc) return
         const specie = gameData.species[val.spc]
-        const abis = [specie.stats.abis[val.abi], ...specie.stats.inns].filter(x => x)
-        const types = [...new Set(specie.stats.types), abilitiesToAddedType(abis)].filter(x => x != undefined)
-        
-        const monDef = getDefensiveCoverage(
-            types.map(x => gameData.typeT[x]), abis
-        )
+        const monDef = getDefensiveCoverage(specie, val.abi)
+
         Object.keys(monDef).forEach((val) => {
             const types = monDef[val]
             for (const type of types) {

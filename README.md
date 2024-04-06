@@ -17,6 +17,8 @@ Commands:
 - run: will execute, one argument can be send to the program
     - sprites: see below run command
     - Any%: will change the output of the gamedata files to gamedata{arg}.json, usefull to upload multiple version of the data.
+    - Any% 1: 1 here (always the second arg) will be the version of parsing to use, as the datastructure of the code changes along its versionning
+    So this is to keep up with the changes, it always be an integer as in the code you can do if(version > 3 && version < 5)
 - sprites: a shortcut to "run sprites", will fetch all sprites and output it in out/. I advise to use the python script "sprites_utils.py" which will remove the default background color to a transparent color
 
 Quick tip, if you use git on your pokemon project you can get back to a previous version with these bash commands

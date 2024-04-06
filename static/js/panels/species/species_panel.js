@@ -106,9 +106,7 @@ function setTypes(types, specie) {
         node.text(type).attr("class", `type ${type.toLowerCase()}`)
     }
     setDefensiveCoverage(
-        getDefensiveCoverage(
-            types.map(x => gameData.typeT[x]), [specie.stats.abis[specie.activeAbi], ...specie.stats.inns]
-        )
+        getDefensiveCoverage(specie, specie.activeAbi)
     )
 }
 
@@ -542,10 +540,7 @@ export function setupReorderBtn() {
 }
 
 function buildResist(specie){
-    const types = [...new Set(specie.stats.types), abilitiesExtraType(0, specie)]
-    const weaknesses = getDefensiveCoverage(
-        types.map(x => gameData.typeT[x]).filter(x => x), [specie.stats.abis[0], ...specie.stats.inns].filter(x => x)
-    )
+    const weaknesses = getDefensiveCoverage(specie, 0)
     specie.resist = [...[].concat(weaknesses["0.5"]?.concat(weaknesses["0.25"]?.concat(weaknesses["0.25"])))]
         .filter(x => x)
         .map(x => x.toLowerCase())

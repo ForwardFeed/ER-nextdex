@@ -134,8 +134,16 @@ export function abilitiesToAddedType(abis){
  * @param {string[]} defTypes 
  * @param {string[]} abilities 
  */
-export function getDefensiveCoverage(defTypes, abis){
-    const modifiers = abilityModifiesTypeChart(abis)
+export function getDefensiveCoverage(specie, abiID){
+    const abisID = [specie.stats.abis[abiID], ...specie.stats.inns].filter(x => x)
+    const abiNames = abisID.map(x => gameData.abilities[x].name)
+    const defTypes = [...new Set(specie.stats.types), abilitiesToAddedType(abisID)]
+        .filter(x => x != undefined)
+        .map(x => gameData.typeT[x])
+        .filter(x => x)
+    const isWonderGuard = abiNames.indexOf('Wonder Guard') != -1
+
+    const modifiers = abilityModifiesTypeChart(abiNames, specie)
     const defensiveCoverage = []
     for (const AtkT of gameData.typeT){
         let typeEffectiveness = 1
@@ -145,7 +153,7 @@ export function getDefensiveCoverage(defTypes, abis){
             continue
         }
         if (modifiers[1].indexOf(AtkT) != -1) {
-            typeEffectiveness = 1
+            typeEffectiveness = 1 
         }
         if (modifiers[2].indexOf(AtkT) != -1) {
             typeEffectiveness = 0.5
@@ -156,6 +164,7 @@ export function getDefensiveCoverage(defTypes, abis){
         for (const defT of defTypes){
             typeEffectiveness *= getTypeEffectiveness(AtkT, defT)
         }
+        if (isWonderGuard && typeEffectiveness <= 1) typeEffectiveness = 0 
         defensiveCoverage.push(typeEffectiveness)
     }
     
@@ -183,7 +192,6 @@ const abilityThatAddsImmunity = {
     "Dry Skin": ["Water"],
     "Storm Drain": ["Water"],
     "Evaporate": ["Water"],
-    "Wonder Guard": [], //TODO Find a way to input it
     "Levitate": ["Ground"],
     "Dragonfly": ["Ground"],
     "Mountaineer": ["Rock"],
@@ -214,7 +222,6 @@ const abilityThatAddsWeakness = {
 // or Ice Scales or Fluffy for Physical or other damage
 
 function abilityModifiesTypeChart(abis){
-    abis = abis.map(x => gameData.abilities[x].name)
     const modifiers = [
         [],
         [],
