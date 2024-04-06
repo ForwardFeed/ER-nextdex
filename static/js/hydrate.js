@@ -122,13 +122,30 @@ function hydrateAbilities(abilities = gameData.abilities) {
         })
     })*/
 }
-
+let HPMoveID = 0
+let HPsMovesID = []
 function hydrateMoves(moves = gameData.moves) {
+    HPsMovesID = []
     gameData.flagsT.push('Technician', 'Perfectionnist')
     const fragment = document.createDocumentFragment();
-    for (const i in moves) {
+    let movesLen = moves.length
+    for (let i = 0; i < movesLen; i++) {
         if (i == 0) continue
         const mv = moves[i]
+        if (mv.name === "Hidden Power"){
+            mv.name = "H.P. Normal"
+            HPMoveID = i
+            for (const typeI in gameData.typeT){
+                const typeName = gameData.typeT[typeI]
+                if (typeName === "Normal") continue
+                const newHP = structuredClone(mv)
+                newHP.types[0] = typeI
+                newHP.name = "H.P. " + typeName
+                movesLen++
+                
+                HPsMovesID.push(moves.push(newHP) - 1)
+            }
+        }
         if (mv.pwr > 0 && mv.pwr <= 60) mv.flags.push(gameData.flagsT.indexOf('Technician'))
         if (mv.pwr > 0 && mv.pwr < 50) mv.flags.push(gameData.flagsT.indexOf('Perfectionnist'))
         const core = document.createElement('div')
@@ -144,6 +161,8 @@ function hydrateMoves(moves = gameData.moves) {
             });
         });
         fragment.append(core)
+
+        
     }
     $("#moves-list").empty().append(fragment);
     feedPanelMoves(1)
@@ -254,6 +273,10 @@ function hydrateSpecies() {
                 )
             )
         )), 0]
+        //if it has Hidden power, set all others non-normal typed HPs
+        if (specie.allMoves.indexOf(HPMoveID) != -1){
+            specie.allMoves.push(...HPsMovesID)
+        }
         // add the region
         for (const regionsMapped of [
             [0, "Kanto"],
