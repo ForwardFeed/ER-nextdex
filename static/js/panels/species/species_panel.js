@@ -463,7 +463,6 @@ function setLocations(locations, SEnc) {
         const node = e('div', 'specie-locs-scripted',
             `Can be found at ${gameData.mapsT[map]} as a ${gameData.scriptedEncoutersHowT[how]}`, {
             onclick: () => {
-                console.log(locaId, typeof locaId)
                 if (typeof locaId === "undefined") return
                 redirectLocation(locaId)
                 // this may not work because maps for scripted encounters aren't sync with location encounter
@@ -541,7 +540,7 @@ export function setupReorderBtn() {
 
 function buildResist(specie){
     const weaknesses = getDefensiveCoverage(specie, 0)
-    specie.resist = [...[].concat(weaknesses["0.5"]?.concat(weaknesses["0.25"]?.concat(weaknesses["0.25"])))]
+    specie.resist = [].concat.apply([], [weaknesses["0"], weaknesses["0.25"], weaknesses["0.5"]])
         .filter(x => x)
         .map(x => x.toLowerCase())
 }
@@ -649,7 +648,7 @@ export const queryMapSpecies = {
             if (!specie.resist) buildResist(specie)
             for (const typeR of specie.resist){
                 if (AisInB(typeQueried, typeR)) {
-                    if (typeQueried !== typeR ) multiSuggestions.push(typeR)
+                    multiSuggestions.push(typeR)
                     isValid = true
                     break
                 }

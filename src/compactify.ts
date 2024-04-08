@@ -136,6 +136,7 @@ export interface CompactBattleItems {
     //could add it? desc: string,
 }
 
+
 export interface CompactGameData {
     abilities: Ability[],
     moves: compactMove[],
@@ -156,6 +157,7 @@ export interface CompactGameData {
     scriptedEncoutersHowT: string[],
     mapsT: string[],
     MAPST: string[],
+    creationDate: number,
 }
 function initCompactGameData(): CompactGameData {
     return {
@@ -178,6 +180,7 @@ function initCompactGameData(): CompactGameData {
         scriptedEncoutersHowT: [],
         mapsT: [],
         MAPST: [],
+        creationDate: +new Date(),
     }
 }
 
