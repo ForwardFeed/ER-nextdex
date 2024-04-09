@@ -23,7 +23,7 @@ export function feedPanelMoves(moveID) {
     //$('#moves-types').text('' + move.types.map((x)=>gameData.typeT[x]).join(' '))
     setTypes(move.types)
     $('#moves-desc').text(move.lDesc) //TODO fix the width of this
-    listMoveFlags(move.flags.map((x) => gameData.flagsT[x]), $('#moves-flags'))
+    listMoveFlags(move.flags.map((x) => gameData.flagsT[x]).concat(gameData.effT[move.eff]), $('#moves-flags'))
 
     $('#moves-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
     $('#moves-list').children().eq(moveID - 1).addClass("sel-active").removeClass("sel-n-active")
@@ -36,47 +36,63 @@ function setTypes(types) {
             .children().text(type)
     }
 }
-
+const flagMap = {
+    "Makes Contact": "Has contact and Big Pecks boost",
+    "Kings Rock Affected": "Triggers King's rock",
+    "High Crit": "High crits chances",
+    "Iron Fist Boost": "Iron fist boost",
+    "Sheer Force Boost": "Sheer force boost",
+    "Keen Edge Boost": "Keen edge boost",
+    "Air Based": "Giant wings boost",
+    "Snatch Affected": "Can be snatched",
+    "Dance": "Dance",
+    "Always Crit": "Always Crit",
+    "Field Based": "Field Explorer boost",
+    "Striker Boost": "Striker boost",
+    "Two Strikes": "Hit twice",
+    "Reckless Boost": "Reckless boost",
+    "Magic Coat Affected": "Affected by magic coat",
+    "Horn Based": "Mighty Horn boost",
+    "Strong Jaw Boost": "Strong Jaw boost",
+    "Sound": "Is a sound move",
+    "Mega Launcher Boost": "Mega Launcher Boost",
+    "Ballistic": "Is a bullet move",
+    "Dmg Underwater": "Damage foes under water",
+    "Weather Based": "Changes with the weather",
+    "Powder": "Power move",
+    "Dmg In Air": "Damages foes in air",
+    "Dmg Underground": "Damages foes underground",
+    "Bone Based": "Is a bonemove",
+    "Dmg Ungrounded Ignore Type If Flying": "",
+    "Thaw User": "Unfreeze the user",
+    "Protection Move": "Gives protection to the user",
+    "Dmg 2x In Air": "Damage the foes in air with 2X damage",
+    "Stat Stages Ignored": "Ignore Stats boost",
+    "Hit In Substitute": "Hit Throught Substitute",
+    "Target Ability Ignored": "Target Ability is ignored",
+    "FrostBite Hit": "May inflict frostbite",
+    "Burn Hit": "May inflict burn",
+    "Sleep": "May inflict sleep",
+    "Confuse": "May inflict confusion",
+    "Confuse Hit": "May inflict confusion",
+    "Paralyze": "May inflict paralyze",
+    "Flinch Hit": "May inflict flinch",
+    "Attack Down Hit": "May down Attack",
+    "Defense Down Hit": "May doww Defense",
+    "Special Attack Down Hit": "May down Special Attack",
+    "Special Defense Down Hit": "May down Special Defense",
+    "Speed Down Hit": "May down Speed",
+    "Attack Down Hit 2": "May down Attack Twofold",
+    "Defense Down Hit 2": "May doww Defense Twofold",
+    "Special Attack Down Hit 2": "May down Special Attack Twofold",
+    "Special Defense Down Hit 2": "May down Special Defense Twofold",
+    "Speed Down Hit 2": "May down Speed Twofold",
+}
+const NoFlagMap = {
+    "Protect Affected": "Isn't affected by protect",
+    "Mirror Move Affected": "Cannot be mirrored",
+}
 function listMoveFlags(flags, core, longClickCallback = ()=>{}) {
-    const flagMap = {
-        "Makes Contact": "Has contact and Big Pecks boost",
-        "Kings Rock Affected": "Triggers King's rock",
-        "High Crit": "High crits chances",
-        "Iron Fist Boost": "Iron fist boost",
-        "Sheer Force Boost": "Sheer force boost",
-        "Keen Edge Boost": "Keen edge boost",
-        "Air Based": "Giant wings boost",
-        "Snatch Affected": "Can be snatched",
-        "Dance": "Dance",
-        "Always Crit": "Always Crit",
-        "Field Based": "Field Explorer boost",
-        "Striker Boost": "Striker boost",
-        "Two Strikes": "Hit twice",
-        "Reckless Boost": "Reckless boost",
-        "Magic Coat Affected": "Affected by magic coat",
-        "Horn Based": "Mighty Horn boost",
-        "Strong Jaw Boost": "Strong Jaw boost",
-        "Sound": "Is a sound move",
-        "Mega Launcher Boost": "Mega Launcher Boost",
-        "Ballistic": "Is a bullet move",
-        "Dmg Underwater": "Damage foes under water",
-        "Weather Based": "Changes with the weather",
-        "Powder": "Power move",
-        "Dmg In Air": "Damages foes in air",
-        "Dmg Underground": "Damages foes underground",
-        "Bone Based": "Is a bonemove",
-        "Dmg Ungrounded Ignore Type If Flying": "",
-        "Thaw User": "Unfreeze the user",
-        "Protection Move": "Gives protection to the user",
-        "Dmg 2x In Air": "Damage the foes in air with 2X damage",
-        "Stat Stages Ignored": "Ignore Stats boost",
-        "Hit In Substitute": "Hit Throught Substitute",
-        "Target Ability Ignored": "Target Ability is ignored",
-    }
-    const NoFlagMap = {
-        "Protect Affected": "Isn't affected by protect",
-        "Mirror Move Affected": "Cannot be mirrored",
-    }
     const frag = document.createDocumentFragment()
     for (const flag of flags) {
         const descFlag = flagMap[flag]
@@ -168,7 +184,7 @@ export function moveOverlay(moveId, interactive=true) {
     split.src = `./icons/${gameData.splitT[move.split]}.png`
     
     const effectsDiv = e("div", "move-overlay-effects")
-    listMoveFlags(move.flags.map((x) => gameData.flagsT[x]), $(effectsDiv), interactive?triggerMoveRefresh:null)
+    listMoveFlags(move.flags.map((x) => gameData.flagsT[x]).concat(gameData.effT[move.eff]), $(effectsDiv), interactive?triggerMoveRefresh:null)
     if (interactive){
         powerTitle.onclick = (ev) => {
         removeInformationWindow(ev)
@@ -253,6 +269,8 @@ export const queryMapMoves = {
         //it's called effect but in the data it's flags not effect
         //effect in the data might be useless to the dex, at least to short and medium terms
         const flags = move.flags.map((x) => gameData.flagsT[x].toLowerCase())
+        const effAsFlag = gameData.effT[move.eff]
+        if (effAsFlag) flags.push(effAsFlag.toLowerCase())
         for (const flag of flags) {
             if (AisInB(queryData, flag)) return flag
         }
