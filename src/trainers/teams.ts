@@ -91,7 +91,7 @@ const executionMap: {[key: string]: (line: string, context: Context) => void} = 
         } else if (line.match('.nature')){
             context.currentPokemon.nature = regexGrabStr(line.replace(/\s/g, ''), /(?<==)\w+/)
         } else if (line.match('.moves')){
-            context.currentPokemon.moves = regexGrabStr(line.replace(/\s/g, ''), /(?<==)[\w,]+/)
+            context.currentPokemon.moves = regexGrabStr(line.replace(/\s/g, ''), /(?<==)[\w,]+/, '')
                 .split(',')
                 .filter(x => x)
             if (context.currentPokemon.moves.length > 4){

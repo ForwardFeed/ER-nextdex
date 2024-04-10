@@ -32,6 +32,7 @@ export interface ParsedValues{
     inputPath: string,
     structureVersion: number,
     spritesOnly: boolean,
+    redirectData: boolean,
 }
 
 export const parsedValues: ParsedValues = {
@@ -39,6 +40,7 @@ export const parsedValues: ParsedValues = {
     inputPath: "",
     structureVersion: 0,
     spritesOnly: false,
+    redirectData: false,
 }
 
 const parsableArguments = [
@@ -70,12 +72,20 @@ const parsableArguments = [
                         false,
                         "",
                         (_arg)=>parsedValues.spritesOnly = true),
+
+    initArgument2Option("rd",
+                        "redirect-data",
+                        "do not output to out/ but directly to static/js/data/",
+                        false,
+                        "",
+                        (_arg)=>parsedValues.redirectData = true),
 ]
 
 function printHelpStdout(){
     
     const helpText = parsableArguments.map(x => {
-        return `    -${x.short}\t--${x.long}${" ".repeat(18 - x.long.length)}: ${x.help} ${x.example ? `(ex: ${x.example}` : ""}`
+        return `    -${x.short}\t--${x.long}${" ".repeat(18 - x.long.length)}: \
+${x.help} ${x.example ? `(ex: ${x.example}` : ""} ${x.requiredValue ? "a value is REQUIRED": "NO value required"}`
     }).join('\n')
     console.log("Printing help: \n" + helpText + "\n" + "End of the help. Have a positive day.")
 }
