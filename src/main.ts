@@ -15,6 +15,7 @@ import * as InternalID from './internal_id'
 import { CompactGameData, compactify } from './compactify';
 import * as Configuration from './configuration';
 import { getTrainerOrder } from './trainers/trainer_ordering';
+import { parseArguments } from './arguments';
 //import { comparify } from './comparify';
 
 
@@ -46,21 +47,18 @@ const gameData: GameData = {
     trainerOrder: [],
 }
 /**Because code structure can change, the way of parsing it is thus 
- * mutable, Hence i have a shareable flag that will include the second
- * CLI argument or put 0
- * There is no safeguard whatsoever on how what version correpond to what
- * which i understand isn't pratical
+ * mutable
+ * There is no safeguard whatsoever on how what version correspond to what
+ * which i understand isn't ideal yet it work sufficiently for now and the near future
  */
 export let VERSION_STRUCTURE = 0
 
 function main(configuration: Configuration.Configuration){
-    const ROOT_PRJ = configuration.project_root
-    const OUTPUT_VERSION = process.argv[2] ? "V" + process.argv[2] : ""
-    if (process.argv[3]) {
-        if (!isNaN(+process.argv[3])){
-            VERSION_STRUCTURE = +process.argv[3]
-        }
-    }
+    
+    const optionsValues = parseArguments(process.argv)
+    const ROOT_PRJ = optionsValues.inputPath ? optionsValues.inputPath : configuration.project_root
+    const OUTPUT_VERSION = optionsValues.output ? "V" + optionsValues.output : ""
+    VERSION_STRUCTURE = optionsValues.structureVersion
     const OUTPUT = `./out/gameData${OUTPUT_VERSION}.json`
     const OUTPUT_ADDITIONNAL = `./out/additional${OUTPUT_VERSION}.json`
     getFileData(Path.join(ROOT_PRJ, 'include/global.h'), {filterComments: true, filterMacros: true, macros: new Map()})
@@ -70,12 +68,12 @@ function main(configuration: Configuration.Configuration){
             filterMacros: true,
             macros: global_h.macros
         }
-        if (process.argv[2] === "sprites"){
+        
+        if (optionsValues.spritesOnly){
             const OUTPUT_SPRITES = Path.join("./out", "sprites/")
             const OUTPUT_PALETTES  = "./out/palettes/"
             if (!FS.existsSync(OUTPUT_SPRITES))FS.mkdirSync(OUTPUT_SPRITES)
             if (!FS.existsSync(OUTPUT_PALETTES))FS.mkdirSync(OUTPUT_PALETTES)
-            
             Sprites.getSprites(ROOT_PRJ, optionsGlobal_h, OUTPUT_SPRITES, OUTPUT_PALETTES)
                 .then(()=>{
                     console.log('Successfully copied the sprites')
