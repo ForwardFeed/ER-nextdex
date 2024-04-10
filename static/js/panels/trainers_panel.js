@@ -143,7 +143,6 @@ export function createPokemon(poke) {
     const pokeAbility = e('div', "trainers-poke-ability", ability?.name)
     const midPanel = e('div', "trainers-pokemon-mid")
     const pokeMoves = e('div', "trainers-poke-moves")
-    console.log(moves, specie.name)
     for (const move of moves) {
         if (!move) continue
         let type1 = gameData.typeT[move.types[0]].toLowerCase()

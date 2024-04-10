@@ -7,7 +7,8 @@ set -e
 [[ ! $(command -v jq) ]] && echo "please install the jq command, or hardcode the project path" && exit
 prj=$(cat nextdex_config.json | jq -r '.project_root')
 curr=$(pwd)
-
+prjAlpha=$(cat nextdex_config.json | jq -r '.project_root_alpha')
+echo ${prjAlpha}
 # if i don't compile i 100% forget because je suis un âne
 tsc
 
@@ -15,14 +16,13 @@ tsc
 cd "${prj}"
 git checkout origin/ReduxForms
 cd "${curr}"
-npm run run Alpha
+npm run run -- -o Alpha -rd -sv 0
 cd "${prj}"
 git checkout origin/master
 cd "${curr}"
-npm run run 1.6.1
-
-cp out/gameDataV1.6.1.json static/js/data/gameDataV1.6.1.json
-cp out/gameDataVAlpha.json static/js/data/gameDataVAlpha.json
+npm run run -- -o 1.6.1 -rd -sv 0
+# special for the alphatesters
+npm run run -- -o Alphatest -rd -ip ${prjAlpha} -sv 1
 
 # update the version
 version=$(grep "%%VERSION%%" static/js/data_version.js | grep -Eo '"[^"]+"' | grep -Eo '[^"]+')
@@ -32,7 +32,7 @@ sed -i "s/const LATEST_DATA_VERSION = \"${version}\"/const LATEST_DATA_VERSION =
 
 # to calculate the whole data size parsed
 # it's just because i thought it would be funny
-
+# misses tons of more data tho
 : '
 size list of all read files in bash
     a=("include/global.h"
