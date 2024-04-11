@@ -1,14 +1,5 @@
 import { gameData } from "./data_version.js"
 
-/**
- * {
- * "Type": [
- *      string[] => types No effect
- *      string[] => types resist
- *      string[] => types vulnerability
- * ]
- * }
- */
 const IMMUNE = 0
 const RESIST = 1
 const WEAK = 2
@@ -97,7 +88,7 @@ export function getTypeEffectiveness(attackerT, defT){
     return 1
 }
 
-export function checkTypos(types){
+function checkTypos(types){
     const keys = Object.keys(typeChart)
     for (const key of keys){
         for (const weaknesses of typeChart[key]){
