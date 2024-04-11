@@ -15,7 +15,7 @@ export function feedPanelTrainers(trainerID) {
     $('#trainers-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
     $('#trainers-list > .btn').eq(trainerID).addClass("sel-active").removeClass("sel-n-active")
     const trainer = gameData.trainers[trainerID]
-    $('#trainers-name').text(trainer.name)
+    $('#trainers-name').text(trainer.fullName)
     $('#trainers-map').text(gameData.mapsT[trainer.map] || "Unknown location")
     setBaseTrainer(trainer)
     setRematchesBar(trainer.rem)

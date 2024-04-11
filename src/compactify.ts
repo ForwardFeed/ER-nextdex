@@ -108,6 +108,7 @@ export interface CompactSpecie {
 
 export interface CompactTrainers {
     name: string,
+    tclass: number
     db: boolean,
     party: CompactTrainerPokemon[],
     insane: CompactTrainerPokemon[],
@@ -157,6 +158,7 @@ export interface CompactGameData {
     scriptedEncoutersHowT: string[],
     mapsT: string[],
     MAPST: string[],
+    tclassT: string[],
     creationDate: number,
 }
 function initCompactGameData(): CompactGameData {
@@ -180,6 +182,7 @@ function initCompactGameData(): CompactGameData {
         scriptedEncoutersHowT: [],
         mapsT: [],
         MAPST: [],
+        tclassT: [],
         creationDate: +new Date(),
     }
 }
@@ -352,7 +355,8 @@ export function compactify(gameData: GameData): CompactGameData {
             return
         }
         compacted.trainers.push({
-            name: trainer.realName,
+            name: Xtox('TRAINER_', trainer.NAME),
+            tclass: tablize(Xtox('TRAINER_CLASS_', trainer.tclass), compacted.tclassT),
             db: trainer.double,
             party: trainer.party.map(compactPoke),
             insane: trainer.insane.map(compactPoke),
@@ -392,8 +396,8 @@ export function compactify(gameData: GameData): CompactGameData {
         })
     })
     compacted.trainers = compacted.trainers.sort(function(a, b){
-        const aOrder = gameData.trainerOrder.indexOf(a.name)
-        const bOrder = gameData.trainerOrder.indexOf(b.name)
+        const aOrder = gameData.trainerOrder.indexOf(`${compacted.tclassT[a.tclass]} ${a.name}`)
+        const bOrder = gameData.trainerOrder.indexOf(`${compacted.tclassT[b.tclass]} ${b.name}`)
         if (aOrder == -1 && bOrder == -1) return 0
         if (aOrder == -1) return 1
         if (bOrder == -1) return -1

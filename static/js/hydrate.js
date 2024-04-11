@@ -481,6 +481,7 @@ function hydrateTrainers() {
     //let lastMap = -1
     for (const i in trainers) {
         const trainer = trainers[i]
+        trainer.fullName = `${gameData.tclassT[trainer.tclass]} ${trainer.name}`
         //check if it's a new map to add it as a header
         /*if (lastMap != trainer.map){
             lastMap = trainer.map
@@ -495,7 +496,7 @@ function hydrateTrainers() {
         const core = document.createElement('div')
         core.className = "btn data-list-row sel-n-active"
         const name = document.createElement('span')
-        name.innerText = trainer.name || "unknown"
+        name.innerText = trainer.fullName || "unknown"
         core.append(name)
         core.dataset.id = i
         $(core).on('click', function () {
