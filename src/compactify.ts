@@ -355,7 +355,7 @@ export function compactify(gameData: GameData): CompactGameData {
             return
         }
         compacted.trainers.push({
-            name: Xtox('TRAINER_', trainer.NAME),
+            name: Xtox('TRAINER_', key),
             tclass: tablize(Xtox('TRAINER_CLASS_', trainer.tclass), compacted.tclassT),
             db: trainer.double,
             party: trainer.party.map(compactPoke),

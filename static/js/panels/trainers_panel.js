@@ -267,7 +267,7 @@ export function buildTrainerPrefixTrees(){
     prefixTree.name = {}
     gameData.trainers.forEach((x, i, arr)=>{
         //by the way i'm building the word array so i can match more widely *l*eader *w*inonna
-        x.splicedName = x.name.split(' ').map(x => x.toLowerCase())
+        x.splicedName = x.fullName.split(' ').map(x => x.toLowerCase())
         for (const splice of x.splicedName){
             const prefix = splice.charAt(0)
             if (!prefixTree.name[prefix]) prefixTree.name[prefix] = []
@@ -280,7 +280,7 @@ export function buildTrainerPrefixTrees(){
 
 export const queryMapTrainers = {
     "name": (queryData, trainer) => {
-        if (trainer.name.toLowerCase() === queryData) return [true, trainer.name, true]
+        if (trainer.fullName.toLowerCase() === queryData) return [true, trainer.fullName, true]
         queryData = queryData.split(' ')
         if (!queryData.length) return false
         for (const subQueryData of queryData){
@@ -290,7 +290,7 @@ export const queryMapTrainers = {
             }
             if (!hasSlicedMatched) return false
         }
-        return trainer.name
+        return trainer.fullName
         
     },
     "map": (queryData, trainer) => {
