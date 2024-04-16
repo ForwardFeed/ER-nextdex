@@ -9,8 +9,5 @@ const CParsingNodes: [string, ()=>void][] = [
     ["id", function(){
         
     }],
-    ["nope", function(){
-        
-    }],
 ]
 const CParsingSwitch = CParsingNodes.map(x => x[0])
