@@ -6,7 +6,7 @@
 [x] Invert Abilities with species in the side bar
 [x] Add versionning changes
     [x] Dynamic js file loading for gameVersion
-[ ] Make a beta version that will autofetch OR having Automated tool that will update the github daily about latest beta changes.
+[-] ~~Make a beta version that will autofetch OR having Automated tool that will update the github daily about latest beta changes.~~
 [x] Change the layout for phone or lateral screen
 [ ] Add a panel to have the global stats, the number of species, abilities and stuff like that
 [x] Add the filtering frame
@@ -16,24 +16,23 @@
 [ ] add list of sSkillSwapBannedAbilities things like that in battle utils
     [x] as data in another file
     [ ] in the UI
-[-] add dex-strategy from 'src/data/dex-strategy.md' :<= in debate, for now no
+[x] added community sets
 [x] locations exception for the fishe and rods
 [x] get pre-evolutions
-    [ ] if possible retroactively
-[ ] add trainers
-    [ ] Trainer Locations from /data/maps/scripts.pory or script.inc
+    [x] if possible retroactively
+[x] add trainers
+    [x] Trainer Locations from /data/maps/scripts.pory or script.inc
     [x] Get Trainer Rematch from RematchTrainer gRematchTable in /src/battle_setup.c
     [x] Get Trainer info from /src/data/trainers.h
     [x] Get Trainer Team from src/data/trainer_parties.h
 [x] Settings pannel
     [x] Supports multiple color theme
 [x] tooltip for moves
-[ ] btw the dex is up
 [x] Sort
     [x] stats
     [x] Aplhabethically
     [x] Maybe add the sort to the list as cliqueable case, for example in species top of bulbasaur
-[ ] Filters
+[x] Filters
     [x] by megas :<= Just type "Mega" as the name
     [x] redux forms :<= Just type "Redux" as the name
     [x] by map
@@ -44,8 +43,8 @@
     [x] click on type to filter by type
     [x] add an arrow to put the selection as a filter
     [x] Filters moves available in the pokemon :<= was linked to the move search
-    [ ] Make filters for tabs only and no longer global
-    [ ] Fix Move filters not being sync when remove filters
+    [x] Make filters for tabs only and no longer global
+    [x] Fix Move filters not being sync when remove filters
 [x] settings file for the extractor of data
 [x] fix species-mid-stats on 300px size phone <= somewhat fixed
 [x] hide non-querable fields in function of the pannel
@@ -53,13 +52,13 @@
     [x] make evo & locations tab instead of two separates
     [ ] Insert all leftovers data, like exp curve, body color and stuff
     [x] make a team builder
-[ ] Trainers Tab
+[x] Trainers Tab
     [x] Order trainer per route
+    [x] trainers by encounter order
+
 [ ] Add a welcome menu?
     [ ] add a wait icon, the time everything loads
-[ ] Add a manual as a iframe or another webpage
+[ ] Add a howto manual as a iframe or another webpage
 [x] if clicked on elite keep it as a elite mode
 [ ] show the date of upload of last pokedex data
-[ ] add trainers locations
-[ ] trainers by encounter order
-[ ] implement abilityThatModifyEffectiveness
+[x] implement abilityThatModifyEffectiveness

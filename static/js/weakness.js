@@ -133,7 +133,7 @@ export function getDefensiveCoverage(specie, abiID){
         .map(x => gameData.typeT[x])
         .filter(x => x)
     const isWonderGuard = abiNames.indexOf('Wonder Guard') != -1
-
+    const isPrimalArmor = abiNames.indexOf('Wonder Guard') != -1
     const modifiers = abilityModifiesTypeChart(abiNames, specie)
     const defensiveCoverage = []
     for (const AtkT of gameData.typeT){
@@ -150,7 +150,7 @@ export function getDefensiveCoverage(specie, abiID){
             typeEffectiveness = 0.5
         }
         if (modifiers[3].indexOf(AtkT) != -1) {
-            typeEffectiveness = 2
+            typeEffectiveness = isPrimalArmor ? 1 : 2
         }
         for (const defT of defTypes){
             typeEffectiveness *= getTypeEffectiveness(AtkT, defT)
@@ -203,6 +203,7 @@ const abilityThatAddsResist = {
     "Immunity": ["Poison"],
     "Fossilized": ["Rock"],
     "Raw Wood": ["Grass"],
+    "Water Compaction": ["Water"],
 }
 
 const abilityThatAddsWeakness = {

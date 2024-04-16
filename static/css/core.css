@@ -287,6 +287,7 @@ span{
     aside {
         flex-direction: column;
         height: 100%;
+        width: 12vmax;
     }
 }
 
