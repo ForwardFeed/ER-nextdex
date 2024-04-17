@@ -1,6 +1,6 @@
 import { GameData } from "../main";
 import { autojoinFilePath, getMulFilesData } from "../utils";
-import * as TrainerNames from './names'
+import * as BaseTrainers from './base_trainer'
 import * as Rematches from './rematches'
 import * as TrainersTeam from './teams'
 
@@ -34,20 +34,20 @@ export interface RematchTrainer{
 function parse(fileData: string): Map<string, Trainer>{
     const lines = fileData.split('\n')
     const RematchesResult = Rematches.parse(lines, 0)
-    const TrainerNamesResult = TrainerNames.parse(lines, RematchesResult.fileIterator)
-    const TrainersTeamResult = TrainersTeam.parse(lines, TrainerNamesResult.fileIterator)
+    const baseTrainerResult = BaseTrainers.parse(lines, RematchesResult.fileIterator)
+    const trainerTeamResult = TrainersTeam.parse(lines, baseTrainerResult.fileIterator)
     const trainers: Map<string, Trainer> = new Map()
-    TrainerNamesResult.trainers.forEach((value, key)=>{
+    baseTrainerResult.trainers.forEach((value, key)=>{
         if (RematchesResult.rematched.indexOf(key) != -1) return
         const rematchList = RematchesResult.rematches.get(key) || []
         let rematchM: string= ""
         const rematchs = rematchList.map((x, i)=> {
-            const rem = TrainerNamesResult.trainers.get(x)
+            const rem = baseTrainerResult.trainers.get(x)
             if (!i) rematchM = x
             if (!rem) return 
             return {
                 double: rem.double,
-                party: TrainersTeamResult.trainers.get(rem.partyPtr) || [],
+                party: trainerTeamResult.trainers.get(rem.partyPtr) || [],
                 ptr: rem.partyPtr,
                 NAME: rem.NAME
             } as RematchTrainer
@@ -59,8 +59,8 @@ function parse(fileData: string): Map<string, Trainer>{
             NAME: value.NAME,
             tclass: value.tclass,
             double: value.double,
-            party: TrainersTeamResult.trainers.get(value.partyPtr) || [],
-            insane: TrainersTeamResult.trainers.get(value.insanePtr) || [],
+            party: trainerTeamResult.trainers.get(value.partyPtr) || [],
+            insane: trainerTeamResult.trainers.get(value.insanePtr) || [],
             rematches: rematchs,
             ptr: value.partyPtr,
             ptrInsane: value.insanePtr,

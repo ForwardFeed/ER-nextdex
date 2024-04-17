@@ -71,7 +71,12 @@ function initContext(): Context{
 }
 /**
  * this may look unorthodox, but it reduce the if else of one level systematically
- * !TODO finish this
+ * Each property of this map is a function that will be executed each line
+ * with a context, the context is a shared data between each parsing
+ * Using context.execFlag you can redirect the function be called next line
+ * stopRead just says that everything the whole execution map has finished reading.
+ * It is useful as i tend to bundle all files to read into one big one in memory
+ * (which with hindsight wasn't that clever but w/e)
  */
 const executionMap: {[key: string]: (line: string, context: Context) => void} = {
     "awaitData" : (line, context) =>{
