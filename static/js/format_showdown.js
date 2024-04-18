@@ -46,7 +46,10 @@ export function parseShowdownFormat(text){
         (line)=>{
             const spcItem = line.split(' @ ')
             poke.spc = spcNameList.indexOf(spcItem[0])
-            if (poke.spc == -1) invalid = true //
+            if (poke.spc == -1) {
+                invalid = true
+                return
+            }
             if (spcItem[1] != undefined) poke.item = itemList.indexOf(spcItem[1])
             next()
         },

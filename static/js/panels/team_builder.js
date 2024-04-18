@@ -422,9 +422,10 @@ function feedPokemonEdition(jNode, viewID) {
                         const moveCallback = (moveID) => {
                             poke.moves[index] = poke.allMoves[moveID]
                             const moveName = poke.allMovesName[moveID]
-                            view.moves.eq(index).children().eq(0).text(moveName)
+                            view.moves[index].innerText = moveName
+                            console.log(view.moves.eq(index), view.moves[index])
                             const moveType = gameData.typeT[gameData.moves[poke.moves[index]].types[0]].toLowerCase()
-                            view.moves.eq(index)[0].className = `trainers-poke-move ${moveType}-t`
+                            view.moves[index].className = `trainers-poke-move ${moveType}-t`
                             save()
                             updateOffensiveTypes()
                         }
