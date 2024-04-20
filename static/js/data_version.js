@@ -28,7 +28,7 @@ function setAvailableVersion(){
     const version = $('#versions').val() || fetchFromLocalstorage("lastusedversion")
     $('#versions').append(fragment).val(version)
 }
-
+let forceRefresh = false
 export function changeVersion(version=defaultVersion, firstLoad=false){
     if (!version /*|| allVersions.indexOf(version) == -1*/){
         console.warn(`no such version : ${version}, defaulting to ${defaultVersion}`)
@@ -40,7 +40,7 @@ export function changeVersion(version=defaultVersion, firstLoad=false){
     const savedVersion = fetchFromLocalstorage("dataversion"+version)
     saveToLocalstorage("lastusedversion", version)
     if (savedVersion && savedVersion == LATEST_DATA_VERSION &&
-        $('#enable-storage')[0].checked ){
+        $('#enable-storage')[0].checked && !forceRefresh){
         try{
             gameData = JSON.parse(fetchFromLocalstorage("data"+version))
             if (gameData) {
@@ -98,5 +98,10 @@ export function setupDataVersionning(firstLoad = false){
     })
     const version = $('#versions').val() || defaultVersion
     $('#versions').val(version).trigger('change')
+    $('#force-refresh-data').on('click', function(){
+        forceRefresh = true
+        changeVersion($('#versions').val())
+        forceRefresh = false
+    })
 }
 
