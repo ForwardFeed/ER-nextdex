@@ -9,12 +9,13 @@ export let compareData;
 export let gameData;
 // each time the data is modified, this is updated
 // so the client checks if it have the latest version by checking lo
-const LATEST_DATA_VERSION = "35"/*%%VERSION%%*/
+const LATEST_DATA_VERSION = "38"/*%%VERSION%%*/
 
 const allVersions = [
     "1.6.1",
-    "Alpha",
+    "Beta2.0",
 ]
+
 const defaultVersion = "1.6.1"
 
 function setAvailableVersion(){
@@ -25,12 +26,14 @@ function setAvailableVersion(){
         option.innerText = version
         fragment.append(option)
     }
-    const version = $('#versions').val() || fetchFromLocalstorage("lastusedversion")
+    let savedVersion = fetchFromLocalstorage("lastusedversion")
+    if (allVersions.indexOf(savedVersion) == -1) savedVersion = defaultVersion
+    const version = $('#versions').val() || savedVersion
     $('#versions').append(fragment).val(version)
 }
 let forceRefresh = false
 export function changeVersion(version=defaultVersion, firstLoad=false){
-    if (!version /*|| allVersions.indexOf(version) == -1*/){
+    if (!version){
         console.warn(`no such version : ${version}, defaulting to ${defaultVersion}`)
         version = defaultVersion
     }

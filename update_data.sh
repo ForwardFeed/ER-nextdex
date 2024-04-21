@@ -13,10 +13,10 @@ echo ${prjAlpha}
 tsc
 
 # fetch the multiples version
-cd "${prj}"
-git checkout origin/ReduxForms
+cd "${prjAlpha}"
+git checkout 90d39b7a723c9605593d50b105cd505766fe443f
 cd "${curr}"
-npm run run -- -o Alpha -rd -sv 0
+npm run run -- -o Beta2.0 -rd -ip ${prjAlpha} -sv 1
 cd "${prj}"
 git checkout origin/master
 cd "${curr}"
