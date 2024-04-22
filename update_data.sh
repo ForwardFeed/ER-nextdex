@@ -14,7 +14,7 @@ tsc
 
 # fetch the multiples version
 cd "${prjAlpha}"
-git checkout 90d39b7a723c9605593d50b105cd505766fe443f
+git checkout f401baf53a4126301412d1d2be8a682a0edc3620
 cd "${curr}"
 npm run run -- -o Beta2.0 -rd -ip ${prjAlpha} -sv 1
 cd "${prj}"
@@ -22,6 +22,9 @@ git checkout origin/master
 cd "${curr}"
 npm run run -- -o 1.6.1 -rd -sv 0
 # special for the alphatesters
+cd "${prjAlpha}"
+git checkout origin/upcoming
+cd "${curr}"
 npm run run -- -o Alphatest -rd -ip ${prjAlpha} -sv 1
 
 # update the version
