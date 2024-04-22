@@ -442,7 +442,11 @@
         <div class="versionning">
             <label for="versions">Game Version</label>
             <select name="versions" id="versions"></select>
-            <span id="ugly-error-span" style="color: red;"></span>
+            <label for="compare-versions">Compare to</label>
+            <select name="compare-versions" id="compare-versions" selected="none">
+                <option value="none">None</option>
+                <option value="Vanilla">Vanilla</option>
+            </select>
         </div>
         <div class="settings-row">
             <button id="open-team-savefile">Import Team from savefile</button>

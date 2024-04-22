@@ -38,8 +38,6 @@ export function changeVersion(version=defaultVersion, firstLoad=false){
         version = defaultVersion
     }
     
-    changeCompareData(version, "Vanilla") //TODO, make it so you can target other things
-    
     const savedVersion = fetchFromLocalstorage("dataversion"+version)
     saveToLocalstorage("lastusedversion", version)
     if (savedVersion && savedVersion == LATEST_DATA_VERSION &&
@@ -105,6 +103,13 @@ export function setupDataVersionning(firstLoad = false){
         forceRefresh = true
         changeVersion($('#versions').val())
         forceRefresh = false
+    })
+    $('#compare-versions').on('change', ()=>{
+        const comparedVersion =  $('#compare-versions').val()
+        const version = $('#versions').val()
+        if (comparedVersion === "none" || version === comparedVersion) return
+        console.log(comparedVersion, version)
+        changeCompareData(version,comparedVersion)
     })
 }
 
