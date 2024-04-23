@@ -14,12 +14,14 @@ No dependecies are used in this games
 
 Commands:
 - build: just a shortcut to tsc
-- run: will execute, one argument can be send to the program
-    - sprites: see below run command
-    - Any%: will change the output of the gamedata files to gamedata{arg}.json, usefull to upload multiple version of the data.
-    - Any% 1: 1 here (always the second arg) will be the version of parsing to use, as the datastructure of the code changes along its versionning
-    So this is to keep up with the changes, it always be an integer as in the code you can do if(version > 3 && version < 5)
-- sprites: a shortcut to "run sprites", will fetch all sprites and output it in out/. I advise to use the python script "sprites_utils.py" which will remove the default background color to a transparent color
+- run: will execute the program, see below for specification, if nothing is specified it will output in out/gameData.json with the path specified in nextdex_config.json using structure version 0
+
+Run Arguments:
+    - -o --output     : name of the output to gamedata{arg}.json
+    - -ip --input-path: override the path of the root folder in nextdex_config.json
+    - -sv --structure-version: indicate which version of the parsing alg to use, since the codebase evolves with the version, it may be necessary, it always be an integer so in the code you can do: if(version > 3 && version < 5) { read this way } else {read this way}
+    - -so --sprites-only: Do not parse for gamedata.json and only outputs all the sprites of pokemon found in out/sprites, i advice to use the python script sprites_utils.py after used that.
+    - -rd -redirect-data: Do not redirect gameData.json to /out/ but directly to the UI folder at /static/js/data/ 
 
 Quick tip, if you use git on your pokemon project you can get back to a previous version with these bash commands
 `git log  --all --grep='V0.0.1'` where `V0.0.1` is the message of a commit marking the version of the game. Copy the commit sha1 hash and then you can do
