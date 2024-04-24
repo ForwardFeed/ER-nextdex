@@ -20,16 +20,22 @@ const defaultVersion = "1.6.1"
 
 function setAvailableVersion(){
     const fragment = document.createDocumentFragment()
+    const compareDataFrag = document.createDocumentFragment()
     for (const version of allVersions){
         const option = document.createElement('option')
         option.value = version
         option.innerText = version
         fragment.append(option)
+        const optionCompare = document.createElement('option')
+        optionCompare.value = version
+        optionCompare.innerText = version
+        compareDataFrag.append(optionCompare)
     }
     let savedVersion = fetchFromLocalstorage("lastusedversion")
     if (allVersions.indexOf(savedVersion) == -1) savedVersion = defaultVersion
     const version = $('#versions').val() || savedVersion
     $('#versions').append(fragment).val(version)
+    $('#compare-versions').append(compareDataFrag)
 }
 let forceRefresh = false
 export function changeVersion(version=defaultVersion, firstLoad=false){
