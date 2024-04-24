@@ -43,7 +43,6 @@ export function changeVersion(version=defaultVersion, firstLoad=false){
         console.warn(`no such version : ${version}, defaulting to ${defaultVersion}`)
         version = defaultVersion
     }
-    
     const savedVersion = fetchFromLocalstorage("dataversion"+version)
     saveToLocalstorage("lastusedversion", version)
     if (savedVersion && savedVersion == LATEST_DATA_VERSION &&
@@ -97,9 +96,19 @@ function changeCompareData(currentVersion, versionTarget){
         })
 }
 
+function hideCompareFieldIdentical(version){
+    $('#compare-versions option').show()
+    $(`#compare-versions option[value="${version}"]`).hide()
+    if (version === $('#compare-versions').val()){
+        $('#compare-versions').val("none").trigger('change')
+    }
+    
+}
+
 export function setupDataVersionning(firstLoad = false){
     if (firstLoad) setAvailableVersion()
     $('#versions').on('change', () => {
+        hideCompareFieldIdentical($('#versions').val())
         changeVersion($('#versions').val(), firstLoad)
         if (firstLoad) firstLoad = false
     })
@@ -113,8 +122,10 @@ export function setupDataVersionning(firstLoad = false){
     $('#compare-versions').on('change', ()=>{
         const comparedVersion =  $('#compare-versions').val()
         const version = $('#versions').val()
-        if (comparedVersion === "none" || version === comparedVersion) return
-        console.log(comparedVersion, version)
+        if (comparedVersion === "none") return
+        if (version === comparedVersion) {
+
+        }
         changeCompareData(version,comparedVersion)
     })
 }
