@@ -211,7 +211,7 @@ export function comparify(filepathToBeCompared: string, filepathToCompareWith: s
 }
 
 function getFileNameFromFilePath(filepath: string): string | undefined{
-    const fileMatch = filepath.match(/(?<=gameDataV)\w+(?=.json)/)
+    const fileMatch = filepath.match(/(?<=gameDataV)[^\/]+(?=.json)/)
     if (!fileMatch){
         return undefined
     }
@@ -224,7 +224,10 @@ function comparifyTwoToFile(filepathToBeCompared: string, filepathToCompareWith:
             writeFile(outputPath, JSON.stringify(x) , (err_exist)=>{
                 if (err_exist){
                     console.error(`couldn't write the gamedata output to ${outputPath}`)
+                } else {
+                    console.log("successfully written to " + outputPath)
                 }
+                
             })
         })
         .catch((e)=>{
@@ -250,8 +253,9 @@ export function comparifyMultiple(entryFiles: string[], parsedArguments: ParsedV
             }
             const outFileName = `comparify${fileName}${additionalName}.json`
             const outputPath = parsedArguments.redirectData ? 
-                `./out/${outFileName}` :
-                `./static/js/data/${outFileName}`
+                `./static/js/data/${outFileName}` :
+                `./out/${outFileName}`
+
             comparifyTwoToFile(file, additionnal, outputPath)
         }
         for (let j = 0; j < entryFilesLen; j++){
@@ -260,9 +264,10 @@ export function comparifyMultiple(entryFiles: string[], parsedArguments: ParsedV
             const comparingFileName = getFileNameFromFilePath(comparingFile)
             if (!comparingFileName) continue
             const outFileName = `comparify${fileName}${comparingFileName}.json`
-            const outputPath = parsedArguments.redirectData ? 
-                `./out/${outFileName}` :
-                `./static/js/data/${outFileName}`
+            const outputPath = parsedArguments.redirectData ?
+                `./static/js/data/${outFileName}` :
+                `./out/${outFileName}`
+            console.log(file, comparingFile, outputPath)
             comparifyTwoToFile(file, comparingFile, outputPath)
         }
     } 

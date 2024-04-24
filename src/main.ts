@@ -16,6 +16,7 @@ import { CompactGameData, compactify } from './compactify';
 import * as Configuration from './configuration';
 import { getTrainerOrder } from './trainers/trainer_ordering';
 import { parseArguments } from './arguments';
+import { comparifyMultiple } from './comparify';
 //import { comparify } from './comparify';
 
 
@@ -69,8 +70,10 @@ function main(configuration: Configuration.Configuration){
             filterMacros: true,
             macros: global_h.macros
         }
-        
-        if (optionsValues.spritesOnly){
+        if (optionsValues.comparify.length){
+            comparifyMultiple(optionsValues.comparify, optionsValues, optionsValues.comparifyAdditional)
+        }
+        else if (optionsValues.spritesOnly){
             const OUTPUT_SPRITES = Path.join(outputDir, "sprites/")
             const OUTPUT_PALETTES  =  Path.join(outputDir, "palettes/")
             if (!FS.existsSync(OUTPUT_SPRITES))FS.mkdirSync(OUTPUT_SPRITES)
