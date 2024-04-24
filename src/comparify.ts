@@ -2,6 +2,7 @@ import {readFileSync, writeFileSync, existsSync, stat, Stats, writeFile} from 'f
 import { CompactGameData, CompactSpecie, compactMove} from "./compactify";
 import { Ability } from './abilities';
 import { types } from 'util';
+import { ParsedValues } from './arguments';
 
 export type CmpAbi = string | boolean //if the desc changed
 
@@ -209,35 +210,60 @@ export function comparify(filepathToBeCompared: string, filepathToCompareWith: s
     })   
 }
 
-comparify('./out/gameDataVAlpha.json', './out/gameDataV1.6.1.json')
-.then((x)=>{
-    const output = `./out/comparify${"Alpha"}${"1.6.1"}.json`
-    writeFile(output, JSON.stringify(x) , (err_exist)=>{
-        if (err_exist){
-            console.error(`couldn't write the gamedata output to ${output}`)
-        }
-    })
-})
-.catch((e)=>{console.error(e)})
+function getFileNameFromFilePath(filepath: string): string | undefined{
+    const fileMatch = filepath.match(/(?<=gameDataV)\w+(?=.json)/)
+    if (!fileMatch){
+        return undefined
+    }
+    return fileMatch[0]
+}
 
-comparify('./out/gameDataVAlpha.json', './out/gameDataVanilla.json')
-.then((x)=>{
-    const output = `./out/comparify${"Alpha"}${"Vanilla"}.json`
-    writeFile(output, JSON.stringify(x) , (err_exist)=>{
-        if (err_exist){
-            console.error(`couldn't write the gamedata output to ${output}`)
-        }
-    })
-})
-.catch((e)=>{console.error(e)})
+function comparifyTwoToFile(filepathToBeCompared: string, filepathToCompareWith: string, outputPath: string){
+    comparify(filepathToBeCompared, filepathToCompareWith)
+        .then((x)=>{
+            writeFile(outputPath, JSON.stringify(x) , (err_exist)=>{
+                if (err_exist){
+                    console.error(`couldn't write the gamedata output to ${outputPath}`)
+                }
+            })
+        })
+        .catch((e)=>{
+            console.error(`error when comparify two files: ${e}`)
+        })
+}
 
-comparify('./out/gameDataV1.6.1.json', './out/gameDataVanilla.json')
-.then((x)=>{
-    const output = `./out/comparify${"1.6.1"}${"Vanilla"}.json`
-    writeFile(output, JSON.stringify(x) , (err_exist)=>{
-        if (err_exist){
-            console.error(`couldn't write the gamedata output to ${output}`)
+export function comparifyMultiple(entryFiles: string[], parsedArguments: ParsedValues ,additionnalFiles: string[]){
+    const entryFilesLen = entryFiles.length
+    for (let i = 0; i < entryFilesLen; i++){
+        const file = entryFiles[i]
+        const fileName = getFileNameFromFilePath(file)
+        if (!fileName) {
+            console.warn(`couldn't extract file name for ${file}, ignoring`)
+            continue
         }
-    })
-})
-.catch((e)=>{console.error(e)})
+
+        for (const additionnal of additionnalFiles){
+            const additionalName = getFileNameFromFilePath(additionnal)
+            if (!additionalName) {
+                console.warn(`couldn't extract file name for ${additionnal}, ignoring`)
+                continue
+            }
+            const outFileName = `comparify${fileName}${additionalName}.json`
+            const outputPath = parsedArguments.redirectData ? 
+                `./out/${outFileName}` :
+                `./static/js/data/${outFileName}`
+            comparifyTwoToFile(file, additionnal, outputPath)
+        }
+        for (let j = 0; j < entryFilesLen; j++){
+            const comparingFile = entryFiles[j]
+            if (file === comparingFile) continue
+            const comparingFileName = getFileNameFromFilePath(comparingFile)
+            if (!comparingFileName) continue
+            const outFileName = `comparify${fileName}${comparingFileName}.json`
+            const outputPath = parsedArguments.redirectData ? 
+                `./out/${outFileName}` :
+                `./static/js/data/${outFileName}`
+            comparifyTwoToFile(file, comparingFile, outputPath)
+        }
+    } 
+}

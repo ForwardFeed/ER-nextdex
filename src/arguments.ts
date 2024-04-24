@@ -33,6 +33,8 @@ export interface ParsedValues{
     structureVersion: number,
     spritesOnly: boolean,
     redirectData: boolean,
+    comparify: string[],
+    comparifyAdditional: string[],
 }
 
 export const parsedValues: ParsedValues = {
@@ -41,6 +43,8 @@ export const parsedValues: ParsedValues = {
     structureVersion: 0,
     spritesOnly: false,
     redirectData: false,
+    comparify: [],
+    comparifyAdditional: [],
 }
 
 const parsableArguments = [
@@ -79,7 +83,24 @@ const parsableArguments = [
                         false,
                         "",
                         (_arg)=>parsedValues.redirectData = true),
-]
+    
+    initArgument2Option("c",
+                        "comparify",
+                        `comparify at minimun two compactified files to create files\
+ that highlights differences, space is used as separator, like sprites-only does it prevent the program from\
+ process the data usually`,
+                        true,
+                        "-c \"./out/gameDataVAlpha.json ./out/gameDataVAnteriorVersion.json\"",
+                        (arg)=>parsedValues.comparify = arg.split(' ')),
+
+    initArgument2Option("ca",
+                        "comparify-additional",
+                        `used in comparify but only as a to compare with an never as\
+ a to be compared with (sorry if that causes confusion), ignored if -c isn't used too`,
+                        true,
+                        "-ca \"./out/gameDataVvanilla.json\"",
+                        (arg)=>parsedValues.comparifyAdditional = arg.split(' ')),
+    ]
 
 function printHelpStdout(){
     
