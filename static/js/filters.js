@@ -681,6 +681,8 @@ export function setupFilters(){
 
     setLongClickSelection($('#to-filter')[0], ()=>{
         removeAllFilters()
+        // remove a color bug on previously added filters buttons
+        $('.extend').not("#to-filter *").css("backgroundColor", "green")
     })
 
     setupFiltersRow()
