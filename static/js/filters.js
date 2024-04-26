@@ -708,8 +708,7 @@ export function setupFilters(){
     setLongClickSelection($('#to-filter')[0], ()=>{
         removeAllFilters()
         // remove a color bug on previously added filters buttons
-        $('.extend').not("#to-filter *").css("backgroundColor", "green")
-    })
+    }, ()=>{return "red"})
 
     setupFiltersRow()
 }
@@ -737,7 +736,7 @@ export function longClickToFilter(panelID, node, key, data = ()=>{return node.in
         activateSearch()
         extendableDiv.style.backgroundColor = color
         if (callback) callback()
-    }, 450, hasFilter(key, data(), panelID) ? "red" : "green")
+    },()=>{return hasFilter(key, data(), panelID) ? "red" : "green" }, 450)
 }
 
 function setupFiltersRow(){

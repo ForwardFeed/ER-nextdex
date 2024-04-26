@@ -126,9 +126,9 @@ export function JSHAC(htmlArray){
     return frag
 }
 
-export function setLongClickSelection(node, callback, time = 500, bgColor = "red"){
+export function setLongClickSelection(node, callback, colorCb, time = 500){
     const extendableDiv  = e("div", "extend")
-    extendableDiv.style.backgroundColor = bgColor
+    extendableDiv.style.backgroundColor = colorCb()
     extendableDiv.style.display = "none"
     node.append(extendableDiv)
     node.style.position = "relative"
@@ -146,6 +146,7 @@ export function setLongClickSelection(node, callback, time = 500, bgColor = "red
             hasFired = true
             callback()
         }, time)
+        extendableDiv.style.backgroundColor = colorCb()
         extendableDiv.animate([
             { width: "0%"},
             { width: "100%"},
