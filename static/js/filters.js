@@ -3,6 +3,9 @@ import { e, JSHAC, clickOutsideToHide, setLongClickSelection } from "./utils.js"
 import { setAllMoves } from "./panels/species/species_panel.js"
 import { capitalizeFirstLetter } from "./utils.js"
 // Sync it with search.js => panelUpdatesTable
+
+let filtersCounter = 0
+
 export const filterDatas = [
     {
         name: "Species",
@@ -136,10 +139,9 @@ export function activateSearch(callback){
         search.updateQueue = false
     }
     search.updateGuard = false
-}
-
-
+} 
 export function appendFilter(panelID, initKey = "", initData = ""){ 
+    incFiltersCounter()
     const divField = e("div", "filter-field")
 
     const divNot = e("div", "filter-not", "¿?")
@@ -231,6 +233,7 @@ export function appendFilter(panelID, initKey = "", initData = ""){
     divRemove.onclick = ()=>{
         divField.remove()
         filterDatas[panelID].modify()
+        decFiltersCounter()
         spinOnRemoveFilter()
         
     }
@@ -239,6 +242,28 @@ export function appendFilter(panelID, initKey = "", initData = ""){
     
     spinOnAddFilter()
     return divField
+}
+
+function incFiltersCounter()
+{
+    if(filtersCounter==0)
+    $("#filter-counter").css("display","block")
+    filtersCounter++ 
+    $("#filter-counter").text(filtersCounter)
+
+}
+function decFiltersCounter()
+{
+    filtersCounter--
+    if(filtersCounter==0) 
+    $("#filter-counter").css("display","none")
+    else    
+        $("#filter-counter").text(filtersCounter)
+}
+function resetFiltersCounter()
+{
+    filtersCounter = 0
+    $("#filter-counter").css("display","none")
 }
 
 /**
@@ -630,6 +655,7 @@ export function queryFilter3(query, datas, keymap, prefixedTree = {} , entrypoin
 function removeAllFilters(){
     $('#filter-frame').find('.filter-field').remove()
     spinOnRemoveFilter()
+    resetFiltersCounter()
     activateSearch()
 }
 
@@ -691,7 +717,7 @@ export function setupFilters(){
 export function longClickToFilter(panelID, node, key, data = ()=>{return node.innerText}, callback = false){
     let filterDiv, color
     let extendableDiv = setLongClickSelection(node, () => {
-        if (hasFilter(key, data(), panelID)) {
+        if (hasFilter(key, data(), panelID)) {  
             if (!filterDiv){
                 $('.filter-search').each((index, val)=>{
                     if (val.value === data()){
@@ -700,6 +726,7 @@ export function longClickToFilter(panelID, node, key, data = ()=>{return node.in
                 })
             } else {
                 filterDiv.remove()
+                decFiltersCounter()
             }
             spinOnRemoveFilter()
             color = "green";

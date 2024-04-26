@@ -325,3 +325,16 @@ span{
     }
 }
 
+#filter-counter{
+    display: none;
+    position: relative;
+    height: fit-content;
+    bottom: 10px;
+    font-size: large;
+    align-self: flex-end;
+    right: 39%;
+    padding: 2px; 
+    background-color: red;
+    border-radius: 100px;
+}
+
