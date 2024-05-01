@@ -13,6 +13,7 @@
     margin: auto;
     display: flex;
     width: calc(50% - 4px);
+    min-width: fit-content;
 }
 .builder-placeholder{
     border-radius: 10px;
