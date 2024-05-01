@@ -59,7 +59,7 @@ const flagMap = {
     "Ballistic": "Is a bullet move",
     "Dmg Underwater": "Damage foes under water",
     "Weather Based": "Changes with the weather",
-    "Powder": "Power move",
+    "Powder": "Powder move",
     "Dmg In Air": "Damages foes in air",
     "Dmg Underground": "Damages foes underground",
     "Bone Based": "Is a bonemove",
@@ -87,6 +87,7 @@ const flagMap = {
     "Special Attack Down Hit 2": "May down Special Attack Twofold",
     "Special Defense Down Hit 2": "May down Special Defense Twofold",
     "Speed Down Hit 2": "May down Speed Twofold",
+    "Always Crit": "Always crit",
 }
 const NoFlagMap = {
     "Protect Affected": "Isn't affected by protect",

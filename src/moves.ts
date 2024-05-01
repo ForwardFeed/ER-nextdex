@@ -117,6 +117,10 @@ const stageBattleMovesExecutionMap: {[key: string]: (line: string, context: Cont
             context.currMove.split = regexGrabStr(line, /(?<==)\w+/).replace(/^SPLIT_/, '')
         } else if (line.match('.argument')){
             context.currMove.argument = regexGrabStr(line, /(?<==)\w+/)
+        } else if (line.match('.alwaysCrit')){
+            const isTrue = regexGrabStr(line, /(?<==)\w+/)
+            if (isTrue !== "TRUE") return
+            context.currMove.flags = context.currMove.flags.concat("ALWAYS_CRIT")
         } else if (line.match(/};/)) {
             if (context.currMove.name) {
                 if (!context.currMove.types.length) context.currMove.types = ["Normal"] // default value
