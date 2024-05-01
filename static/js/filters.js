@@ -2,6 +2,7 @@ import { search, onkeySearchFilter } from "./search.js"
 import { e, JSHAC, clickOutsideToHide, setLongClickSelection } from "./utils.js"
 import { setAllMoves } from "./panels/species/species_panel.js"
 import { capitalizeFirstLetter } from "./utils.js"
+import { clearMatchedMove } from "./panels/moves_panel.js"
 // Sync it with search.js => panelUpdatesTable
 
 let filtersCounter = 0
@@ -653,6 +654,8 @@ export function queryFilter3(query, datas, keymap, prefixedTree = {} , entrypoin
     }
 }
 function removeAllFilters(){
+    clearMatchedMove()
+    setAllMoves()
     $('#filter-frame').find('.filter-field').remove()
     spinOnRemoveFilter()
     resetFiltersCounter()

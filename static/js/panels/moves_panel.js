@@ -223,6 +223,10 @@ export function moveOverlay(moveId, interactive=true) {
     ])
 }
 
+export function clearMatchedMove(){
+    matchedMoves = false
+}
+
 const prefixTree = {
     treeId: "moves"
 }
