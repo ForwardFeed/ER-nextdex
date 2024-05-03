@@ -45,19 +45,173 @@ function setupDrop(){
         input.click()
     })
 }
-// the new saveFileStructure is now tottally static in memory
-const staticPtrs = {
-    gPokemonStorage: 0x2029714,
-    gSaveblock1: 4096,
-    playerPartyCount: 4096 + 0x0234,
-    gSaveblock2: 0x20259d8,
-    gGameVersion: 0x83ad298,
+
+function readSubStructure(OTID, personV, start, bytes){
+    var key = OTID ^ personV;
+    var substructSelector = [
+		[0, 1, 2, 3],
+		[0, 1, 3, 2],
+		[0, 2, 1, 3],
+		[0, 3, 1, 2],
+		[0, 2, 3, 1],
+		[0, 3, 2, 1],
+		[1, 0, 2, 3],
+		[1, 0, 3, 2],
+		[2, 0, 1, 3],
+		[3, 0, 1, 2],
+		[2, 0, 3, 1],
+		[3, 0, 2, 1],
+		[1, 2, 0, 3],
+		[1, 3, 0, 2],
+		[2, 1, 0, 3],
+		[3, 1, 0, 2],
+		[2, 3, 0, 1],
+		[3, 2, 0, 1],
+		[1, 2, 3, 0],
+		[1, 3, 2, 0],
+		[2, 1, 3, 0],
+		[3, 1, 2, 0],
+		[2, 3, 1, 0],
+		[3, 2, 1, 0],
+    ]
+    var selected = substructSelector[(personV >>> 0) % 24]
+    var ss0 = [0,0]
+	var ss1 = [0,0]
+	var ss2 = [0,0]
+	var ss3 = [0,0]
+    for (var i = 0; i<3; i++){
+        ss0[i] = readNbytes(start + 32 + selected[0] * 12 + i * 4 ,4, bytes) ^ key;
+        ss1[i] = readNbytes(start + 32 + selected[1] * 12 + i * 4 ,4, bytes) ^ key;
+        ss2[i] = readNbytes(start + 32 + selected[2] * 12 + i * 4 ,4, bytes) ^ key;
+        ss3[i] = readNbytes(start + 32 + selected[3] * 12 + i * 4 ,4, bytes) ^ key;
+    }
+    //var 
+    var mon = {};
+
+    mon.species = ss0[0] & 0xFFFF;
+	mon.heldItem = ss0[0] >> 16;
+	mon.experience = ss0[1];
+	mon.ppBonuses = ss0[2] & 0xFF;
+	mon.friendship = (ss0[2] >> 8) & 0xFF;
+
+    mon.moves = [
+		ss1[0] & 0xFFFF,
+		ss1[0] >> 16,
+		ss1[1] & 0xFFFF,
+		ss1[1] >> 16
+    ]
+	mon.pp = [
+		ss1[2] & 0xFF,
+		(ss1[2] >> 8) & 0xFF,
+		(ss1[2] >> 16) & 0xFF,
+		(ss1[2] >> 24) & 0xFF
+    ]
+
+    mon.hpEV = ss2[0] & 0xFF
+	mon.attackEV = (ss2[0] >> 8) & 0xFF
+	mon.defenseEV = (ss2[0] >> 16) & 0xFF
+	mon.speedEV = (ss2[0] >> 24) & 0xFF
+	mon.spAttackEV = ss2[1] & 0xFF
+	mon.spDefenseEV = (ss2[1] >> 8) 
+    
+	mon.cool = (ss2[1] >> 16) & 0xFF
+	mon.beauty = (ss2[1] >> 24) & 0xFF
+	mon.cute = ss2[2] & 0xFF
+	mon.smart = (ss2[2] >> 8) & 0xFF
+	mon.tough = (ss2[2] >> 16) & 0xFF
+	mon.sheen = (ss2[2] >> 24) & 0xFF
+	mon.pokerus = ss3[0] & 0xFF
+	mon.metLocation = (ss3[0] >> 8) & 0xFF
+
+	let flags = ss3[0] >> 16
+	mon.metLevel = flags & 0x7F
+	mon.metGame = (flags >> 7) & 0xF
+    mon.hiddenNature = (flags >> 10);
+	mon.otGender = (flags >> 15) & 0x1
+    flags = ss3[1]
+	mon.hpIV = flags >> 1 & 0x1F
+	mon.attackIV = (flags >> 5) & 0x1F
+	mon.defenseIV = (flags >> 10) & 0x1F
+	mon.speedIV = (flags >> 15) & 0x1F
+	mon.spAttackIV = (flags >> 20) & 0x1F
+	mon.spDefenseIV = (flags >> 25) & 0x1F
+    mon.isEgg = (flags >> 30) & 0x1
+    mon.zeroSpe = (flags >> 31) & 0x1
+    
+    flags = ss3[2]
+    mon.pokeball = flags & 0xF;
+    mon.altAbility = (flags >> 5) & 3;
+	mon.coolRibbon = flags & 7
+	mon.beautyRibbon = (flags >> 3) & 7
+	mon.cuteRibbon = (flags >> 6) & 7
+	mon.smartRibbon = (flags >> 9) & 7
+	mon.toughRibbon = (flags >> 12) & 7
+	mon.championRibbon = (flags >> 15) & 1
+	mon.winningRibbon = (flags >> 16) & 1
+	mon.victoryRibbon = (flags >> 17) & 1
+	mon.artistRibbon = (flags >> 18) & 1
+	mon.effortRibbon = (flags >> 19) & 1
+	mon.marineRibbon = (flags >> 20) & 1
+	mon.landRibbon = (flags >> 21) & 1
+	mon.skyRibbon = (flags >> 22) & 1
+	mon.countryRibbon = (flags >> 23) & 1
+	mon.nationalRibbon = (flags >> 24) & 1
+	mon.earthRibbon = (flags >> 25) & 1
+	mon.worldRibbon = (flags >> 26) & 1
+    return mon
 }
+
+function readMonParty(start, bytes){
+    var personality = readNbytes(start, 4, bytes);
+    var otId = readNbytes(start + 4, 4, bytes);
+    //var nickName = readNbytes(start + 8, 10, bytes);
+    //var lang = readNbytes(start + 18, 1, bytes);
+    //var eggName = readNbytes(start + 19, 1, bytes);
+    //var OTname = readNbytes(start + 20, 7, bytes);
+    //var markings = readNbytes(start + 27, 1, bytes);
+    //var checksum = readNbytes(start + 28, 2, bytes);
+    //var wtf = readNbytes(start + 30, 2, bytes);
+    //var data = readNbytes(start + 32, 48, bytes);
+    var mon = readSubStructure(otId, personality, start,bytes);
+    mon.personality = personality;
+    mon.otId = otId;
+    //var status = readNbytes(start + 60, 4, bytes);
+    mon.level = readNbytes(start + 60, 1, bytes);
+    //var pkrs = readNbytes(start + 85, 1, bytes);
+    mon.liveStat = {}
+    mon.liveStat.currentHP = readNbytes(start + 62, 2, bytes);
+    mon.liveStat.totalHP = readNbytes(start + 64, 2, bytes);
+    mon.liveStat.atk = readNbytes(start + 66, 2, bytes);
+    mon.liveStat.def = readNbytes(start + 68, 2, bytes);
+    mon.liveStat.spe = readNbytes(start + 70, 2, bytes);
+    mon.liveStat.spa = readNbytes(start + 72, 2, bytes);
+    mon.liveStat.spd = readNbytes(start + 74, 2, bytes);
+    return mon
+}
+
 const SaveBlock1 = {
-    playerPartyCount: 0x0234
+    playerPartyCount: 0x234,
+    playerParty: 0x238,
 }
 function readParty(bytes, SB1){
-    console.log(readNbytes(SaveBlock1.playerPartyCount + SB1, 4, bytes))
+    const teamsize = readNbytes(SB1 + SaveBlock1.playerPartyCount, 4, bytes)
+    var teamList = []
+    for (var i = 0; i< teamsize; i++){
+        console.log(bytes.slice(SB1 + SaveBlock1.playerParty - 4, SB1 + SaveBlock1.playerParty + 304))
+        var mon = readMonParty(SB1 + SaveBlock1.playerParty + (i * 80), bytes)
+        console.log(mon)
+        /*const evs = mon.evs
+        teamList.push({
+            spc: mon.species,
+            isShiny: false,
+            abi: mon.ability,
+            moves: mon.moves,
+            item: undefined,
+            ivs: [31, 31, 31, 31, 31, mon.zeroSpe ? 0 : 31],
+            evs: [evs.hp, evs.at, evs.df, evs.sa, evs.sd, evs.sp],
+            nature: gameData.natureT.indexOf(mon.nature)
+        });*/
+    }
 }
 
 function getFooterData(startOffset, endOffset, bytes) {
@@ -108,3 +262,4 @@ function parseFile(file){
     }
     reader.readAsArrayBuffer(file);
 };
+

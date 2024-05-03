@@ -105,7 +105,7 @@ function getFooterData(startOffset, endOffset, bytes) {
         GS: GS,
     }
 }
-var comp = []
+
 function readSubStructure(OTID, personV, start, bytes){
     var key = OTID ^ personV;
     var substructSelector = [
