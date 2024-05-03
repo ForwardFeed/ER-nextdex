@@ -45,7 +45,6 @@ function setupDrop(){
         input.click()
     })
 }
-
 function readSubStructure(OTID, personV, start, bytes){
     var key = OTID ^ personV;
     var substructSelector = [
@@ -197,9 +196,8 @@ function readParty(bytes, SB1){
     const teamsize = readNbytes(SB1 + SaveBlock1.playerPartyCount, 4, bytes)
     var teamList = []
     for (var i = 0; i< teamsize; i++){
-        console.log(bytes.slice(SB1 + SaveBlock1.playerParty - 4, SB1 + SaveBlock1.playerParty + 304))
         var mon = readMonParty(SB1 + SaveBlock1.playerParty + (i * 80), bytes)
-        console.log(mon)
+        teamList.push(mon)
         /*const evs = mon.evs
         teamList.push({
             spc: mon.species,
@@ -212,6 +210,7 @@ function readParty(bytes, SB1){
             nature: gameData.natureT.indexOf(mon.nature)
         });*/
     }
+    console.log(teamList.map(x => x.species))
 }
 
 function getFooterData(startOffset, endOffset, bytes) {
@@ -256,6 +255,7 @@ function parseFile(file){
         try {
             const RSave = getFooterData(0, 114688, bytes)
             readParty(bytes, RSave.SB1)
+            
         } catch (e) {
             console.warn(e)
         }
