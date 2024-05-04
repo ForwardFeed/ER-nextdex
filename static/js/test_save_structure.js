@@ -97,7 +97,7 @@ const BoxPokemon = [
 ]
 
 // now unencrypted
-function readSubStructure(start, bytes){
+function readMonBoxed(start, bytes){
     const getNextWord = ()=>{
         const u32 = readNbytes(start + (wordIndex * 4),4, bytes)
         wordIndex++
@@ -151,7 +151,7 @@ function readSubStructure(start, bytes){
 }
 
 function readMonParty(start, bytes){
-    var mon = readSubStructure(start,bytes); // 0
+    var mon = readMonBoxed(start,bytes); // 0
     mon.pp = [
         readNbytes(start + 52, 1, bytes),
         readNbytes(start + 53, 1, bytes),
@@ -176,11 +176,12 @@ const SaveBlock1 = {
     playerPartyCount: 0x234,
     playerParty: 0x238,
 }
-function readParty(bytes, SB1){
+function readParty(bytes, SB1, PC){
     const teamsize = readNbytes(SB1 + SaveBlock1.playerPartyCount, 4, bytes)
-    var teamList = []
-    for (var i = 0; i< teamsize; i++){
-        var mon = readMonParty(SB1 + SaveBlock1.playerParty + (i * 76), bytes)
+    const teamList = []
+    console.log(SB1 + SaveBlock1.playerParty, PC)
+    for (let i = 0; i< teamsize; i++){
+        const mon = readMonParty(SB1 + SaveBlock1.playerParty + (i * 76), bytes)
         teamList.push(mon)
         /*const evs = mon.evs
         teamList.push({
@@ -194,7 +195,20 @@ function readParty(bytes, SB1){
             nature: gameData.natureT.indexOf(mon.nature)
         });*/
     }
-    console.log(teamList)
+    const OTID = teamList[0].otID
+    /*function fromX(j = 0){
+        for (; j < 114688; j+=4){
+            const fourBytes = readNbytes(j, 4, bytes)
+            if (fourBytes == OTID) {
+                console.log(j)
+            }
+        }
+    }
+    fromX(0)*/
+    for (let i = 0; i < 50; i++){
+        console.log(readMonBoxed(PC[13] + 4 + (i * 52), bytes))
+    }
+    console.log('end')
 }
 
 function getFooterData(startOffset, endOffset, bytes) {
@@ -210,7 +224,10 @@ function getFooterData(startOffset, endOffset, bytes) {
         //console.log(sID, readNbytes(ofs + 0x234, 4, bytes), ofs)
         if (sID == 5){
             SB1 = ofs
-        } /*else if (sID >= 5){
+        } else if(sID >= 6){
+            PC[sID -6 ] = ofs
+        } 
+        /*else if (sID >= 5){
             PC[sID - 5] = ofs
         } else {
             //GS[sID] = ofs
@@ -222,6 +239,7 @@ function getFooterData(startOffset, endOffset, bytes) {
    // if (SI == 65535) SI = 0; //javascript aint build for binary
     return {
         SB1: SB1,
+        PC: PC,
     }
 }
 
@@ -238,7 +256,7 @@ function parseFile(file){
         }
         try {
             const RSave = getFooterData(0, 114688, bytes)
-            readParty(bytes, RSave.SB1)
+            readParty(bytes, RSave.SB1, RSave.PC)
             
         } catch (e) {
             console.warn(e)
