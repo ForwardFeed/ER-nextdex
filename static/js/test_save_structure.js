@@ -81,64 +81,70 @@ const BoxPokemon = [
     ["speedEV", 8],
     ["spAttackEV", 8],
     ["spDefenseEV", 8],
-    /*["", ],
-    ["", ],
-    ["", ],
-    ["", ],
-    ["", ],
-    ["", ],
-    ["", ],
-    ["", ],
-    ["", ],*/
+    ["heldItem", 10],
+    ["nature", 5],
+    ["isEgg", 1],
+    ["metLevel", 7],
+    ["pokeball", 5],
+    ["isShiny", 3],
+    ["filler", 1],
+    ["metLocation", 8],
+    ["otName", 7 * 8],
+    ["markings", 4],
+    ["abilityNum", 2],
+    ["speedDown", 1],
+    ["otGender", 1],
 ]
 
 // now unencrypted
 function readSubStructure(start, bytes){
-    const getWord = ()=>{
+    const getNextWord = ()=>{
         const u32 = readNbytes(start + (wordIndex * 4),4, bytes)
         wordIndex++
         return u32
     }
-    const getNextField = ()=>{
-        const field = BoxPokemon[fieldDataIndex]
-        if (!field) return undefined
-        fieldDataIndex++
-        return {
-            name: field[0],
-            nbits: field[1]
+    const setValueToField = (field, value) => {
+        if (field.nbits > 32){
+            if (!mon[field.name]){
+                mon[field.name] = []
+            }
+            mon[field.name].push(value)
+        } else {
+            mon[field.name] = value
         }
     }
-
     const mon = {}
-    let fieldDataIndex = 0
     let wordIndex = 0
-
-    while(true){
-        let field = getNextField()
-        if (!field) break
-        let bitsLeft = 32
-        let word;
-        if (field.nbits > 32){
-            bitsLeft = field.nbits
-            mon[field.name] = []
-            while( bitsLeft >= 32){
-                word = getWord()
-                mon[field.name].push(word)
-                bitsLeft -= 32
-            }
-            if (!bitsLeft) continue
+    let word
+    let bitsReaden
+    for (const fieldArray of BoxPokemon){
+        const field = {
+            name: fieldArray[0],
+            nbits: fieldArray[1]
         }
-        if (!word) word = getWord()
-        // this will bug if a field is between two words
-        while(bitsLeft > 0){
-            mon[field.name] = readBitsInU32(word, 32 - bitsLeft , field.nbits)
-            bitsLeft = bitsLeft - field.nbits
-            if (bitsLeft) {
-                field = getNextField()
-                if (!field) break
-            } else {
-                break
+        if (field.nbits > 32) mon[field.name] = []
+        let bitsLeftToRead = field.nbits
+        while(bitsLeftToRead){
+            if (!word) {
+                word = getNextWord()
+                bitsReaden = 0
             }
+            // needs to read more than just what's left in the word
+            // if 18 bits were read, and you need to read 32, then you need to read 14 now
+            
+            if (32 - bitsReaden - bitsLeftToRead < 0){
+                // remove how many bits that have been read already
+                let bitsThatGonnaBeRead = 32 - bitsReaden
+                setValueToField(field, readBitsInU32(word, bitsReaden, bitsThatGonnaBeRead))
+                bitsLeftToRead -= bitsThatGonnaBeRead
+                word = undefined // will trigger a word read next loop
+            } else {
+               // there's enough bits left to read them all
+               let bitsThatGonnaBeRead = bitsLeftToRead
+               setValueToField(field, readBitsInU32(word, bitsReaden, bitsThatGonnaBeRead))
+               bitsReaden += bitsLeftToRead
+               bitsLeftToRead = 0 // will trigger the next field to be read
+            }  
         }
     }
     console.log(mon)
