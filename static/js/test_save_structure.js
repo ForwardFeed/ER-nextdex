@@ -56,7 +56,7 @@ function readbits(int, boffset, blen){
 }
 // just an utility wrapper
 function readBitsInU32(int, boffset, blen){
-    return readbits(int, (32 - boffset), Math.pow(2, blen) - 1)
+    return readbits(int, boffset, Math.pow(2, blen) - 1)
 }
 // field, numbers of bits
 const BoxPokemon = [
@@ -94,13 +94,16 @@ const BoxPokemon = [
 
 // now unencrypted
 function readSubStructure(start, bytes){
-    const mon = {}
-    let fieldDataIndex = 0
-    let i = 0
-    const readWord = ()=>{
-        const u32 = readNbytes(start + (i * 4),4, bytes)
-        i++
-        return u32
+    const getWord = ()=>{
+        const u32 = readNbytes(start + (wordIndex * 4),4, bytes)
+        let u32ToLittleEndian = 0
+        for (let i = 0; i < 4; i++){
+            const u8 = (u32 >>> (24 - (i * 8))) & 0xFF
+            u32ToLittleEndian |= (u8 << (i * 8))
+        }
+        console.log(u32ToLittleEndian, u32)
+        wordIndex++
+        return u32ToLittleEndian
     }
     const getNextField = ()=>{
         const field = BoxPokemon[fieldDataIndex]
@@ -111,149 +114,57 @@ function readSubStructure(start, bytes){
             nbits: field[1]
         }
     }
+
+    const mon = {}
+    let fieldDataIndex = 0
+    let wordIndex = 0
+
     while(true){
         let field = getNextField()
-        console.log(field)
         if (!field) break
+        let bitsLeft = 32
+        let word;
         if (field.nbits > 32){
-            let bitsLeft = field.nbits
+            bitsLeft = field.nbits
             mon[field.name] = []
             while( bitsLeft >= 32){
-                mon[field.name].push(readWord())
-                bitsLeft -= 2
+                word = getWord()
+                mon[field.name].push(word)
+                bitsLeft -= 32
             }
-            console.log(bitsLeft)
-        } else {
-            let bitsLeft = 32
-            const word = readWord()
-            // this will bug if a field is between two words
-            while(bitsLeft > 0){
-                //console.log(field)
-                bitsLeft = bitsLeft - field.nbits
-                mon[field.name] = readBitsInU32(word, bitsLeft, field.nbits)
-                if (bitsLeft) {
-                    field = getNextField()
-                    if (!field) break
-                }
+            if (!bitsLeft) continue
+        }
+        if (!word) word = getWord()
+        // this will bug if a field is between two words
+        while(bitsLeft > 0){
+            bitsLeft = bitsLeft - field.nbits
+            console.log(field.name, bitsLeft, field.nbits)
+            mon[field.name] = readBitsInU32(word, bitsLeft, field.nbits)
+            if (bitsLeft) {
+                field = getNextField()
+                if (!field) break
+            } else {
                 break
-                
             }
-            
         }
     }
     console.log(mon)
-    return mon
-    //var 
-    let word6 = undecoded[0];
-    const move1 = word6 >>> (32 - 10) & (Math.pow(2, 10) - 1);
-    const experience = (word6 >>> 10 ) & (Math.pow(2, 21) - 1);
-    console.log(read32Bits(word6, ))
-    const attackDown = word6 & 1;
-    let word7 = ss0[1];
-    const move2 = word7  >> (32 - 10)
-    const move3 = word7  >> (32 - 20) & (Math.pow(2, 10) - 1)
-    let word8 = ss0[2];
-    let word9 = undecoded[3];
-    mon.hpEV = word9 >>> 24;
-    mon.attackEV = (word9 >>> 16) & 0xFF;
-    mon.defenseEV = (word9 >>> 8) & 0xFF;
-	mon.speedEV = word9 & 0xFF;
-    console.log(experience, mon.hpEV, mon.attackEV, mon.defenseEV, mon.speedEV)
-	/*mon.spAttackEV = 
-	mon.spDefenseEV = */
-    let word10 = ss1[1];
-    let word11 = ss1[2];
-    let word12 = ss2[0];
-    let word13 = ss2[1];
-    let word14 = ss2[2];
-    //console.log(word13 & 0xFF, experience)
-    
-    mon.species = ss0[0] & 0xFFFF;
-	mon.heldItem = ss0[0] >> 16;
-	mon.experience = ss0[1];
-	mon.ppBonuses = ss0[2] & 0xFF;
-	mon.friendship = (ss0[2] >> 8) & 0xFF;
-
-    mon.moves = [
-		ss1[0] & 0xFFFF,
-		ss1[0] >> 16,
-		ss1[1] & 0xFFFF,
-		ss1[1] >> 16
-    ]
-	mon.pp = [
-		ss1[2] & 0xFF,
-		(ss1[2] >> 8) & 0xFF,
-		(ss1[2] >> 16) & 0xFF,
-		(ss1[2] >> 24) & 0xFF
-    ]
-
-    mon.hpEV = ss2[0] & 0xFF
-	mon.attackEV = (ss2[0] >> 8) & 0xFF
-	mon.defenseEV = (ss2[0] >> 16) & 0xFF
-	mon.speedEV = (ss2[0] >> 24) & 0xFF
-	mon.spAttackEV = ss2[1] & 0xFF
-	mon.spDefenseEV = (ss2[1] >> 8) 
-    
-	mon.cool = (ss2[1] >> 16) & 0xFF
-	mon.beauty = (ss2[1] >> 24) & 0xFF
-	mon.cute = ss2[2] & 0xFF
-	mon.smart = (ss2[2] >> 8) & 0xFF
-	mon.tough = (ss2[2] >> 16) & 0xFF
-	mon.sheen = (ss2[2] >> 24) & 0xFF
-	mon.pokerus = ss3[0] & 0xFF
-	mon.metLocation = (ss3[0] >> 8) & 0xFF
-
-	let flags = ss3[0] >> 16
-	mon.metLevel = flags & 0x7F
-	mon.metGame = (flags >> 7) & 0xF
-    mon.hiddenNature = (flags >> 10);
-	mon.otGender = (flags >> 15) & 0x1
-    flags = ss3[1]
-	mon.hpIV = flags >> 1 & 0x1F
-	mon.attackIV = (flags >> 5) & 0x1F
-	mon.defenseIV = (flags >> 10) & 0x1F
-	mon.speedIV = (flags >> 15) & 0x1F
-	mon.spAttackIV = (flags >> 20) & 0x1F
-	mon.spDefenseIV = (flags >> 25) & 0x1F
-    mon.isEgg = (flags >> 30) & 0x1
-    mon.zeroSpe = (flags >> 31) & 0x1
-    
-    flags = ss3[2]
-    mon.pokeball = flags & 0xF;
-    mon.altAbility = (flags >> 5) & 3;
-	mon.coolRibbon = flags & 7
-	mon.beautyRibbon = (flags >> 3) & 7
-	mon.cuteRibbon = (flags >> 6) & 7
-	mon.smartRibbon = (flags >> 9) & 7
-	mon.toughRibbon = (flags >> 12) & 7
-	mon.championRibbon = (flags >> 15) & 1
-	mon.winningRibbon = (flags >> 16) & 1
-	mon.victoryRibbon = (flags >> 17) & 1
-	mon.artistRibbon = (flags >> 18) & 1
-	mon.effortRibbon = (flags >> 19) & 1
-	mon.marineRibbon = (flags >> 20) & 1
-	mon.landRibbon = (flags >> 21) & 1
-	mon.skyRibbon = (flags >> 22) & 1
-	mon.countryRibbon = (flags >> 23) & 1
-	mon.nationalRibbon = (flags >> 24) & 1
-	mon.earthRibbon = (flags >> 25) & 1
-	mon.worldRibbon = (flags >> 26) & 1
     return mon
 }
 
 function readMonParty(start, bytes){
     var mon = readSubStructure(start,bytes); // 20
     //var status = readNbytes(start + 60, 4, bytes);
-    mon.level = readNbytes(start + 60, 1, bytes);
+    //mon.level = readNbytes(start + 60, 1, bytes);
     //var pkrs = readNbytes(start + 85, 1, bytes);
-    mon.liveStat = {}
+   /* mon.liveStat = {}
     mon.liveStat.currentHP = readNbytes(start + 62, 2, bytes);
     mon.liveStat.totalHP = readNbytes(start + 64, 2, bytes);
     mon.liveStat.atk = readNbytes(start + 66, 2, bytes);
     mon.liveStat.def = readNbytes(start + 68, 2, bytes);
     mon.liveStat.spe = readNbytes(start + 70, 2, bytes);
     mon.liveStat.spa = readNbytes(start + 72, 2, bytes);
-    mon.liveStat.spd = readNbytes(start + 74, 2, bytes);
+    mon.liveStat.spd = readNbytes(start + 74, 2, bytes);*/
     return mon
 }
 
