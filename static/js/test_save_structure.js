@@ -147,23 +147,28 @@ function readSubStructure(start, bytes){
             }  
         }
     }
-    console.log(mon)
     return mon
 }
 
 function readMonParty(start, bytes){
-    var mon = readSubStructure(start,bytes); // 20
-    //var status = readNbytes(start + 60, 4, bytes);
-    //mon.level = readNbytes(start + 60, 1, bytes);
-    //var pkrs = readNbytes(start + 85, 1, bytes);
-   /* mon.liveStat = {}
+    var mon = readSubStructure(start,bytes); // 0
+    mon.pp = [
+        readNbytes(start + 52, 1, bytes),
+        readNbytes(start + 53, 1, bytes),
+        readNbytes(start + 54, 1, bytes),
+        readNbytes(start + 55, 1, bytes),
+    ];
+    mon.status = readNbytes(start + 56, 4, bytes);
+    mon.level = readNbytes(start + 60, 1, bytes);
+    mon.mail = readNbytes(start + 61, 1, bytes);
+    mon.liveStat = {}
     mon.liveStat.currentHP = readNbytes(start + 62, 2, bytes);
     mon.liveStat.totalHP = readNbytes(start + 64, 2, bytes);
     mon.liveStat.atk = readNbytes(start + 66, 2, bytes);
     mon.liveStat.def = readNbytes(start + 68, 2, bytes);
     mon.liveStat.spe = readNbytes(start + 70, 2, bytes);
     mon.liveStat.spa = readNbytes(start + 72, 2, bytes);
-    mon.liveStat.spd = readNbytes(start + 74, 2, bytes);*/
+    mon.liveStat.spd = readNbytes(start + 74, 2, bytes);
     return mon
 }
 
@@ -175,13 +180,12 @@ function readParty(bytes, SB1){
     const teamsize = readNbytes(SB1 + SaveBlock1.playerPartyCount, 4, bytes)
     var teamList = []
     for (var i = 0; i< teamsize; i++){
-        var mon = readMonParty(SB1 + SaveBlock1.playerParty + (i * 80), bytes)
+        var mon = readMonParty(SB1 + SaveBlock1.playerParty + (i * 76), bytes)
         teamList.push(mon)
-        break
         /*const evs = mon.evs
         teamList.push({
             spc: mon.species,
-            isShiny: false,
+            isShiny: mon.isShiny,
             abi: mon.ability,
             moves: mon.moves,
             item: undefined,
@@ -190,7 +194,7 @@ function readParty(bytes, SB1){
             nature: gameData.natureT.indexOf(mon.nature)
         });*/
     }
-    // console.log(teamList.map(x => x.experience))
+    console.log(teamList)
 }
 
 function getFooterData(startOffset, endOffset, bytes) {
