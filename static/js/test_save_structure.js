@@ -96,14 +96,8 @@ const BoxPokemon = [
 function readSubStructure(start, bytes){
     const getWord = ()=>{
         const u32 = readNbytes(start + (wordIndex * 4),4, bytes)
-        let u32ToLittleEndian = 0
-        for (let i = 0; i < 4; i++){
-            const u8 = (u32 >>> (24 - (i * 8))) & 0xFF
-            u32ToLittleEndian |= (u8 << (i * 8))
-        }
-        console.log(u32ToLittleEndian, u32)
         wordIndex++
-        return u32ToLittleEndian
+        return u32
     }
     const getNextField = ()=>{
         const field = BoxPokemon[fieldDataIndex]
@@ -137,9 +131,8 @@ function readSubStructure(start, bytes){
         if (!word) word = getWord()
         // this will bug if a field is between two words
         while(bitsLeft > 0){
+            mon[field.name] = readBitsInU32(word, 32 - bitsLeft , field.nbits)
             bitsLeft = bitsLeft - field.nbits
-            console.log(field.name, bitsLeft, field.nbits)
-            mon[field.name] = readBitsInU32(word, bitsLeft, field.nbits)
             if (bitsLeft) {
                 field = getNextField()
                 if (!field) break
