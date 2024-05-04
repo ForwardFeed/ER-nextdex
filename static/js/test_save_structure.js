@@ -45,6 +45,7 @@ function setupDrop(){
         input.click()
     })
 }
+
 function readSubStructure(OTID, personV, start, bytes){
     var key = OTID ^ personV;
     var substructSelector = [
@@ -79,14 +80,26 @@ function readSubStructure(OTID, personV, start, bytes){
 	var ss2 = [0,0]
 	var ss3 = [0,0]
     for (var i = 0; i<3; i++){
-        ss0[i] = readNbytes(start + 32 + selected[0] * 12 + i * 4 ,4, bytes) ^ key;
-        ss1[i] = readNbytes(start + 32 + selected[1] * 12 + i * 4 ,4, bytes) ^ key;
-        ss2[i] = readNbytes(start + 32 + selected[2] * 12 + i * 4 ,4, bytes) ^ key;
-        ss3[i] = readNbytes(start + 32 + selected[3] * 12 + i * 4 ,4, bytes) ^ key;
+        ss0[i] = readNbytes(start + 20 + selected[0] * 12 + i * 4 ,4, bytes) ^ key;
+        ss1[i] = readNbytes(start + 20 + selected[1] * 12 + i * 4 ,4, bytes) ^ key;
+        ss2[i] = readNbytes(start + 20 + selected[2] * 12 + i * 4 ,4, bytes) ^ key;
     }
     //var 
+    let word6 = ss0[0]; // 20
+    const move1 = word6 >> (32 - 10);
+    const experience = (word6 >> 1 ) & Math.pow(2, 21)
+    const attackDown = word6 & 1;
+    console.log(move1,experience,attackDown)
+    let word7 = ss0[1];
+    let word8 = ss0[2];
+    let word9 = ss1[0];
+    let word10 = ss1[1];
+    let word11 = ss1[2];
+    let word12 = ss2[0];
+    let word13 = ss2[1];
+    let word14 = ss2[2];
+    console.log(word13 & 0xFF)
     var mon = {};
-
     mon.species = ss0[0] & 0xFFFF;
 	mon.heldItem = ss0[0] >> 16;
 	mon.experience = ss0[1];
@@ -161,10 +174,10 @@ function readSubStructure(OTID, personV, start, bytes){
 }
 
 function readMonParty(start, bytes){
-    var personality = readNbytes(start, 4, bytes);
-    var otId = readNbytes(start + 4, 4, bytes);
-    //var nickName = readNbytes(start + 8, 10, bytes);
-    //var lang = readNbytes(start + 18, 1, bytes);
+    var personality = readNbytes(start, 4, bytes); //0
+    var otId = readNbytes(start + 4, 4, bytes); //4
+    //var nickName = readNbytes(start + 8, 12, bytes);//8
+    
     //var eggName = readNbytes(start + 19, 1, bytes);
     //var OTname = readNbytes(start + 20, 7, bytes);
     //var markings = readNbytes(start + 27, 1, bytes);
@@ -210,7 +223,7 @@ function readParty(bytes, SB1){
             nature: gameData.natureT.indexOf(mon.nature)
         });*/
     }
-    console.log(teamList.map(x => x.species))
+    console.log(teamList.map(x => x.experience))
 }
 
 function getFooterData(startOffset, endOffset, bytes) {
