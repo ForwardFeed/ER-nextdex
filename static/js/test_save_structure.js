@@ -176,10 +176,9 @@ const SaveBlock1 = {
     playerPartyCount: 0x234,
     playerParty: 0x238,
 }
-function readParty(bytes, SB1, PC){
+function readParty(bytes, SB1){
     const teamsize = readNbytes(SB1 + SaveBlock1.playerPartyCount, 4, bytes)
     const teamList = []
-    console.log(SB1 + SaveBlock1.playerParty, PC)
     for (let i = 0; i< teamsize; i++){
         const mon = readMonParty(SB1 + SaveBlock1.playerParty + (i * 76), bytes)
         teamList.push(mon)
@@ -195,20 +194,21 @@ function readParty(bytes, SB1, PC){
             nature: gameData.natureT.indexOf(mon.nature)
         });*/
     }
-    const OTID = teamList[0].otID
-    /*function fromX(j = 0){
-        for (; j < 114688; j+=4){
-            const fourBytes = readNbytes(j, 4, bytes)
-            if (fourBytes == OTID) {
-                console.log(j)
-            }
-        }
+}
+
+function readBox(bytes, PC, nbToRead=30*26){
+    const boxedMons = []
+    for (let i = 0; i < nbToRead; i++){
+        // the first 4 bytes are the active box nb, not valuable here
+        const totalOfs = 4 + (i * 52)
+        const saveblock = Math.floor(totalOfs / 3968)
+        const saveBlockOfs = totalOfs % 3968
+        const mon = readMonBoxed(PC[saveblock] + saveBlockOfs, bytes)
+        if (!mon.personality) continue
+        console.log(mon.experience)
+        boxedMons.push(mon)
     }
-    fromX(0)*/
-    for (let i = 0; i < 50; i++){
-        console.log(readMonBoxed(PC[13] + 4 + (i * 52), bytes))
-    }
-    console.log('end')
+    console.log(boxedMons)
 }
 
 function getFooterData(startOffset, endOffset, bytes) {
@@ -224,8 +224,8 @@ function getFooterData(startOffset, endOffset, bytes) {
         //console.log(sID, readNbytes(ofs + 0x234, 4, bytes), ofs)
         if (sID == 5){
             SB1 = ofs
-        } else if(sID >= 6){
-            PC[sID -6 ] = ofs
+        } else if(sID >= 19){
+            PC[sID - 19] = ofs
         } 
         /*else if (sID >= 5){
             PC[sID - 5] = ofs
@@ -256,7 +256,8 @@ function parseFile(file){
         }
         try {
             const RSave = getFooterData(0, 114688, bytes)
-            readParty(bytes, RSave.SB1, RSave.PC)
+            readParty(bytes, RSave.SB1)
+            readBox(bytes, RSave.PC)
             
         } catch (e) {
             console.warn(e)
