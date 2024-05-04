@@ -45,70 +45,110 @@ function setupDrop(){
         input.click()
     })
 }
+/**
+ * 
+ * @param {number} int // number to apply
+ * @param {number} boffset // bit(s) offset 
+ * @param {number} blen // bit(s) length
+ */
+function readbits(int, boffset, blen){
+    return (int >>> boffset) & blen;
+}
+// just an utility wrapper
+function readBitsInU32(int, boffset, blen){
+    return readbits(int, (32 - boffset), Math.pow(2, blen) - 1)
+}
+// field, numbers of bits
+const BoxPokemon = [
+    ["personality", 32],
+    ["otID", 32],
+    ["nickname", 12 * 8],
+    ["move1", 10],
+    ["experience", 21],
+    ["attackDown", 1],
+    ["move2", 10],
+    ["move3", 10],
+    ["language", 3],
+    ["isAlpha", 1],
+    ["friendship", 8],
+    ["species", 16],
+    ["move4", 10],
+    ["hpType",5 ],
+    ["isEventMon", 1],
+    ["hpEV", 8],
+    ["attackEV", 8],
+    ["defenseEV", 8],
+    ["speedEV", 8],
+    ["spAttackEV", 8],
+    ["spDefenseEV", 8],
+    /*["", ],
+    ["", ],
+    ["", ],
+    ["", ],
+    ["", ],
+    ["", ],
+    ["", ],
+    ["", ],
+    ["", ],*/
+]
 
-function readSubStructure(OTID, personV, start, bytes){
-    var key = OTID ^ personV;
-    var substructSelector = [
-		[0, 1, 2, 3],
-		[0, 1, 3, 2],
-		[0, 2, 1, 3],
-		[0, 3, 1, 2],
-		[0, 2, 3, 1],
-		[0, 3, 2, 1],
-		[1, 0, 2, 3],
-		[1, 0, 3, 2],
-		[2, 0, 1, 3],
-		[3, 0, 1, 2],
-		[2, 0, 3, 1],
-		[3, 0, 2, 1],
-		[1, 2, 0, 3],
-		[1, 3, 0, 2],
-		[2, 1, 0, 3],
-		[3, 1, 0, 2],
-		[2, 3, 0, 1],
-		[3, 2, 0, 1],
-		[1, 2, 3, 0],
-		[1, 3, 2, 0],
-		[2, 1, 3, 0],
-		[3, 1, 2, 0],
-		[2, 3, 1, 0],
-		[3, 2, 1, 0],
-    ]
-    var selected = substructSelector[(personV >>> 0) % 24]
-    var ss0 = [0,0]
-	var ss1 = [0,0]
-	var ss2 = [0,0]
-	var ss3 = [0,0]
-    const decoded = []
-    const undecoded = []
-    /*for (var i = 0; i < 56; i++){
-        undecoded.push(readNbytes(start + 20 + i,1, bytes))
-    }*/
-    for (var i = 0; i < 14; i++){
-        decoded.push(readNbytes(start + 20 + (i * 4),4, bytes) ^ key)
-        undecoded.push(readNbytes(start + 20 + (i * 4),4, bytes))
+// now unencrypted
+function readSubStructure(start, bytes){
+    const mon = {}
+    let fieldDataIndex = 0
+    let i = 0
+    const readWord = ()=>{
+        const u32 = readNbytes(start + (i * 4),4, bytes)
+        i++
+        return u32
     }
-    const decoded2 = []
-    for (const d of decoded){
-        for (let i = 0; i < 4; i++){
-            const byte = ( d >> (i* 8)) & 0xFF
-            decoded2.push(byte)
+    const getNextField = ()=>{
+        const field = BoxPokemon[fieldDataIndex]
+        if (!field) return undefined
+        fieldDataIndex++
+        return {
+            name: field[0],
+            nbits: field[1]
         }
     }
-    console.log(JSON.stringify(decoded2), JSON.stringify(undecoded))
-    for (var i = 0; i<3; i++){
-        //console.log(i, 20 + selected[0] * 12 + i * 4)
-        ss0[i] = readNbytes(start + 20 + selected[0] * 8 + i * 4 ,4, bytes) ^ key;
-        ss1[i] = readNbytes(start + 20 + selected[1] * 8 + i * 4 ,4, bytes) ^ key;
-        ss2[i] = readNbytes(start + 20 + selected[2] * 8 + i * 4 ,4, bytes) ^ key;
+    while(true){
+        let field = getNextField()
+        console.log(field)
+        if (!field) break
+        if (field.nbits > 32){
+            let bitsLeft = field.nbits
+            mon[field.name] = []
+            while( bitsLeft >= 32){
+                mon[field.name].push(readWord())
+                bitsLeft -= 2
+            }
+            console.log(bitsLeft)
+        } else {
+            let bitsLeft = 32
+            const word = readWord()
+            // this will bug if a field is between two words
+            while(bitsLeft > 0){
+                //console.log(field)
+                bitsLeft = bitsLeft - field.nbits
+                mon[field.name] = readBitsInU32(word, bitsLeft, field.nbits)
+                if (bitsLeft) {
+                    field = getNextField()
+                    if (!field) break
+                }
+                break
+                
+            }
+            
+        }
     }
+    console.log(mon)
+    return mon
     //var 
-    var mon = {};
-    let word6 = undecoded[0]
-    const move1 = word6 >> (32 - 10);
-    const experience = (word6 >> 1 ) & (Math.pow(2, 21) - 1)
+    let word6 = undecoded[0];
+    const move1 = word6 >>> (32 - 10) & (Math.pow(2, 10) - 1);
+    const experience = (word6 >>> 10 ) & (Math.pow(2, 21) - 1);
+    console.log(read32Bits(word6, ))
     const attackDown = word6 & 1;
-    console.log(experience)
     let word7 = ss0[1];
     const move2 = word7  >> (32 - 10)
     const move3 = word7  >> (32 - 20) & (Math.pow(2, 10) - 1)
@@ -118,8 +158,7 @@ function readSubStructure(OTID, personV, start, bytes){
     mon.attackEV = (word9 >>> 16) & 0xFF;
     mon.defenseEV = (word9 >>> 8) & 0xFF;
 	mon.speedEV = word9 & 0xFF;
-    console.log(word9, mon.hpEV, mon.attackEV, mon.defenseEV, mon.speedEV)
-    return
+    console.log(experience, mon.hpEV, mon.attackEV, mon.defenseEV, mon.speedEV)
 	/*mon.spAttackEV = 
 	mon.spDefenseEV = */
     let word10 = ss1[1];
@@ -203,19 +242,7 @@ function readSubStructure(OTID, personV, start, bytes){
 }
 
 function readMonParty(start, bytes){
-    var personality = readNbytes(start, 4, bytes); //0
-    var otId = readNbytes(start + 4, 4, bytes); //4
-    //var nickName = readNbytes(start + 8, 12, bytes);//8
-    
-    //var eggName = readNbytes(start + 19, 1, bytes);
-    //var OTname = readNbytes(start + 20, 7, bytes);
-    //var markings = readNbytes(start + 27, 1, bytes);
-    //var checksum = readNbytes(start + 28, 2, bytes);
-    //var wtf = readNbytes(start + 30, 2, bytes);
-    //var data = readNbytes(start + 32, 48, bytes);
-    var mon = readSubStructure(otId, personality, start,bytes);
-    mon.personality = personality;
-    mon.otId = otId;
+    var mon = readSubStructure(start,bytes); // 20
     //var status = readNbytes(start + 60, 4, bytes);
     mon.level = readNbytes(start + 60, 1, bytes);
     //var pkrs = readNbytes(start + 85, 1, bytes);
