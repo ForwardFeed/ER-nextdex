@@ -79,27 +79,56 @@ function readSubStructure(OTID, personV, start, bytes){
 	var ss1 = [0,0]
 	var ss2 = [0,0]
 	var ss3 = [0,0]
+    const decoded = []
+    const undecoded = []
+    /*for (var i = 0; i < 56; i++){
+        undecoded.push(readNbytes(start + 20 + i,1, bytes))
+    }*/
+    for (var i = 0; i < 14; i++){
+        decoded.push(readNbytes(start + 20 + (i * 4),4, bytes) ^ key)
+        undecoded.push(readNbytes(start + 20 + (i * 4),4, bytes))
+    }
+    const decoded2 = []
+    for (const d of decoded){
+        for (let i = 0; i < 4; i++){
+            const byte = ( d >> (i* 8)) & 0xFF
+            decoded2.push(byte)
+        }
+    }
+    console.log(JSON.stringify(decoded2), JSON.stringify(undecoded))
     for (var i = 0; i<3; i++){
-        ss0[i] = readNbytes(start + 20 + selected[0] * 12 + i * 4 ,4, bytes) ^ key;
-        ss1[i] = readNbytes(start + 20 + selected[1] * 12 + i * 4 ,4, bytes) ^ key;
-        ss2[i] = readNbytes(start + 20 + selected[2] * 12 + i * 4 ,4, bytes) ^ key;
+        //console.log(i, 20 + selected[0] * 12 + i * 4)
+        ss0[i] = readNbytes(start + 20 + selected[0] * 8 + i * 4 ,4, bytes) ^ key;
+        ss1[i] = readNbytes(start + 20 + selected[1] * 8 + i * 4 ,4, bytes) ^ key;
+        ss2[i] = readNbytes(start + 20 + selected[2] * 8 + i * 4 ,4, bytes) ^ key;
     }
     //var 
-    let word6 = ss0[0]; // 20
+    var mon = {};
+    let word6 = undecoded[0]
     const move1 = word6 >> (32 - 10);
-    const experience = (word6 >> 1 ) & Math.pow(2, 21)
+    const experience = (word6 >> 1 ) & (Math.pow(2, 21) - 1)
     const attackDown = word6 & 1;
-    console.log(move1,experience,attackDown)
+    console.log(experience)
     let word7 = ss0[1];
+    const move2 = word7  >> (32 - 10)
+    const move3 = word7  >> (32 - 20) & (Math.pow(2, 10) - 1)
     let word8 = ss0[2];
-    let word9 = ss1[0];
+    let word9 = undecoded[3];
+    mon.hpEV = word9 >>> 24;
+    mon.attackEV = (word9 >>> 16) & 0xFF;
+    mon.defenseEV = (word9 >>> 8) & 0xFF;
+	mon.speedEV = word9 & 0xFF;
+    console.log(word9, mon.hpEV, mon.attackEV, mon.defenseEV, mon.speedEV)
+    return
+	/*mon.spAttackEV = 
+	mon.spDefenseEV = */
     let word10 = ss1[1];
     let word11 = ss1[2];
     let word12 = ss2[0];
     let word13 = ss2[1];
     let word14 = ss2[2];
-    console.log(word13 & 0xFF)
-    var mon = {};
+    //console.log(word13 & 0xFF, experience)
+    
     mon.species = ss0[0] & 0xFFFF;
 	mon.heldItem = ss0[0] >> 16;
 	mon.experience = ss0[1];
@@ -211,6 +240,7 @@ function readParty(bytes, SB1){
     for (var i = 0; i< teamsize; i++){
         var mon = readMonParty(SB1 + SaveBlock1.playerParty + (i * 80), bytes)
         teamList.push(mon)
+        break
         /*const evs = mon.evs
         teamList.push({
             spc: mon.species,
@@ -223,7 +253,7 @@ function readParty(bytes, SB1){
             nature: gameData.natureT.indexOf(mon.nature)
         });*/
     }
-    console.log(teamList.map(x => x.experience))
+    // console.log(teamList.map(x => x.experience))
 }
 
 function getFooterData(startOffset, endOffset, bytes) {
