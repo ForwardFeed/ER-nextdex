@@ -30,12 +30,13 @@ function setupDrop(){
             if (item.kind !== "file") return
             const file = item.getAsFile();
             //file.name
-            parseFile(file)
+            //parseFile(file)
+            convertSaveFile(file)
         }
         ev.preventDefault();  
         ev.stopPropagation();
     })
-    var input = document.createElement("input");
+    /*var input = document.createElement("input");
         input.id = "savefile-upload";
         input.type = "file";
         input.accept = ".sav";
@@ -43,7 +44,7 @@ function setupDrop(){
         input.onchange = parseFile;
     $('body').append(input).on('click', function(){
         input.click()
-    })
+    })*/
 }
 /**
  * 
@@ -198,18 +199,18 @@ function readParty(bytes, SB1){
 
 function readBox(bytes, PC, nbToRead=30*26){
     const boxedMons = []
-    const DATA_BLOCK = 4084
+    const DATA_BLOCK_SIZE = 4084
     // some pokemon are streched between two saveblocks
     let strechUnder = 0
     for (let i = 0; i < nbToRead; i++){
         let mon
         // the first 4 bytes are the active box nb, not valuable here
         const relativeOffset     = 4 + (i * 52)
-        const saveblockNb        = Math.floor(relativeOffset / DATA_BLOCK)
-        const boxRelativeOffset  = relativeOffset % DATA_BLOCK
+        const saveblockNb        = Math.floor(relativeOffset / DATA_BLOCK_SIZE)
+        const boxRelativeOffset  = relativeOffset % DATA_BLOCK_SIZE
         const absoluteOffset     = PC[saveblockNb] + boxRelativeOffset
-        if (boxRelativeOffset + 52 > DATA_BLOCK){
-            strechUnder = DATA_BLOCK - boxRelativeOffset
+        if (boxRelativeOffset + 52 > DATA_BLOCK_SIZE){
+            strechUnder = DATA_BLOCK_SIZE - boxRelativeOffset
             const strechOver = 52 - strechUnder
             const strechedUnderBytes    = bytes.slice(absoluteOffset, absoluteOffset + strechUnder)
             const strechOverBytes       = bytes.slice(PC[saveblockNb + 1], PC[saveblockNb + 1] + strechOver)
@@ -223,20 +224,26 @@ function readBox(bytes, PC, nbToRead=30*26){
         if (!mon.personality) continue
         boxedMons.push(mon)
     }
-    console.log(boxedMons)
+    return boxedMons
 }
 
 function getFooterData(startOffset, endOffset, bytes) {
     var SIZE_SECTOR = 4096;
     var SB1, // SAVEBLOCK 1
         //SI, //Save index
+        SB = [],
         PC = [] // PC start
         //GS = [] // Game Sector testing purpose
         
     for (var ofs = startOffset; ofs < endOffset; ofs += SIZE_SECTOR){
         var off = ofs + 4084 //offset footer
         var sID = readNbytes(off,2,bytes)//Sector ID
-        //console.log(sID, readNbytes(ofs + 0x234, 4, bytes), ofs)
+        if (sID > 28) {
+            console.log("Weird sector id:" +  sID + " at offset :" + ofs)
+            continue
+        }
+        
+        SB[sID] = ofs
         if (sID == 5){
             SB1 = ofs
         } else if(sID >= 12){
@@ -255,6 +262,7 @@ function getFooterData(startOffset, endOffset, bytes) {
     return {
         SB1: SB1,
         PC: PC,
+        SB: SB,
     }
 }
 
@@ -272,7 +280,7 @@ function parseFile(file){
         try {
             const RSave = getFooterData(0, 114688, bytes)
             readParty(bytes, RSave.SB1)
-            readBox(bytes, RSave.PC)
+            const storage = readBox(bytes, RSave.PC)
             
         } catch (e) {
             console.warn(e)
@@ -280,4 +288,123 @@ function parseFile(file){
     }
     reader.readAsArrayBuffer(file);
 };
+const OLD_SAVE_STRUCTURE = [
+    "saveblock2_0",//0
+    "unused_0", //1
+    "unused_1", //2
+    "unused_2", //3
+    "unused_3", //4
+    "saveblock1_0", //5
+    "saveblock1_1", //6
+    "saveblock1_2", // 7
+    "saveblock1_3", //8
+    "unused_4", //9
+    "unused_5", //10
+    "unused_6", //11
+    "unused_7", //12
+    "unused_8", //13
+    "unused_9", // 14
+    "unused_10", // 15
+    "unused_11", // 16
+    "unused_12", // 17
+    "unused_13", // 18
+    "storage_0", // 19
+    "storage_1", // 20
+    "storage_2", // 21
+    "storage_3", // 22
+    "storage_4", // 23
+    "storage_5", // 24
+    "storage_6", // 25
+    "storage_7", // 26
+    "storage_8", // 27
+    "storage_9", // 28
+]
+const NEW_SAVE_STRUCTURE = {
+    "saveblock2_0": 0,
+    "unused_0": 1,
+    "unused_1": 2,
+    "unused_2": 3,
+    "unused_3": 4,
+    "saveblock1_0": 5,
+    "saveblock1_1": 6,
+    "saveblock1_2": 7,
+    "saveblock1_3": 8,
+    "unused_4": 9,
+    "unused_5": 10,
+    "unused_6": 11,
+    "storage_0": 12,
+    "storage_1": 13,
+    "storage_2": 14,
+    "storage_3": 15,
+    "storage_4": 16,
+    "storage_5": 17,
+    "storage_6": 18,
+    "storage_7": 19,
+    "storage_8": 20,
+    "storage_9": 21,
+    "unused_7": 22,
+    "unused_8": 23,
+    "unused_9": 24,
+    "unused_10": 25,
+    "unused_11": 26,
+    "unused_12": 27,
+    "unused_13": 28,
+}
+function intervertSaveBlock(bytes, RSave){
+    console.log(RSave)
+    const BLOCK_SIZE = 4096
+    const convertedSave = structuredClone(bytes)
+    for (let i = 0; i < OLD_SAVE_STRUCTURE.length; i++){
+        const oldSector = OLD_SAVE_STRUCTURE[i]
+        const newSector = NEW_SAVE_STRUCTURE[oldSector]
+        const oldOfs = RSave.SB[i]
+        const newOfs = RSave.SB[newSector]
+        console.log(i)
+        console.log(oldSector, newSector, oldOfs, newOfs)
+        const sectorBytes = bytes.slice(oldOfs, oldOfs + BLOCK_SIZE)
+        convertedSave.set(sectorBytes, BLOCK_SIZE)
+    }
 
+    downloadBlob(convertedSave, "ERBeta2.1_converted.sav" ,'application/octet-stream')
+}
+function downloadURL (data, fileName) {
+    var a;
+    a = document.createElement('a');
+    a.href = data;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.style = 'display: none';
+    a.click();
+    a.remove();
+  };
+  
+const downloadBlob = (data, fileName, mimeType) => {
+
+    const blob = new Blob([data], {
+      type: mimeType
+    })
+    const url = window.URL.createObjectURL(blob)
+    downloadURL(url, fileName)
+    setTimeout(() => window.URL.revokeObjectURL(url), 1000)
+} 
+function convertSaveFile(file){
+    if (!file) return
+    if (file.target) file = file.target.files[0]
+    var reader = new FileReader();
+	reader.onload = function (e) {
+		var bytes = new Uint8Array(e.target.result);
+        //size check, for now only emerald.
+        if (bytes.length != 131072 && bytes.length != 131088) {
+            console.warn("Not a pokemon emerald game", bytes.length)
+            return
+        }
+        try {
+            const RSave = getFooterData(0, 114688, bytes)
+            intervertSaveBlock(bytes, RSave)
+            
+        } catch (e) {
+            console.warn(e)
+        }
+    }
+    reader.readAsArrayBuffer(file);
+}
