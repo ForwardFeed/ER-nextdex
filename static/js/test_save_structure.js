@@ -198,14 +198,29 @@ function readParty(bytes, SB1){
 
 function readBox(bytes, PC, nbToRead=30*26){
     const boxedMons = []
+    const DATA_BLOCK = 4084
+    // some pokemon are streched between two saveblocks
+    let strechUnder = 0
     for (let i = 0; i < nbToRead; i++){
+        let mon
         // the first 4 bytes are the active box nb, not valuable here
-        const totalOfs = 4 + (i * 52)
-        const saveblock = Math.floor(totalOfs / 3968)
-        const saveBlockOfs = totalOfs % 3968
-        const mon = readMonBoxed(PC[saveblock] + saveBlockOfs, bytes)
+        const relativeOffset     = 4 + (i * 52)
+        const saveblockNb        = Math.floor(relativeOffset / DATA_BLOCK)
+        const boxRelativeOffset  = relativeOffset % DATA_BLOCK
+        const absoluteOffset     = PC[saveblockNb] + boxRelativeOffset
+        if (boxRelativeOffset + 52 > 3968){
+            strechUnder = 3968 - boxRelativeOffset
+            const strechOver = 52 - strechUnder
+            const strechedUnderBytes    = bytes.slice(absoluteOffset, absoluteOffset + strechUnder)
+            const strechOverBytes       = bytes.slice(PC[saveblockNb + 1], PC[saveblockNb + 1] + strechOver)
+            const reconstitutedBytes = new Uint16Array(strechedUnderBytes.length + strechOverBytes.length)
+            reconstitutedBytes.set(strechedUnderBytes)
+            reconstitutedBytes.set(strechOverBytes, strechedUnderBytes.length)
+            mon = readMonBoxed(0, reconstitutedBytes)
+        } else {
+            mon = readMonBoxed(absoluteOffset , bytes)
+        }
         if (!mon.personality) continue
-        console.log(mon.experience)
         boxedMons.push(mon)
     }
     console.log(boxedMons)
@@ -224,8 +239,8 @@ function getFooterData(startOffset, endOffset, bytes) {
         //console.log(sID, readNbytes(ofs + 0x234, 4, bytes), ofs)
         if (sID == 5){
             SB1 = ofs
-        } else if(sID >= 19){
-            PC[sID - 19] = ofs
+        } else if(sID >= 12){
+            PC[sID - 12] = ofs
         } 
         /*else if (sID >= 5){
             PC[sID - 5] = ofs
