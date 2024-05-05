@@ -208,8 +208,8 @@ function readBox(bytes, PC, nbToRead=30*26){
         const saveblockNb        = Math.floor(relativeOffset / DATA_BLOCK)
         const boxRelativeOffset  = relativeOffset % DATA_BLOCK
         const absoluteOffset     = PC[saveblockNb] + boxRelativeOffset
-        if (boxRelativeOffset + 52 > 3968){
-            strechUnder = 3968 - boxRelativeOffset
+        if (boxRelativeOffset + 52 > DATA_BLOCK){
+            strechUnder = DATA_BLOCK - boxRelativeOffset
             const strechOver = 52 - strechUnder
             const strechedUnderBytes    = bytes.slice(absoluteOffset, absoluteOffset + strechUnder)
             const strechOverBytes       = bytes.slice(PC[saveblockNb + 1], PC[saveblockNb + 1] + strechOver)
