@@ -281,6 +281,7 @@ function parseFile(file){
             const RSave = getFooterData(0, 114688, bytes)
             readParty(bytes, RSave.SB1)
             const storage = readBox(bytes, RSave.PC)
+            console.log(storage)
             
         } catch (e) {
             console.warn(e)
@@ -288,26 +289,27 @@ function parseFile(file){
     }
     reader.readAsArrayBuffer(file);
 };
+
 const OLD_SAVE_STRUCTURE = [
     "saveblock2_0",//0
-    "unused_0", //1
-    "unused_1", //2
-    "unused_2", //3
-    "unused_3", //4
+    "SaveBlock2_1", //1
+    "SaveBlock2_2", //2
+    "SaveBlock2_3", //3
+    "SaveBlock2_4", //4
     "saveblock1_0", //5
     "saveblock1_1", //6
-    "saveblock1_2", // 7
+    "saveblock1_2", //7
     "saveblock1_3", //8
-    "unused_4", //9
-    "unused_5", //10
-    "unused_6", //11
-    "unused_7", //12
-    "unused_8", //13
-    "unused_9", // 14
-    "unused_10", // 15
-    "unused_11", // 16
-    "unused_12", // 17
-    "unused_13", // 18
+    "unused_0", //9
+    "unused_1", //10
+    "unused_2", //11
+    "unused_3", //12
+    "unused_4", //13
+    "unused_5", // 14
+    "unused_6", // 15
+    "unused_7", // 16
+    "unused_8", // 17
+    "unused_9", // 18
     "storage_0", // 19
     "storage_1", // 20
     "storage_2", // 21
@@ -317,21 +319,20 @@ const OLD_SAVE_STRUCTURE = [
     "storage_6", // 25
     "storage_7", // 26
     "storage_8", // 27
-    "storage_9", // 28
 ]
 const NEW_SAVE_STRUCTURE = {
-    "saveblock2_0": 0,
-    "unused_0": 1,
-    "unused_1": 2,
-    "unused_2": 3,
-    "unused_3": 4,
-    "saveblock1_0": 5,
-    "saveblock1_1": 6,
-    "saveblock1_2": 7,
-    "saveblock1_3": 8,
-    "unused_4": 9,
-    "unused_5": 10,
-    "unused_6": 11,
+    "saveblock2_0": 0, // S2
+    "SaveBlock2_1": 1, // S2
+    "saveblock1_0": 2, // S1
+    "saveblock1_1": 3,
+    "saveblock1_2": 4,
+    "saveblock1_3": 5,
+    "unused_8": 6, // actually is saveblock1_4
+    "unused_9": 7, //  actually is saveblock1_5
+    "SaveBlock2_2": 8, // unused
+    "SaveBlock2_3": 9, 
+    "SaveBlock2_4": 10,
+    "unused_0": 11, // unused
     "storage_0": 12,
     "storage_1": 13,
     "storage_2": 14,
@@ -341,31 +342,37 @@ const NEW_SAVE_STRUCTURE = {
     "storage_6": 18,
     "storage_7": 19,
     "storage_8": 20,
-    "storage_9": 21,
-    "unused_7": 22,
-    "unused_8": 23,
-    "unused_9": 24,
-    "unused_10": 25,
-    "unused_11": 26,
-    "unused_12": 27,
-    "unused_13": 28,
+    "unused_1": 21,
+    "unused_2": 22,
+    "unused_3": 23,
+    "unused_4": 24,
+    "unused_5": 25,
+    "unused_6": 26,
+    "unused_7": 27,
 }
+
+function changeSectors(bytes, sectorID){
+    var off = 0 + 4084 //offset footer
+    bytes[4084] = sectorID
+    var sID = readNbytes(off,2,bytes)//Sector ID
+}
+
 function intervertSaveBlock(bytes, RSave){
-    console.log(RSave)
     const BLOCK_SIZE = 4096
     const convertedSave = structuredClone(bytes)
     for (let i = 0; i < OLD_SAVE_STRUCTURE.length; i++){
         const oldSector = OLD_SAVE_STRUCTURE[i]
         const newSector = NEW_SAVE_STRUCTURE[oldSector]
         const oldOfs = RSave.SB[i]
-        const newOfs = RSave.SB[newSector]
-        console.log(i)
-        console.log(oldSector, newSector, oldOfs, newOfs)
-        const sectorBytes = bytes.slice(oldOfs, oldOfs + BLOCK_SIZE)
-        convertedSave.set(sectorBytes, BLOCK_SIZE)
+        const newOfs = newSector * 4096
+        const oldSectorBytes = bytes.slice(oldOfs, oldOfs + BLOCK_SIZE)
+        changeSectors(oldSectorBytes, newSector)
+        convertedSave.set(oldSectorBytes, newOfs)
     }
-
-    downloadBlob(convertedSave, "ERBeta2.1_converted.sav" ,'application/octet-stream')
+    /*RSave = getFooterData(0, 114688, convertedSave)
+    readParty(convertedSave, RSave.SB1)
+    const storage = readBox(convertedSave, RSave.PC)*/
+    downloadBlob(convertedSave, "pokeemerald.sav" ,'application/octet-stream')
 }
 function downloadURL (data, fileName) {
     var a;
