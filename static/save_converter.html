@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ER Save converter</title>
+    <link rel="icon" type="image/x-icon" href="./icons/favicon.webp">
+</head>
+
+<body>
+    <header>
+        <span>Here convert your elite redux save from beta 2.0.1 to beta 2.0.2</span>
+    </header>
+    <main>
+        <div id="convert-box">
+            <div id="convert-instruction">Slide in your .sav, or use this button</div>
+            <label for="convert-input">Select a .sav file:</label>
+            <input type="file" id="convert-input" name="convert-input" accept=".sav"> 
+            <div id="convert-debug" style="background-color: red;"></div>
+            <div id="convert-sucess" style="background-color: rgb(55, 110, 192);"></div>
+        </div>
+    </main>
+    <footer>
+        <span>We could have made the save file compatible but
+            because save sectors were playing twister it was too infuriating to my eyes.
+            😔 I'm sorry Tuna, but you will have to tell people to use this tool for one month 
+            because I cling to valueless details. 😔</span>
+    </footer>
+    <script src="./vendor/jquery3.7.1.min.js"></script>
+    <script type="module" src="js/convert_save.js"></script>
+</body>
+
+<style>
+    @font-face {
+        font-family: 'basis33';
+        src: url(font/basis33.ttf);
+    }
+    
+    html, body {
+        font-size: 2vw;
+        font-family: basis33;
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    header {
+        display: flex;
+        background-color: rgb(25, 126, 58);
+        font-size: 1.5em;
+        width: 100%;
+    }
+    span {
+        margin: auto;
+    }
+    main{
+        background-color: rgb(26, 160, 71);
+        flex: 1 1 auto;
+        display: flex;
+    }
+    #convert-box{
+        padding: 1em;
+        border-radius: 0.3em;
+        border-style: solid;
+        border-width: 0.3em;
+        border-color: rgb(15, 81, 180);
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+    }
+    footer{
+        background-color: rgb(25, 126, 58);
+        height: 4em;
+        font-size: 0.5em;
+        display: flex;
+        padding: 1em;
+    }
+</style>
+
+</html>

@@ -2,16 +2,6 @@ document.addEventListener("DOMContentLoaded", function(){
     setupDrop()
 });
 
-
-// LITTLE ENDIAN !
-function readNbytes(bof, nBytes, bytes){
-    var resBytes = bytes[bof];
-    for (var i = 1; i< nBytes; i++){
-        resBytes = resBytes | (bytes[bof + i] << i*8)
-    }
-    return (resBytes >>> 0)
-}
-
 function setupDrop(){
     let timeoutDropper
     $(document.body).on('dragover', function(ev){
@@ -46,6 +36,15 @@ function setupDrop(){
         input.click()
     })*/
 }
+// LITTLE ENDIAN !
+function readNbytes(bof, nBytes, bytes){
+    var resBytes = bytes[bof];
+    for (var i = 1; i< nBytes; i++){
+        resBytes = resBytes | (bytes[bof + i] << i*8)
+    }
+    return (resBytes >>> 0)
+}
+
 /**
  * 
  * @param {number} int // number to apply
