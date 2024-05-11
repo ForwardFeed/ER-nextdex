@@ -130,8 +130,11 @@ function setDynamicalRowOfSettings(name, settingsList, onchange){
     rowCore.append(frag)
     $('#settings-main').after(rowCore)
 }
-export function getHintInteractibilityClass(){
-    return settings.hintSelectible ? "filter-interactible" : "filter-interactible-disable"
+export function getHintInteractibilityClass(isForRegular = true){
+    if (!isForRegular){ // it's for filter then, the main use of this function
+        return settings.hintSelectible ? "filter-interactible" : "filter-interactible-disable"
+    }
+    return settings.hintSelectible ? "interactible" : "interactible-disable"
 }
 export function setupSettings(){
     $('#settings-btn').on('click', function(){
@@ -166,8 +169,10 @@ export function setupSettings(){
     if (settings.discordFormat) $('#enable-export-discord').attr('checked', true)
     function setHintInteractible(){
         const isEnabled = settings.hintSelectible
-        const targetClass = isEnabled ? ".filter-interactible-disable" : ".filter-interactible"
-        $(targetClass).toggleClass('filter-interactible-disable', !isEnabled).toggleClass('filter-interactible', isEnabled)
+        const targetClass = isEnabled ? ".interactible-disable" : ".interactible"
+        $(targetClass).toggleClass('interactible-disable', !isEnabled).toggleClass('interactible', isEnabled)
+        const targetClassFilter = isEnabled ? ".filter-interactible-disable" : ".filter-interactible"
+        $(targetClassFilter).toggleClass('filter-interactible-disable', !isEnabled).toggleClass('filter-interactible', isEnabled)
     }
     $('#enable-interactible').on('change', ()=>{
         settings.hintSelectible = true

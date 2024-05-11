@@ -385,11 +385,6 @@ span{
     box-sizing: border-box;
     border: 0.15em solid var(--filter-interactible);
 }
-
-.small-select:hover, .big-select:hover{
-    box-sizing: border-box;
-    border: 2px solid var(--interactible);
-}
 .species-abi-inn{
     display: flex;
     flex-direction: column;

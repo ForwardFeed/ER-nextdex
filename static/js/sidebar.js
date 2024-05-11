@@ -1,6 +1,7 @@
 import { search, updateMainSearchKey} from "./search.js"
 import { activateSearch } from "./filters.js"
 import { capitalizeFirstLetter } from "./utils.js"
+import { getHintInteractibilityClass } from "./settings.js"
 
 export function setupPanels(){
     // if modified sync it with "search.js > search > panelUpdatesTable" variable
@@ -23,8 +24,8 @@ export function setupPanels(){
                 // modify the button inner text
                 const small = btn.find('.small-select')
                 const big = btn.find('.big-select')
-                small[0].className = "big-select"
-                big[0].className = "small-select"
+                small[0].className = "big-select " + getHintInteractibilityClass(true)
+                big[0].className = "small-select " + getHintInteractibilityClass(true)
                 small.insertBefore(big)
                 // changes the data panel
                 $(btnPanel[2]).toggle()

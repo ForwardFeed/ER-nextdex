@@ -255,10 +255,6 @@ input[type="text"] {
     width: 5em;
     display: flex;
 }
-#to-filter:hover{
-    box-sizing: border-box;
-    border: 0.3em solid var(--filter-interactible);
-}
 
 span{
     margin: auto;
