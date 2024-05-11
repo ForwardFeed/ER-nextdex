@@ -3,7 +3,7 @@ import { loadFont } from "./fonts.js"
 
 const appName = "ERdex"
 const appSettings = appName + "_settings"
-const settingsVersion = "5" //when changed it will init newly added elements from default to the current settings
+const settingsVersion = "7" //when changed it will init newly added elements from default to the current settings
 // and this automatically to prevent some undefined behavior
 const themeList =  [
     "blueish",
@@ -26,7 +26,8 @@ const defaultSettings = {
     storageEnable: true,
     monotype: false,
     discordFormat: true,
-    font: "basis33"
+    font: "basis33",
+    hintSelectible: true
 }
 
 export function initAppSettings(){
@@ -129,7 +130,9 @@ function setDynamicalRowOfSettings(name, settingsList, onchange){
     rowCore.append(frag)
     $('#settings-main').after(rowCore)
 }
-
+export function getHintInteractibilityClass(){
+    return settings.hintSelectible ? "filter-interactible" : "filter-interactible-disable"
+}
 export function setupSettings(){
     $('#settings-btn').on('click', function(){
         $('#settings-frame').toggle()
@@ -160,6 +163,25 @@ export function setupSettings(){
         settings.discordFormat = false
         saveSettings()
     })
+    if (settings.discordFormat) $('#enable-export-discord').attr('checked', true)
+    function setHintInteractible(){
+        const isEnabled = settings.hintSelectible
+        const targetClass = isEnabled ? ".filter-interactible-disable" : ".filter-interactible"
+        console.log(targetClass, isEnabled, $(targetClass))
+        $(targetClass).toggleClass('filter-interactible-disable', !isEnabled).toggleClass('filter-interactible', isEnabled)
+    }
+    $('#enable-interactible').on('change', ()=>{
+        settings.hintSelectible = true
+        setHintInteractible()
+        saveSettings()
+    })
+    $('#disable-interactible').on('change', ()=>{
+        settings.hintSelectible = false
+        setHintInteractible()
+        saveSettings()
+    })
+    if (settings.hintSelectible) $('#enable-interactible').attr('checked', true)
+    setHintInteractible()
     setDynamicalRowOfSettings("font", fontList, (font)=>{
         settings.theme = font
         saveSettings()

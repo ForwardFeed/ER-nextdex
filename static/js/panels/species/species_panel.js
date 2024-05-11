@@ -8,7 +8,7 @@ import { createInformationWindow, removeInformationWindow } from "../../window.j
 import { getDefensiveCoverage, abilitiesToAddedType} from "../../weakness.js"
 import { nodeLists } from "../../hydrate.js"
 import { cubicRadial } from "../../radial.js"
-import { settings } from "../../settings.js"
+import { getHintInteractibilityClass, settings } from "../../settings.js"
 import { feedCommunitySets } from "./community_sets.js"
 
 export let currentSpecieID = 1
@@ -290,7 +290,7 @@ function setAbilities(abilities, specie) {
                 return undefined
             }
             const abi = gameData.abilities[abilities[i]]
-            const name = e("div", "species-ability filter-interactible", abi.name)
+            const name = e("div", "species-ability " + getHintInteractibilityClass(), abi.name)
             addTooltip(name, abi.desc)
             name.onclick = () => {
                 $('#species-abilities .sel-active').removeClass('sel-active').addClass('sel-n-active')
@@ -312,7 +312,7 @@ function setInnates(innates) {
                 return
             }
             const inn = gameData.abilities[innates[i]]
-            const name = e("div", "species-innate filter-interactible", inn.name)
+            const name = e("div", "species-innate " + getHintInteractibilityClass(), inn.name)
             longClickToFilter(0, name, "ability", () => { return inn.name }, 0)
             addTooltip(name, inn.desc)
             return name

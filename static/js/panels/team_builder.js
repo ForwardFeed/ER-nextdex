@@ -4,7 +4,7 @@ import { createPokemon, getTextNature } from "./trainers_panel.js";
 import { getSpritesURL, getSpritesShinyURL } from "./species/species_panel.js";
 import { createInformationWindow } from "../window.js";
 import { cubicRadial } from "../radial.js";
-import { saveToLocalstorage, fetchFromLocalstorage } from "../settings.js";
+import { saveToLocalstorage, fetchFromLocalstorage, getHintInteractibilityClass } from "../settings.js";
 import { getDefensiveCoverage, getMoveEffectiveness } from "../weakness.js"
 import { longClickToFilter } from "../filters.js";
 import { itemList } from "../hydrate.js";
@@ -282,7 +282,7 @@ function updateTeamWeaknesses(){
         const colRow = e('div', `builder-type-col builder-type-strength-${typeStrength}`)
         const colData = data.map((data, indexData)=>{
             if (!indexData){
-                const typeNode = e('div', `builder-type ${type.toLowerCase()} filter-interactible`, type.substring(0, 6), {
+                const typeNode = e('div', `builder-type ${type.toLowerCase()} ${getHintInteractibilityClass()}`, type.substring(0, 6), {
                     onclick: (ev) => {
                         ev?.stopPropagation()
                         $(colRow).find('.builder-nb-weakness').toggle()

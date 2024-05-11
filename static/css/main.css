@@ -385,11 +385,7 @@ span{
     box-sizing: border-box;
     border: 0.15em solid var(--filter-interactible);
 }
-#species-front:hover, #species-coverage:hover, #species-basestats:hover, #moves-name:hover, .side-btn:hover{
-     /* box-shadow: inset 2px 0px 2px var(--font-color);*/
-    box-sizing: border-box;
-    border: 0.15em solid var(--interactible);
-}
+
 .small-select:hover, .big-select:hover{
     box-sizing: border-box;
     border: 2px solid var(--interactible);

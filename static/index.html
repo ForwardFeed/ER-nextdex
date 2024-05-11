@@ -64,7 +64,7 @@
                 </div>
                 <div id="species-data" class="data-data">
                     <div class="species-top">
-                        <img id="species-front">
+                        <img id="species-front" class="filter-interactible">
                         <div class="species-abi-inn">
                             <div class="abi-inn-info">
                                 Abilities
@@ -81,7 +81,7 @@
 
                             </div>
                         </div>
-                        <div id="species-basestats">
+                        <div id="species-basestats" class="filter-interactible">
                             <div id="BHP" class="stat-row">
                                 <span class="stat-name">HP</span>
                                 <span class="stat-num">0</span>
@@ -118,7 +118,7 @@
                                 <div id="BSTBar" class="stat-bar"></div>
                             </div>
                         </div>
-                        <div id="species-coverage" style="display: none;">
+                        <div id="species-coverage" class="filter-interactible" style="display: none;">
 
                         </div>
                     </div>
@@ -287,7 +287,7 @@
                     </div>
                     <div class="moves-bot">
                         <div class="moves-bot-info">
-                            <div id="moves-name"></div>
+                            <div id="moves-name" class="filter-interactible"></div>
                             <div id="moves-internal-id"></div>
                             <div id="moves-types1"><span></span></div>
                             <div id="moves-types2"><span></span></div>
@@ -354,19 +354,19 @@
             </div>
         </main>
         <aside>
-            <div class="side-btn btn-active" id="btn-species">
+            <div class="side-btn btn-active filter-interactible" id="btn-species">
                 <span class="big-select">Species</span>
                 <span class="small-select">Builder</span>
             </div>
-            <div class="side-btn btn-n-active" id="btn-abis">
+            <div class="side-btn btn-n-active filter-interactible" id="btn-abis">
                 <span>
                     Abilities
                 </span>
             </div>
-            <div class="side-btn btn-n-active" id="btn-moves">
+            <div class="side-btn btn-n-active filter-interactible" id="btn-moves">
                 <span>Moves</span>
             </div>
-            <div class="side-btn btn-n-active" id="btn-locations">
+            <div class="side-btn btn-n-active filter-interactible" id="btn-locations">
                 <span>Locations</span>
             </div>
             <div class="side-btn btn-n-active" id="btn-trainers">
@@ -482,6 +482,13 @@
             <input type="radio" name="settings-export-discord" id="disable-export-discord" checked>
             <label for="enable-export-discord">Discord embed</label>
             <input type="radio" name="settings-export-discord" id="enable-export-discord">
+        </div>
+        <div class="settings-row">
+            <span>Hover hint for interactible presence: </span>
+            <label for="disable-interactible">Disable</label>
+            <input type="radio" name="settings-interactible" id="disable-interactible" checked>
+            <label for="enable-interactible">Enable</label>
+            <input type="radio" name="settings-interactible" id="enable-interactible">
         </div>
         <hr>
         <button id="insanity">ACTIVATE INSANITY WARNING EPILEPSY</button>
