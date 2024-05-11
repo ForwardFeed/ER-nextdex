@@ -167,7 +167,6 @@ export function setupSettings(){
     function setHintInteractible(){
         const isEnabled = settings.hintSelectible
         const targetClass = isEnabled ? ".filter-interactible-disable" : ".filter-interactible"
-        console.log(targetClass, isEnabled, $(targetClass))
         $(targetClass).toggleClass('filter-interactible-disable', !isEnabled).toggleClass('filter-interactible', isEnabled)
     }
     $('#enable-interactible').on('change', ()=>{
