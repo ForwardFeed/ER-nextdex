@@ -282,7 +282,7 @@ function updateTeamWeaknesses(){
         const colRow = e('div', `builder-type-col builder-type-strength-${typeStrength}`)
         const colData = data.map((data, indexData)=>{
             if (!indexData){
-                const typeNode = e('div', `builder-type ${type.toLowerCase()}`, type.substring(0, 6), {
+                const typeNode = e('div', `builder-type ${type.toLowerCase()} filter-interactible`, type.substring(0, 6), {
                     onclick: (ev) => {
                         ev?.stopPropagation()
                         $(colRow).find('.builder-nb-weakness').toggle()

@@ -32,7 +32,7 @@ export function feedPanelMoves(moveID) {
 function setTypes(types) {
     for (let i = 0; i < 2; i++) {
         const type = gameData.typeT[types[i]] || ""
-        $(`#moves-types${i + 1}`).attr("class", `type ${type.toLowerCase()}`)
+        $(`#moves-types${i + 1}`).attr("class", `type ${type.toLowerCase()} filter-interactible`)
             .children().text(type)
     }
 }
@@ -98,7 +98,7 @@ function listMoveFlags(flags, core, longClickCallback = ()=>{}) {
     for (const flag of flags) {
         const descFlag = flagMap[flag]
         if (!descFlag) continue
-        const node = e("div", undefined, descFlag)
+        const node = e("div", "filter-interactible", descFlag)
         longClickToFilter(2, node, "move-effect", () => {return flag}, longClickCallback)
         frag.append(node)
     }
@@ -106,7 +106,7 @@ function listMoveFlags(flags, core, longClickCallback = ()=>{}) {
     for (const noFlag of noFlagArray) {
         if (flags.indexOf(noFlag) != -1) continue
         const descFlag = NoFlagMap[noFlag]
-        const node = e("div", undefined, descFlag)
+        const node = e("div", "filter-interactible", descFlag)
         longClickToFilter(2, node, "move-effect", () => {return descFlag}, longClickCallback)
         frag.append(node)
     }
@@ -163,7 +163,7 @@ export function moveOverlay(moveId, interactive=true) {
     const move = gameData.moves[moveId]
     const core = e("div", "move-overlay")
     const power = e("div", "move-overlay-power")
-    const powerTitle = e("div", "move-overlay-top", move.name)
+    const powerTitle = e("div", "move-overlay-top filter-interactible", move.name)
     
     
     const powerNumber = e("div", "move-overlay-fill", move.pwr || "?")
@@ -175,12 +175,12 @@ export function moveOverlay(moveId, interactive=true) {
     const otherInfos = e("div", "move-overlay-other")
     const typeDiv = e("div", "move-overlay-types")
     const type1 = gameData.typeT[move.types[0]]
-    const type1Div = e("div", `move-overlay-type ${type1.toLowerCase()}`, type1)
+    const type1Div = e("div", `move-overlay-type ${type1.toLowerCase()} filter-interactible`, type1)
     
     const type2 = move.types[1] ? gameData.typeT[move.types[1]] : ""
-    const type2Div = e("div", `move-overlay-type ${type2.toLowerCase()}`, type2)
+    const type2Div = e("div", `move-overlay-type ${type2.toLowerCase()} filter-interactible`, type2)
     
-    const splitDiv = e('div')
+    const splitDiv = e('div', 'filter-interactible')
     const split = e("img", "move-overlay-img pixelated")
     split.src = `./icons/${gameData.splitT[move.split]}.png`
     

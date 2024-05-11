@@ -16,4 +16,6 @@
     --headerBGL: linear-gradient(0deg, rgb(28, 64, 105)30%, rgb(81, 96, 100) 100%);
     --font-color: white;
     --positive: #1fc990;
+    --interactible: rgba(35, 185, 147, 0.295);
+    --filter-interactible: rgba(90, 32, 197, 0.295);
 }

@@ -249,14 +249,15 @@ input[type="text"] {
     display: none!important;
 }
 #to-filter{
-    height: fit-content;
+    height: 100%;
     margin: auto;
     position: relative;
     width: 5em;
+    display: flex;
 }
 #to-filter:hover{
-    background-color: var(--btnHover);
-
+    box-sizing: border-box;
+    border: 0.3em solid var(--filter-interactible);
 }
 
 span{
