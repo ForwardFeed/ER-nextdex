@@ -17,4 +17,6 @@
     --font-color: black;
     --filter: contrast(1000%) saturate(900%);
     --positive: #0fd8c7;
+    --interactible: rgb(209, 69, 4);
+    --filter-interactible: rgba(216, 169, 15, 0.884);
 }

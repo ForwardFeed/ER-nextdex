@@ -17,4 +17,6 @@
     --font-color: #a9ff83;
     --filter: saturate(140%)
     --positive: #1fc990;
+    --interactible: rgba(7, 90, 39, 0.884);
+    --filter-interactible: rgba(172, 182, 80, 0.815);
 }
