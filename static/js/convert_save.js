@@ -29,7 +29,6 @@ function setupDrop(){
     $('#convert-input').on('change', function(ev){
         console.log($(this)[0].files)
         for (const file of $(this)[0].files){
-            console.log(file)
             fileName = file.name
             convertSaveFile(file)
         }
