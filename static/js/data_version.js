@@ -14,6 +14,7 @@ const LATEST_DATA_VERSION = "40"/*%%VERSION%%*/
 const allVersions = [
     "1.6.1",
     "Beta2.0",
+    "Beta2.1",
 ]
 
 const defaultVersion = "1.6.1"
