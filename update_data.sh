@@ -32,6 +32,8 @@ version=$(grep "%%VERSION%%" static/js/data_version.js | grep -Eo '"[^"]+"' | gr
 next_version=$((version + 1))
 sed -i "s/const LATEST_DATA_VERSION = \"${version}\"/const LATEST_DATA_VERSION = \"${next_version}\"/" static/js/data_version.js
 
+# update the comparify if you add a completely new datasets
+# npm run run -- -o Beta2.1 -rd -c "out/gameDataVVanilla.json static/js/data/gameDataV1.6.1.json static/js/data/gameDataVBeta2.0.json static/js/data/gameDataVBeta2.1.json"
 
 # to calculate the whole data size parsed
 # it's just because i thought it would be funny

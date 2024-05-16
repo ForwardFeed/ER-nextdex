@@ -332,8 +332,8 @@ const NEW_SAVE_STRUCTURE = {
     "SaveBlock2_3": 9, 
     "SaveBlock2_4": 10,
     "unused_0": 11, // unused
-    "storage_0": 12,
-    "storage_1": 13,
+    "storage_1": 12,
+    "storage_0": 13,
     "storage_2": 14,
     "storage_3": 15,
     "storage_4": 16,
@@ -351,9 +351,7 @@ const NEW_SAVE_STRUCTURE = {
 }
 
 function changeSectors(bytes, sectorID){
-    var off = 0 + 4084 //offset footer
     bytes[4084] = sectorID
-    var sID = readNbytes(off,2,bytes)//Sector ID
 }
 
 function intervertSaveBlock(bytes, RSave){

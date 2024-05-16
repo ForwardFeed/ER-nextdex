@@ -117,19 +117,19 @@ const NEW_SAVE_STRUCTURE = {
     "saveblock1_3": 5,
     "unused_8": 6, // actually is saveblock1_4
     "unused_9": 7, //  actually is saveblock1_5
-    "SaveBlock2_2": 8, // unused
-    "SaveBlock2_3": 9, 
-    "SaveBlock2_4": 10,
-    "unused_0": 11, // unused
-    "storage_0": 12,
-    "storage_1": 13,
-    "storage_2": 14,
-    "storage_3": 15,
-    "storage_4": 16,
-    "storage_5": 17,
-    "storage_6": 18,
-    "storage_7": 19,
-    "storage_8": 20,
+    "storage_0": 8,
+    "storage_1": 9,
+    "storage_2": 10,
+    "storage_3": 11,
+    "storage_4": 12,
+    "storage_5": 13,
+    "storage_6": 14,
+    "storage_7": 15,
+    "storage_8": 16,
+    "SaveBlock2_2": 17, // unused
+    "SaveBlock2_3": 18, 
+    "SaveBlock2_4": 19,
+    "unused_0": 20, // unused
     "unused_1": 21,
     "unused_2": 22,
     "unused_3": 23,
