@@ -234,7 +234,7 @@ span{
     padding-right: 0.5em;
 }
 
-#moves-split, #species-front, .pixelated, .trainer-poke-sprite {
+#moves-split, #species-front, .pixelated, .trainer-poke-sprite, #settings-btn{
     image-rendering:optimizeSpeed;             /* Legal fallback */
     image-rendering:-moz-crisp-edges;          /* Firefox        */
     image-rendering:-o-crisp-edges;            /* Opera          */

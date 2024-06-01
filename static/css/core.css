@@ -137,19 +137,12 @@ main{
     box-sizing: border-box;
 }
 
-#filter-icon, #settings-btn {
-    width: 5vh;
-    height: 5vh;
-    padding: 2vh;
-}
-
 #search-keys:hover{
     background-color: var(--selHover);
 }
 
 
 #filter-icon:hover,
-#settings-btn:hover,
 .btn-n-active:hover {
     background-color: var(--btnHover);
 }
@@ -284,6 +277,15 @@ span{
         height: 100%;
         min-width: 12vmax;
     }
+    #filter-icon{
+        width: 5vh;
+        height: 5vh;
+        padding: 2vh;
+    }
+    #settings-btn {
+        width: 5vh;
+        height: 5vh;
+    }
 }
 
 @media (orientation: portrait) {
@@ -317,6 +319,15 @@ span{
         overflow: auto;
         position: sticky;
         bottom: 0;
+    }
+    #filter-icon{
+        width: 5vw;
+        height: 5vw;
+        padding: 2vw;
+    }
+    #settings-btn {
+        width: 5vw;
+        height: 5vw;
     }
 }
 

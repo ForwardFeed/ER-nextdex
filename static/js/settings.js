@@ -140,6 +140,12 @@ export function setupSettings(){
     $('#settings-btn').on('click', function(){
         $('#settings-frame').toggle()
     })
+    $('#settings-btn').on('mouseover', function(){
+        $(this).attr('src', './icons/settings_hover.png')
+    })
+    $('#settings-btn').on('mouseleave', function(){
+        $(this).attr('src', './icons/settings.png')
+    })
     $('#disable-storage').on('change', ()=>{
         settings.storageEnable = false
         saveSettings()
