@@ -252,14 +252,16 @@ export function buildMovesPrefixTrees(){
 export const queryMapMoves = {
     "name": (queryData, move) => {
         const moveName = move.name.toLowerCase()
-        if (AisInB(queryData, moveName)) {
+        const desc = move.lDesc.toLowerCase()
+        if (AisInB(queryData, moveName) || AisInB(queryData, desc)) {
             return [moveName === queryData, moveName, true]
         }
         return false
     },
     "move": (queryData, move) => {
         const moveName = move.name.toLowerCase()
-        if (AisInB(queryData, moveName)) {
+        const desc = move.lDesc.toLowerCase()
+        if (AisInB(queryData, moveName) || AisInB(queryData, desc)) {
             return [moveName === queryData, moveName, true]
         }
         return false
