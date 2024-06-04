@@ -1,5 +1,5 @@
 import { gameData } from "./data_version.js";
-import { nodeLists } from "./hydrate.js";
+import { nodeLists } from "./hydrate/hydrate.js";
 
 export function addTooltip(node, description) {
 	const tooltip = document.createElement("div");

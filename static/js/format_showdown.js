@@ -2,7 +2,7 @@ import { e, JSHAC } from "./utils.js"
 import { createInformationWindow, removeInformationWindow } from "./window.js"
 import { setFullTeam, teamData } from "./panels/team_builder.js"
 import { gameData } from "./data_version.js"
-import { itemList } from "./hydrate.js"
+import { itemList } from "./hydrate/hydrate.js"
 import { settings } from "./settings.js"
 
 

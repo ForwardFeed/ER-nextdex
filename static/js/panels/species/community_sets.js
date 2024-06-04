@@ -7,7 +7,7 @@ import { cubicRadial } from "../../radial.js";
 import { overlayList, editionStats, overlayEditorAbilities, enterToClose} from "../team_builder.js";
 import { fetchFromLocalstorage, saveToLocalstorage } from "../../settings.js";
 import { exportDataShowdownFormat, parseShowdownFormat } from "../../format_showdown.js";
-import { itemList } from "../../hydrate.js";
+import { itemList } from "../../hydrate/hydrate.js";
 import { movePicker, listPicker } from "../../pickers.js";
 
 /** @type {Map<string, pokeData[]>} */

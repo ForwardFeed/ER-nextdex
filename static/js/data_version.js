@@ -1,4 +1,4 @@
-import { hydrate } from './hydrate.js'
+import { hydrate } from './hydrate/hydrate.js'
 import { saveToLocalstorage, fetchFromLocalstorage } from './settings.js';
 /**
  * To select which version of the game data to have

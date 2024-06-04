@@ -7,7 +7,7 @@ import { cubicRadial } from "../radial.js";
 import { saveToLocalstorage, fetchFromLocalstorage, getHintInteractibilityClass } from "../settings.js";
 import { getDefensiveCoverage, getMoveEffectiveness } from "../weakness.js"
 import { longClickToFilter } from "../filters.js";
-import { itemList } from "../hydrate.js";
+import { itemList } from "../hydrate/hydrate.js";
 import { movePicker, listPicker} from "../pickers.js";
 
 const saveKeysPokemon = [
