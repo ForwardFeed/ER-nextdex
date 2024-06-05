@@ -16,6 +16,8 @@ main{
     display: flex;
     flex-grow: 1;
     min-height: 0;
+    max-width: calc(100% - 12vmax);
+    overflow: scroll;
 }
 ::-webkit-scrollbar {
     -webkit-appearance: none;

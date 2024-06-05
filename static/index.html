@@ -59,184 +59,187 @@
     </div>
     <div id="non-header">
         <main>
-            <div id="panel-list-species" class="panel" style="display: none;">
-
-            </div>
             <div id="panel-species" class="panel">
-                <div id="species-list" class="data-list">
+                <div id="panel-block-species" class="panel">
+                    <div id="species-list" class="data-list">
+                    </div>
+                    <div id="species-data" class="data-data">
+                        <div class="species-top">
+                            <img id="species-front" class="interactible">
+                            <div class="species-abi-inn">
+                                <div class="abi-inn-info">
+                                    Abilities
+                                </div>
+                                <div id="species-abilities">
+    
+                                </div>
+                            </div>
+                            <div class="species-abi-inn">
+                                <div class="abi-inn-info">
+                                    Innates
+                                </div>
+                                <div id="species-innates">
+    
+                                </div>
+                            </div>
+                            <div id="species-basestats" class="interactible">
+                                <div id="BHP" class="stat-row">
+                                    <span class="stat-name">HP</span>
+                                    <span class="stat-num">0</span>
+                                    <div id="BHPBar" class="stat-bar"></div>
+                                </div>
+                                <div id="BAT" class="stat-row">
+                                    <span class="stat-name">Atk</span>
+                                    <span class="stat-num">0</span>
+                                    <div id="BATBar" class="stat-bar"></div>
+                                </div>
+                                <div id="BDF" class="stat-row">
+                                    <span class="stat-name">Def</span>
+                                    <span class="stat-num">0</span>
+                                    <div id="BDFBar" class="stat-bar"></div>
+                                </div>
+                                <div id="BSA" class="stat-row">
+                                    <span class="stat-name">SpA</span>
+                                    <span class="stat-num">0</span>
+                                    <div id="BSABar" class="stat-bar"></div>
+                                </div>
+                                <div id="BSD" class="stat-row">
+                                    <span class="stat-name">SpD</span>
+                                    <span class="stat-num">0</span>
+                                    <div id="BSDBar" class="stat-bar"></div>
+                                </div>
+                                <div id="BSP" class="stat-row">
+                                    <span class="stat-name">Spe</span>
+                                    <span class="stat-num">0</span>
+                                    <div id="BSPBar" class="stat-bar"></div>
+                                </div>
+                                <div id="BST" class="stat-row">
+                                    <span class="stat-name">BST</span>
+                                    <span class="stat-num">0</span>
+                                    <div id="BSTBar" class="stat-bar"></div>
+                                </div>
+                            </div>
+                            <div id="species-coverage" class="interactible" style="display: none;">
+    
+                            </div>
+                        </div>
+                        <div class="species-mid">
+                            <div class="species-mid-stats">
+                                <div id="species-name"></div>
+                                <div id="species-id"></div>
+                                <div id="species-types">
+                                    <div class="type filter-interactible"><span></span></div>
+                                    <div class="type filter-interactible"><span></span></div>
+                                    <div class="type filter-interactible"><span></span></div>
+                                </div>
+                            </div>
+                            <div class="species-switch">
+                                <div id="switch-moves" class="btn sel-active">Moves</div>
+                                <div id="switch-evos-locs" class="btn sel-n-active">Evo & Loca</div>
+                                <div id="switch-misc" class="btn sel-n-active">Misc</div>
+                                <div id="switch-sets" class="btn sel-n-active">Sets</div>
+                            </div>
+                        </div>
+                        <div id="species-bot" class="species-bot">
+                            <div id="species-moves" class="species-sub-pannel active-sub-panel">
+                                <div class="species-bot-row" id="learnset-title">
+                                    <div class="species-moves-title">
+                                        Learn Sets
+                                    </div>
+                                    <div class="species-move-list" id="learnset">
+    
+                                    </div>
+                                </div>
+                                <div class="species-bot-row" id="tmhm-title">
+                                    <div class="species-moves-title">
+                                        TM/HM
+                                    </div>
+                                    <div class="species-move-list" id="tmhm">
+    
+                                    </div>
+                                </div>
+                                <div class="species-bot-row"  id="tutor-title">
+                                    <div class="species-moves-title">
+                                        Tutor moves
+                                    </div>
+                                    <div class="species-move-list" id="tutor">
+    
+                                    </div>
+                                </div>
+                                <div class="species-bot-row" id="eggpreevo-title">
+                                    <div class="species-moves-title" id="eggmoves-title">
+                                        Egg Moves
+                                    </div>
+                                    <div class="species-move-list" id="eggmoves">
+    
+                                    </div>
+                                    <div class="species-moves-title" id="preevomoves-title">
+                                        Pre Evo Moves
+                                    </div>
+                                    <div class="species-move-list" id="preevomoves">
+    
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="species-evos-locs" class="species-sub-pannel" style="display: none;">
+                                <div id="species-evos" class="species-sub-half-pannel"></div>
+                                <div id="species-locations" class="species-sub-half-pannel"></div>
+                            </div>
+                            <div id="species-misc" class="species-sub-pannel" style="display: none;">
+                                <div id="species-desc">
+    
+                                </div>
+                                <div class="species-misc-row">
+                                    <div id="species-hw" class="species-misc-col">
+                                        <span id="species-height"></span>
+                                        <span id="species-weight"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="species-sets" class="species-sub-pannel" style="display: none;">
+                                <div class="species-sets-block">
+                                </div>
+                                <div class="species-sets-block">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="builder-data" class="data-data" style="display: none;">
+                        <div class="builder-bot">
+                            <div class="builder-mon"></div>
+                            <div class="builder-mon"></div>
+                            <div class="builder-mon"></div>
+                            <div class="builder-mon"></div>
+                            <div class="builder-mon"></div>
+                            <div class="builder-mon"></div>
+                            <div class="builder-tools">
+                                <div class="bi-btn-row">
+                                    <div id="defensive-cov" class="sel-active"><span>Defensive Coverage</span></div>
+                                    <div id="offensive-cov" class="sel-n-active"><span>Offensive Coverage</span></div>
+                                </div>
+                                <div id="builder-def-cov">
+                                    
+                                </div>
+                                <div id="builder-off-cov" style="display: none;">
+                                    <span>click to see which pokemon has a super effective move against</span>
+                                    <div id="builder-off-types" class="builder-type-row">
+    
+                                    </div>
+                                </div>
+                                <div id="builder-screenshot" class="btn btn-hover">
+                                    <span>Team as a screenshot</span>
+                                </div>
+                                <div id="builder-import" class="btn btn-hover">
+                                    <span>Import / Export</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div id="species-data" class="data-data">
-                    <div class="species-top">
-                        <img id="species-front" class="interactible">
-                        <div class="species-abi-inn">
-                            <div class="abi-inn-info">
-                                Abilities
-                            </div>
-                            <div id="species-abilities">
+                <div id="panel-list-species" class="panel" style="display: none;">
 
-                            </div>
-                        </div>
-                        <div class="species-abi-inn">
-                            <div class="abi-inn-info">
-                                Innates
-                            </div>
-                            <div id="species-innates">
-
-                            </div>
-                        </div>
-                        <div id="species-basestats" class="interactible">
-                            <div id="BHP" class="stat-row">
-                                <span class="stat-name">HP</span>
-                                <span class="stat-num">0</span>
-                                <div id="BHPBar" class="stat-bar"></div>
-                            </div>
-                            <div id="BAT" class="stat-row">
-                                <span class="stat-name">Atk</span>
-                                <span class="stat-num">0</span>
-                                <div id="BATBar" class="stat-bar"></div>
-                            </div>
-                            <div id="BDF" class="stat-row">
-                                <span class="stat-name">Def</span>
-                                <span class="stat-num">0</span>
-                                <div id="BDFBar" class="stat-bar"></div>
-                            </div>
-                            <div id="BSA" class="stat-row">
-                                <span class="stat-name">SpA</span>
-                                <span class="stat-num">0</span>
-                                <div id="BSABar" class="stat-bar"></div>
-                            </div>
-                            <div id="BSD" class="stat-row">
-                                <span class="stat-name">SpD</span>
-                                <span class="stat-num">0</span>
-                                <div id="BSDBar" class="stat-bar"></div>
-                            </div>
-                            <div id="BSP" class="stat-row">
-                                <span class="stat-name">Spe</span>
-                                <span class="stat-num">0</span>
-                                <div id="BSPBar" class="stat-bar"></div>
-                            </div>
-                            <div id="BST" class="stat-row">
-                                <span class="stat-name">BST</span>
-                                <span class="stat-num">0</span>
-                                <div id="BSTBar" class="stat-bar"></div>
-                            </div>
-                        </div>
-                        <div id="species-coverage" class="interactible" style="display: none;">
-
-                        </div>
-                    </div>
-                    <div class="species-mid">
-                        <div class="species-mid-stats">
-                            <div id="species-name"></div>
-                            <div id="species-id"></div>
-                            <div id="species-types">
-                                <div class="type filter-interactible"><span></span></div>
-                                <div class="type filter-interactible"><span></span></div>
-                                <div class="type filter-interactible"><span></span></div>
-                            </div>
-                        </div>
-                        <div class="species-switch">
-                            <div id="switch-moves" class="btn sel-active">Moves</div>
-                            <div id="switch-evos-locs" class="btn sel-n-active">Evo & Loca</div>
-                            <div id="switch-misc" class="btn sel-n-active">Misc</div>
-                            <div id="switch-sets" class="btn sel-n-active">Sets</div>
-                        </div>
-                    </div>
-                    <div id="species-bot" class="species-bot">
-                        <div id="species-moves" class="species-sub-pannel active-sub-panel">
-                            <div class="species-bot-row" id="learnset-title">
-                                <div class="species-moves-title">
-                                    Learn Sets
-                                </div>
-                                <div class="species-move-list" id="learnset">
-
-                                </div>
-                            </div>
-                            <div class="species-bot-row" id="tmhm-title">
-                                <div class="species-moves-title">
-                                    TM/HM
-                                </div>
-                                <div class="species-move-list" id="tmhm">
-
-                                </div>
-                            </div>
-                            <div class="species-bot-row"  id="tutor-title">
-                                <div class="species-moves-title">
-                                    Tutor moves
-                                </div>
-                                <div class="species-move-list" id="tutor">
-
-                                </div>
-                            </div>
-                            <div class="species-bot-row" id="eggpreevo-title">
-                                <div class="species-moves-title" id="eggmoves-title">
-                                    Egg Moves
-                                </div>
-                                <div class="species-move-list" id="eggmoves">
-
-                                </div>
-                                <div class="species-moves-title" id="preevomoves-title">
-                                    Pre Evo Moves
-                                </div>
-                                <div class="species-move-list" id="preevomoves">
-
-                                </div>
-                            </div>
-                        </div>
-                        <div id="species-evos-locs" class="species-sub-pannel" style="display: none;">
-                            <div id="species-evos" class="species-sub-half-pannel"></div>
-                            <div id="species-locations" class="species-sub-half-pannel"></div>
-                        </div>
-                        <div id="species-misc" class="species-sub-pannel" style="display: none;">
-                            <div id="species-desc">
-
-                            </div>
-                            <div class="species-misc-row">
-                                <div id="species-hw" class="species-misc-col">
-                                    <span id="species-height"></span>
-                                    <span id="species-weight"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="species-sets" class="species-sub-pannel" style="display: none;">
-                            <div class="species-sets-block">
-                            </div>
-                            <div class="species-sets-block">
-                            </div>
-                        </div>
-                    </div>
                 </div>
-                <div id="builder-data" class="data-data" style="display: none;">
-                    <div class="builder-bot">
-                        <div class="builder-mon"></div>
-                        <div class="builder-mon"></div>
-                        <div class="builder-mon"></div>
-                        <div class="builder-mon"></div>
-                        <div class="builder-mon"></div>
-                        <div class="builder-mon"></div>
-                        <div class="builder-tools">
-                            <div class="bi-btn-row">
-                                <div id="defensive-cov" class="sel-active"><span>Defensive Coverage</span></div>
-                                <div id="offensive-cov" class="sel-n-active"><span>Offensive Coverage</span></div>
-                            </div>
-                            <div id="builder-def-cov">
-                                
-                            </div>
-                            <div id="builder-off-cov" style="display: none;">
-                                <span>click to see which pokemon has a super effective move against</span>
-                                <div id="builder-off-types" class="builder-type-row">
-
-                                </div>
-                            </div>
-                            <div id="builder-screenshot" class="btn btn-hover">
-                                <span>Team as a screenshot</span>
-                            </div>
-                            <div id="builder-import" class="btn btn-hover">
-                                <span>Import / Export</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
             </div>
             <div id="panel-abis" class="panel">
                 <!--button id="filter-alphabethically">Filter Alphabethically</button-->

@@ -204,7 +204,7 @@ export function setupSettings(){
         saveSettings()
     })
     settings.listLayout ? $('#enable-list-layout').attr('checked', true) : $('#disable-list-layout').attr('checked', true)
-
+    toggleLayoutList(settings.listLayout)
     setDynamicalRowOfSettings("font", fontList, (font)=>{
         settings.theme = font
         saveSettings()

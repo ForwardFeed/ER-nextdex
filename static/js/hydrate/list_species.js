@@ -5,10 +5,10 @@ import { JSHAC, e } from "../utils.js";
 export function toggleLayoutList(toggle= true){
     if (toggle){
         $('#panel-list-species').show()
-        $('#panel-species').hide()
+        $('#panel-block-species').hide()
     } else {
         $('#panel-list-species').hide()
-        $('#panel-species').show()
+        $('#panel-block-species').show()
     }
 }
 
