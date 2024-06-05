@@ -1,7 +1,7 @@
 import setupPanels from "./sidebar.js"
 import { setupSpeciesPanel } from "./panels/species/species_panel.js"
 import { setupDataVersionning, changeVersion } from "./data_version.js"
-import { setupSearch } from "./search.js"
+import { initSearch, setupSearch } from "./search.js"
 import { addTooltip } from "./utils.js"
 import { setupSettings, fetchFromLocalstorage } from "./settings.js"
 import { setupFilters } from "./filters.js"
@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", function(){
     load(()=>{}, "start")
     const setupSteps = [
         [setupSettings, "settings"],
+        [initSearch, "init search"],
         [setupPanels, "side bar"],
         [setupMoves, "panel moves"],
         [setupSpeciesPanel, "panel species"],
