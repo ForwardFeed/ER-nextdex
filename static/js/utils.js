@@ -75,7 +75,7 @@ export function clickOutsideToRemove(node, absorb = false, onCloseCb = ()=>{}){
  * 
  * @param {string | undefined} tag 
  * @param {string | undefined} classname 
- * @param {string | undefined} innerText 
+ * @param {string | HTMLElement[] | undefined} innerText - can put an array of HTML nodes
  * @param {Object | undefined} events 
  * @returns {HTMLDivElement}
  */
