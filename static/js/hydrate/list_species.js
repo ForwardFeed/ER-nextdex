@@ -2,6 +2,16 @@ import { gameData } from "../data_version.js";
 import { JSHAC, e } from "../utils.js";
 
 
+export function toggleLayoutList(toggle= true){
+    if (toggle){
+        $('#panel-list-species').show()
+        $('#panel-panel-species').hide()
+    } else {
+        $('#panel-list-species').hide()
+        $('#panel-panel-species').show()
+    }
+}
+
 export function hydrateSpeciesList(){
     const species = gameData.species
     const speciesLen = species.length
