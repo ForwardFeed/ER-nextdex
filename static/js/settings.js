@@ -3,7 +3,7 @@ import { loadFont } from "./fonts.js"
 
 const appName = "ERdex"
 const appSettings = appName + "_settings"
-const settingsVersion = "7" //when changed it will init newly added elements from default to the current settings
+const settingsVersion = "8" //when changed it will init newly added elements from default to the current settings
 // and this automatically to prevent some undefined behavior
 const themeList =  [
     "blueish",
@@ -27,7 +27,8 @@ const defaultSettings = {
     monotype: false,
     discordFormat: true,
     font: "basis33",
-    hintSelectible: true
+    hintSelectible: true,
+    listLayout: false,
 }
 
 export function initAppSettings(){
@@ -192,6 +193,15 @@ export function setupSettings(){
     })
     if (settings.hintSelectible) $('#enable-interactible').attr('checked', true)
     setHintInteractible()
+    $('#enable-list-layout').on('change', ()=>{
+        settings.listLayout = true
+        saveSettings()
+    })
+    $('#disable-list-layout').on('change', ()=>{
+        settings.listLayout = false
+        saveSettings()
+    })
+    if (settings.hintSelectible) $('#enable-interactible').attr('checked', true)
     setDynamicalRowOfSettings("font", fontList, (font)=>{
         settings.theme = font
         saveSettings()
