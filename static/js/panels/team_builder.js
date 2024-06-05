@@ -1,7 +1,7 @@
 import { gameData } from "../data_version.js";
 import { e, JSHAC } from "../utils.js";
-import { createPokemon, getTextNature, StatsEnum } from "./trainers_panel.js";
-import { getSpritesURL, getSpritesShinyURL } from "./species/species_panel.js";
+import { createPokemon, getTextNature } from "./trainers_panel.js";
+import { getSpritesURL, getSpritesShinyURL, StatsEnum } from "./species/species_panel.js";
 import { createInformationWindow } from "../window.js";
 import { cubicRadial } from "../radial.js";
 import { saveToLocalstorage, fetchFromLocalstorage, getHintInteractibilityClass } from "../settings.js";

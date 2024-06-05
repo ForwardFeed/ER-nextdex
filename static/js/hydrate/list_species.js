@@ -1,5 +1,5 @@
 import { gameData } from "../data_version.js";
-import { getSpritesURL } from "../panels/species/species_panel.js";
+import { StatsEnum, getSpritesURL } from "../panels/species/species_panel.js";
 import { JSHAC, e } from "../utils.js";
 
 

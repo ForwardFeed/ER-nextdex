@@ -1,4 +1,4 @@
-import { getSpritesURL, redirectSpecie, getSpritesShinyURL } from "./species/species_panel.js"
+import { getSpritesURL, redirectSpecie, getSpritesShinyURL, StatsEnum } from "./species/species_panel.js"
 import { queryFilter2, queryFilter3 } from "../filters.js"
 import { gameData } from "../data_version.js"
 import { AisInB, e, JSHAC } from "../utils.js"
@@ -112,15 +112,6 @@ function setPartyPanel(party) {
     $('#trainers-team').empty().append(frag).append(getNodeRedirectToEditorPokemon(party))
 }
 
-
-export const StatsEnum = [
-    "HP",
-    "Atk",
-    "Def",
-    "SpA",
-    "SpD",
-    "Spe",
-]
 export function createPokemon(poke) {
     const specie = gameData.species[poke.spc]
     const ability = gameData.abilities[specie.stats.abis[poke.abi]]

@@ -4,7 +4,8 @@ import { setFullTeam, teamData } from "./panels/team_builder.js"
 import { gameData } from "./data_version.js"
 import { itemList } from "./hydrate/hydrate.js"
 import { settings } from "./settings.js"
-import { StatsEnum } from "./panels/trainers_panel.js"
+import { StatsEnum } from "./panels/species/species_panel.js"
+
 
 
 export function parseShowdownFormat(text){

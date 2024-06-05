@@ -1,7 +1,7 @@
 import { gameData } from "../../data_version.js";
 import { JSHAC, e, t} from "../../utils.js";
-import { getTextNature, StatsEnum } from "../trainers_panel.js";
-import { currentSpecieID } from "./species_panel.js";
+import { getTextNature } from "../trainers_panel.js";
+import { StatsEnum, currentSpecieID } from "./species_panel.js";
 import { createInformationWindow } from "../../window.js";
 import { cubicRadial } from "../../radial.js";
 import { overlayList, editionStats, overlayEditorAbilities, enterToClose} from "../team_builder.js";

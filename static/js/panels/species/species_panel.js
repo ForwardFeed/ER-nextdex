@@ -11,6 +11,15 @@ import { cubicRadial } from "../../radial.js"
 import { getHintInteractibilityClass, settings } from "../../settings.js"
 import { feedCommunitySets } from "./community_sets.js"
 
+export const StatsEnum = [
+    "HP",
+    "Atk",
+    "Def",
+    "SpA",
+    "SpD",
+    "Spe",
+]
+
 export let currentSpecieID = 1
 
 export function feedPanelSpecies(id) {
