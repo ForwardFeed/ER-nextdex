@@ -1,5 +1,5 @@
-import { gameData } from "../data_version.js";
-import { StatsEnum, getSpritesURL } from "../panels/species/species_panel.js";
+import { compareData, gameData } from "../data_version.js";
+import { StatsEnum, currentSpecieID, getSpritesURL } from "../panels/species/species_panel.js";
 import { JSHAC, e } from "../utils.js";
 
 
@@ -18,9 +18,9 @@ export function hydrateSpeciesList(){
     const species = gameData.species
     const speciesLen = species.length
     const fragment = document.createDocumentFragment();
-    for (let i = 0; i < speciesLen; i++) {
-        if (i == 0) continue // skip specie none
-        const specie = species[i]
+    for (let specieID = 0; specieID < speciesLen; specieID++) {
+        if (specieID == 0) continue // skip specie none
+        const specie = species[specieID]
         const nameRow = e('div', 'list-species-name')
         /*row.setAttribute('draggable', true);
         row.ondragstart = (ev) => {
@@ -35,7 +35,7 @@ export function hydrateSpeciesList(){
         image.alt = specie.name
         image.loading = "lazy"
         nameRow.appendChild(image)
-
+        
         const name = e('span', "species-name span-a", specie.name)
         nameRow.append(name)
         fragment.append(JSHAC([
@@ -51,7 +51,25 @@ export function hydrateSpeciesList(){
                     const type = gameData.typeT[x]
                     return e('div', `list-species-type type ${type.toLowerCase()}`, [e('span', null, type)])
                 })),
-                e('div', 'list-species-basestats-block', 'basesstats')
+                e('div', 'list-species-basestats-block', StatsEnum.concat(["BST"]).map((x, i) => {
+                    const comp = compareData?.species?.[specieID].stats?.base[i]
+                    if (comp){
+                        return JSHAC([
+                            e('div', 'list-species-basestats-col', [
+                                e('div', 'list-species-basestats-head', x),
+                                e('div', 'list-species-basestats-val', `${comp}→<br>${specie.stats.base[i]}`)
+                            ])
+                        ])
+                    } else {
+                        return JSHAC([
+                            e('div', 'list-species-basestats-col', [
+                                e('div', 'list-species-basestats-head', x),
+                                e('div', 'list-species-basestats-val', specie.stats.base[i])
+                            ])
+                        ])
+                    }
+                    
+                }))
             ]
         ]))
     }

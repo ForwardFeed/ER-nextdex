@@ -4,7 +4,7 @@ import { getTextNature } from "../trainers_panel.js";
 import { StatsEnum, currentSpecieID } from "./species_panel.js";
 import { createInformationWindow } from "../../window.js";
 import { cubicRadial } from "../../radial.js";
-import { overlayList, editionStats, overlayEditorAbilities, enterToClose} from "../team_builder.js";
+import { editionStats, overlayEditorAbilities, enterToClose} from "../team_builder.js";
 import { fetchFromLocalstorage, saveToLocalstorage } from "../../settings.js";
 import { exportDataShowdownFormat, parseShowdownFormat } from "../../format_showdown.js";
 import { itemList } from "../../hydrate/hydrate.js";

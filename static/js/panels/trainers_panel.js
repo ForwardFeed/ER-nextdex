@@ -1,5 +1,5 @@
 import { getSpritesURL, redirectSpecie, getSpritesShinyURL, StatsEnum } from "./species/species_panel.js"
-import { queryFilter2, queryFilter3 } from "../filters.js"
+import { queryFilter3 } from "../filters.js"
 import { gameData } from "../data_version.js"
 import { AisInB, e, JSHAC } from "../utils.js"
 import { setFullTeam } from "./team_builder.js"
