@@ -1082,19 +1082,39 @@ a:hover{
     z-index: 20;
 }
 
-
+#panel-list-species{
+    flex-direction: column;
+}
 .list-species-row{
-
+    display: flex;
+    border-bottom: solid var(--colorB);
+    border-radius: 5px;
+    min-height: 3.5em;
+    font-size: 0.8em;
 }
 
 .list-species-name{
-
+    display: flex;
+    width: 7em;
+    padding-right: 0.5em;
+    border-right: dashed var(--colorA) 1px;
 }
 
-.list-species-abis-block{
-
+.list-species-sprite{
+    margin: auto;
 }
 
-.list-species-inns-block{
-    
+.list-species-abis-block, .list-species-inns-block{
+    display: flex;
+    flex-direction: column;
+    width: 7em;
+}
+
+.list-species-abi, .list-species-inn{
+    display: flex;
+    margin: auto;
+}
+
+.list-species-abi > span, .list-species-inn > span{
+    margin-left: 0;
 }
