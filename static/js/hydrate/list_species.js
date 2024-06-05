@@ -47,6 +47,10 @@ export function hydrateSpeciesList(){
                 e('div', 'list-species-inns-block', [...new Set(specie.stats.inns)].filter(x => x).map(x => {
                     return e('div', 'list-species-inn', [e('span', null, gameData.abilities[x].name)])
                 })),
+                e('div', 'list-species-types-block', [...new Set(specie.stats.types)].map(x => {
+                    const type = gameData.typeT[x]
+                    return e('div', `list-species-type type ${type.toLowerCase()}`, [e('span', null, type)])
+                }))
             ]
         ]))
     }

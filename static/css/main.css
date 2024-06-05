@@ -1108,13 +1108,29 @@ a:hover{
     display: flex;
     flex-direction: column;
     width: 7em;
+    padding-left: 0.2em;
+    padding-right: 0.2em;
 }
 
 .list-species-abi, .list-species-inn{
     display: flex;
     margin: auto;
+    background-color: var(--colorB);
+    width: 7em;
+    border-radius: 3em;
 }
 
 .list-species-abi > span, .list-species-inn > span{
-    margin-left: 0;
+    margin-left: 0.3em;
+}
+
+.list-species-types-block{
+    display: flex;
+    flex-direction: column;
+}
+
+.list-species-type{
+    margin: auto;
+    width: 3em;
+    display: flex;
 }
