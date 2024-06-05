@@ -1,6 +1,6 @@
 import { gameData } from "../data_version.js";
 import { e, JSHAC } from "../utils.js";
-import { createPokemon, getTextNature } from "./trainers_panel.js";
+import { createPokemon, getTextNature, StatsEnum } from "./trainers_panel.js";
 import { getSpritesURL, getSpritesShinyURL } from "./species/species_panel.js";
 import { createInformationWindow } from "../window.js";
 import { cubicRadial } from "../radial.js";
@@ -563,14 +563,7 @@ export function overlayList(callback, list) {
         options
     ])
 }
-const statsOrder = [
-    "HP",
-    "Atk",
-    "Def",
-    "SpA",
-    "SpD",
-    "Spe",
-]
+
 const statFieldInputControl = {
     "ivs": (value, evKey) => {
         if (value.includes('+') || evKey === "ArrowRight" || evKey === "ArrowUp") {
@@ -614,7 +607,7 @@ const statFieldInputControl = {
 export function editionStats(statField, poke, callback) {
     const core = e("div", "overlay-stats-edition")
     const rowDiv = e("div", "overlay-stats-row")
-    statsOrder.forEach((value, index) => {
+    StatsEnum.forEach((value, index) => {
         const statColumn = e("div", "overlay-stats-column")
         const statLabel = e("label", "overlay-stats-label", value)
         statLabel.setAttribute('for', `overlay-stats-edit${index}`)

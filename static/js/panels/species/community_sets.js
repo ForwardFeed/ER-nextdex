@@ -1,6 +1,6 @@
 import { gameData } from "../../data_version.js";
 import { JSHAC, e, t} from "../../utils.js";
-import { getTextNature, statsOrder } from "../trainers_panel.js";
+import { getTextNature, StatsEnum } from "../trainers_panel.js";
 import { currentSpecieID } from "./species_panel.js";
 import { createInformationWindow } from "../../window.js";
 import { cubicRadial } from "../../radial.js";
@@ -274,7 +274,7 @@ class BlockComSets {
         this.statsNames = []
         this.evs = []
         this.ivs = []
-        statsOrder.map((x, i)=>{
+        StatsEnum.map((x, i)=>{
             const col = e('div', `trainers-stats-name`, x)
             const ev = e('div', `trainers-poke-evs`, 0)
             const iv = e('div', `trainers-poke-ivs`, 0)
@@ -392,8 +392,8 @@ class BlockComSets {
         const statNerfed = nerfedBuffed?.[1]
         $(this.statsRow).find('.trainers-stats-name.nerfed, .trainers-stats-name.buffed').removeClass("nerfed buffed")
         if (statBuffed && statNerfed){
-            const buffedRowIndex = statsOrder.indexOf(statBuffed)
-            const nerfedRowIndex = statsOrder.indexOf(statNerfed)
+            const buffedRowIndex = StatsEnum.indexOf(statBuffed)
+            const nerfedRowIndex = StatsEnum.indexOf(statNerfed)
             this.statsNames[buffedRowIndex].classList.add('buffed')
             this.statsNames[nerfedRowIndex].classList.add('nerfed')
         } else {

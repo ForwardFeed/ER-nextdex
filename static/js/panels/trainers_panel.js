@@ -113,7 +113,7 @@ function setPartyPanel(party) {
 }
 
 
-export const statsOrder = [
+export const StatsEnum = [
     "HP",
     "Atk",
     "Def",
@@ -178,8 +178,8 @@ export function createPokemon(poke) {
     let fontRgb = window.getComputedStyle(document.body).color.match(/\d+/g)
     if (!fontRgb || fontRgb.length != 3) fontRgb = [255, 255, 255]
 
-    for (const statIndex in statsOrder) {
-        const stat = statsOrder[statIndex]
+    for (const statIndex in StatsEnum) {
+        const stat = StatsEnum[statIndex]
         const nerfedOrbuffed = stat === statBuffed ? "buffed" : stat === statNerfed ? "nerfed" : ""
         const evVal = poke.evs[statIndex]
         const evRow = e('div', `trainers-poke-evs`, evVal)

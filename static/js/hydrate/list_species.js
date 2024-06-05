@@ -50,7 +50,8 @@ export function hydrateSpeciesList(){
                 e('div', 'list-species-types-block', [...new Set(specie.stats.types)].map(x => {
                     const type = gameData.typeT[x]
                     return e('div', `list-species-type type ${type.toLowerCase()}`, [e('span', null, type)])
-                }))
+                })),
+                e('div', 'list-species-basestats-block', 'basesstats')
             ]
         ]))
     }
