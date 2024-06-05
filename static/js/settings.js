@@ -203,7 +203,8 @@ export function setupSettings(){
         toggleLayoutList(settings.listLayout = false)
         saveSettings()
     })
-    if (settings.hintSelectible) $('#enable-interactible').attr('checked', true)
+    settings.listLayout ? $('#enable-list-layout').attr('checked', true) : $('#disable-list-layout').attr('checked', true)
+
     setDynamicalRowOfSettings("font", fontList, (font)=>{
         settings.theme = font
         saveSettings()

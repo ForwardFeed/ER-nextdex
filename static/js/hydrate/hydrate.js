@@ -13,6 +13,7 @@ import { hydrateSpecies } from "./species.js"
 import { hydrateLocation } from "./locations.js"
 import { addAllOtherEveeMoves } from "./moves.js"
 import { takeMovesFromPreEvolution } from "./moves.js"
+import { hydrateSpeciesList } from "./list_species.js"
 
 export const nodeLists = {
     species: [],
@@ -57,6 +58,7 @@ export function hydrate(firstLoad=false) {
         [hydrateAbilities, "abilities data"],
         [hydrateMoves, "moves data"],
         [hydrateSpecies, "species data"],
+        [hydrateSpeciesList, "list layout species data"],
         [hydrateLocation, "locations data"],
         [hydrateTrainers, "trainers data"],
         [restoreSave, "save"], // also restore the save of the team builder
