@@ -1,5 +1,5 @@
 import { compareData, gameData } from "../data_version.js";
-import { StatsEnum, currentSpecieID, feedPanelSpecies, getColorOfStat, getSpritesURL } from "../panels/species/species_panel.js";
+import { StatsEnum, currentSpecieID, feedPanelSpecies, getColorOfStat, getSpritesShinyURL, getSpritesURL } from "../panels/species/species_panel.js";
 import { JSHAC, e } from "../utils.js";
 
 
@@ -25,6 +25,12 @@ export function hydrateSpeciesList(){
         if (specieID == 0) continue // skip specie none
         const specie = species[specieID]
         const nameRow = e('div', 'list-species-name')
+        let imageIsShiny = false
+        nameRow.onclick = ()=>{
+            imageIsShiny = !imageIsShiny
+            image.src = imageIsShiny ? getSpritesShinyURL(specie.NAME) : getSpritesURL(specie.NAME)
+
+        }
         /*row.setAttribute('draggable', true);
         row.ondragstart = (ev) => {
             ev.dataTransfer.setData("id", i)
