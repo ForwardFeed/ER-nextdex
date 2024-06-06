@@ -1,4 +1,5 @@
 import { compareData, gameData } from "../data_version.js";
+import { longClickToFilter } from "../filters.js";
 import { StatsEnum, currentSpecieID, feedPanelSpecies, getColorOfStat, getSpritesShinyURL, getSpritesURL } from "../panels/species/species_panel.js";
 import { JSHAC, e } from "../utils.js";
 import { nodeLists } from "./hydrate.js";
@@ -52,10 +53,16 @@ export function hydrateSpeciesList(){
             e('div', 'list-species-row'), [
                 nameRow,
                 e('div', 'list-species-abis-block', [...new Set(specie.stats.abis)].filter(x => x).map(x => {
-                    return e('div', 'list-species-abi', [e('span', null, gameData.abilities[x].name)])
+                    const abiName = gameData.abilities[x].name
+                    const abiNode = e('div', 'list-species-abi', [e('span', null, abiName)])
+                    longClickToFilter(0, abiNode, "ability", () => { return abiName })
+                    return abiNode
                 })),
                 e('div', 'list-species-inns-block', [...new Set(specie.stats.inns)].filter(x => x).map(x => {
-                    return e('div', 'list-species-inn', [e('span', null, gameData.abilities[x].name)])
+                    const innName = gameData.abilities[x].name
+                    const innNode = e('div', 'list-species-inn', [e('span', null, innName)])
+                    longClickToFilter(0, innNode, "ability", () => { return innName })
+                    return innNode
                 })),
                 e('div', 'list-species-types-block', [...new Set(specie.stats.types)].map(x => {
                     const type = gameData.typeT[x]

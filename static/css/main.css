@@ -1175,6 +1175,6 @@ a:hover{
     border: solid var(--interactible) 0.1em;
     border-radius: 1em;
     position: absolute;
-    right: 0;
-    top: 0;
+    right: 0.1em;
+    top: 0.1em;
 }
