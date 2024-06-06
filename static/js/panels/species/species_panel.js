@@ -689,11 +689,14 @@ export function updateSpecies(searchQuery) {
     for (let i = 0; i < specieLen; i++) {
         if (i == 0) continue
         const node = $(nodeLists.species[i - 1])
+        const nodeLayoutList = $(nodeLists.listLayoutSpecies[i - 1])
         if (!matched || matched.indexOf(i) != -1) {
             if (!validID) validID = i
             node.show()
+            nodeLayoutList.show()
         } else {
             node.hide()
+            nodeLayoutList.hide()
         }
     }
     //if the current selection isn't in the list then change

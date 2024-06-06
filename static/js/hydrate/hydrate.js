@@ -17,6 +17,7 @@ import { hydrateSpeciesList } from "./list_species.js"
 
 export const nodeLists = {
     species: [],
+    listLayoutSpecies: [],
     abilities: [],
     moves: [],
     locations: [],

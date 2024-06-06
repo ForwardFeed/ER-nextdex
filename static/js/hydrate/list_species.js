@@ -1,6 +1,7 @@
 import { compareData, gameData } from "../data_version.js";
 import { StatsEnum, currentSpecieID, feedPanelSpecies, getColorOfStat, getSpritesShinyURL, getSpritesURL } from "../panels/species/species_panel.js";
 import { JSHAC, e } from "../utils.js";
+import { nodeLists } from "./hydrate.js";
 
 
 export function toggleLayoutList(toggle= true){
@@ -47,8 +48,7 @@ export function hydrateSpeciesList(){
         
         const name = e('span', "species-name span-a", specie.name)
         nameRow.append(name)
-
-        fragment.append(JSHAC([
+        const nodeSpecieRow = JSHAC([
             e('div', 'list-species-row'), [
                 nameRow,
                 e('div', 'list-species-abis-block', [...new Set(specie.stats.abis)].filter(x => x).map(x => {
@@ -98,7 +98,9 @@ export function hydrateSpeciesList(){
                     }
                 })
             ]
-        ]))
+        ])
+        nodeLists.listLayoutSpecies.push(nodeSpecieRow.firstChild)
+        fragment.append(nodeSpecieRow)
     }
     $('#panel-list-species').empty().append(fragment)
 }
