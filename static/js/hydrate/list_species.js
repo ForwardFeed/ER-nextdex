@@ -5,8 +5,8 @@ import { JSHAC, e } from "../utils.js";
 import { nodeLists } from "./hydrate.js";
 
 
-export function toggleLayoutList(toggle= true){
-    if (toggle){
+export function toggleLayoutList(toggle = true) {
+    if (toggle) {
         // I tried not using hide() but apparently it has not affect on the lag issue
         // No clue on how to fix this besides reworking a completely new loading system where it's generated on scroll
         $('#panel-list-species').css('display', 'flex')
@@ -19,7 +19,7 @@ export function toggleLayoutList(toggle= true){
 }
 
 
-export function hydrateSpeciesList(){
+export function hydrateSpeciesList() {
     const species = gameData.species
     const speciesLen = species.length
     const fragment = document.createDocumentFragment();
@@ -28,7 +28,7 @@ export function hydrateSpeciesList(){
         const specie = species[specieID]
         const nameRow = e('div', 'list-species-name')
         let imageIsShiny = false
-        nameRow.onclick = ()=>{
+        nameRow.onclick = () => {
             imageIsShiny = !imageIsShiny
             image.src = imageIsShiny ? getSpritesShinyURL(specie.NAME) : getSpritesURL(specie.NAME)
 
@@ -46,7 +46,7 @@ export function hydrateSpeciesList(){
         image.alt = specie.name
         image.loading = "lazy"
         nameRow.appendChild(image)
-        
+
         const name = e('span', "species-name span-a", specie.name)
         nameRow.append(name)
         const nodeSpecieRow = JSHAC([
@@ -67,7 +67,7 @@ export function hydrateSpeciesList(){
                 e('div', 'list-species-types-block', [...new Set(specie.stats.types)].map(x => {
                     const type = gameData.typeT[x]
                     const typeNode = e('div', `list-species-type type ${type.toLowerCase()}`, [e('span', null, type)])
-                    longClickToFilter(0, typeNode, "type", ()=>{return type})
+                    longClickToFilter(0, typeNode, "type", () => { return type })
                     return typeNode
                 })),
                 e('div', 'list-species-basestats-block', StatsEnum.concat(["BST"]).map((x, i) => {
@@ -76,12 +76,12 @@ export function hydrateSpeciesList(){
                     const statNode = e('span', null, statValue)
                     $(statNode).css('background-color', color)
                     const comp = compareData?.species?.[specieID].stats?.base[i]
-                    if (comp){
+                    if (comp) {
                         return JSHAC([
                             e('div', 'list-species-basestats-col', [
                                 e('div', 'list-species-basestats-head', x),
                                 e('div', 'list-species-basestats-val', [
-                                    e('span','crossed', comp),
+                                    e('span', 'crossed', comp),
                                     e('br', null, '→'),
                                     statNode,
                                 ])
@@ -97,10 +97,10 @@ export function hydrateSpeciesList(){
                             ])
                         ])
                     }
-                    
+
                 })),
                 e('div', 'list-species-btn-view', [e('span', null, 'View')], {
-                    onclick: (ev)=>{
+                    onclick: (ev) => {
                         feedPanelSpecies(specieID)
                         toggleLayoutList(false)
                         $('#species-return-list-layout').show()
@@ -109,7 +109,35 @@ export function hydrateSpeciesList(){
             ]
         ])
         nodeLists.listLayoutSpecies.push(nodeSpecieRow.firstChild)
+        if (specieID > LIST_RENDER_RANGE) $(nodeSpecieRow.firstChild).hide()
         fragment.append(nodeSpecieRow)
     }
     $('#panel-list-species').empty().append(fragment)
+}
+export const LIST_RENDER_RANGE = 20
+
+let lastNbScrolled = 0
+function listRenderingUpdate() {
+    const panelDiv = document.getElementById("panel-list-species")
+    const nbRowScrolled = Math.round(panelDiv.scrollTop / panelDiv.children[0].clientHeight)
+    // first hide those out of range
+    const minCurrToRender = Math.max(0, nbRowScrolled - LIST_RENDER_RANGE)
+    const maxCurrToRender = Math.min(gameData.species.length, nbRowScrolled + LIST_RENDER_RANGE)
+    if (nbRowScrolled > lastNbScrolled){//scrolled down
+        
+    } else { //scrolled up
+        
+    }
+    for (let i = minCurrToRender; i < maxCurrToRender; i++){
+        nodeLists.listLayoutSpecies[i].style.display = "flex"
+    }
+    console.log(nbRowScrolled)
+    // show those in range
+    lastNbScrolled = nbRowScrolled
+}
+
+export function setupListSpecies() {
+    $('#panel-list-species').on('scrollend', () => {
+        listRenderingUpdate()
+    })
 }

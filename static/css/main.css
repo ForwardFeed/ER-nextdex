@@ -1095,6 +1095,7 @@ a:hover{
     border-bottom: solid var(--colorB) 0.1em;
     border-radius: 5px;
     min-height: 3.5em;
+    max-height: 3.5em;
 }
 .list-species-name{
     display: flex;

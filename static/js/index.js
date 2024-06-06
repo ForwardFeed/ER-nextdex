@@ -11,6 +11,7 @@ import { setupMoves} from "./panels/moves_panel.js"
 import { load } from "./loading.js"
 import { setupFormatShowdown } from "./format_showdown.js"
 import { setupLoadSave } from "./load_save.js"
+import { setupListSpecies } from "./hydrate/list_species.js"
 
 
 document.addEventListener("DOMContentLoaded", function(){
@@ -21,6 +22,7 @@ document.addEventListener("DOMContentLoaded", function(){
         [setupPanels, "side bar"],
         [setupMoves, "panel moves"],
         [setupSpeciesPanel, "panel species"],
+        [setupListSpecies, "list layout for species"],
         [setupTeamBuilder, "panel builder"], // the team builder BEFORE data version is Important
         [setupSearch, "search frame"],
         [setupFilters, "filter frame"],
