@@ -66,7 +66,9 @@ export function hydrateSpeciesList(){
                 })),
                 e('div', 'list-species-types-block', [...new Set(specie.stats.types)].map(x => {
                     const type = gameData.typeT[x]
-                    return e('div', `list-species-type type ${type.toLowerCase()}`, [e('span', null, type)])
+                    const typeNode = e('div', `list-species-type type ${type.toLowerCase()}`, [e('span', null, type)])
+                    longClickToFilter(0, typeNode, "type", ()=>{return type})
+                    return typeNode
                 })),
                 e('div', 'list-species-basestats-block', StatsEnum.concat(["BST"]).map((x, i) => {
                     const statValue = specie.stats.base[i]
