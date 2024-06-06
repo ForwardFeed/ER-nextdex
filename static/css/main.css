@@ -1,4 +1,7 @@
 /* GENERAL */
+.crossed{
+    text-decoration: line-through var(--colorB);
+}
 
 .left{
     margin: auto;

@@ -57,7 +57,11 @@ export function hydrateSpeciesList(){
                         return JSHAC([
                             e('div', 'list-species-basestats-col', [
                                 e('div', 'list-species-basestats-head', x),
-                                e('div', 'list-species-basestats-val', `${comp}→<br>${specie.stats.base[i]}`)
+                                e('div', 'list-species-basestats-val', [
+                                    e('span','crossed', comp),
+                                    e('br', null, '→'),
+                                    e('span', null, specie.stats.base[i])
+                                ])
                             ])
                         ])
                     } else {
