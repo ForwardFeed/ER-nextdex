@@ -1151,3 +1151,7 @@ a:hover{
     flex-grow: 1;
     margin: auto;
 }
+.list-species-basestats-val{
+    display: flex;
+    color: black;
+}

@@ -257,16 +257,7 @@ export function getSpritesShinyURL(NAME) {
     return `./sprites/SHINY_${NAME}.png`
 }
 
-function changeBaseStat(node, value, statID, cmp) {
-
-    if (cmp && !isNaN(+cmp)){
-        node.find('.stat-num').html(`${cmp}→<br>${value}`)
-        node.find('.stat-num').css('font-size', '0.5em').css('width', '3em')
-    } else {
-        node.find('.stat-num').text(value)
-        node.find('.stat-num').css('font-size', '1em').css('width', '')
-    }
-    
+export function getColorOfStat(value, statID){
     let color = "gray"
     for (const colorMapped of [
         [gameData.speciesStats.result.min5[statID], "#ff3300"],
@@ -279,6 +270,20 @@ function changeBaseStat(node, value, statID, cmp) {
         if (value < colorMapped[0]) break
         color = colorMapped[1]
     }
+    return color
+}
+
+function changeBaseStat(node, value, statID, cmp) {
+
+    if (cmp && !isNaN(+cmp)){
+        node.find('.stat-num').html(`${cmp}→<br>${value}`)
+        node.find('.stat-num').css('font-size', '0.5em').css('width', '3em')
+    } else {
+        node.find('.stat-num').text(value)
+        node.find('.stat-num').css('font-size', '1em').css('width', '')
+    }
+    const color = getColorOfStat(value, statID)
+    
     const maxValue = statID < 6 ? 255 : gameData.speciesStats.result.maxBST
     const percent = ((value / maxValue) * 100).toFixed()
     node.find('.stat-num').css('background-color', color)

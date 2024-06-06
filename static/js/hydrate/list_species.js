@@ -1,5 +1,5 @@
 import { compareData, gameData } from "../data_version.js";
-import { StatsEnum, currentSpecieID, getSpritesURL } from "../panels/species/species_panel.js";
+import { StatsEnum, currentSpecieID, getColorOfStat, getSpritesURL } from "../panels/species/species_panel.js";
 import { JSHAC, e } from "../utils.js";
 
 
@@ -38,6 +38,7 @@ export function hydrateSpeciesList(){
         
         const name = e('span', "species-name span-a", specie.name)
         nameRow.append(name)
+
         fragment.append(JSHAC([
             e('div', 'list-species-row'), [
                 nameRow,
@@ -52,6 +53,10 @@ export function hydrateSpeciesList(){
                     return e('div', `list-species-type type ${type.toLowerCase()}`, [e('span', null, type)])
                 })),
                 e('div', 'list-species-basestats-block', StatsEnum.concat(["BST"]).map((x, i) => {
+                    const statValue = specie.stats.base[i]
+                    const color = getColorOfStat(statValue, i)
+                    const statNode = e('span', null, statValue)
+                    $(statNode).css('background-color', color)
                     const comp = compareData?.species?.[specieID].stats?.base[i]
                     if (comp){
                         return JSHAC([
@@ -60,7 +65,7 @@ export function hydrateSpeciesList(){
                                 e('div', 'list-species-basestats-val', [
                                     e('span','crossed', comp),
                                     e('br', null, '→'),
-                                    e('span', null, specie.stats.base[i])
+                                    statNode,
                                 ])
                             ])
                         ])
@@ -68,7 +73,9 @@ export function hydrateSpeciesList(){
                         return JSHAC([
                             e('div', 'list-species-basestats-col', [
                                 e('div', 'list-species-basestats-head', x),
-                                e('div', 'list-species-basestats-val', specie.stats.base[i])
+                                e('div', 'list-species-basestats-val', [
+                                    statNode,
+                                ])
                             ])
                         ])
                     }
