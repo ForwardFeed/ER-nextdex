@@ -10,6 +10,7 @@ import { nodeLists } from "../../hydrate/hydrate.js"
 import { cubicRadial } from "../../radial.js"
 import { getHintInteractibilityClass, settings } from "../../settings.js"
 import { feedCommunitySets } from "./community_sets.js"
+import { toggleLayoutList } from "../../hydrate/list_species.js"
 
 export const StatsEnum = [
     "HP",
@@ -363,6 +364,10 @@ export function setupSpeciesPanel() {
     $('#species-hw').on('click', ()=>{
         freedom = !freedom
         setSpecieHeightWeight()
+    })
+    $('#species-return-list-layout').on('click', ()=>{
+        toggleLayoutList(true)
+        $('#species-return-list-layout').hide()
     })
 }
 function toLowerButFirstCase(word) {

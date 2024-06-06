@@ -83,6 +83,7 @@ export function hydrateSpeciesList(){
                 })),
                 e('div', 'list-species-btn-view', [e('span', null, 'View')], {
                     onclick: (ev)=>{
+                        $('#species-return-list-layout').show()
                         feedPanelSpecies(specieID)
                         toggleLayoutList(false)
                     }

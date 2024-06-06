@@ -370,6 +370,7 @@ span{
 }
 
 .species-top{
+    position: relative;
     display: flex;
     width: 100%;
     background-color: var(--colorB);
@@ -1163,7 +1164,18 @@ a:hover{
     border-radius: 1em;
     margin: 0.5em;
 }
-.list-species-btn-view:hover{
+.list-species-btn-view:hover, #species-return-list-layout:hover{
     color: var(--colorD);
     background-color: var(--font-color);
+}
+
+#species-return-list-layout{
+    padding: 0.5em;
+    width: 3em;
+    display: flex;
+    border: solid var(--interactible) 0.1em;
+    border-radius: 1em;
+    position: absolute;
+    right: 0;
+    top: 0;
 }
