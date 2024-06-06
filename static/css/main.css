@@ -1094,13 +1094,11 @@ a:hover{
     border-bottom: solid var(--colorB) 0.1em;
     border-radius: 5px;
     min-height: 3.5em;
-    font-size: 0.8em;
 }
 .list-species-name{
     display: flex;
     width: 7em;
     padding-right: 0.5em;
-    border-right: dashed var(--colorA) 0.1em;
 }
 
 .list-species-sprite{
