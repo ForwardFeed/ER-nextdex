@@ -264,8 +264,8 @@ export function getColorOfStat(value, statID){
         [gameData.speciesStats.result.min5[statID], "#ff3300"],
         [gameData.speciesStats.result.min20[statID], "#cc6600"],
         [gameData.speciesStats.result.median[statID], "#cccc00"],
-        [gameData.speciesStats.result.top20[statID], "#99cc00"],
-        [gameData.speciesStats.result.top5[statID], "#33cc33"],
+        [gameData.speciesStats.result.top20[statID], "#33cc33"],
+        [gameData.speciesStats.result.top5[statID], "#33CC8B"],
         [256, "#0033cc"],
     ]) {
         if (value < colorMapped[0]) break
