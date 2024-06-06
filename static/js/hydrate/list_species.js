@@ -5,11 +5,12 @@ import { JSHAC, e } from "../utils.js";
 
 export function toggleLayoutList(toggle= true){
     if (toggle){
-        $('#panel-list-species').show()
-        $('#panel-block-species').hide()
+        $('#panel-list-species').css('display', 'flex')
+        $('#panel-block-species').css('display', 'none')
     } else {
-        $('#panel-list-species').hide()
-        $('#panel-block-species').show()
+        $('#species-return-list-layout').hide()
+        $('#panel-list-species').css('display', 'none')
+        $('#panel-block-species').css('display', 'flex')
     }
 }
 
@@ -83,9 +84,9 @@ export function hydrateSpeciesList(){
                 })),
                 e('div', 'list-species-btn-view', [e('span', null, 'View')], {
                     onclick: (ev)=>{
-                        $('#species-return-list-layout').show()
                         feedPanelSpecies(specieID)
                         toggleLayoutList(false)
+                        $('#species-return-list-layout').show()
                     }
                 })
             ]
