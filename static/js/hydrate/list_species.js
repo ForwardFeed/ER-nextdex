@@ -20,6 +20,9 @@ export function toggleLayoutList(toggle= true){
 
 
 export function hydrateSpeciesList(){
+    $('#panel-list-species').on('scroll', (ev)=>{
+        console.log(ev)
+    })
     const species = gameData.species
     const speciesLen = species.length
     const fragment = document.createDocumentFragment();

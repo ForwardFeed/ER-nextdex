@@ -1088,6 +1088,7 @@ a:hover{
 
 #panel-list-species{
     flex-direction: column;
+    overflow-y: scroll;
 }
 .list-species-row{
     display: flex;
