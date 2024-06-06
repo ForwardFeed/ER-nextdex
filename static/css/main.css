@@ -1155,3 +1155,15 @@ a:hover{
     display: flex;
     color: black;
 }
+
+.list-species-btn-view{
+    width: 3em;
+    display: flex;
+    border: solid var(--interactible) 0.1em;
+    border-radius: 1em;
+    margin: 0.5em;
+}
+.list-species-btn-view:hover{
+    color: var(--colorD);
+    background-color: var(--font-color);
+}

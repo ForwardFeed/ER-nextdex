@@ -1,5 +1,5 @@
 import { compareData, gameData } from "../data_version.js";
-import { StatsEnum, currentSpecieID, getColorOfStat, getSpritesURL } from "../panels/species/species_panel.js";
+import { StatsEnum, currentSpecieID, feedPanelSpecies, getColorOfStat, getSpritesURL } from "../panels/species/species_panel.js";
 import { JSHAC, e } from "../utils.js";
 
 
@@ -80,7 +80,13 @@ export function hydrateSpeciesList(){
                         ])
                     }
                     
-                }))
+                })),
+                e('div', 'list-species-btn-view', [e('span', null, 'View')], {
+                    onclick: (ev)=>{
+                        feedPanelSpecies(specieID)
+                        toggleLayoutList(false)
+                    }
+                })
             ]
         ]))
     }
