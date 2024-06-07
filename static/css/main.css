@@ -1110,7 +1110,7 @@ a:hover{
 .list-species-abis-block, .list-species-inns-block{
     display: flex;
     flex-direction: column;
-    width: 9em;
+    width: 7.5em;
     padding-left: 0.2em;
     padding-right: 0.2em;
 }
@@ -1119,7 +1119,7 @@ a:hover{
     display: flex;
     margin: auto;
     background-color: var(--colorB);
-    width: 8em;
+    width: 7.2em;
     padding-left: 0.2em;
     padding-right: 0.2em;
     border-radius: 0.2em;
@@ -1160,11 +1160,11 @@ a:hover{
     text-align: center;
 }
 .list-species-btn-view{
-    width: 3em;
+    width: 2.5em;
     display: flex;
     border: solid var(--interactible) 0.1em;
     border-radius: 1em;
-    margin: 0.5em;
+    margin: 0.25em;
 }
 .list-species-btn-view:hover, #species-return-list-layout:hover{
     color: var(--colorD);
