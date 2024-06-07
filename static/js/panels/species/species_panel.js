@@ -10,7 +10,7 @@ import { nodeLists } from "../../hydrate/hydrate.js"
 import { cubicRadial } from "../../radial.js"
 import { getHintInteractibilityClass, settings } from "../../settings.js"
 import { feedCommunitySets } from "./community_sets.js"
-import { toggleLayoutList } from "../../hydrate/list_species.js"
+import { LIST_RENDER_RANGE, resetListRendering, toggleLayoutList } from "../../hydrate/list_species.js"
 
 export const StatsEnum = [
     "HP",
@@ -680,25 +680,31 @@ export const queryMapSpecies = {
     },
 }
 
-export let matchedSpecies = []
+export let matchedSpecies = undefined
 export function updateSpecies(searchQuery) {
+    resetListRendering()
     const species = gameData.species
-    const matched = queryFilter3(searchQuery, species, queryMapSpecies, prefixTree)
+    matchedSpecies = queryFilter3(searchQuery, species, queryMapSpecies, prefixTree)
     let validID;
+    let listRenderingCapacity = LIST_RENDER_RANGE;
     const specieLen = species.length
     for (let i = 0; i < specieLen; i++) {
         if (i == 0) continue
         const node = $(nodeLists.species[i - 1])
         const nodeLayoutList = $(nodeLists.listLayoutSpecies[i - 1])
-        if (!matched || matched.indexOf(i) != -1) {
+        if (!matchedSpecies || matchedSpecies.indexOf(i) != -1) {
             if (!validID) validID = i
             node.show()
-            nodeLayoutList.show()
+            if (listRenderingCapacity){
+                listRenderingCapacity--
+                nodeLayoutList.show()
+            }
+            
         } else {
             node.hide()
             nodeLayoutList.hide()
         }
     }
     //if the current selection isn't in the list then change
-    if (matched && matched.indexOf(currentSpecieID) == -1 && validID) feedPanelSpecies(validID)
+    if (matchedSpecies && matchedSpecies.indexOf(currentSpecieID) == -1 && validID) feedPanelSpecies(validID)
 }

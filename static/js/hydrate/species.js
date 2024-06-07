@@ -1,7 +1,7 @@
 import { HPMoveID } from "./moves.js"
 import { HPsMovesID } from "./moves.js"
 import { e } from "../utils.js"
-import { abilitiesExtraType, buildSpeciesPrefixTrees, feedPanelSpecies, getSpritesURL, matchedSpecies, setupReorderBtn } from "../panels/species/species_panel.js"
+import { abilitiesExtraType, buildSpeciesPrefixTrees, feedPanelSpecies, getSpritesURL, setupReorderBtn } from "../panels/species/species_panel.js"
 import { gameData } from "../data_version.js"
 import { nodeLists } from "./hydrate.js"
 
@@ -65,7 +65,7 @@ function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo) {
 
 
 export function hydrateSpecies() {
-    //matchedSpecies.splice(0, matchedSpecies.length, ...gameData.species)
+
     nodeLists.species = [] // reset
     const fragment = document.createDocumentFragment();
     const species = gameData.species

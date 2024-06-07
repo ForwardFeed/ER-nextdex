@@ -1,6 +1,6 @@
 import { compareData, gameData } from "../data_version.js";
 import { longClickToFilter } from "../filters.js";
-import { StatsEnum, currentSpecieID, feedPanelSpecies, getColorOfStat, getSpritesShinyURL, getSpritesURL } from "../panels/species/species_panel.js";
+import { StatsEnum, currentSpecieID, feedPanelSpecies, getColorOfStat, getSpritesShinyURL, getSpritesURL, matchedSpecies } from "../panels/species/species_panel.js";
 import { JSHAC, e } from "../utils.js";
 import { nodeLists } from "./hydrate.js";
 
@@ -118,33 +118,85 @@ export const LIST_RENDER_RANGE = 20
 
 let lastNbScrolled = 0
 let unloadOffset = 0
-function listRenderingUpdate() {
+function calculateRenderingRange(){
     const panelDiv = document.getElementById("panel-list-species")
-    const oneRowHeightPx = panelDiv.children[lastNbScrolled].clientHeight
-    const maxRow = gameData.species.length - 2
-    const nbRowScrolled = Math.min(maxRow, Math.round(panelDiv.scrollTop / oneRowHeightPx) + unloadOffset)
+    const oneRowHeightPx = panelDiv.children[getRowRelativeToMatched(lastNbScrolled)].clientHeight
+    console.log(oneRowHeightPx, lastNbScrolled)
+    const nbRowScrolledFloat = panelDiv.scrollTop / oneRowHeightPx
+    let maxRow
+    if (matchedSpecies){
+        if (typeof matchedSpecies === "object"){
+            maxRow = matchedSpecies.length
+        } else {
+            maxRow = 1
+        }
+    } else {
+        maxRow = gameData.species.length - 2
+    }
+    
+    const nbRowScrolled = Math.min(maxRow, Math.round(nbRowScrolledFloat) + unloadOffset)
+
+    return{
+        nbRowScrolled: nbRowScrolled,
+        curr: {
+            min: Math.max(0, nbRowScrolled - LIST_RENDER_RANGE),
+            max: Math.min(maxRow, nbRowScrolled + LIST_RENDER_RANGE)
+        },
+        prev: {
+            min: Math.max(0, lastNbScrolled - LIST_RENDER_RANGE),
+            max: Math.min(maxRow, lastNbScrolled + LIST_RENDER_RANGE)
+        }
+    }
+}
+
+function listRenderingUpdate() {
+    const renderRanges = calculateRenderingRange()
     // first hide those out of range
-    const minCurrToRender = Math.max(0, nbRowScrolled - LIST_RENDER_RANGE)
-    const maxCurrToRender = Math.min(maxRow, nbRowScrolled + LIST_RENDER_RANGE)
-    const minPrevToRender = Math.max(0, lastNbScrolled - LIST_RENDER_RANGE)
-    const maxPrevToRender = Math.min(maxRow, lastNbScrolled + LIST_RENDER_RANGE)
-    //console.log(unloadOffset, nbRowScrolled, minCurrToRender, maxCurrToRender, minPrevToRender, maxPrevToRender)
-    if (nbRowScrolled > lastNbScrolled){//scrolled down
-        for (let i = minPrevToRender; i < minCurrToRender; i++){
-            nodeLists.listLayoutSpecies[i].style.display = "none"
+    console.log(renderRanges)
+    if (renderRanges.nbRowScrolled > lastNbScrolled){//scrolled down
+        for (let i = renderRanges.prev.min; i < renderRanges.curr.min; i++){
+            renderNextRow(i, false)
         }
-        unloadOffset += minCurrToRender - minPrevToRender
+        unloadOffset += renderRanges.curr.min - renderRanges.prev.min
     } else { //scrolled up
-        for (let i = maxPrevToRender; i > maxCurrToRender; i--){
-            nodeLists.listLayoutSpecies[i].style.display = "none"
+        for (let i = renderRanges.prev.max; i > renderRanges.curr.max; i--){
+            renderNextRow(i, false)
         }
-        unloadOffset = Math.max(0, unloadOffset - (maxPrevToRender - maxCurrToRender))
+        unloadOffset = Math.max(0, unloadOffset - (renderRanges.prev.max - renderRanges.curr.max))
     }
-    for (let i = minCurrToRender; i < maxCurrToRender; i++){
-        nodeLists.listLayoutSpecies[i].style.display = "flex"
+    // then show those in range
+    for (let i = renderRanges.curr.min; i < renderRanges.curr.max; i++){
+        renderNextRow(i, true)
     }
-    // show those in range
-    lastNbScrolled = nbRowScrolled
+    lastNbScrolled = renderRanges.nbRowScrolled
+}
+
+function getRowRelativeToMatched(rowI){
+    if (matchedSpecies && typeof matchedSpecies === "object"){
+        // because of species none, there's a need for -1 it
+        rowI = matchedSpecies[rowI] - 1
+    } else if (matchedSpecies){
+        rowI = matchedSpecies - 1
+    }
+    return rowI
+}
+// this is because the search just hides the row, so you have to hide over it
+function renderNextRow(rowI, show=true){
+    rowI = getRowRelativeToMatched(rowI)
+    if (show){
+        // we've reached the end of things to render
+        if (rowI === undefined) return
+    }
+    if (!nodeLists.listLayoutSpecies[rowI]) return
+    nodeLists.listLayoutSpecies[rowI].style.display = show ? "flex" : "none"
+}
+export function resetListRendering(){
+    const renderRanges = calculateRenderingRange()
+    for (let i = renderRanges.curr.min; i < renderRanges.curr.max; i++){
+        renderNextRow(i, false)
+    }
+    lastNbScrolled = 0
+    unloadOffset = 0
 }
 
 export function setupListSpecies() {
