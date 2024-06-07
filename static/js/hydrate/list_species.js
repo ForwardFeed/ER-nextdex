@@ -121,13 +121,14 @@ let unloadOffset = 0
 function listRenderingUpdate() {
     const panelDiv = document.getElementById("panel-list-species")
     const oneRowHeightPx = panelDiv.children[lastNbScrolled].clientHeight
-    const nbRowScrolled = Math.round(panelDiv.scrollTop / oneRowHeightPx) + unloadOffset
+    const maxRow = gameData.species.length - 2
+    const nbRowScrolled = Math.min(maxRow, Math.round(panelDiv.scrollTop / oneRowHeightPx) + unloadOffset)
     // first hide those out of range
     const minCurrToRender = Math.max(0, nbRowScrolled - LIST_RENDER_RANGE)
-    const maxCurrToRender = Math.min(gameData.species.length - 1, nbRowScrolled + LIST_RENDER_RANGE)
+    const maxCurrToRender = Math.min(maxRow, nbRowScrolled + LIST_RENDER_RANGE)
     const minPrevToRender = Math.max(0, lastNbScrolled - LIST_RENDER_RANGE)
-    const maxPrevToRender = Math.min(gameData.species.length - 1, lastNbScrolled + LIST_RENDER_RANGE)
-    console.log(unloadOffset, nbRowScrolled, minCurrToRender, maxCurrToRender, minPrevToRender, maxPrevToRender)
+    const maxPrevToRender = Math.min(maxRow, lastNbScrolled + LIST_RENDER_RANGE)
+    //console.log(unloadOffset, nbRowScrolled, minCurrToRender, maxCurrToRender, minPrevToRender, maxPrevToRender)
     if (nbRowScrolled > lastNbScrolled){//scrolled down
         for (let i = minPrevToRender; i < minCurrToRender; i++){
             nodeLists.listLayoutSpecies[i].style.display = "none"
