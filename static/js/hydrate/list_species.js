@@ -117,27 +117,39 @@ export function hydrateSpeciesList() {
 export const LIST_RENDER_RANGE = 20
 
 let lastNbScrolled = 0
+let unloadOffset = 0
 function listRenderingUpdate() {
     const panelDiv = document.getElementById("panel-list-species")
-    const nbRowScrolled = Math.round(panelDiv.scrollTop / panelDiv.children[0].clientHeight)
+    const oneRowHeightPx = panelDiv.children[lastNbScrolled].clientHeight
+    const nbRowScrolled = Math.round(panelDiv.scrollTop / oneRowHeightPx) + unloadOffset
     // first hide those out of range
     const minCurrToRender = Math.max(0, nbRowScrolled - LIST_RENDER_RANGE)
-    const maxCurrToRender = Math.min(gameData.species.length, nbRowScrolled + LIST_RENDER_RANGE)
+    const maxCurrToRender = Math.min(gameData.species.length - 1, nbRowScrolled + LIST_RENDER_RANGE)
+    const minPrevToRender = Math.max(0, lastNbScrolled - LIST_RENDER_RANGE)
+    const maxPrevToRender = Math.min(gameData.species.length - 1, lastNbScrolled + LIST_RENDER_RANGE)
+    console.log(unloadOffset, nbRowScrolled, minCurrToRender, maxCurrToRender, minPrevToRender, maxPrevToRender)
     if (nbRowScrolled > lastNbScrolled){//scrolled down
-        
+        for (let i = minPrevToRender; i < minCurrToRender; i++){
+            nodeLists.listLayoutSpecies[i].style.display = "none"
+        }
+        unloadOffset += minCurrToRender - minPrevToRender
     } else { //scrolled up
-        
+        for (let i = maxPrevToRender; i > maxCurrToRender; i--){
+            nodeLists.listLayoutSpecies[i].style.display = "none"
+        }
+        unloadOffset = Math.max(0, unloadOffset - (maxPrevToRender - maxCurrToRender))
     }
     for (let i = minCurrToRender; i < maxCurrToRender; i++){
         nodeLists.listLayoutSpecies[i].style.display = "flex"
     }
-    console.log(nbRowScrolled)
     // show those in range
     lastNbScrolled = nbRowScrolled
 }
 
 export function setupListSpecies() {
     $('#panel-list-species').on('scrollend', () => {
-        listRenderingUpdate()
+        fastdom.mutate(() => {
+            listRenderingUpdate()
+        })
     })
 }
