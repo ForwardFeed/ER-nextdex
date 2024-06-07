@@ -1181,14 +1181,3 @@ a:hover{
     right: 0.1em;
     top: 0.1em;
 }
-
-@media (orientation: portrait) {
-    @media (max-width: 680px) {
-        .list-species-abis-block, .list-species-inns-block{
-            width: 16em;
-        }
-        .list-species-abi, .list-species-inn{
-            width: 8em;
-        }
-    }
-}
