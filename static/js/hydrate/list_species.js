@@ -121,7 +121,6 @@ let unloadOffset = 0
 function calculateRenderingRange(){
     const panelDiv = document.getElementById("panel-list-species")
     const oneRowHeightPx = panelDiv.children[getRowRelativeToMatched(lastNbScrolled)].clientHeight
-    console.log(oneRowHeightPx, lastNbScrolled)
     const nbRowScrolledFloat = panelDiv.scrollTop / oneRowHeightPx
     let maxRow
     if (matchedSpecies){
@@ -152,7 +151,6 @@ function calculateRenderingRange(){
 function listRenderingUpdate() {
     const renderRanges = calculateRenderingRange()
     // first hide those out of range
-    console.log(renderRanges)
     if (renderRanges.nbRowScrolled > lastNbScrolled){//scrolled down
         for (let i = renderRanges.prev.min; i < renderRanges.curr.min; i++){
             renderNextRow(i, false)
