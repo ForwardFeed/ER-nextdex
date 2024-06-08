@@ -252,15 +252,16 @@ function listRenderingUpdate() {
 }
 
 function getRowRelativeToMatched(rowI){
+    if (reorderedListLayout){
+        rowI = reorderedListLayout[rowI].nodeID
+    }
     if (matchedSpecies && typeof matchedSpecies === "object"){
         // because of species none, there's a need for -1 it
         rowI = matchedSpecies[rowI] - 1
     } else if (matchedSpecies){
         rowI = matchedSpecies - 1
     }
-    if (reorderedListLayout){
-        return reorderedListLayout[rowI].nodeID
-    }
+    
     return rowI
 }
 // this is because the search just hides the row, so you have to hide over it
