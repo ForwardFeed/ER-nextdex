@@ -112,8 +112,23 @@ export function hydrateSpeciesList() {
         if (specieID > LIST_RENDER_RANGE) $(nodeSpecieRow.firstChild).hide()
         fragment.append(nodeSpecieRow)
     }
-    $('#panel-list-species').empty().append(fragment)
+    
+    setupReordering()
+    $('#panel-list-species').append(fragment)
 }
+
+function setupReordering(){
+    const topNode = JSHAC([
+        e('div', 'list-species-row'),[
+            e('div', 'list-species-name', 'name'),
+            e('div', 'list-species-abis-block', 'abilities'),
+            e('div', 'list-species-inns-block', 'innates'),
+            e('div', 'list-species-basestats-block', 'basestats'),
+        ]
+    ])
+    $('#panel-list-species').empty().append(topNode)
+}
+
 export const LIST_RENDER_RANGE = 20
 
 let lastNbScrolled = 0
