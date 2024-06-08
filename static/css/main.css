@@ -1181,3 +1181,16 @@ a:hover{
     right: 0.1em;
     top: 0.1em;
 }
+
+.list-species-reorder{
+    background-color: var(--colorC);
+}
+
+.list-species-reorder-block{
+    width: 100%;
+    display: flex;
+}
+
+.list-species-reorder-block > *{
+    margin: auto;
+}

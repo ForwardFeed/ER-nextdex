@@ -118,15 +118,49 @@ export function hydrateSpeciesList() {
 }
 
 function setupReordering(){
+    const nameArrowObj = createReorderArrow()
     const topNode = JSHAC([
-        e('div', 'list-species-row'),[
-            e('div', 'list-species-name', 'name'),
+        e('div', 'list-species-row list-species-reorder'),[
+            e('div', 'list-species-name', null, {
+                onclick: ()=>{
+                    console.log('clicked')
+                    nameArrowObj.dirDown()
+                }
+            }), [
+                e('div', 'list-species-reorder-block'), [
+                    e('div', 'list-species-reorder-inner'), [
+                        e('span', null, 'Name'),
+                    ],
+                    nameArrowObj.node
+                ]
+            ],
             e('div', 'list-species-abis-block', 'abilities'),
             e('div', 'list-species-inns-block', 'innates'),
             e('div', 'list-species-basestats-block', 'basestats'),
         ]
     ])
     $('#panel-list-species').empty().append(topNode)
+}
+
+function createReorderArrow(){
+    const arrowNode = e('div', 'reorder-arrow', '→')
+    const node = JSHAC([
+        e('div', 'reorder-arrow-block'), [
+            arrowNode
+        ]
+    ])
+    return {
+        node: node,
+        dirDefault: ()=>{
+            arrowNode.innerText = "→"
+        },
+        dirDown: ()=>{
+            arrowNode.innerText = "↓"
+        },
+        dirUp: ()=>{
+            arrowNode.innerText = "↑"
+        },
+    }
 }
 
 export const LIST_RENDER_RANGE = 20
