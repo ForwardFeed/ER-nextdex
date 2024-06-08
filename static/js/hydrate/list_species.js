@@ -118,20 +118,20 @@ export function hydrateSpeciesList() {
 }
 
 function setupReordering(){
-    const nameArrowObj = createReorderArrow()
+    const nameArrowData = createReorderArrow()
     const topNode = JSHAC([
         e('div', 'list-species-row list-species-reorder'),[
             e('div', 'list-species-name', null, {
                 onclick: ()=>{
                     console.log('clicked')
-                    nameArrowObj.dirDown()
+                    nameArrowData.dirNext()
                 }
             }), [
                 e('div', 'list-species-reorder-block'), [
                     e('div', 'list-species-reorder-inner'), [
                         e('span', null, 'Name'),
                     ],
-                    nameArrowObj.node
+                    nameArrowData.node
                 ]
             ],
             e('div', 'list-species-abis-block', 'abilities'),
@@ -151,15 +151,23 @@ function createReorderArrow(){
     ])
     return {
         node: node,
-        dirDefault: ()=>{
+        dir: 0,
+        dirDefault: function(){
             arrowNode.innerText = "→"
         },
-        dirDown: ()=>{
+        dirDown: function(){
             arrowNode.innerText = "↓"
         },
-        dirUp: ()=>{
+        dirUp: function(){
             arrowNode.innerText = "↑"
         },
+        dirNext: function(){
+            console.log(this.dir)
+            this.dir = (this.dir + 1) % 3
+            console.log(this.dir)
+            const dirs = [this.dirDefault, this.dirDown, this.dirUp]
+            dirs[this.dir]()
+        }
     }
 }
 
