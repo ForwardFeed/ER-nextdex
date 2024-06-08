@@ -118,12 +118,14 @@ export function hydrateSpeciesList() {
 }
 
 function setupReordering(){
-    const nameArrowData = createReorderArrow()
+    function byAlpha(a, b) { //alphabet reorder
+        return a.name.localeCompare(b.name)
+    }
+    const nameArrowData = createReorderArrow(byAlpha)
     const topNode = JSHAC([
         e('div', 'list-species-row list-species-reorder'),[
             e('div', 'list-species-name', null, {
                 onclick: ()=>{
-                    console.log('clicked')
                     nameArrowData.dirNext()
                 }
             }), [
@@ -142,8 +144,13 @@ function setupReordering(){
     $('#panel-list-species').empty().append(topNode)
 }
 
-function reorderListLayoutNodes(list){
-    $('')
+function reorderListLayoutNodes(reordered){
+    const len = reordered.length
+    for (var i=0; i < len; i++){
+        const node = reordered[i]
+        if (node.nodeID === undefined) continue
+        $('#panel-list-species').append(nodeLists.listLayoutSpecies[node.nodeID])
+    }
 }
 
 function createReorderArrow(sortFn){
@@ -156,19 +163,29 @@ function createReorderArrow(sortFn){
     return {
         node: node,
         dir: 0,
-        dirDefault: function(){
+        dirDefault: function(reorder = true){
             arrowNode.innerText = "→"
+            if (reorder) reorderListLayoutNodes(gameData.species)
         },
-        dirDown: function(){
+        dirDown: function(reorder = true){
             arrowNode.innerText = "↓"
+            if (reorder) reorderListLayoutNodes(structuredClone(gameData.species).sort(sortFn))
         },
-        dirUp: function(){
+        dirUp: function(reorder = true){
             arrowNode.innerText = "↑"
+            if (reorder) reorderListLayoutNodes(structuredClone(gameData.species).sort(sortFn).reverse())
         },
         dirNext: function(){
             this.dir = (this.dir + 1) % 3
-            const dirs = [this.dirDefault, this.dirDown, this.dirUp]
-            dirs[this.dir]()
+            const directionsFuncs = [this.dirDefault, this.dirDown, this.dirUp]
+            fastdom.mutate(()=>{
+                directionsFuncs[this.dir]()
+            })
+        },
+        reset: function(){
+            if (this.dir){
+                this.dirDefault(false)
+            }
         }
     }
 }

@@ -173,7 +173,7 @@ export function setLongClickSelection(node, callback, colorCb, time = 500){
 }
 
 
-export function reorderNodeList(list, sortFn, direction = "<"){
+export function reorderNodeList(listParentNode, sortFn, direction = "<"){
     // fastdom to do it in a single frame or it will lag a lot on some browsers
     fastdom.mutate(()=>{ 
         let clonedForReorder
@@ -187,7 +187,7 @@ export function reorderNodeList(list, sortFn, direction = "<"){
         for (var i=0; i < len; i++){
             const mon = clonedForReorder[i]
             if (mon.nodeID === undefined) continue
-            list.append(nodeLists.species[mon.nodeID])
+            listParentNode.append(nodeLists.species[mon.nodeID])
         }
     })
 }
