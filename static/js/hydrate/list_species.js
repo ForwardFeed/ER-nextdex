@@ -117,6 +117,8 @@ export function hydrateSpeciesList() {
     $('#panel-list-species').append(fragment)
 }
 
+
+let reorderedListLayout
 function setupReordering(){
     function byAlpha(a, b) { //alphabet reorder
         return a.name.localeCompare(b.name)
@@ -145,12 +147,15 @@ function setupReordering(){
 }
 
 function reorderListLayoutNodes(reordered){
+    hideCurrentRendered()
+    reorderedListLayout = reordered
     const len = reordered.length
     for (var i=0; i < len; i++){
         const node = reordered[i]
         if (node.nodeID === undefined) continue
         $('#panel-list-species').append(nodeLists.listLayoutSpecies[node.nodeID])
     }
+    listRenderingUpdate()
 }
 
 function createReorderArrow(sortFn){
@@ -253,6 +258,9 @@ function getRowRelativeToMatched(rowI){
     } else if (matchedSpecies){
         rowI = matchedSpecies - 1
     }
+    if (reorderedListLayout){
+        return reorderedListLayout[rowI].nodeID
+    }
     return rowI
 }
 // this is because the search just hides the row, so you have to hide over it
@@ -265,11 +273,16 @@ function renderNextRow(rowI, show=true){
     if (!nodeLists.listLayoutSpecies[rowI]) return
     nodeLists.listLayoutSpecies[rowI].style.display = show ? "flex" : "none"
 }
-export function resetListRendering(){
+
+function hideCurrentRendered(){
     const renderRanges = calculateRenderingRange()
     for (let i = renderRanges.curr.min; i < renderRanges.curr.max; i++){
         renderNextRow(i, false)
     }
+}
+
+export function resetListRendering(){
+    hideCurrentRendered()
     lastNbScrolled = 0
     unloadOffset = 0
 }
