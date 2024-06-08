@@ -142,7 +142,11 @@ function setupReordering(){
     $('#panel-list-species').empty().append(topNode)
 }
 
-function createReorderArrow(){
+function reorderListLayoutNodes(list){
+    $('')
+}
+
+function createReorderArrow(sortFn){
     const arrowNode = e('div', 'reorder-arrow', '→')
     const node = JSHAC([
         e('div', 'reorder-arrow-block'), [
@@ -162,9 +166,7 @@ function createReorderArrow(){
             arrowNode.innerText = "↑"
         },
         dirNext: function(){
-            console.log(this.dir)
             this.dir = (this.dir + 1) % 3
-            console.log(this.dir)
             const dirs = [this.dirDefault, this.dirDown, this.dirUp]
             dirs[this.dir]()
         }
@@ -177,7 +179,8 @@ let lastNbScrolled = 0
 let unloadOffset = 0
 function calculateRenderingRange(){
     const panelDiv = document.getElementById("panel-list-species")
-    const oneRowHeightPx = panelDiv.children[getRowRelativeToMatched(lastNbScrolled)].clientHeight
+    // turns out that the reorder bar is always there and in the right size
+    const oneRowHeightPx = panelDiv.children[0].clientHeight
     const nbRowScrolledFloat = panelDiv.scrollTop / oneRowHeightPx
     let maxRow
     if (matchedSpecies){
@@ -189,9 +192,9 @@ function calculateRenderingRange(){
     } else {
         maxRow = gameData.species.length - 2
     }
-    
-    const nbRowScrolled = Math.min(maxRow, Math.round(nbRowScrolledFloat) + unloadOffset)
-
+    const nbRowScrolledRaw = Math.min(maxRow, Math.round(nbRowScrolledFloat) + unloadOffset)
+    // Minus one because it takes in account the top reordering bar
+    const nbRowScrolled = Math.max(0, nbRowScrolledRaw - 1)
     return{
         nbRowScrolled: nbRowScrolled,
         curr: {
