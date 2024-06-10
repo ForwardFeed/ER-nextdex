@@ -255,7 +255,6 @@ function calculateRenderingRange(){
 
 function listRenderingUpdate() {
     const renderRanges = calculateRenderingRange()
-    //console.log("a", renderRanges.prev.max - renderRanges.curr.max, lastNbScrolled, unloadOffset)
     if (renderRanges.nbRowScrolled && renderRanges.nbRowScrolled == lastNbScrolled) return // nothing to do
     // first hide those out of range
     if (renderRanges.nbRowScrolled > lastNbScrolled){//scrolled down
@@ -343,7 +342,6 @@ export function setupListSpecies() {
     let timeStamp
     const RATE_LIMIT_INTERVAL = 400 // trigger the rendering of the list with this minimun in ms
     $('#panel-list-species').on('scroll', () => {
-        console.log("scroll")
         if (timeStamp) return
         timeStamp = setTimeout(()=>{
             fastdom.mutate(() => {
