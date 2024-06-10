@@ -128,7 +128,7 @@ function setupReordering(){
     }
     const nameArrowData = createReorderArrow(byAlpha)
     const statsArrowData = []
-    const baseStatsNodes = StatsEnum.map((x, statsID)=>{
+    const baseStatsNodes = StatsEnum.concat(["BST"]).map((x, statsID)=>{
         const arrowData = statsArrowData[statsID] = createReorderArrow(byStats.bind(null, statsID))
         return JSHAC([
             e('div', 'list-species-basestats-col', null, {
