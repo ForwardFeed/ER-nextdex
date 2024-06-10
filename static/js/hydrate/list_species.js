@@ -123,7 +123,24 @@ function setupReordering(){
     function byAlpha(a, b) { //alphabet reorder
         return a.name.localeCompare(b.name)
     }
+    function byStats(statID, a, b) {
+        return b.stats.base[statID] - a.stats.base[statID]
+    }
     const nameArrowData = createReorderArrow(byAlpha)
+    const statsArrowData = []
+    const baseStatsNodes = StatsEnum.map((x, statsID)=>{
+        const arrowData = statsArrowData[statsID] = createReorderArrow(byStats.bind(null, statsID))
+        return JSHAC([
+            e('div', 'list-species-basestats-col', null, {
+                onclick: ()=>{
+                    arrowData.dirNext()
+                }
+            }), [
+                e('div', 'list-species-basestats-head', x),
+                arrowData.node
+            ]
+        ])
+    })
     const topNode = JSHAC([
         e('div', 'list-species-row list-species-reorder'),[
             e('div', 'list-species-name', null, {
@@ -141,7 +158,8 @@ function setupReordering(){
             e('div', 'list-species-abis-block', [e('span', null, 'abilities')]),
             e('div', 'list-species-inns-block', [e('span', null, 'innates')]),
             e('div', 'list-species-types-block', [e('span', null, 'types')]),
-            e('div', 'list-species-basestats-block', [e('span', null, 'basestats')]),
+            e('div', 'list-species-basestats-block', /*[e('span', null, 'basestats')]*/),
+                baseStatsNodes
         ]
     ])
     $('#panel-list-species').empty().append(topNode)
@@ -161,7 +179,13 @@ function reorderListLayoutNodes(reordered){
     listDataUpdate()
     listRenderingUpdate()
 }
-
+const reorderArrowsdata = []
+function resetAllArrows(){
+    const len =reorderArrowsdata.length
+    for (let i = 0; i < len; i++){
+        reorderArrowsdata[i].reset()
+    }
+}
 function createReorderArrow(sortFn){
     const arrowNode = e('div', 'reorder-arrow', '→')
     const node = JSHAC([
@@ -169,7 +193,7 @@ function createReorderArrow(sortFn){
             arrowNode
         ]
     ])
-    return {
+    const dataID = reorderArrowsdata.push({
         node: node,
         dir: 0,
         dirDefault: function(reorder = true){
@@ -177,6 +201,7 @@ function createReorderArrow(sortFn){
             if (reorder) reorderListLayoutNodes(gameData.species)
         },
         dirDown: function(reorder = true){
+            resetAllArrows()
             arrowNode.innerText = "↓"
             if (reorder) reorderListLayoutNodes(structuredClone(gameData.species).sort(sortFn))
         },
@@ -194,10 +219,11 @@ function createReorderArrow(sortFn){
         reset: function(){
             if (this.dir){
                 this.dirDefault(false)
-                finalDataListLayout = undefined
+                finalDataListLayout.length = 0
             }
         }
-    }
+    }) - 1
+    return reorderArrowsdata[dataID]
 }
 
 export const LIST_RENDER_RANGE = 20
@@ -230,7 +256,7 @@ function calculateRenderingRange(){
 function listRenderingUpdate() {
     const renderRanges = calculateRenderingRange()
     //console.log("a", renderRanges.prev.max - renderRanges.curr.max, lastNbScrolled, unloadOffset)
-    if (renderRanges.nbRowScrolled == lastNbScrolled) return // nothing to do
+    if (renderRanges.nbRowScrolled && renderRanges.nbRowScrolled == lastNbScrolled) return // nothing to do
     // first hide those out of range
     if (renderRanges.nbRowScrolled > lastNbScrolled){//scrolled down
         for (let i = renderRanges.prev.min; i < renderRanges.curr.min; i++){

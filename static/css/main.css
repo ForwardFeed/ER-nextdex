@@ -1151,7 +1151,6 @@ a:hover{
 }
 
 .list-species-basestats-head,.list-species-basestats-val{
-    flex-grow: 1;
     margin: auto;
 }
 .list-species-basestats-val{
@@ -1196,5 +1195,12 @@ a:hover{
 }
 
 .list-species-reorder-block > *{
+    margin: auto;
+}
+
+.reorder-arrow-block{
+    display: flex;
+}
+.reorder-arrow{
     margin: auto;
 }
