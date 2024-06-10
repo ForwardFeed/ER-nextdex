@@ -316,6 +316,7 @@ export function setupListSpecies() {
     let timeStamp
     const RATE_LIMIT_INTERVAL = 400 // trigger the rendering of the list with this minimun in ms
     $('#panel-list-species').on('scroll', () => {
+        console.log("scroll")
         if (timeStamp) return
         timeStamp = setTimeout(()=>{
             fastdom.mutate(() => {
@@ -323,11 +324,5 @@ export function setupListSpecies() {
             })
             timeStamp = undefined
         }, RATE_LIMIT_INTERVAL)  
-    })
-    $('#panel-list-species').on('scrollend', () => {
-        if (timeStamp) clearTimeout(timeStamp)
-        fastdom.mutate(() => {
-            listRenderingUpdate()
-        })
     })
 }
