@@ -207,17 +207,9 @@ function calculateRenderingRange(){
     // turns out that the reorder bar is always there and in the right size
     const oneRowHeightPx = panelDiv.children[0].clientHeight
     const nbRowScrolledFloat = panelDiv.scrollTop / oneRowHeightPx
-    let maxRow
-    if (matchedSpecies){
-        if (typeof matchedSpecies === "object"){
-            maxRow = matchedSpecies.length
-        } else {
-            maxRow = 1
-        }
-    } else {
-        maxRow = gameData.species.length - 2
-    }
+    const maxRow = finalDataListLayout.length
     const nbRowScrolledRaw = Math.min(maxRow, Math.round(nbRowScrolledFloat) + unloadOffset)
+
     // Minus one because it takes in account the top reordering bar
     const nbRowScrolled = Math.max(0, nbRowScrolledRaw - 1)
     return{
@@ -235,6 +227,7 @@ function calculateRenderingRange(){
 
 function listRenderingUpdate() {
     const renderRanges = calculateRenderingRange()
+    console.log(renderRanges.curr.min, renderRanges.curr.max)
     // first hide those out of range
     if (renderRanges.nbRowScrolled > lastNbScrolled){//scrolled down
         for (let i = renderRanges.prev.min; i < renderRanges.curr.min; i++){
@@ -277,10 +270,10 @@ export function listDataUpdate(){
         const matchedLen = matchedSpecies.length
         for(let i = 0; i < reorderLen; i++){
             if (finalDataListLayout.length == matchedLen) {
-                return console.log(reorderedDataListLayout, finalDataListLayout, "yes fuck yes")
+                return
             }
             const reorderI = reorderedDataListLayout[i] + 1
-            if ( matchedSpecies.indexOf(reorderI) == - 1) continue
+            if (matchedSpecies.indexOf(reorderI) == - 1) continue
             finalDataListLayout.push(reorderI - 1)
         }
     } else if (matchedSpecies){
@@ -289,7 +282,6 @@ export function listDataUpdate(){
         const naturalOrder = nodeLists.listLayoutSpecies.length
         for(let i = 0; i < naturalOrder; i++) finalDataListLayout[i] = reorderedDataListLayout[i]
     }
-    console.log(reorderedDataListLayout, finalDataListLayout, matchedSpecies)
 }
 
 // this is because the search just hides the row, so you have to hide over it
