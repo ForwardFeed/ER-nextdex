@@ -138,9 +138,10 @@ function setupReordering(){
                     nameArrowData.node
                 ]
             ],
-            e('div', 'list-species-abis-block', 'abilities'),
-            e('div', 'list-species-inns-block', 'innates'),
-            e('div', 'list-species-basestats-block', 'basestats'),
+            e('div', 'list-species-abis-block', [e('span', null, 'abilities')]),
+            e('div', 'list-species-inns-block', [e('span', null, 'innates')]),
+            e('div', 'list-species-types-block', [e('span', null, 'types')]),
+            e('div', 'list-species-basestats-block', [e('span', null, 'basestats')]),
         ]
     ])
     $('#panel-list-species').empty().append(topNode)
