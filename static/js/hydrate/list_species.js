@@ -180,9 +180,10 @@ function reorderListLayoutNodes(reordered){
     listRenderingUpdate()
 }
 const reorderArrowsdata = []
-function resetAllArrows(){
+function resetAllArrows(callerID){
     const len =reorderArrowsdata.length
     for (let i = 0; i < len; i++){
+        if (callerID == i) continue
         reorderArrowsdata[i].reset()
     }
 }
@@ -193,7 +194,9 @@ function createReorderArrow(sortFn){
             arrowNode
         ]
     ])
-    const dataID = reorderArrowsdata.push({
+    const arrowID = reorderArrowsdata.length
+    reorderArrowsdata.push({
+        arrowID: arrowID,
         node: node,
         dir: 0,
         dirDefault: function(reorder = true){
@@ -201,7 +204,6 @@ function createReorderArrow(sortFn){
             if (reorder) reorderListLayoutNodes(gameData.species)
         },
         dirDown: function(reorder = true){
-            resetAllArrows()
             arrowNode.innerText = "↓"
             if (reorder) reorderListLayoutNodes(structuredClone(gameData.species).sort(sortFn))
         },
@@ -210,20 +212,22 @@ function createReorderArrow(sortFn){
             if (reorder) reorderListLayoutNodes(structuredClone(gameData.species).sort(sortFn).reverse())
         },
         dirNext: function(){
-            this.dir = (this.dir + 1) % 3
-            const directionsFuncs = [this.dirDefault, this.dirDown, this.dirUp]
             fastdom.mutate(()=>{
+                resetAllArrows(this.arrowID)
+                this.dir = (this.dir + 1) % 3
+                const directionsFuncs = [this.dirDefault, this.dirDown, this.dirUp]
                 directionsFuncs[this.dir]()
             })
         },
         reset: function(){
             if (this.dir){
+                this.dir = 0
                 this.dirDefault(false)
                 finalDataListLayout.length = 0
             }
         }
-    }) - 1
-    return reorderArrowsdata[dataID]
+    })
+    return reorderArrowsdata[arrowID]
 }
 
 export const LIST_RENDER_RANGE = 20
