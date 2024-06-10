@@ -1141,13 +1141,14 @@ a:hover{
 
 .list-species-basestats-block{
     display: flex;
-    width: 13em;
+    width: 14em;
 }
 
 .list-species-basestats-col{
     display: flex;
     flex-direction: column;
-    width: 2em;
+    min-width: 2em;
+    max-width: 2em;
 }
 
 .list-species-basestats-head,.list-species-basestats-val{
