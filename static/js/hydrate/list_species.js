@@ -114,6 +114,7 @@ export function hydrateSpeciesList() {
     }
     
     setupReordering()
+    listDataUpdate()
     $('#panel-list-species').append(fragment)
 }
 
@@ -209,9 +210,11 @@ function calculateRenderingRange(){
     const nbRowScrolledFloat = panelDiv.scrollTop / oneRowHeightPx
     const maxRow = finalDataListLayout.length
     const nbRowScrolledRaw = Math.min(maxRow, Math.round(nbRowScrolledFloat) + unloadOffset)
-
     // Minus one because it takes in account the top reordering bar
     const nbRowScrolled = Math.max(0, nbRowScrolledRaw - 1)
+    console.log("nbRowScrolledFloat " + nbRowScrolledFloat)
+    console.log("oneRowHeightPx " + oneRowHeightPx)
+    console.log("nbRowScrolled " + nbRowScrolled)
     return{
         nbRowScrolled: nbRowScrolled,
         curr: {
@@ -227,7 +230,7 @@ function calculateRenderingRange(){
 
 function listRenderingUpdate() {
     const renderRanges = calculateRenderingRange()
-    console.log(renderRanges.curr.min, renderRanges.curr.max)
+    console.log("a", renderRanges.prev.max - renderRanges.curr.max, lastNbScrolled, unloadOffset)
     // first hide those out of range
     if (renderRanges.nbRowScrolled > lastNbScrolled){//scrolled down
         for (let i = renderRanges.prev.min; i < renderRanges.curr.min; i++){
@@ -311,9 +314,16 @@ export function resetListRendering(){
 
 
 export function setupListSpecies() {
-    $('#panel-list-species').on('scrollend', () => {
-        fastdom.mutate(() => {
-            listRenderingUpdate()
-        })
+    let timeStamp
+    const REFRESH_INTERVAL = 400 // trigger the rendering of the list with this minimun in ms
+    $('#panel-list-species').on('scroll', () => {
+        if (timeStamp) return
+        timeStamp = setTimeout(()=>{
+            fastdom.mutate(() => {
+                listRenderingUpdate()
+            })
+            timeStamp = undefined
+        }, REFRESH_INTERVAL)
+        
     })
 }
