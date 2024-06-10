@@ -243,7 +243,7 @@ function calculateRenderingRange(){
     const nbRowScrolledRaw = Math.min(maxRow, Math.round(nbRowScrolledFloat) + unloadOffset)
     // Minus one because it takes in account the top reordering bar
     const nbRowScrolled = Math.max(0, nbRowScrolledRaw - 1)
-
+    console.log(nbRowScrolled)
     return{
         nbRowScrolled: nbRowScrolled,
         curr: {
@@ -257,7 +257,7 @@ function calculateRenderingRange(){
     }
 }
 
-function listRenderingUpdate() {
+export function listRenderingUpdate() {
     const renderRanges = calculateRenderingRange()
     if (renderRanges.nbRowScrolled && renderRanges.nbRowScrolled == lastNbScrolled) return // nothing to do
     // first hide those out of range
@@ -292,8 +292,8 @@ export function listDataUpdate(){
         } else if (matchedSpecies){
                 finalDataListLayout[0] = matchedSpecies
         } else {
-            const naturalOrder = nodeLists.listLayoutSpecies.length
-            for(let i = 0; i < naturalOrder; i++) finalDataListLayout[i] = i
+            const naturalOrderLen = nodeLists.listLayoutSpecies.length
+            for(let i = 0; i < naturalOrderLen; i++) finalDataListLayout[i] = i
         }
         return
     }
@@ -311,8 +311,8 @@ export function listDataUpdate(){
     } else if (matchedSpecies){
             finalDataListLayout[0] = matchedSpecies
     } else {
-        const naturalOrder = nodeLists.listLayoutSpecies.length
-        for(let i = 0; i < naturalOrder; i++) finalDataListLayout[i] = reorderedDataListLayout[i]
+        const reordererOrderLen = nodeLists.listLayoutSpecies.length
+        for(let i = 0; i < reordererOrderLen; i++) finalDataListLayout[i] = reorderedDataListLayout[i]
     }
 }
 
