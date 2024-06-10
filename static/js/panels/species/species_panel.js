@@ -10,7 +10,7 @@ import { nodeLists } from "../../hydrate/hydrate.js"
 import { cubicRadial } from "../../radial.js"
 import { getHintInteractibilityClass, settings } from "../../settings.js"
 import { feedCommunitySets } from "./community_sets.js"
-import { LIST_RENDER_RANGE, resetListRendering, toggleLayoutList } from "../../hydrate/list_species.js"
+import { LIST_RENDER_RANGE, listDataUpdate, resetListRendering, toggleLayoutList } from "../../hydrate/list_species.js"
 
 export const StatsEnum = [
     "HP",
@@ -685,6 +685,7 @@ export function updateSpecies(searchQuery) {
     resetListRendering()
     const species = gameData.species
     matchedSpecies = queryFilter3(searchQuery, species, queryMapSpecies, prefixTree)
+    listDataUpdate()
     let validID;
     let listRenderingCapacity = LIST_RENDER_RANGE;
     const specieLen = species.length

@@ -1,7 +1,7 @@
 import { compareData, gameData } from "../data_version.js";
 import { longClickToFilter } from "../filters.js";
 import { StatsEnum, currentSpecieID, feedPanelSpecies, getColorOfStat, getSpritesShinyURL, getSpritesURL, matchedSpecies } from "../panels/species/species_panel.js";
-import { JSHAC, e } from "../utils.js";
+import { JSHAC, e, reorderNodeList } from "../utils.js";
 import { nodeLists } from "./hydrate.js";
 
 
@@ -118,7 +118,6 @@ export function hydrateSpeciesList() {
 }
 
 
-let reorderedListLayout
 function setupReordering(){
     function byAlpha(a, b) { //alphabet reorder
         return a.name.localeCompare(b.name)
@@ -146,15 +145,18 @@ function setupReordering(){
     $('#panel-list-species').empty().append(topNode)
 }
 
+let reorderedDataListLayout = undefined
 function reorderListLayoutNodes(reordered){
     hideCurrentRendered()
-    reorderedListLayout = reordered
+    reorderedDataListLayout = []
     const len = reordered.length
     for (var i=0; i < len; i++){
         const node = reordered[i]
         if (node.nodeID === undefined) continue
+        reorderedDataListLayout[i - 1] = node.nodeID
         $('#panel-list-species').append(nodeLists.listLayoutSpecies[node.nodeID])
     }
+    listDataUpdate()
     listRenderingUpdate()
 }
 
@@ -190,6 +192,7 @@ function createReorderArrow(sortFn){
         reset: function(){
             if (this.dir){
                 this.dirDefault(false)
+                finalDataListLayout = undefined
             }
         }
     }
@@ -251,22 +254,48 @@ function listRenderingUpdate() {
     lastNbScrolled = renderRanges.nbRowScrolled
 }
 
-function getRowRelativeToMatched(rowI){
-    if (reorderedListLayout){
-        rowI = reorderedListLayout[rowI].nodeID
+const finalDataListLayout = []
+export function listDataUpdate(){
+    finalDataListLayout.length = 0 // reset the array
+    if (!reorderedDataListLayout){
+        if (matchedSpecies && typeof matchedSpecies === "object"){
+            const matchedSpeciesLen = matchedSpecies.length
+            for(let i = 0; i < matchedSpeciesLen; i++){
+                // because of species none, there's a need for -1 it
+                finalDataListLayout[i] = matchedSpecies[i] - 1
+            }
+        } else if (matchedSpecies){
+                finalDataListLayout[0] = matchedSpecies
+        } else {
+            const naturalOrder = nodeLists.listLayoutSpecies.length
+            for(let i = 0; i < naturalOrder; i++) finalDataListLayout[i] = i
+        }
+        return
     }
     if (matchedSpecies && typeof matchedSpecies === "object"){
-        // because of species none, there's a need for -1 it
-        rowI = matchedSpecies[rowI] - 1
+        const reorderLen = reorderedDataListLayout.length
+        const matchedLen = matchedSpecies.length
+        for(let i = 0; i < reorderLen; i++){
+            if (finalDataListLayout.length == matchedLen) {
+                return console.log(reorderedDataListLayout, finalDataListLayout, "yes fuck yes")
+            }
+            const reorderI = reorderedDataListLayout[i] + 1
+            if ( matchedSpecies.indexOf(reorderI) == - 1) continue
+            finalDataListLayout.push(reorderI - 1)
+        }
     } else if (matchedSpecies){
-        rowI = matchedSpecies - 1
+            finalDataListLayout[0] = matchedSpecies
+    } else {
+        const naturalOrder = nodeLists.listLayoutSpecies.length
+        for(let i = 0; i < naturalOrder; i++) finalDataListLayout[i] = reorderedDataListLayout[i]
     }
-    
-    return rowI
+    console.log(reorderedDataListLayout, finalDataListLayout, matchedSpecies)
 }
+
 // this is because the search just hides the row, so you have to hide over it
 function renderNextRow(rowI, show=true){
-    rowI = getRowRelativeToMatched(rowI)
+    rowI = finalDataListLayout[rowI]
+    if (rowI === undefined) return
     if (show){
         // we've reached the end of things to render
         if (rowI === undefined) return
@@ -287,6 +316,7 @@ export function resetListRendering(){
     lastNbScrolled = 0
     unloadOffset = 0
 }
+
 
 export function setupListSpecies() {
     $('#panel-list-species').on('scrollend', () => {
