@@ -243,7 +243,6 @@ function calculateRenderingRange(){
     const nbRowScrolledRaw = Math.min(maxRow, Math.round(nbRowScrolledFloat) + unloadOffset)
     // Minus one because it takes in account the top reordering bar
     const nbRowScrolled = Math.max(0, nbRowScrolledRaw - 1)
-    console.log(nbRowScrolled)
     return{
         nbRowScrolled: nbRowScrolled,
         curr: {

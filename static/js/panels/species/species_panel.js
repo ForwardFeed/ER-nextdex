@@ -10,7 +10,7 @@ import { nodeLists } from "../../hydrate/hydrate.js"
 import { cubicRadial } from "../../radial.js"
 import { getHintInteractibilityClass, settings } from "../../settings.js"
 import { feedCommunitySets } from "./community_sets.js"
-import { LIST_RENDER_RANGE, listDataUpdate, listRenderingUpdate, resetListRendering, toggleLayoutList } from "../../hydrate/list_species.js"
+import { listDataUpdate, listRenderingUpdate, resetListRendering, toggleLayoutList } from "../../hydrate/list_species.js"
 
 export const StatsEnum = [
     "HP",
