@@ -322,7 +322,12 @@ export function setupListSpecies() {
                 listRenderingUpdate()
             })
             timeStamp = undefined
-        }, RATE_LIMIT_INTERVAL)
-        
+        }, RATE_LIMIT_INTERVAL)  
+    })
+    $('#panel-list-species').on('scrollend', () => {
+        if (timeStamp) clearTimeout(timeStamp)
+        fastdom.mutate(() => {
+            listRenderingUpdate()
+        })
     })
 }
