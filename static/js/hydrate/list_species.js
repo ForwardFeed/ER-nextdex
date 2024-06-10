@@ -212,9 +212,7 @@ function calculateRenderingRange(){
     const nbRowScrolledRaw = Math.min(maxRow, Math.round(nbRowScrolledFloat) + unloadOffset)
     // Minus one because it takes in account the top reordering bar
     const nbRowScrolled = Math.max(0, nbRowScrolledRaw - 1)
-    console.log("nbRowScrolledFloat " + nbRowScrolledFloat)
-    console.log("oneRowHeightPx " + oneRowHeightPx)
-    console.log("nbRowScrolled " + nbRowScrolled)
+
     return{
         nbRowScrolled: nbRowScrolled,
         curr: {
@@ -230,7 +228,8 @@ function calculateRenderingRange(){
 
 function listRenderingUpdate() {
     const renderRanges = calculateRenderingRange()
-    console.log("a", renderRanges.prev.max - renderRanges.curr.max, lastNbScrolled, unloadOffset)
+    //console.log("a", renderRanges.prev.max - renderRanges.curr.max, lastNbScrolled, unloadOffset)
+    if (renderRanges.nbRowScrolled == lastNbScrolled) return // nothing to do
     // first hide those out of range
     if (renderRanges.nbRowScrolled > lastNbScrolled){//scrolled down
         for (let i = renderRanges.prev.min; i < renderRanges.curr.min; i++){
@@ -241,7 +240,7 @@ function listRenderingUpdate() {
         for (let i = renderRanges.prev.max; i > renderRanges.curr.max; i--){
             renderNextRow(i, false)
         }
-        unloadOffset = Math.max(0, unloadOffset - (renderRanges.prev.max - renderRanges.curr.max))
+        unloadOffset = Math.max(0, unloadOffset - (renderRanges.prev.min - renderRanges.curr.min))
     }
     // then show those in range
     for (let i = renderRanges.curr.min; i < renderRanges.curr.max; i++){
@@ -315,7 +314,7 @@ export function resetListRendering(){
 
 export function setupListSpecies() {
     let timeStamp
-    const REFRESH_INTERVAL = 400 // trigger the rendering of the list with this minimun in ms
+    const RATE_LIMIT_INTERVAL = 400 // trigger the rendering of the list with this minimun in ms
     $('#panel-list-species').on('scroll', () => {
         if (timeStamp) return
         timeStamp = setTimeout(()=>{
@@ -323,7 +322,7 @@ export function setupListSpecies() {
                 listRenderingUpdate()
             })
             timeStamp = undefined
-        }, REFRESH_INTERVAL)
+        }, RATE_LIMIT_INTERVAL)
         
     })
 }
