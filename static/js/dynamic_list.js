@@ -35,15 +35,16 @@ export class DynamicList{
         this.nodeListName = nodeListName
     }
     setup(){
-        let timeStamp
+        let timeout
         this.node.onscroll = () => {
-            if (timeStamp) return
-            timeStamp = setTimeout(()=>{
+            if (timeout) return
+            timeout = setTimeout(()=>{
                 fastdom.mutate(() => {
                     this.update()
                 })
-                timeStamp = undefined
+                timeout = undefined
             }, RATE_LIMIT_INTERVAL)  
+            
         }
     }
     dataUpdate(data){
@@ -69,7 +70,6 @@ export class DynamicList{
                 max: Math.min(maxRow, this.lastNbScrolled + LIST_RENDER_RANGE)
             }
         }
-        console.log(this)
         return this
     }
     update(){
@@ -81,12 +81,18 @@ export class DynamicList{
                 if (!this.renderNextRow(i, false)) break
             }
             this.unloadOffset += this.ranges.curr.min - this.ranges.prev.min
-        } else { //scrolled up
+        } else if (this.nbRowScrolled < this.lastNbScrolled){ //scrolled up
             for (let i = this.ranges.prev.max; i > this.ranges.curr.max; i--){
                 if (!this.renderNextRow(i, false)) break
             }
-            this.unloadOffset = Math.max(0, this.unloadOffset - (this.ranges.prev.min - this.ranges.curr.min))
+            const scrollDiff = this.lastNbScrolled - this.nbRowScrolled
+            this.unloadOffset = Math.max(0, this.unloadOffset - scrollDiff)
+            if (scrollDiff > LIST_RENDER_RANGE) {
+                // dumb workaround but it works for me so far
+                this.node.scrollTop = this.topBar.clientHeight * (LIST_RENDER_RANGE / 2)
+            }
         }
+        
         // then show those in range
         for (let i = this.ranges.curr.min; i < this.ranges.curr.max; i++){
             if (!this.renderNextRow(i, true)) break
