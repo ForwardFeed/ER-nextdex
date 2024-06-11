@@ -244,7 +244,7 @@ export function listDataUpdate(){
             const naturalOrderLen = nodeLists.listLayoutSpecies.length
             for(let i = 0; i < naturalOrderLen; i++) finalDataListLayout[i] = i
         }
-        listSpeciesDynList.dataUpdate(finalDataListLayout)
+        listSpeciesDynList.dataUpdate(finalDataListLayout).update()
         return 
     }
     if (matchedSpecies && typeof matchedSpecies === "object"){
@@ -252,7 +252,7 @@ export function listDataUpdate(){
         const matchedLen = matchedSpecies.length
         for(let i = 0; i < reorderLen; i++){
             if (finalDataListLayout.length == matchedLen) {
-                listSpeciesDynList.dataUpdate(finalDataListLayout)
+                listSpeciesDynList.dataUpdate(finalDataListLayout).update()
                 return
             }
             const reorderI = reorderedDataListLayout[i] + 1
@@ -265,7 +265,7 @@ export function listDataUpdate(){
         const reordererOrderLen = nodeLists.listLayoutSpecies.length
         for(let i = 0; i < reordererOrderLen; i++) finalDataListLayout[i] = reorderedDataListLayout[i]
     }
-    listSpeciesDynList.dataUpdate(finalDataListLayout)
+    listSpeciesDynList.dataUpdate(finalDataListLayout).update()
 }
 
 /** @type {DynamicList} */

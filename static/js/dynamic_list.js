@@ -40,7 +40,7 @@ export class DynamicList{
             if (timeStamp) return
             timeStamp = setTimeout(()=>{
                 fastdom.mutate(() => {
-                    listRenderingUpdate()
+                    this.update()
                 })
                 timeStamp = undefined
             }, RATE_LIMIT_INTERVAL)  
@@ -88,7 +88,7 @@ export class DynamicList{
         for (let i = this.ranges.curr.min; i < this.ranges.curr.max; i++){
             if (!this.renderNextRow(i, true)) break
         }
-        this.lastNbScrolled = this.ranges.nbRowScrolled
+        this.lastNbScrolled = this.nbRowScrolled
         return this
     }
     renderNextRow(rowI, show=true){
@@ -110,8 +110,8 @@ export class DynamicList{
         return this
     }
     reset(){
-        lastNbScrolled = 0
-        unloadOffset = 0
+        this.lastNbScrolled = 0
+        this.unloadOffset = 0
         return this
     }
     emptyList(){
