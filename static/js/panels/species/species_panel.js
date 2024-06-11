@@ -728,6 +728,7 @@ export function updateSpecies(searchQuery) {
             node.hide()
         }
     }
+    listSpeciesDynList.hideCurrentRendered().reset()
     listDataUpdate()
     //if the current selection isn't in the list then change
     if (matchedSpecies && matchedSpecies.indexOf(currentSpecieID) == -1 && validID) feedPanelSpecies(validID)
