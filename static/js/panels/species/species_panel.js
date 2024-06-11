@@ -688,7 +688,7 @@ function postTreatingSpeciesFiltering(){
     if (!settings.monotype) return
     if (!matchedSpecies){
         matchedSpecies = []
-        const len = gameData.species
+        const len = gameData.species.length
         for (let i = 0; i < len; i++){
             const specie = gameData.species[i]
             if (specie.allTypesNames[0] == specie.allTypesNames[1]){
