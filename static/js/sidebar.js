@@ -2,6 +2,7 @@ import { search, updateMainSearchKey} from "./search.js"
 import { activateSearch } from "./filters.js"
 import { capitalizeFirstLetter } from "./utils.js"
 import { getHintInteractibilityClass } from "./settings.js"
+import { toggleLayoutList } from "./hydrate/list_species.js"
 
 export function setupPanels(){
     // if modified sync it with "search.js > search > panelUpdatesTable" variable
@@ -30,6 +31,16 @@ export function setupPanels(){
                 // changes the data panel
                 $(btnPanel[2]).toggle()
                 $(btnPanel[3]).toggle()
+                // switch the list layout temporarily
+                if (small.text() === "Builder"){
+                    if ($('#enable-list-layout').prop("checked")){
+                        toggleLayoutList(false)
+                    }
+                } else {
+                    if ($('#enable-list-layout').prop("checked")){
+                        toggleLayoutList(true)
+                    }
+                }
                 return
             }
 
