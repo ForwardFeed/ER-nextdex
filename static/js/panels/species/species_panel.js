@@ -612,7 +612,7 @@ export const queryMapSpecies = {
     },
     "type": (queryData, specie) => {
         if (settings.monotype && specie.allTypesNames[0]) {
-            return AisInB(queryData, specie.allTypesNames[0]) && specie.allTypesNames[0] == specie.allTypesNames[1]
+            return 
         }
         const typesQueried = queryData.split(' ').filter(x => x)
         const thirdType = specie.thirdType ? gameData.typeT[specie.thirdType].toLowerCase() : null
@@ -687,11 +687,38 @@ export const queryMapSpecies = {
     },
 }
 
+function postTreatingSpeciesFiltering(){
+    if (!settings.monotype) return
+    if (!matchedSpecies){
+        matchedSpecies = []
+        const len = gameData.species
+        for (let i = 0; i < len; i++){
+            const specie = gameData.species[i]
+            if (specie.allTypesNames[0] == specie.allTypesNames[1]){
+                matchedSpecies.push(i)
+            }
+        }
+        
+    } else {
+        let matchedLen = matchedSpecies?.length || 0
+        for (let i = 0; i < matchedLen; i++){
+            const specieID = matchedSpecies[i]
+            const specie = gameData.species[specieID]
+            if (specie.allTypesNames[0] != specie.allTypesNames[1]){
+                matchedSpecies.splice(i, 1)
+                matchedLen--
+                i--
+            }
+        }
+    }
+}
+
 export let matchedSpecies = undefined
 export function updateSpecies(searchQuery) {
     resetListRendering()
     const species = gameData.species
     matchedSpecies = queryFilter3(searchQuery, species, queryMapSpecies, prefixTree)
+    postTreatingSpeciesFiltering()
     listDataUpdate()
     let validID;
     const specieLen = species.length
