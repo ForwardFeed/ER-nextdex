@@ -652,7 +652,8 @@ span{
     }
     .data-list-row{
         padding: 10px;
-        height: fit-content;
+        min-height: 1.7em;
+        max-height: 1.7em;
     }
     .data-data{
         height: 100%;

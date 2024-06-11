@@ -493,7 +493,7 @@ function setLocations(locations, SEnc) {
 }
 
 export function setupReorderBtn() {
-    const row = e('div', 'data-list-row', 'reorder')
+    const row = e('div', 'data-list-row', [e('span', null, 'reorder')])
     function byAlpha(a, b) {
         return a.name.localeCompare(b.name)
     }
