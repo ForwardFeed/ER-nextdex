@@ -53,6 +53,7 @@ export class DynamicList{
     calculateRenderingRange(){
         // turns out that the reorder bar is always there and in the right size
         const oneRowHeightPx =  this.topBar.clientHeight
+        if (!oneRowHeightPx) return
         const nbRowScrolledFloat = this.node.scrollTop / oneRowHeightPx
         const maxRow = this.data.length
         const nbRowScrolledRaw = Math.min(maxRow, Math.round(nbRowScrolledFloat) + this.unloadOffset)
