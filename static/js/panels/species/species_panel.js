@@ -611,9 +611,6 @@ export const queryMapSpecies = {
         
     },
     "type": (queryData, specie) => {
-        if (settings.monotype && specie.allTypesNames[0]) {
-            return 
-        }
         const typesQueried = queryData.split(' ').filter(x => x)
         const thirdType = specie.thirdType ? gameData.typeT[specie.thirdType].toLowerCase() : null
         let multiSuggestions = []
@@ -698,7 +695,6 @@ function postTreatingSpeciesFiltering(){
                 matchedSpecies.push(i)
             }
         }
-        
     } else {
         let matchedLen = matchedSpecies?.length || 0
         for (let i = 0; i < matchedLen; i++){
