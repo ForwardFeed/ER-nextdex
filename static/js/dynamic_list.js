@@ -68,11 +68,13 @@ export class DynamicList{
                 max: Math.min(maxRow, this.lastNbScrolled + LIST_RENDER_RANGE)
             }
         }
+        console.log(this)
         return this
     }
     update(){
         this.calculateRenderingRange()
         // first hide those out of range
+        if (this.nbRowScrolled && (this.nbRowScrolled == this.lastNbScrolled)) return
         if (this.nbRowScrolled > this.lastNbScrolled){//scrolled down
             for (let i = this.ranges.prev.min; i < this.ranges.curr.min; i++){
                 if (!this.renderNextRow(i, false)) break

@@ -4,6 +4,7 @@ import { longClickToFilter } from "../filters.js";
 import { StatsEnum, currentSpecieID, feedPanelSpecies, getColorOfStat, getSpritesShinyURL, getSpritesURL, matchedSpecies } from "../panels/species/species_panel.js";
 import { JSHAC, e, reorderNodeList } from "../utils.js";
 import { nodeLists } from "./hydrate.js";
+import { blockSpeciesDynList } from "./species.js";
 
 
 export function toggleLayoutList(toggle = true) {
@@ -167,7 +168,7 @@ function setupReordering(){
 }
 
 let reorderedDataListLayout = undefined
-function reorderListLayoutNodes(reordered){
+export function reorderListLayoutNodes(reordered){
     listSpeciesDynList.hideCurrentRendered()
     reorderedDataListLayout = []
     const len = reordered.length
@@ -245,6 +246,7 @@ export function listDataUpdate(){
             for(let i = 0; i < naturalOrderLen; i++) finalDataListLayout[i] = i
         }
         listSpeciesDynList.dataUpdate(finalDataListLayout).update()
+        blockSpeciesDynList.dataUpdate(finalDataListLayout).update()
         return 
     }
     if (matchedSpecies && typeof matchedSpecies === "object"){
@@ -253,6 +255,7 @@ export function listDataUpdate(){
         for(let i = 0; i < reorderLen; i++){
             if (finalDataListLayout.length == matchedLen) {
                 listSpeciesDynList.dataUpdate(finalDataListLayout).update()
+                blockSpeciesDynList.dataUpdate(finalDataListLayout).update()
                 return
             }
             const reorderI = reorderedDataListLayout[i] + 1
@@ -266,6 +269,7 @@ export function listDataUpdate(){
         for(let i = 0; i < reordererOrderLen; i++) finalDataListLayout[i] = reorderedDataListLayout[i]
     }
     listSpeciesDynList.dataUpdate(finalDataListLayout).update()
+    blockSpeciesDynList.dataUpdate(finalDataListLayout).update()
 }
 
 /** @type {DynamicList} */

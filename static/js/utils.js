@@ -1,5 +1,6 @@
 import { gameData } from "./data_version.js";
 import { nodeLists } from "./hydrate/hydrate.js";
+import { reorderListLayoutNodes } from "./hydrate/list_species.js";
 
 export function addTooltip(node, description) {
 	const tooltip = document.createElement("div");
@@ -183,12 +184,7 @@ export function reorderNodeList(listParentNode, sortFn, direction = "<"){
             clonedForReorder = structuredClone(gameData.species)
         }
         if (direction === ">") clonedForReorder = clonedForReorder.reverse()
-        const len = clonedForReorder.length
-        for (var i=0; i < len; i++){
-            const mon = clonedForReorder[i]
-            if (mon.nodeID === undefined) continue
-            listParentNode.append(nodeLists.species[mon.nodeID])
-        }
+        reorderListLayoutNodes(clonedForReorder)
     })
 }
 
