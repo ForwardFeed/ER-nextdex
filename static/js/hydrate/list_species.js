@@ -1,4 +1,5 @@
 import { compareData, gameData } from "../data_version.js";
+import { DynamicList, LIST_RENDER_RANGE} from "../dynamic_list.js";
 import { longClickToFilter } from "../filters.js";
 import { StatsEnum, currentSpecieID, feedPanelSpecies, getColorOfStat, getSpritesShinyURL, getSpritesURL, matchedSpecies } from "../panels/species/species_panel.js";
 import { JSHAC, e, reorderNodeList } from "../utils.js";
@@ -20,6 +21,7 @@ export function toggleLayoutList(toggle = true) {
 
 
 export function hydrateSpeciesList() {
+    listSpeciesDynList.emptyList()
     const species = gameData.species
     const speciesLen = species.length
     const fragment = document.createDocumentFragment();
@@ -113,9 +115,8 @@ export function hydrateSpeciesList() {
         fragment.append(nodeSpecieRow)
     }
     
-    setupReordering()
     listDataUpdate()
-    $('#panel-list-species').append(fragment)
+    listSpeciesDynList.addList(fragment).update()
 }
 
 
@@ -162,12 +163,12 @@ function setupReordering(){
                 baseStatsNodes
         ]
     ])
-    $('#panel-list-species').empty().append(topNode)
+    $('#panel-list-species').append(topNode)
 }
 
 let reorderedDataListLayout = undefined
 function reorderListLayoutNodes(reordered){
-    hideCurrentRendered()
+    listSpeciesDynList.hideCurrentRendered()
     reorderedDataListLayout = []
     const len = reordered.length
     for (var i=0; i < len; i++){
@@ -177,7 +178,6 @@ function reorderListLayoutNodes(reordered){
         $('#panel-list-species').append(nodeLists.listLayoutSpecies[node.nodeID])
     }
     listDataUpdate()
-    listRenderingUpdate()
 }
 const reorderArrowsdata = []
 function resetAllArrows(callerID){
@@ -223,64 +223,14 @@ function createReorderArrow(sortFn){
             if (this.dir){
                 this.dir = 0
                 this.dirDefault(false)
-                finalDataListLayout.length = 0
             }
         }
     })
     return reorderArrowsdata[arrowID]
 }
 
-export const LIST_RENDER_RANGE = 20
-
-let lastNbScrolled = 0
-let unloadOffset = 0
-function calculateRenderingRange(){
-    const panelDiv = document.getElementById("panel-list-species")
-    // turns out that the reorder bar is always there and in the right size
-    const oneRowHeightPx = panelDiv.children[0].clientHeight
-    const nbRowScrolledFloat = panelDiv.scrollTop / oneRowHeightPx
-    const maxRow = finalDataListLayout.length
-    const nbRowScrolledRaw = Math.min(maxRow, Math.round(nbRowScrolledFloat) + unloadOffset)
-    // Minus one because it takes in account the top reordering bar
-    const nbRowScrolled = Math.max(0, nbRowScrolledRaw - 1)
-    return{
-        nbRowScrolled: nbRowScrolled,
-        curr: {
-            min: Math.max(0, nbRowScrolled - LIST_RENDER_RANGE),
-            max: Math.min(maxRow, nbRowScrolled + LIST_RENDER_RANGE)
-        },
-        prev: {
-            min: Math.max(0, lastNbScrolled - LIST_RENDER_RANGE),
-            max: Math.min(maxRow, lastNbScrolled + LIST_RENDER_RANGE)
-        }
-    }
-}
-
-export function listRenderingUpdate() {
-    const renderRanges = calculateRenderingRange()
-    if (renderRanges.nbRowScrolled && renderRanges.nbRowScrolled == lastNbScrolled) return // nothing to do
-    // first hide those out of range
-    if (renderRanges.nbRowScrolled > lastNbScrolled){//scrolled down
-        for (let i = renderRanges.prev.min; i < renderRanges.curr.min; i++){
-            renderNextRow(i, false)
-        }
-        unloadOffset += renderRanges.curr.min - renderRanges.prev.min
-    } else { //scrolled up
-        for (let i = renderRanges.prev.max; i > renderRanges.curr.max; i--){
-            renderNextRow(i, false)
-        }
-        unloadOffset = Math.max(0, unloadOffset - (renderRanges.prev.min - renderRanges.curr.min))
-    }
-    // then show those in range
-    for (let i = renderRanges.curr.min; i < renderRanges.curr.max; i++){
-        renderNextRow(i, true)
-    }
-    lastNbScrolled = renderRanges.nbRowScrolled
-}
-
-const finalDataListLayout = []
 export function listDataUpdate(){
-    finalDataListLayout.length = 0 // reset the array
+    const finalDataListLayout = []
     if (!reorderedDataListLayout){
         if (matchedSpecies && typeof matchedSpecies === "object"){
             const matchedSpeciesLen = matchedSpecies.length
@@ -294,13 +244,15 @@ export function listDataUpdate(){
             const naturalOrderLen = nodeLists.listLayoutSpecies.length
             for(let i = 0; i < naturalOrderLen; i++) finalDataListLayout[i] = i
         }
-        return
+        listSpeciesDynList.dataUpdate(finalDataListLayout)
+        return 
     }
     if (matchedSpecies && typeof matchedSpecies === "object"){
         const reorderLen = reorderedDataListLayout.length
         const matchedLen = matchedSpecies.length
         for(let i = 0; i < reorderLen; i++){
             if (finalDataListLayout.length == matchedLen) {
+                listSpeciesDynList.dataUpdate(finalDataListLayout)
                 return
             }
             const reorderI = reorderedDataListLayout[i] + 1
@@ -313,44 +265,14 @@ export function listDataUpdate(){
         const reordererOrderLen = nodeLists.listLayoutSpecies.length
         for(let i = 0; i < reordererOrderLen; i++) finalDataListLayout[i] = reorderedDataListLayout[i]
     }
+    listSpeciesDynList.dataUpdate(finalDataListLayout)
 }
 
-// this is because the search just hides the row, so you have to hide over it
-function renderNextRow(rowI, show=true){
-    rowI = finalDataListLayout[rowI]
-    if (rowI === undefined) return
-    if (show){
-        // we've reached the end of things to render
-        if (rowI === undefined) return
-    }
-    if (!nodeLists.listLayoutSpecies[rowI]) return
-    nodeLists.listLayoutSpecies[rowI].style.display = show ? "flex" : "none"
-}
-
-function hideCurrentRendered(){
-    const renderRanges = calculateRenderingRange()
-    for (let i = renderRanges.curr.min; i < renderRanges.curr.max; i++){
-        renderNextRow(i, false)
-    }
-}
-
-export function resetListRendering(){
-    hideCurrentRendered()
-    lastNbScrolled = 0
-    unloadOffset = 0
-}
-
-
+/** @type {DynamicList} */
+export let listSpeciesDynList
 export function setupListSpecies() {
-    let timeStamp
-    const RATE_LIMIT_INTERVAL = 400 // trigger the rendering of the list with this minimun in ms
-    $('#panel-list-species').on('scroll', () => {
-        if (timeStamp) return
-        timeStamp = setTimeout(()=>{
-            fastdom.mutate(() => {
-                listRenderingUpdate()
-            })
-            timeStamp = undefined
-        }, RATE_LIMIT_INTERVAL)  
-    })
+    setupReordering()
+    listSpeciesDynList = new DynamicList($('#panel-list-species')[0], $('#panel-list-species')[0].children[0], "listLayoutSpecies")
+    listSpeciesDynList.setup()
+
 }

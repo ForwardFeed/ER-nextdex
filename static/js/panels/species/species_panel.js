@@ -10,7 +10,7 @@ import { nodeLists } from "../../hydrate/hydrate.js"
 import { cubicRadial } from "../../radial.js"
 import { getHintInteractibilityClass, settings } from "../../settings.js"
 import { feedCommunitySets } from "./community_sets.js"
-import { listDataUpdate, listRenderingUpdate, resetListRendering, toggleLayoutList } from "../../hydrate/list_species.js"
+import { listDataUpdate, listSpeciesDynList, toggleLayoutList } from "../../hydrate/list_species.js"
 
 export const StatsEnum = [
     "HP",
@@ -711,7 +711,7 @@ function postTreatingSpeciesFiltering(){
 
 export let matchedSpecies = undefined
 export function updateSpecies(searchQuery) {
-    resetListRendering()
+    listSpeciesDynList.reset()
     const species = gameData.species
     matchedSpecies = queryFilter3(searchQuery, species, queryMapSpecies, prefixTree)
     postTreatingSpeciesFiltering()
@@ -728,7 +728,7 @@ export function updateSpecies(searchQuery) {
             node.hide()
         }
     }
-    listRenderingUpdate()
+    listDataUpdate()
     //if the current selection isn't in the list then change
     if (matchedSpecies && matchedSpecies.indexOf(currentSpecieID) == -1 && validID) feedPanelSpecies(validID)
 }
