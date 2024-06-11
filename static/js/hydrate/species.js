@@ -4,6 +4,7 @@ import { e } from "../utils.js"
 import { abilitiesExtraType, buildSpeciesPrefixTrees, feedPanelSpecies, getSpritesURL, setupReorderBtn } from "../panels/species/species_panel.js"
 import { gameData } from "../data_version.js"
 import { nodeLists } from "./hydrate.js"
+import { DynamicList, LIST_RENDER_RANGE } from "../dynamic_list.js"
 
 function feedBaseStatsStats(statID, value) {
     gameData.speciesStats.data[statID].push(value)
@@ -65,11 +66,10 @@ function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo) {
 
 
 export function hydrateSpecies() {
-
+    blockSpeciesDynList.emptyList()
     nodeLists.species = [] // reset
     const fragment = document.createDocumentFragment();
     const species = gameData.species
-    fragment.append(setupReorderBtn())
     for (const i in species) {
         if (i == 0) continue
         const specie = species[i]
@@ -175,10 +175,22 @@ export function hydrateSpecies() {
                 feedPanelSpecies($(this).attr('data-id'))
             });
         });
+        if (+i + 1 > LIST_RENDER_RANGE) $(row).hide()
         fragment.append(row)
     }
     setMeanBaseStats()
-    $("#species-list").empty().append(fragment);
+    blockSpeciesDynList.addList(fragment).update()
     feedPanelSpecies(1)
     buildSpeciesPrefixTrees()
+}
+
+
+/** @type {DynamicList} */
+export let blockSpeciesDynList
+
+export function setupBlockSpecies(){
+    const node = $("#species-list")[0]
+    node.append(setupReorderBtn())
+    blockSpeciesDynList = new DynamicList(node, node.children[0], "species")
+    blockSpeciesDynList.setup()
 }

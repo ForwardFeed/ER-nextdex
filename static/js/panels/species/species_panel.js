@@ -10,7 +10,8 @@ import { nodeLists } from "../../hydrate/hydrate.js"
 import { cubicRadial } from "../../radial.js"
 import { getHintInteractibilityClass, settings } from "../../settings.js"
 import { feedCommunitySets } from "./community_sets.js"
-import { listDataUpdate, listSpeciesDynList, toggleLayoutList } from "../../hydrate/list_species.js"
+import { listDataUpdate, listSpeciesDynList, setupListSpecies, toggleLayoutList } from "../../hydrate/list_species.js"
+import { setupBlockSpecies } from "../../hydrate/species.js"
 
 export const StatsEnum = [
     "HP",
@@ -369,6 +370,8 @@ export function setupSpeciesPanel() {
         toggleLayoutList(true)
         $('#species-return-list-layout').hide()
     })
+    setupBlockSpecies()
+    setupListSpecies()
 }
 function toLowerButFirstCase(word) {
     word = word.toLowerCase()
