@@ -582,9 +582,16 @@ export function buildSpeciesPrefixTrees(){
             const typeAsString = gameData.typeT[pokeType].toLowerCase()
             const prefix = typeAsString.charAt(0)
             if (!prefixTree.type[prefix]) prefixTree.type[prefix] = []
+            
             prefixTree.type[prefix].push({data: i, suggestions: typeAsString})
             return typeAsString
         })
+        const thirdType = x.thirdType ? gameData.typeT[x.thirdType].toLowerCase() : null
+        if (thirdType){
+            const prefix = thirdType.charAt(0)
+            if (!prefixTree.type[prefix]) prefixTree.type[prefix] = []
+            prefixTree.type[prefix].push({data: i, suggestions: thirdType})
+        }
     })
 }
 
