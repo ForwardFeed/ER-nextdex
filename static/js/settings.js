@@ -1,5 +1,5 @@
 import { loadFont } from "./fonts.js"
-import { toggleLayoutList } from "./hydrate/list_species.js"
+import { toggleLayoutListSpecies } from "./hydrate/list_species.js"
 
 
 const appName = "ERdex"
@@ -195,16 +195,16 @@ export function setupSettings(){
     if (settings.hintSelectible) $('#enable-interactible').attr('checked', true)
     setHintInteractible()
     $('#enable-list-layout').on('change', ()=>{
-        toggleLayoutList(settings.listLayout = true)
+        toggleLayoutListSpecies(settings.listLayout = true)
         saveSettings()
         
     })
     $('#disable-list-layout').on('change', ()=>{
-        toggleLayoutList(settings.listLayout = false)
+        toggleLayoutListSpecies(settings.listLayout = false)
         saveSettings()
     })
     settings.listLayout ? $('#enable-list-layout').attr('checked', true) : $('#disable-list-layout').attr('checked', true)
-    toggleLayoutList(settings.listLayout)
+    toggleLayoutListSpecies(settings.listLayout)
     setDynamicalRowOfSettings("font", fontList, (font)=>{
         settings.theme = font
         saveSettings()

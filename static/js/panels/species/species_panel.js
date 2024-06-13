@@ -10,7 +10,7 @@ import { nodeLists } from "../../hydrate/hydrate.js"
 import { cubicRadial } from "../../radial.js"
 import { getHintInteractibilityClass, settings } from "../../settings.js"
 import { feedCommunitySets } from "./community_sets.js"
-import { listDataUpdate, listSpeciesDynList, setupListSpecies, toggleLayoutList } from "../../hydrate/list_species.js"
+import { listDataUpdate, listSpeciesDynList, setupListSpecies, toggleLayoutListSpecies } from "../../hydrate/list_species.js"
 import { setupBlockSpecies } from "../../hydrate/species.js"
 
 export const StatsEnum = [
@@ -367,7 +367,7 @@ export function setupSpeciesPanel() {
         setSpecieHeightWeight()
     })
     $('#species-return-list-layout').on('click', ()=>{
-        toggleLayoutList(true)
+        toggleLayoutListSpecies(true)
         $('#species-return-list-layout').hide()
     })
     setupBlockSpecies()
