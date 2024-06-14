@@ -14,6 +14,7 @@ import { hydrateLocation } from "./locations.js"
 import { addAllOtherEveeMoves } from "./moves.js"
 import { takeMovesFromPreEvolution } from "./moves.js"
 import { hydrateSpeciesList } from "./list_species.js"
+import { hydrateListMoves } from "./list_moves.js"
 
 export const nodeLists = {
     species: [],
@@ -58,6 +59,7 @@ export function hydrate(firstLoad=false) {
         [setUpComSets, "Import Community sets"],
         [hydrateAbilities, "abilities data"],
         [hydrateMoves, "moves data"],
+        [hydrateListMoves, "list layout moves data"],
         [hydrateSpecies, "species data"],
         [hydrateSpeciesList, "list layout species data"],
         [hydrateLocation, "locations data"],

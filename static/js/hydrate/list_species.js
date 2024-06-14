@@ -1,8 +1,8 @@
 import { compareData, gameData } from "../data_version.js";
 import { DynamicList, LIST_RENDER_RANGE} from "../dynamic_list.js";
 import { longClickToFilter } from "../filters.js";
-import { StatsEnum, currentSpecieID, feedPanelSpecies, getColorOfStat, getSpritesShinyURL, getSpritesURL, matchedSpecies } from "../panels/species/species_panel.js";
-import { JSHAC, e, reorderNodeList } from "../utils.js";
+import { StatsEnum, feedPanelSpecies, getColorOfStat, getSpritesShinyURL, getSpritesURL, matchedSpecies } from "../panels/species/species_panel.js";
+import { JSHAC, e } from "../utils.js";
 import { nodeLists } from "./hydrate.js";
 import { blockSpeciesDynList } from "./species.js";
 

@@ -1,4 +1,5 @@
 import { loadFont } from "./fonts.js"
+import { toggleLayoutListMoves } from "./hydrate/list_moves.js"
 import { toggleLayoutListSpecies } from "./hydrate/list_species.js"
 
 
@@ -196,15 +197,18 @@ export function setupSettings(){
     setHintInteractible()
     $('#enable-list-layout').on('change', ()=>{
         toggleLayoutListSpecies(settings.listLayout = true)
+        toggleLayoutListMoves(settings.listLayout)
         saveSettings()
         
     })
     $('#disable-list-layout').on('change', ()=>{
         toggleLayoutListSpecies(settings.listLayout = false)
+        toggleLayoutListMoves(settings.listLayout)
         saveSettings()
     })
     settings.listLayout ? $('#enable-list-layout').attr('checked', true) : $('#disable-list-layout').attr('checked', true)
     toggleLayoutListSpecies(settings.listLayout)
+    toggleLayoutListMoves(settings.listLayout)
     setDynamicalRowOfSettings("font", fontList, (font)=>{
         settings.theme = font
         saveSettings()
