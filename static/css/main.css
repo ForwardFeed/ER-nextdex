@@ -1087,18 +1087,18 @@ a:hover{
     z-index: 20;
 }
 
-#panel-list-species{
+#panel-list-species, #panel-list-moves{
     flex-direction: column;
     overflow-y: scroll;
 }
-.list-species-row{
+.list-species-row, .moves-list-row{
     display: flex;
     border-bottom: solid var(--colorB) 0.1em;
     border-radius: 5px;
     min-height: 3.5em;
     max-height: 3.5em;
 }
-.list-species-name{
+.list-species-name, .moves-list-name{
     display: flex;
     min-width: 7em;
     padding-right: 0.5em;
@@ -1206,4 +1206,18 @@ a:hover{
 }
 .reorder-arrow{
     margin: auto;
+}
+
+.moves-list-stats0{
+    display: flex;
+    flex-direction: column;   
+}
+
+.moves-list-power{
+    display: flex;
+    font-size: 2.5em;
+}
+
+.moves-list-stats1-row{
+    display: flex;
 }

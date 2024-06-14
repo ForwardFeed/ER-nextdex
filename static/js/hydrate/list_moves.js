@@ -20,28 +20,48 @@ export function hydrateListMoves(){
     const len = gameData.moves.length
     for (let specieID = 1; specieID < len; specieID++){
         const move = gameData.moves[specieID]
+        const splitImg = e('img')
+        splitImg.src = `./icons/${gameData.splitT[move.split]}.png`
+        const nodeTypes = move.types.map(x =>
+            e('div', null, [e('span', null, gameData.typeT[x])])
+        )
+        const nodeFlags = move.flags.map(x =>
+            e('div', null, [e('span', null, gameData.flagsT[x])])
+        )
         const node = JSHAC([
-            e('div', 'moves-list-name'),[
-                e('span', null, move.name)
-            ],
-            e('div', 'moves-list-power',[
-                e('span', null, move.pwr)
-            ]),
-            e('div', 'moves-list-stats1'),[
-                e('div', 'moves-list-stats1-row'),[
-                    e('span', null, move.acc || "--")
+            e('div', 'moves-list-row'),[
+                e('div', 'moves-list-stats0'), [
+                    e('div', 'moves-list-name'),[
+                        e('span', null, move.name),
+                    ],
+                    e('div', 'moves-list-power'),[
+                        e('span', null, move.pwr),
+                    ],
                 ],
-                e('div', 'moves-list-stats1-row'),[
-                    e('span', null, move.pp)
+                e('div', 'moves-list-stats1'),[
+                    e('div', 'moves-list-stats1-row'),[
+                        e('span', null, "acc :"),
+                        e('span', null, move.acc || "--")
+                    ],
+                    e('div', 'moves-list-stats1-row'),[
+                        e('span', null, "pp  :"),
+                        e('span', null, move.pp)
+                    ],
+                    e('div', 'moves-list-stats1-row'),[
+                        e('span', null, "pri :"),
+                        e('span', null, move.prio)
+                    ],
+                    e('div', 'moves-list-stats1-row'),[
+                        e('span', null, "e.c  :"),
+                        e('span', null, move.chance)
+                    ],
                 ],
-                e('div', 'moves-list-stats1-row'),[
-                    e('span', null, move.prio)
-                ],
-                e('div', 'moves-list-stats1-row'),[
-                    e('span', null, move.chance)
-                ],
-            ]
-                
+                splitImg,
+                e('div', 'moves-list-stats-types'), 
+                    nodeTypes,
+                e('div', 'moves-list-stats-flags'),
+                    nodeFlags
+            ]       
         ])
         fragment.append(node)
     }
