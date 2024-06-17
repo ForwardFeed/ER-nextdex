@@ -1127,7 +1127,7 @@ a:hover{
     border-radius: 0.2em;
 }
 
-.list-species-types-block{
+.list-species-types-block, .list-moves-types-block{
     display: flex;
     flex-direction: column;
     min-width: 4em;
@@ -1217,7 +1217,38 @@ a:hover{
     display: flex;
     font-size: 2.5em;
 }
+.moves-list-split{
+    height: 3.5em;
+    width: 3.5em;
+}
+.moves-list-stats1, .moves-list-stats1-row{
+    display: flex;
+    width: 3.5em;
+    font-size: 0.85em;
+}
+.moves-list-stats1{
+    flex-direction: column;
+}
 
 .moves-list-stats1-row{
     display: flex;
+}
+.moves-list-stats1-name{
+    margin-left: 0;
+    padding-left: 0;
+}
+.moves-list-stats-flags{
+    display: flex;
+    flex-wrap: wrap;
+    min-width: 10em;
+    overflow: scroll;
+}
+
+.moves-list-stats-flag{
+    display: flex;
+    background-color: var(--colorB);
+    padding-left: 0.2em;
+    padding-right: 0.2em;
+    border-radius: 0.2em;
+    margin: auto;
 }
