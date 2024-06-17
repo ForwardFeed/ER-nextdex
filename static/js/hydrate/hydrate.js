@@ -21,6 +21,7 @@ export const nodeLists = {
     listLayoutSpecies: [],
     abilities: [],
     moves: [],
+    listLayoutMoves: [],
     locations: [],
     trainers: [],
 }

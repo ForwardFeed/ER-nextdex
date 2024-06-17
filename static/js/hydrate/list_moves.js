@@ -67,3 +67,20 @@ export function hydrateListMoves(){
     }
     $('#panel-list-moves').append(fragment)
 }
+
+function setupReordering(){
+    const node = JSHAC([
+        e('div', 'moves-list-row'),[
+            e('div', 'moves-list-stats0'),[
+                e('span', null, 'Name'),
+            ],
+            
+        ]
+    ])
+    $('#panel-list-moves').append(fragment)
+}
+
+export function setupListMoves(){
+    setupReordering()
+    const node = $('#panel-list-moves')[0]
+}
