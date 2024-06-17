@@ -1156,6 +1156,7 @@ a:hover{
 }
 .list-species-basestats-val{
     display: flex;
+    flex-direction: column;
     color: black;
 }
 .list-species-basestats-val>span{
