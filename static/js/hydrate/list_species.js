@@ -20,6 +20,7 @@ export function toggleLayoutListSpecies(toggle = true) {
 
 
 function generateSpeciesNode(){
+    nodeLists.listLayoutSpecies.length = 0
     const species = gameData.species
     const speciesLen = species.length
     const fragment = document.createDocumentFragment();

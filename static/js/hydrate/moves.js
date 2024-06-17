@@ -3,10 +3,14 @@ import { gameData } from "../data_version.js"
 import { DynamicList, LIST_RENDER_RANGE } from "../dynamic_list.js"
 import { JSHAC, e } from "../utils.js"
 import { movesListDataUpdate } from "./list_moves.js"
+import { nodeLists } from "./hydrate.js"
 
 export let HPMoveID = 0
 export let HPsMovesID = []
 function generateMovesNodes(moves = gameData.moves){
+    nodeLists.moves.length = 0 // reset
+    HPsMovesID = []
+    if (gameData.flagsT.indexOf('Technician') == -1) gameData.flagsT.push('Technician', 'Perfectionnist')
     const fragment = document.createDocumentFragment();
     let movesLen = moves.length
     for (let i = 0; i < movesLen; i++) {
@@ -41,6 +45,7 @@ function generateMovesNodes(moves = gameData.moves){
             });
         });
         if (i > LIST_RENDER_RANGE) $(core).hide()
+        nodeLists.moves.push(core)
         fragment.append(core)
     }
     return fragment
@@ -48,8 +53,6 @@ function generateMovesNodes(moves = gameData.moves){
 
 
 export function hydrateMoves() {
-    HPsMovesID = []
-    if (gameData.flagsT.indexOf('Technician') == -1) gameData.flagsT.push('Technician', 'Perfectionnist')
     generateMovesNodes()
     movesListDataUpdate()
     blockMovesDynList.replaceList(generateMovesNodes)

@@ -21,6 +21,7 @@ export function toggleLayoutListMoves(toggle = true){
 }
 
 function generateMovesNodes(){
+    nodeLists.listLayoutMoves.length = 0
     const fragment = document.createDocumentFragment()
     const len = gameData.moves.length
     for (let moveID = 1; moveID < len; moveID++){

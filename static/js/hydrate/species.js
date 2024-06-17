@@ -23,8 +23,15 @@ function setMeanBaseStats() {
         gameData.speciesStats.result.top20[statID] = sorted[Math.ceil(len * 0.80)]
         gameData.speciesStats.result.top5[statID] = sorted[Math.ceil(len * 0.95)]
     }
-    // i don't trust the garbage collector
-    delete gameData.speciesStats.data
+    gameData.speciesStats.data = [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+    ]
 }
 
 
