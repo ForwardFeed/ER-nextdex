@@ -19,8 +19,7 @@ export function toggleLayoutListSpecies(toggle = true) {
 }
 
 
-export function hydrateSpeciesList() {
-    listSpeciesDynList.emptyList()
+function generateSpeciesNode(){
     const species = gameData.species
     const speciesLen = species.length
     const fragment = document.createDocumentFragment();
@@ -113,9 +112,12 @@ export function hydrateSpeciesList() {
         if (specieID > LIST_RENDER_RANGE) $(nodeSpecieRow.firstChild).hide()
         fragment.append(nodeSpecieRow)
     }
-    
+    return fragment
+}
+
+export function hydrateSpeciesList() {
     speciesListDataUpdate()
-    listSpeciesDynList.addList(fragment).update()
+    listSpeciesDynList.replaceList(generateSpeciesNode)
 }
 
 

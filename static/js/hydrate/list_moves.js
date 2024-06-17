@@ -4,6 +4,7 @@ import { longClickToFilter } from "../filters.js"
 import { feedPanelMoves, matchedMoves } from "../panels/moves_panel.js"
 import { JSHAC, e } from "../utils.js"
 import { nodeLists } from "./hydrate.js"
+import { blockMovesDynList } from "./moves.js"
 
 
 export function toggleLayoutListMoves(toggle = true){
@@ -19,7 +20,7 @@ export function toggleLayoutListMoves(toggle = true){
     }
 }
 
-export function hydrateListMoves(){
+function generateMovesNodes(){
     const fragment = document.createDocumentFragment()
     const len = gameData.moves.length
     for (let moveID = 1; moveID < len; moveID++){
@@ -78,9 +79,13 @@ export function hydrateListMoves(){
         nodeLists.listLayoutMoves.push(node)
         if (moveID > LIST_RENDER_RANGE) $(node).hide()
     }
-    $('#panel-list-moves').append(fragment)
+    return fragment
+}
+
+export function hydrateListMoves(){
+    
     movesListDataUpdate()
-    listMovesDynList.addList(fragment).update()
+    listMovesDynList.replaceList(generateMovesNodes)
 }
 
 function setupReordering(){
@@ -121,6 +126,7 @@ export function movesListDataUpdate(){
         for(let i = 0; i < naturalOrderLen; i++) finalDataListLayout[i] = i
     }
     listMovesDynList.dataUpdate(finalDataListLayout).update()
+    blockMovesDynList.dataUpdate(finalDataListLayout).update()
 }
 
 /** @type {DynamicList} */

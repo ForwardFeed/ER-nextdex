@@ -99,6 +99,7 @@ export class DynamicList{
         }
         this.lastNbScrolled = this.nbRowScrolled
         return this
+       
     }
     renderNextRow(rowI, show=true){
         rowI = this.data[rowI]
@@ -123,18 +124,15 @@ export class DynamicList{
         this.unloadOffset = 0
         return this
     }
-    emptyList(){
+    replaceList(callback){
         const len = nodeLists[this.nodeListName].length
         fastdom.mutate(()=>{
             for(let i = 0; i < len; i++){
                 nodeLists[this.nodeListName][i].remove()
             }
+            this.node.append(callback())
+            this.update()
         })
         return this
-    }
-    addList(frag){
-        this.node.append(frag)
-        return this
-    }
-    
+    }   
 }

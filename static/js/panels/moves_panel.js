@@ -6,6 +6,7 @@ import { removeInformationWindow } from "../window.js"
 import { setAllMoves } from "./species/species_panel.js"
 import { getHintInteractibilityClass } from "../settings.js"
 import { listMovesDynList, movesListDataUpdate, setupListMoves, toggleLayoutListMoves } from "../hydrate/list_moves.js"
+import { blockMovesDynList, setupBlockMoves } from "../hydrate/moves.js"
 
 export let matchedMoves
 let currentMoveID = 0
@@ -150,6 +151,7 @@ export function setupMoves(){
         toggleLayoutListMoves(true)
         $('#moves-return-list-layout').hide()
     })
+    setupBlockMoves()
 }
 
 export function redirectMove(moveId) {
@@ -352,5 +354,6 @@ export function updateMoves(searchQuery) {
     //if the current selection isn't in the list then change
     if (matchedMoves && matchedMoves.indexOf(currentMoveID) == -1 && validID) feedPanelMoves(validID)
     listMovesDynList.hideCurrentRendered().reset()
+    blockMovesDynList.hideCurrentRendered().reset()
     movesListDataUpdate()
 }

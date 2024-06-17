@@ -63,10 +63,7 @@ function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo) {
     if (!currentSpecie.region) currentSpecie.region = previousSpecie.region
 }
 
-
-
-export function hydrateSpecies() {
-    blockSpeciesDynList.emptyList()
+function generateSpeciesNode(){
     nodeLists.species = [] // reset
     const fragment = document.createDocumentFragment();
     const species = gameData.species
@@ -179,7 +176,12 @@ export function hydrateSpecies() {
         fragment.append(row)
     }
     setMeanBaseStats()
-    blockSpeciesDynList.addList(fragment).update()
+    return fragment
+}
+
+export function hydrateSpecies() {
+    generateSpeciesNode()
+    blockSpeciesDynList.replaceList(generateSpeciesNode)
     feedPanelSpecies(1)
     buildSpeciesPrefixTrees()
 }

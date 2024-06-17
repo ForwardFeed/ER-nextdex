@@ -1,12 +1,12 @@
 import { feedPanelMoves } from "../panels/moves_panel.js"
 import { gameData } from "../data_version.js"
-import { LIST_RENDER_RANGE } from "../dynamic_list.js"
+import { DynamicList, LIST_RENDER_RANGE } from "../dynamic_list.js"
+import { JSHAC, e } from "../utils.js"
+import { movesListDataUpdate } from "./list_moves.js"
 
 export let HPMoveID = 0
 export let HPsMovesID = []
-export function hydrateMoves(moves = gameData.moves) {
-    HPsMovesID = []
-    gameData.flagsT.push('Technician', 'Perfectionnist')
+function generateMovesNodes(moves = gameData.moves){
     const fragment = document.createDocumentFragment();
     let movesLen = moves.length
     for (let i = 0; i < movesLen; i++) {
@@ -42,10 +42,17 @@ export function hydrateMoves(moves = gameData.moves) {
         });
         if (i > LIST_RENDER_RANGE) $(core).hide()
         fragment.append(core)
-
-        
     }
-    $("#moves-list").empty().append(fragment);
+    return fragment
+}
+
+
+export function hydrateMoves() {
+    HPsMovesID = []
+    if (gameData.flagsT.indexOf('Technician') == -1) gameData.flagsT.push('Technician', 'Perfectionnist')
+    generateMovesNodes()
+    movesListDataUpdate()
+    blockMovesDynList.replaceList(generateMovesNodes)
     feedPanelMoves(1)
 }
 
@@ -91,4 +98,22 @@ export function takeMovesFromPreEvolution(){
             specie.allMoves =  [... new Set(specie.allMoves.concat(...specie.preevomoves))]
         }
     }
+}
+
+function setupReorderBtn(){
+    return JSHAC([
+        e('div', 'data-list-row'), [
+            e('span', null, '')
+        ]
+    ]).firstChild
+}
+
+/** @type {DynamicList} */
+export let blockMovesDynList
+
+export function setupBlockMoves(){
+    const node = $("#moves-list")[0]
+    node.append(setupReorderBtn())
+    blockMovesDynList = new DynamicList(node, node.children[0], "moves")
+    blockMovesDynList.setup()
 }
