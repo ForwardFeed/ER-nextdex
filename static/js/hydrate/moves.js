@@ -1,5 +1,6 @@
 import { feedPanelMoves } from "../panels/moves_panel.js"
 import { gameData } from "../data_version.js"
+import { LIST_RENDER_RANGE } from "../dynamic_list.js"
 
 export let HPMoveID = 0
 export let HPsMovesID = []
@@ -39,6 +40,7 @@ export function hydrateMoves(moves = gameData.moves) {
                 feedPanelMoves($(this).attr('data-id'))
             });
         });
+        if (i > LIST_RENDER_RANGE) $(core).hide()
         fragment.append(core)
 
         

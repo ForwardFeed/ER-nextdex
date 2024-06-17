@@ -114,7 +114,7 @@ export function hydrateSpeciesList() {
         fragment.append(nodeSpecieRow)
     }
     
-    listDataUpdate()
+    speciesListDataUpdate()
     listSpeciesDynList.addList(fragment).update()
 }
 
@@ -176,7 +176,7 @@ export function reorderListLayoutNodes(reordered){
         reorderedDataListLayout[i - 1] = node.nodeID
         $('#panel-list-species').append(nodeLists.listLayoutSpecies[node.nodeID])
     }
-    listDataUpdate()
+    speciesListDataUpdate()
 }
 const reorderArrowsdata = []
 function resetAllArrows(callerID){
@@ -228,7 +228,7 @@ function createReorderArrow(sortFn){
     return reorderArrowsdata[arrowID]
 }
 
-export function listDataUpdate(){
+export function speciesListDataUpdate(){
     const finalDataListLayout = []
     if (!reorderedDataListLayout){
         if (matchedSpecies && typeof matchedSpecies === "object"){

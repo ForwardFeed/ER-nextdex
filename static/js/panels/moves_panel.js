@@ -5,6 +5,7 @@ import { AisInB, e, JSHAC } from "../utils.js"
 import { createInformationWindow, removeInformationWindow } from "../window.js"
 import { setAllMoves, setMoveName, setMovePower, setMoveRow, setSplitMove } from "./species/species_panel.js"
 import { getHintInteractibilityClass } from "../settings.js"
+import { setupListMoves } from "../hydrate/list_moves.js"
 
 export let matchedMoves
 let currentMoveID = 0
@@ -144,7 +145,7 @@ export function setupMoves(){
     longClickToFilter(2, $('#moves-split').parent()[0], "category", 
             ()=>{ return $('#moves-split')[0].dataset.split || ""}
         )
-    
+    setupListMoves()
 }
 
 export function redirectMove(moveId) {

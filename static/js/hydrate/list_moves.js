@@ -1,6 +1,8 @@
 import { gameData } from "../data_version.js"
+import { DynamicList, LIST_RENDER_RANGE } from "../dynamic_list.js"
 import { longClickToFilter } from "../filters.js"
 import { JSHAC, e } from "../utils.js"
+import { nodeLists } from "./hydrate.js"
 
 
 export function toggleLayoutListMoves(toggle = true){
@@ -19,8 +21,8 @@ export function toggleLayoutListMoves(toggle = true){
 export function hydrateListMoves(){
     const fragment = document.createDocumentFragment()
     const len = gameData.moves.length
-    for (let specieID = 1; specieID < len; specieID++){
-        const move = gameData.moves[specieID]
+    for (let moveID = 1; moveID < len; moveID++){
+        const move = gameData.moves[moveID]
         const splitImg = e('img', 'moves-list-split')
         splitImg.src = `./icons/${gameData.splitT[move.split]}.png`
         const node = JSHAC([
@@ -63,25 +65,51 @@ export function hydrateListMoves(){
                         e('div', 'moves-list-stats-flag', [e('span', null, gameData.flagsT[x])])
                     )
             ]       
-        ])
+        ]).firstChild
         fragment.append(node)
+        nodeLists.listLayoutMoves.push(node)
+        if (moveID > LIST_RENDER_RANGE) $(node).hide()
     }
     $('#panel-list-moves').append(fragment)
+    movesListDataUpdate()
+    listMovesDynList.addList(fragment).update()
 }
 
 function setupReordering(){
     const node = JSHAC([
         e('div', 'moves-list-row'),[
-            e('div', 'moves-list-stats0'),[
+            e('div', 'moves-list-name'),[
                 e('span', null, 'Name'),
             ],
-            
+            e('div', 'moves-list-stats1-row'),[
+                e('span', null, 'Stats'),
+            ],
+            e('div', 'moves-list-split'),[
+                e('span', null, 'Split'),
+            ],
+            e('div', 'list-moves-types-block'),[
+                e('span', null, 'Types'),
+            ],
+            e('div', 'moves-list-stats-flags'),[
+                e('span', null, 'Move-Effect'),
+            ],
         ]
     ])
-    $('#panel-list-moves').append(fragment)
+    $('#panel-list-moves').append(node)
 }
 
+export function movesListDataUpdate(){
+    const finalDataListLayout = []
+    const reordererOrderLen = nodeLists.listLayoutMoves.length
+    for(let i = 0; i < reordererOrderLen; i++) finalDataListLayout[i] = i
+    listMovesDynList.dataUpdate(finalDataListLayout)
+}
+
+/** @type {DynamicList} */
+export let listMovesDynList
 export function setupListMoves(){
     setupReordering()
     const node = $('#panel-list-moves')[0]
+    listMovesDynList = new DynamicList(node, node.children[0], "listLayoutMoves")
+    listMovesDynList.setup()
 }
