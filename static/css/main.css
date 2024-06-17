@@ -205,6 +205,7 @@ span{
     display: flex;
     background-color: var(--colorB);
     text-align: center;
+    position: relative;
 }
 .moves-top-sub{
     width: 50%;
@@ -1172,12 +1173,13 @@ a:hover{
     border-radius: 1em;
     margin: 0.25em;
 }
-.list-species-btn-view:hover, #species-return-list-layout:hover{
+.list-species-btn-view:hover, #species-return-list-layout:hover,
+ #moves-return-list-layout:hover, .list-moves-btn-view:hover{
     color: var(--colorD);
     background-color: var(--font-color);
 }
 
-#species-return-list-layout{
+#species-return-list-layout, #moves-return-list-layout{
     padding: 0.5em;
     width: 3em;
     display: flex;
@@ -1218,6 +1220,7 @@ a:hover{
     font-size: 2.5em;
 }
 .moves-list-split{
+    display: flex;
     height: 3.5em;
     width: 3.5em;
 }

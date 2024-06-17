@@ -1,6 +1,7 @@
 import { gameData } from "../data_version.js"
 import { DynamicList, LIST_RENDER_RANGE } from "../dynamic_list.js"
 import { longClickToFilter } from "../filters.js"
+import { feedPanelMoves, matchedMoves } from "../panels/moves_panel.js"
 import { JSHAC, e } from "../utils.js"
 import { nodeLists } from "./hydrate.js"
 
@@ -63,7 +64,14 @@ export function hydrateListMoves(){
                 e('div', 'moves-list-stats-flags'),
                     move.flags.map(x =>
                         e('div', 'moves-list-stats-flag', [e('span', null, gameData.flagsT[x])])
-                    )
+                    ),
+                e('div', 'list-species-btn-view', [e('span', null, 'View')], {
+                    onclick: (ev) => {
+                        feedPanelMoves(moveID)
+                        toggleLayoutListMoves(false)
+                        $('#moves-return-list-layout').show()
+                    }
+                })
             ]       
         ]).firstChild
         fragment.append(node)
@@ -100,9 +108,19 @@ function setupReordering(){
 
 export function movesListDataUpdate(){
     const finalDataListLayout = []
-    const reordererOrderLen = nodeLists.listLayoutMoves.length
-    for(let i = 0; i < reordererOrderLen; i++) finalDataListLayout[i] = i
-    listMovesDynList.dataUpdate(finalDataListLayout)
+    if (matchedMoves && typeof matchedMoves === "object"){
+        const matchedMovesLen = matchedMoves.length
+        for(let i = 0; i < matchedMovesLen; i++){
+            // because of species none, there's a need for -1 it
+            finalDataListLayout[i] = matchedMoves[i] - 1
+        }
+    } else if (matchedMoves){
+            finalDataListLayout[0] = matchedMoves
+    } else {
+        const naturalOrderLen = nodeLists.listLayoutMoves.length
+        for(let i = 0; i < naturalOrderLen; i++) finalDataListLayout[i] = i
+    }
+    listMovesDynList.dataUpdate(finalDataListLayout).update()
 }
 
 /** @type {DynamicList} */

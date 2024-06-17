@@ -1,11 +1,11 @@
 import { gameData } from "../data_version.js"
 import { search } from "../search.js"
-import { queryFilter2, longClickToFilter, trickFilterSearch, queryFilter3} from "../filters.js"
+import {longClickToFilter, trickFilterSearch, queryFilter3} from "../filters.js"
 import { AisInB, e, JSHAC } from "../utils.js"
-import { createInformationWindow, removeInformationWindow } from "../window.js"
-import { setAllMoves, setMoveName, setMovePower, setMoveRow, setSplitMove } from "./species/species_panel.js"
+import { removeInformationWindow } from "../window.js"
+import { setAllMoves } from "./species/species_panel.js"
 import { getHintInteractibilityClass } from "../settings.js"
-import { setupListMoves } from "../hydrate/list_moves.js"
+import { listMovesDynList, movesListDataUpdate, setupListMoves, toggleLayoutListMoves } from "../hydrate/list_moves.js"
 
 export let matchedMoves
 let currentMoveID = 0
@@ -146,6 +146,10 @@ export function setupMoves(){
             ()=>{ return $('#moves-split')[0].dataset.split || ""}
         )
     setupListMoves()
+    $('#moves-return-list-layout').on('click', function(){
+        toggleLayoutListMoves(true)
+        $('#moves-return-list-layout').hide()
+    })
 }
 
 export function redirectMove(moveId) {
@@ -347,4 +351,6 @@ export function updateMoves(searchQuery) {
     }
     //if the current selection isn't in the list then change
     if (matchedMoves && matchedMoves.indexOf(currentMoveID) == -1 && validID) feedPanelMoves(validID)
+    listMovesDynList.hideCurrentRendered().reset()
+    movesListDataUpdate()
 }
