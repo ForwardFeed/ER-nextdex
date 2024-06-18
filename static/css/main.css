@@ -1219,6 +1219,10 @@ a:hover{
 .moves-list-power{
     display: flex;
     font-size: 2.5em;
+    height: 1em;
+}
+.moves-list-power > span{
+    height: 1em;
 }
 .moves-list-split{
     /*display: flex;
@@ -1236,6 +1240,9 @@ a:hover{
     flex-direction: column;
     font-size: 0.5em;
     width: 3em;
+}
+.moves-list-acc > span{
+    height: 1em;
 }
 .moves-list-stats1, .moves-list-stats1-row{
     display: flex;
