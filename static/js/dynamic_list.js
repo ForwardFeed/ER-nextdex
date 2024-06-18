@@ -52,10 +52,20 @@ export class DynamicList{
         return this
     }
     calculateRenderingRange(){
+        const scrollOrientation = {
+            size: "clientHeight",
+            dir: "topScroll"
+        }
+        if (this.node.clientHeight < this.node.clientWidth){
+            // vertical layout needs to add
+            scrollOrientation.size = "clientWidth"
+            scrollOrientation.dir = "scrollLeft"
+        }
         // turns out that the reorder bar is always there and in the right size
-        const oneRowHeightPx =  this.topBar.clientHeight
+        // however it is not this will not work well at all, not good design but I don't plan to export it
+        const oneRowHeightPx =  this.topBar[scrollOrientation.size]
         if (!oneRowHeightPx) return
-        const nbRowScrolledFloat = this.node.scrollTop / oneRowHeightPx
+        const nbRowScrolledFloat = this.node[scrollOrientation.dir] / oneRowHeightPx
         const maxRow = this.data.length
         const nbRowScrolledRaw = Math.min(maxRow, Math.round(nbRowScrolledFloat) + this.unloadOffset)
         // Minus one because it takes in account the top reordering bar
@@ -89,7 +99,12 @@ export class DynamicList{
             this.unloadOffset = Math.max(0, this.unloadOffset - scrollDiff)
             if (scrollDiff > LIST_RENDER_RANGE) {
                 // dumb workaround but it works for me so far
-                this.node.scrollTop = this.topBar.clientHeight * (LIST_RENDER_RANGE / 2)
+                if (this.node.clientHeight < this.node.clientWidth){
+                    this.node.scrollLeft = this.topBar.clientWidth * (LIST_RENDER_RANGE / 2)
+                } else {
+                    this.node.scrollTop = this.topBar.clientHeight * (LIST_RENDER_RANGE / 2)
+                }
+                
             }
         }
         
