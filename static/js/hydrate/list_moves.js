@@ -84,9 +84,8 @@ function generateMovesNodes(){
 }
 
 export function hydrateListMoves(){
-    
-    movesListDataUpdate()
-    listMovesDynList.replaceList(generateMovesNodes)
+
+    listMovesDynList.replaceList(generateMovesNodes,movesListDataUpdate)
 }
 
 function setupReordering(){

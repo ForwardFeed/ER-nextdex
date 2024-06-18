@@ -5,6 +5,7 @@ import { abilitiesExtraType, buildSpeciesPrefixTrees, feedPanelSpecies, getSprit
 import { gameData } from "../data_version.js"
 import { nodeLists } from "./hydrate.js"
 import { DynamicList, LIST_RENDER_RANGE } from "../dynamic_list.js"
+import { speciesListDataUpdate } from "./list_species.js"
 
 function feedBaseStatsStats(statID, value) {
     gameData.speciesStats.data[statID].push(value)
@@ -188,7 +189,7 @@ function generateSpeciesNode(){
 
 export function hydrateSpecies() {
     generateSpeciesNode()
-    blockSpeciesDynList.replaceList(generateSpeciesNode)
+    blockSpeciesDynList.replaceList(generateSpeciesNode, speciesListDataUpdate)
     feedPanelSpecies(1)
     buildSpeciesPrefixTrees()
 }

@@ -117,8 +117,7 @@ function generateSpeciesNode(){
 }
 
 export function hydrateSpeciesList() {
-    speciesListDataUpdate()
-    listSpeciesDynList.replaceList(generateSpeciesNode)
+    listSpeciesDynList.replaceList(generateSpeciesNode, speciesListDataUpdate)
 }
 
 

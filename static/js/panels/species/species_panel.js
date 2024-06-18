@@ -720,7 +720,12 @@ export function updateSpecies(searchQuery) {
     listSpeciesDynList.hideCurrentRendered().reset()
     blockSpeciesDynList.hideCurrentRendered().reset()
     speciesListDataUpdate()
-    
+    let validID;
+    if (!matchedSpecies) {
+        validID = 1
+    } else if(matchedSpecies.length) {
+        validID = matchedSpecies[0]
+    }
     //if the current selection isn't in the list then change
     if (matchedSpecies && matchedSpecies.indexOf(currentSpecieID) == -1 && validID) feedPanelSpecies(validID)
 }

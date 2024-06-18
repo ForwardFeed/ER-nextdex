@@ -29,7 +29,7 @@ export function feedPanelMoves(moveID) {
     listMoveFlags(move.flags.map((x) => gameData.flagsT[x]).concat(gameData.effT[move.eff]), $('#moves-flags'))
 
     $('#moves-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
-    $('#moves-list').children().eq(moveID - 1).addClass("sel-active").removeClass("sel-n-active")
+    $('#moves-list').children().eq(moveID).addClass("sel-active").removeClass("sel-n-active")
 }
 
 function setTypes(types) {
@@ -337,19 +337,12 @@ export function updateMoves(searchQuery) {
             searchQuery.k = hOp + searchQuery.k
         }
     }
-    const nodeList = $('#moves-list').children()
     matchedMoves = queryFilter3(searchQuery, moves, queryMapMoves, prefixTree)
     let validID;
-    const movesLen = moves.length
-    for (let i  = 0; i < movesLen; i++) {
-        if (i == 0) continue
-        const node = nodeList.eq(i - 1)
-        if (!matchedMoves || matchedMoves.indexOf(i) != -1) {
-            if (!validID) validID = i
-            node.show()
-        } else {
-            node.hide()
-        }
+    if (!matchedMoves) {
+        validID = 1
+    } else if(matchedMoves.length) {
+        validID = matchedMoves[0]
     }
     //if the current selection isn't in the list then change
     if (matchedMoves && matchedMoves.indexOf(currentMoveID) == -1 && validID) feedPanelMoves(validID)

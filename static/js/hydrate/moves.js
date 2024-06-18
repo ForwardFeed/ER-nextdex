@@ -54,8 +54,7 @@ function generateMovesNodes(moves = gameData.moves){
 
 export function hydrateMoves() {
     generateMovesNodes()
-    movesListDataUpdate()
-    blockMovesDynList.replaceList(generateMovesNodes)
+    blockMovesDynList.replaceList(generateMovesNodes, movesListDataUpdate)
     feedPanelMoves(1)
 }
 
