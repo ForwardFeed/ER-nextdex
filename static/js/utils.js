@@ -165,10 +165,17 @@ export function setLongClickSelection(node, callback, colorCb, time = 500){
         ev.stopImmediatePropagation(); 
         clearTimeout(timeout)
     }
+    // this is because if you put the mouseup outside the button it won't be registered here
+    // so if the mouse leave then just acts like if the mouse was up
+    const mouseLeave = (ev)=>{
+        extendableDiv.style.display = "none"
+        clearTimeout(timeout)
+    }
     node.addEventListener("mousedown", mouseDown)
     node.addEventListener("touchstart", mouseDown)
     node.addEventListener("mouseup", mouseUp)
     node.addEventListener("touchend", mouseUp)
+    node.addEventListener("mouseleave", mouseLeave)
 
     return extendableDiv
 }

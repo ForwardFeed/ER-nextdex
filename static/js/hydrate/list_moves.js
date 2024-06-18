@@ -37,14 +37,14 @@ function generateMovesNodes(){
                         e('span', null, move.name),
                     ],
                     e('div', 'moves-list-power'),[
-                        e('span', null, move.pwr),
+                        e('span', null, move.pwr || "--"),
+                        e('div', 'moves-list-acc'),[
+                            e('span', null, "/"),
+                            e('span', null, move.acc || "--")
+                        ],
                     ],
                 ],
                 e('div', 'moves-list-stats1'),[
-                    e('div', 'moves-list-stats1-row'),[
-                        e('span', 'moves-list-stats1-name', "acc: "),
-                        e('span', null, move.acc || "--")
-                    ],
                     e('div', 'moves-list-stats1-row'),[
                         e('span', 'moves-list-stats1-name', "p.p: "),
                         e('span', null, move.pp)
@@ -94,12 +94,18 @@ function setupReordering(){
         e('div', 'moves-list-row'),[
             e('div', 'moves-list-name'),[
                 e('span', null, 'Name'),
+                e('div', 'moves-list-topbar-power'), [
+                    e('div', null),[
+                        e('span', null, "Pwr")
+                    ],
+                    e('div', 'moves-list-acc'),[
+                        e('span', null, "/"),
+                        e('span', null, "Acc")
+                    ]
+                ]
             ],
             e('div', 'moves-list-stats1-row'),[
                 e('span', null, 'Stats'),
-            ],
-            e('div', 'moves-list-split'),[
-                e('span', null, 'Split'),
             ],
             e('div', 'list-moves-types-block'),[
                 e('span', null, 'Types'),

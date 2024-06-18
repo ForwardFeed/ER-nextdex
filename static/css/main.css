@@ -1231,10 +1231,16 @@ a:hover{
     background-size: cover;
 
 }
+.moves-list-acc{
+    display: flex;
+    flex-direction: column;
+    font-size: 0.5em;
+    width: 3em;
+}
 .moves-list-stats1, .moves-list-stats1-row{
     display: flex;
     width: 3.5em;
-    font-size: 0.85em;
+    font-size: 0.9em;
 }
 .moves-list-stats1{
     flex-direction: column;
@@ -1260,5 +1266,11 @@ a:hover{
     padding-left: 0.2em;
     padding-right: 0.2em;
     border-radius: 0.2em;
+    margin: auto;
+}
+
+.moves-list-topbar-power{
+    width: 1.5em;
+    font-size: 1.2em;
     margin: auto;
 }
