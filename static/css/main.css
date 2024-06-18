@@ -1212,7 +1212,8 @@ a:hover{
 
 .moves-list-stats0{
     display: flex;
-    flex-direction: column;   
+    flex-direction: column;
+    position: relative;
 }
 
 .moves-list-power{
@@ -1220,9 +1221,15 @@ a:hover{
     font-size: 2.5em;
 }
 .moves-list-split{
-    display: flex;
+    /*display: flex;
     height: 3.5em;
     width: 3.5em;
+    margin: auto;
+    position: absolute;*/
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+
 }
 .moves-list-stats1, .moves-list-stats1-row{
     display: flex;

@@ -28,6 +28,8 @@ function generateMovesNodes(){
         const move = gameData.moves[moveID]
         const splitImg = e('img', 'moves-list-split')
         splitImg.src = `./icons/${gameData.splitT[move.split]}.png`
+        const typeSplitNode = e('div', 'list-moves-types-block moves-list-split')
+        typeSplitNode.style.backgroundImage = `url(./icons/${gameData.splitT[move.split]}.png)`
         const node = JSHAC([
             e('div', 'moves-list-row'),[
                 e('div', 'moves-list-stats0'), [
@@ -56,13 +58,12 @@ function generateMovesNodes(){
                         e('span', null, move.chance)
                     ],
                 ],
-                splitImg,
-                e('div', 'list-moves-types-block', [...new Set(move.types)].map(x => {
+                typeSplitNode, [...new Set(move.types)].map(x => {
                     const type = gameData.typeT[x]
                     const typeNode = e('div', `list-species-type type ${type.toLowerCase()}`, [e('span', null, type)])
                     longClickToFilter(2, typeNode, "type", () => { return type })
                     return typeNode
-                })),
+                }),
                 e('div', 'moves-list-stats-flags'),
                     [... new Set(move.flags)].map(x =>
                         e('div', 'moves-list-stats-flag', [e('span', null, gameData.flagsT[x])])
