@@ -64,7 +64,7 @@ function generateMovesNodes(){
                     return typeNode
                 })),
                 e('div', 'moves-list-stats-flags'),
-                    move.flags.map(x =>
+                    [... new Set(move.flags)].map(x =>
                         e('div', 'moves-list-stats-flag', [e('span', null, gameData.flagsT[x])])
                     ),
                 e('div', 'list-species-btn-view', [e('span', null, 'View')], {
