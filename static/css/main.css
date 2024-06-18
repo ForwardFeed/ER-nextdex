@@ -1250,7 +1250,7 @@ a:hover{
 .moves-list-stats-flags{
     display: flex;
     flex-wrap: wrap;
-    width: 26em;
+    min-width: 26em;
     overflow: scroll;
 }
 
