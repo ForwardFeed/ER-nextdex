@@ -234,7 +234,6 @@ function createReorderArrow(sortFn){
 
 export function speciesListDataUpdate(){
     const finalDataListLayout = []
-    console.log(reorderedDataListLayout)
     if (!reorderedDataListLayout){
         if (matchedSpecies && typeof matchedSpecies === "object"){
             const matchedSpeciesLen = matchedSpecies.length
@@ -271,7 +270,6 @@ export function speciesListDataUpdate(){
         const reordererOrderLen = nodeLists.listLayoutSpecies.length
         for(let i = 0; i < reordererOrderLen; i++) finalDataListLayout[i] = reorderedDataListLayout[i]
     }
-    console.log(finalDataListLayout)
     listSpeciesDynList.dataUpdate(finalDataListLayout).update()
     blockSpeciesDynList.dataUpdate(finalDataListLayout).update()
 }

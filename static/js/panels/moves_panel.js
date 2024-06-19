@@ -27,7 +27,6 @@ export function feedPanelMoves(moveID) {
     setTypes(move.types)
     $('#moves-desc').text(move.lDesc) //TODO fix the width of this
     listMoveFlags(move.flags.map((x) => gameData.flagsT[x]).concat(gameData.effT[move.eff]), $('#moves-flags'))
-
     $('#moves-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
     $('#moves-list').children().eq(moveID).addClass("sel-active").removeClass("sel-n-active")
 }
@@ -156,9 +155,9 @@ export function setupMoves(){
 
 export function redirectMove(moveId) {
     search.callbackAfterFilters = () => {
-        $('#moves-list').children().eq(moveId - 1).click()[0].scrollIntoView({ behavior: "smooth" })
+        $('#moves-list').children().eq(moveId).trigger("click")[0].scrollIntoView({ behavior: "smooth" })
     }
-    $("#btn-moves").click()
+    $("#btn-moves").trigger("click")
 
 }
 
