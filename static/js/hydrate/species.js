@@ -84,10 +84,9 @@ function generateSpeciesNode(){
             feedBaseStatsStats(statID, value)
             if (statID < 6) specie.stats.base[6] += + value
         }
+        if (!specie.locations) specie.locations = new Map()
         // set third types for innates
         specie.thirdType = abilitiesExtraType(false, specie)
-        // prepare to be appended a list of location where this pokemon appear
-        specie.locations = new Map();
         // concatenate all moves into a new variable
         // also remove all duplicates
         // also adding move none to it, so it's selectable
