@@ -170,6 +170,7 @@ function setupReordering(){
 let reorderedDataListLayout = undefined
 export function reorderListLayoutNodes(reordered){
     listSpeciesDynList.hideCurrentRendered()
+    blockSpeciesDynList.hideCurrentRendered()
     reorderedDataListLayout = []
     const len = reordered.length
     for (var i=0; i < len; i++){
@@ -177,6 +178,7 @@ export function reorderListLayoutNodes(reordered){
         if (node.nodeID === undefined) continue
         reorderedDataListLayout[i - 1] = node.nodeID
         $('#panel-list-species').append(nodeLists.listLayoutSpecies[node.nodeID])
+        $('#species-list').append(nodeLists.species[node.nodeID])
     }
     speciesListDataUpdate()
 }
@@ -232,6 +234,7 @@ function createReorderArrow(sortFn){
 
 export function speciesListDataUpdate(){
     const finalDataListLayout = []
+    console.log(reorderedDataListLayout)
     if (!reorderedDataListLayout){
         if (matchedSpecies && typeof matchedSpecies === "object"){
             const matchedSpeciesLen = matchedSpecies.length
@@ -268,6 +271,7 @@ export function speciesListDataUpdate(){
         const reordererOrderLen = nodeLists.listLayoutSpecies.length
         for(let i = 0; i < reordererOrderLen; i++) finalDataListLayout[i] = reorderedDataListLayout[i]
     }
+    console.log(finalDataListLayout)
     listSpeciesDynList.dataUpdate(finalDataListLayout).update()
     blockSpeciesDynList.dataUpdate(finalDataListLayout).update()
 }
