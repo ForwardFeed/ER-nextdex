@@ -54,7 +54,7 @@ export class DynamicList{
     calculateRenderingRange(){
         const scrollOrientation = {
             size: "clientHeight",
-            dir: "topScroll"
+            dir: "scrollTop"
         }
         if (this.node.clientHeight < this.node.clientWidth){
             // vertical layout needs to add
