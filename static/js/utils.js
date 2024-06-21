@@ -1,5 +1,3 @@
-import { gameData } from "./data_version.js";
-import { reorderListLayoutNodes } from "./hydrate/list_species.js";
 
 export function addTooltip(node, description) {
 	const tooltip = document.createElement("div");
@@ -179,20 +177,6 @@ export function setLongClickSelection(node, callback, colorCb, time = 500){
     return extendableDiv
 }
 
-
-export function reorderNodeList(listParentNode, sortFn, direction = "<"){
-    // fastdom to do it in a single frame or it will lag a lot on some browsers
-    fastdom.mutate(()=>{ 
-        let clonedForReorder
-        if (sortFn){
-            clonedForReorder = structuredClone(gameData.species).sort(sortFn)
-        } else {
-            clonedForReorder = structuredClone(gameData.species)
-        }
-        if (direction === ">") clonedForReorder = clonedForReorder.reverse()
-        reorderListLayoutNodes(clonedForReorder)
-    })
-}
 
 /**
  * shamelessly lazy wrapper

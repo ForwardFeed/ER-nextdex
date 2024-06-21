@@ -1,6 +1,6 @@
 import { redirectLocation } from "../locations_panel.js"
 import { matchedMoves, moveOverlay } from "../moves_panel.js"
-import { addTooltip, capitalizeFirstLetter, AisInB, e, JSHAC, reorderNodeList } from "../../utils.js"
+import { addTooltip, capitalizeFirstLetter, AisInB, e, JSHAC } from "../../utils.js"
 import { search } from "../../search.js"
 import { longClickToFilter, queryFilter3 } from "../../filters.js"
 import { gameData, compareData } from "../../data_version.js"
@@ -10,7 +10,7 @@ import { nodeLists } from "../../hydrate/hydrate.js"
 import { cubicRadial } from "../../radial.js"
 import { getHintInteractibilityClass, settings } from "../../settings.js"
 import { feedCommunitySets } from "./community_sets.js"
-import { speciesListDataUpdate, listSpeciesDynList, setupListSpecies, toggleLayoutListSpecies } from "../../hydrate/list_species.js"
+import { speciesListDataUpdate, listSpeciesDynList, setupListSpecies, toggleLayoutListSpecies, reorderListLayoutNodes } from "../../hydrate/list_species.js"
 import { blockSpeciesDynList, setupBlockSpecies } from "../../hydrate/species.js"
 
 export const StatsEnum = [
@@ -494,6 +494,20 @@ function setLocations(locations, SEnc) {
     }
     $('#species-locations').empty().append(frag)
 }
+export function reorderNodeList(listParentNode, sortFn, direction = "<"){
+    // fastdom to do it in a single frame or it will lag a lot on some browsers
+    fastdom.mutate(()=>{ 
+        let clonedForReorder
+        if (sortFn){
+            clonedForReorder = structuredClone(gameData.species).sort(sortFn)
+        } else {
+            clonedForReorder = structuredClone(gameData.species)
+        }
+        if (direction === ">") clonedForReorder = clonedForReorder.reverse()
+        reorderListLayoutNodes(clonedForReorder)
+    })
+}
+
 
 export function setupReorderBtn() {
     const row = e('div', 'data-list-row', [e('span', null, 'reorder')])
@@ -556,7 +570,8 @@ export function setupReorderBtn() {
             }],
         ], "6em", "1em"), ev, "mid", true, false)
     }
-
+    // this is critical for the ... i dunno
+    reorderNodeList()
     return row
 }
 
