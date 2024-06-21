@@ -129,7 +129,7 @@ export class DynamicList{
     }
     hideCurrentRendered(){
         this.calculateRenderingRange()
-        for (let i = this.ranges.curr.min; i < this.ranges.curr.max; i++){
+        for (let i = this.ranges.curr.min; i < this.ranges.curr.max + 1; i++){
             if (!this.renderNextRow(i, false)) break;
         }
         return this
