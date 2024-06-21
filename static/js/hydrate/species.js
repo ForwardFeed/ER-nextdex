@@ -199,6 +199,6 @@ export let blockSpeciesDynList
 export function setupBlockSpecies(){
     const node = $("#species-list")[0]
     node.append(setupReorderBtn())
-    blockSpeciesDynList = new DynamicList(node, node.children[0], "species")
+    blockSpeciesDynList = new DynamicList(node, node.children[0], "species", true)
     blockSpeciesDynList.setup()
 }

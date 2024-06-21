@@ -141,6 +141,6 @@ export let listMovesDynList
 export function setupListMoves(){
     setupReordering()
     const node = $('#panel-list-moves')[0]
-    listMovesDynList = new DynamicList(node, node.children[0], "listLayoutMoves")
+    listMovesDynList = new DynamicList(node, node.children[0], "listLayoutMoves", false)
     listMovesDynList.setup()
 }

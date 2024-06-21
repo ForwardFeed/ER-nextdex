@@ -116,6 +116,6 @@ export let blockMovesDynList
 export function setupBlockMoves(){
     const node = $("#moves-list")[0]
     node.append(setupReorderBtn())
-    blockMovesDynList = new DynamicList(node, node.children[0], "moves")
+    blockMovesDynList = new DynamicList(node, node.children[0], "moves", true)
     blockMovesDynList.setup()
 }

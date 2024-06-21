@@ -29,10 +29,12 @@ export class DynamicList{
     }
     /** @type {number[]} */
     data = []
-    constructor(node, topBar, nodeListName){
+    scrollDirAuto = true
+    constructor(node, topBar, nodeListName, scrollDirAuto = true){
         this.node = node
         this.topBar = topBar
         this.nodeListName = nodeListName
+        this.scrollDirAuto = scrollDirAuto
     }
     setup(){
         let timeout
@@ -56,7 +58,7 @@ export class DynamicList{
             size: "clientHeight",
             dir: "scrollTop"
         }
-        if (this.node.clientHeight < this.node.clientWidth){
+        if (this.scrollDirAuto && document.body.clientHeight > document.body.clientWidth){
             // vertical layout needs to add
             scrollOrientation.size = "clientWidth"
             scrollOrientation.dir = "scrollLeft"
@@ -80,7 +82,6 @@ export class DynamicList{
                 max: Math.min(maxRow, this.lastNbScrolled + LIST_RENDER_RANGE)
             }
         }
-        return this
     }
     update(){
         this.calculateRenderingRange()
@@ -104,7 +105,6 @@ export class DynamicList{
                 } else {
                     this.node.scrollTop = this.topBar.clientHeight * (LIST_RENDER_RANGE / 2)
                 }
-                
             }
         }
         

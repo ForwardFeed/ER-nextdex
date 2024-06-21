@@ -279,7 +279,7 @@ export let listSpeciesDynList
 export function setupListSpecies() {
     setupReordering()
     const node = $('#panel-list-species')[0]
-    listSpeciesDynList = new DynamicList(node, node.children[0], "listLayoutSpecies")
+    listSpeciesDynList = new DynamicList(node, node.children[0], "listLayoutSpecies", false)
     listSpeciesDynList.setup()
 
 }
