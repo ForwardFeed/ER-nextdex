@@ -70,7 +70,6 @@ export class DynamicList{
         const pixelPerBlock = this.getDivPx()
         const pixelMod = this.leftovers / pixelPerBlock
         if (!pixelMod) return
-
         const nbRowScrolled = pixelMod > 0 ?
             Math.floor(this.leftovers / pixelPerBlock) :
             Math.ceil(this.leftovers / pixelPerBlock)

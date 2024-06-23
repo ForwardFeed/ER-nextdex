@@ -366,6 +366,10 @@ span{
     user-select: text;
     padding-right: 1em;
 }
+/*
+#species-id{
+
+}*/
 .species-mid-stats{
     display: flex;
 }
@@ -680,7 +684,9 @@ span{
     }
     .data-list-row{
         padding: 0 10px;
-
+        min-width: 3.5em;
+        max-width: 3.5em;
+        padding-top: 0;
     }
     .data-data{
         width: 100%;
