@@ -3,6 +3,7 @@
  */
 
 import { nodeLists } from "./hydrate/hydrate.js"
+import { settings } from "./settings.js"
 
 export const LIST_RENDER_RANGE = 20 //maximum that is loading on a direction
 const RATE_LIMIT_INTERVAL = 400 // trigger the rendering of the list with this minimun in ms
@@ -77,12 +78,19 @@ export class DynamicList{
         if (!nbRowScrolled) return
         this.lastNbScrolled = this.nbRowScrolled
         this.nbRowScrolled += nbRowScrolled
+        if (!settings.scscrollLock) {
+            fastdom.mutate(() => {
+                this.update()
+            })
+        }
+        
     }
     setup(){
         this.node.onscroll = () => {
             this.onScroll()
         }
         this.node.onscrollend = () => {
+            if (!settings.scrollLock) return
             this.onScroll()
             fastdom.mutate(() => {
                 this.update()

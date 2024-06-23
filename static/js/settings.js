@@ -5,7 +5,7 @@ import { toggleLayoutListSpecies } from "./hydrate/list_species.js"
 
 const appName = "ERdex"
 const appSettings = appName + "_settings"
-const settingsVersion = "8" //when changed it will init newly added elements from default to the current settings
+const settingsVersion = "9" //when changed it will init newly added elements from default to the current settings
 // and this automatically to prevent some undefined behavior
 const themeList =  [
     "blueish",
@@ -31,6 +31,7 @@ const defaultSettings = {
     font: "basis33",
     hintSelectible: true,
     listLayout: false,
+    scrollLock: true,
 }
 
 export function initAppSettings(){
@@ -209,6 +210,15 @@ export function setupSettings(){
     settings.listLayout ? $('#enable-list-layout').attr('checked', true) : $('#disable-list-layout').attr('checked', true)
     toggleLayoutListSpecies(settings.listLayout)
     toggleLayoutListMoves(settings.listLayout)
+    $('#disable-scroll-lock').on('change', function(){
+        settings.scrollLock = false
+        saveSettings()
+    })
+    $('#enable-scroll-lock').on('change', function(){
+        settings.scrollLock = true
+        saveSettings()
+    })
+    settings.scrollLock ? $('#enable-scroll-lock').attr('checked', true) : $('#disable-scroll-lock').attr('checked', true)
     setDynamicalRowOfSettings("font", fontList, (font)=>{
         settings.theme = font
         saveSettings()
