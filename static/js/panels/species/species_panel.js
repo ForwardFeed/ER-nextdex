@@ -570,8 +570,6 @@ export function setupReorderBtn() {
             }],
         ], "6em", "1em"), ev, "mid", true, false)
     }
-    // this is critical for the ... i dunno
-    reorderNodeList()
     return row
 }
 
