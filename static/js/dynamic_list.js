@@ -65,9 +65,9 @@ export class DynamicList{
     }
     onScroll(){
         const currScroll = this.getScroll()
+        const pixelPerBlock = this.getDivPx()
         this.leftovers += currScroll - this.prevScroll
         this.prevScroll = currScroll
-        const pixelPerBlock = this.getDivPx()
         const pixelMod = this.leftovers / pixelPerBlock
         if (!pixelMod) return
         const nbRowScrolled = pixelMod > 0 ?
@@ -77,13 +77,16 @@ export class DynamicList{
         if (!nbRowScrolled) return
         this.lastNbScrolled = this.nbRowScrolled
         this.nbRowScrolled += nbRowScrolled
-        fastdom.mutate(() => {
-            this.update(nbRowScrolled)
-        })
     }
     setup(){
         this.node.onscroll = () => {
             this.onScroll()
+        }
+        this.node.onscrollend = () => {
+            this.onScroll()
+            fastdom.mutate(() => {
+                this.update()
+            })
         }
     }
     dataUpdate(data){
@@ -116,6 +119,12 @@ export class DynamicList{
             for (let i = this.ranges.prev.max; i > len; i--){
                 if (!this.renderNextRow(i, false)) break
             }
+            // poor quality workaround but works for me
+            if (this.ranges.prev.max - this.ranges.curr.max >= LIST_RENDER_RANGE){
+                this.setScroll(this.getMaxSpace() / 2)
+            }
+            
+            
         }
         const unloadOffset = this.ranges.curr.min - this.ranges.prev.min
         this.leftovers += unloadOffset * this.getDivPx()

@@ -687,6 +687,7 @@ span{
         min-width: 3.5em;
         max-width: 3.5em;
         padding-top: 0;
+        overflow: clip;
     }
     .data-data{
         width: 100%;
