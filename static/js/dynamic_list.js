@@ -78,7 +78,7 @@ export class DynamicList{
         if (!nbRowScrolled) return
         this.lastNbScrolled = this.nbRowScrolled
         this.nbRowScrolled += nbRowScrolled
-        if (!settings.scscrollLock) {
+        if (!settings.scrollLock) {
             fastdom.mutate(() => {
                 this.update()
             })
