@@ -7,7 +7,27 @@ import { nodeLists } from "./hydrate.js"
 
 export let HPMoveID = 0
 export let HPsMovesID = []
-function generateMovesNodes(moves = gameData.moves){
+function rehydrateMove(mv, i, moves, movesLen){ // i => moveID
+    if (mv.name === "Hidden Power"){
+        mv.name = "H.P. Normal"
+        HPMoveID = i
+        for (const typeI in gameData.typeT){
+            const typeName = gameData.typeT[typeI]
+            if (typeName === "Normal") continue
+            const newHP = structuredClone(mv)
+            newHP.types[0] = typeI
+            newHP.name = "H.P. " + typeName
+            movesLen++
+            HPsMovesID.push(moves.push(newHP) - 1)
+        }
+    }
+    if (mv.pwr > 0 && mv.pwr <= 60) mv.flags.push(gameData.flagsT.indexOf('Technician'))
+    if (mv.pwr > 0 && mv.pwr < 50) mv.flags.push(gameData.flagsT.indexOf('Perfectionnist'))
+    return movesLen
+}
+
+function generateMovesNodes(onHydration = false){
+    const moves = gameData.moves
     nodeLists.moves.length = 0 // reset
     HPsMovesID = []
     if (gameData.flagsT.indexOf('Technician') == -1) gameData.flagsT.push('Technician', 'Perfectionnist')
@@ -16,22 +36,7 @@ function generateMovesNodes(moves = gameData.moves){
     for (let i = 0; i < movesLen; i++) {
         if (i == 0) continue
         const mv = moves[i]
-        if (mv.name === "Hidden Power"){
-            mv.name = "H.P. Normal"
-            HPMoveID = i
-            for (const typeI in gameData.typeT){
-                const typeName = gameData.typeT[typeI]
-                if (typeName === "Normal") continue
-                const newHP = structuredClone(mv)
-                newHP.types[0] = typeI
-                newHP.name = "H.P. " + typeName
-                movesLen++
-                
-                HPsMovesID.push(moves.push(newHP) - 1)
-            }
-        }
-        if (mv.pwr > 0 && mv.pwr <= 60) mv.flags.push(gameData.flagsT.indexOf('Technician'))
-        if (mv.pwr > 0 && mv.pwr < 50) mv.flags.push(gameData.flagsT.indexOf('Perfectionnist'))
+        if (onHydration) movesLen = rehydrateMove(mv, i, moves, movesLen)
         const core = document.createElement('div')
         core.className = "btn data-list-row sel-n-active"
         const name = document.createElement('span')
@@ -53,7 +58,7 @@ function generateMovesNodes(moves = gameData.moves){
 
 
 export function hydrateMoves() {
-    generateMovesNodes()
+    generateMovesNodes(true)
     blockMovesDynList.replaceList(generateMovesNodes, movesListDataUpdate)
     feedPanelMoves(1)
 }
