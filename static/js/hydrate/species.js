@@ -149,6 +149,13 @@ function rehydratePokeData(specie, i){ // i = specieID
             locaObj.given.push(['??','??',i])
         }
     }
+    const allMovesLen = specie.allMoves.length
+    for (let j = 0; j < allMovesLen; j++){
+        const mvID = specie.allMoves[j]
+        const mv = gameData.moves[mvID]
+        if (!mv.species) mv.species = []
+        mv.species.push(+i)
+    }
 }
 
 function generateSpeciesNode(onHydration = false){
