@@ -1,5 +1,5 @@
 
-import { gameData } from "../data_version.js"
+import { changeVersion, gameData } from "../data_version.js"
 import { restoreSave, setupOffensiveTeam } from "../panels/team_builder.js"
 
 import { load } from "../loading.js"
@@ -29,6 +29,9 @@ export const nodeLists = {
 export function hydrate(firstLoad=false) {
     if (!gameData) {
         return console.warn("couldn't find gameData")
+    }
+    if (!gameData.species){ // sometimes this happens and fuck over everything, I currently don't know why it happens
+        return changeVersion($('#versions').val(), true)
     }
     // add some reconstitution data for ease of use here
     gameData.minMaxBaseStats = new Array(6).fill(0)
