@@ -412,7 +412,7 @@ export function setEvos(evos) {
 
 export function createSpeciesBlock(specieId) {
     //create a div, then inside an image and the species name with redirection
-    const node = $("<span/>").addClass("specie-block").click(() => {
+    const node = $("<span/>").addClass("specie-block").trigger("click", () => {
         redirectSpecie(specieId)
     })
     const specie = gameData.species[specieId]

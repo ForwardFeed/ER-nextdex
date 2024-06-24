@@ -3,7 +3,7 @@ import { search } from "../search.js"
 import {longClickToFilter, trickFilterSearch, queryFilter3} from "../filters.js"
 import { AisInB, e, JSHAC } from "../utils.js"
 import { removeInformationWindow } from "../window.js"
-import { setAllMoves } from "./species/species_panel.js"
+import { createSpeciesBlock, queryMapSpecies, setAllMoves } from "./species/species_panel.js"
 import { getHintInteractibilityClass } from "../settings.js"
 import { listMovesDynList, movesListDataUpdate, setupListMoves, toggleLayoutListMoves } from "../hydrate/list_moves.js"
 import { blockMovesDynList, setupBlockMoves } from "../hydrate/moves.js"
@@ -27,6 +27,7 @@ export function feedPanelMoves(moveID) {
     setTypes(move.types)
     $('#moves-desc').text(move.lDesc) //TODO fix the width of this
     listMoveFlags(move.flags.map((x) => gameData.flagsT[x]).concat(gameData.effT[move.eff]), $('#moves-flags'))
+    if (move.species) showSpeciesMove(move)
     $('#moves-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
     $('#moves-list').children().eq(moveID).addClass("sel-active").removeClass("sel-n-active")
 }
@@ -151,6 +152,22 @@ export function setupMoves(){
         $('#moves-return-list-layout').hide()
     })
     setupBlockMoves()
+    $('#moves-species-search').on('keyup', function(){
+        const val = $(this).val()
+        const move = gameData.moves[currentMoveID]
+        if (!move.species) return
+        const len = move.species.length
+        for (let i = 0; i < len; i++){
+            const specieID =  move.species[i]
+            const specie = gameData.species[specieID]
+            if (!queryMapSpecies.name(val, specie)) {
+                $('#moves-species').children().eq(i).hide()
+            } else {
+                $('#moves-species').children().eq(i).show()
+            }
+            
+        }
+    })
 }
 
 export function redirectMove(moveId) {
@@ -229,6 +246,17 @@ export function moveOverlay(moveId, interactive=true) {
             effectsDiv
         ]
     ])
+}
+
+function showSpeciesMove(move){
+    const frag = new DocumentFragment()
+    const len = move.species.length
+    for (let i = 0; i < len; i++){
+        const specie = move.species[i]
+        frag.append(createSpeciesBlock(specie))
+    }
+    $('#moves-species-title span').text(`Pokemons who have this move: ${len}`)
+    $('#moves-species').empty().append(frag)
 }
 
 export function clearMatchedMove(){

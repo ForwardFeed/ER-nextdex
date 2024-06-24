@@ -283,7 +283,21 @@ span{
     display: flex;
     flex-direction: column;
 }
-
+#moves-species-title{
+    background-color: var(--colorA);
+    display: flex;
+    width: 50em;
+}
+#moves-species-search{
+    width: calc(100% - 50em);
+}
+#moves-species{
+    display: flex;
+    flex-wrap: wrap;
+}
+#moves-species > *{
+    width: 7em;
+}
 
 @media (orientation: landscape) {
     .moves-top{
