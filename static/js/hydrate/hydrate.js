@@ -15,6 +15,7 @@ import { addAllOtherEveeMoves } from "./moves.js"
 import { takeMovesFromPreEvolution } from "./moves.js"
 import { hydrateSpeciesList } from "./list_species.js"
 import { hydrateListMoves } from "./list_moves.js"
+import { cleanLocalStorage } from "../settings.js"
 
 export const nodeLists = {
     species: [],
@@ -31,6 +32,7 @@ export function hydrate(firstLoad=false) {
         return console.warn("couldn't find gameData")
     }
     if (!gameData.species){ // sometimes this happens and fuck over everything, I currently don't know why it happens
+        cleanLocalStorage()
         return changeVersion($('#versions').val(), true)
     }
     // add some reconstitution data for ease of use here

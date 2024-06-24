@@ -236,7 +236,7 @@ export function setupSettings(){
 /**
  * when the localStorage is too full
  */
-function cleanLocalStorage(){
+export function cleanLocalStorage(){
     if (!localStorage) return // dunno
     console.log('cleaned the local storage of data')
     const keys = Object.keys(localStorage) 
