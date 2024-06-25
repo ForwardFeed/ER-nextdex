@@ -1,12 +1,10 @@
 import { gameData } from "../data_version.js"
 import { search } from "../search.js"
-import {longClickToFilter, trickFilterSearch, queryFilter3} from "../filters.js"
+import { queryFilter2, longClickToFilter, trickFilterSearch, queryFilter3} from "../filters.js"
 import { AisInB, e, JSHAC } from "../utils.js"
-import { removeInformationWindow } from "../window.js"
-import { createSpeciesBlock, queryMapSpecies, setAllMoves } from "./species/species_panel.js"
+import { createInformationWindow, removeInformationWindow } from "../window.js"
+import { setAllMoves, setMoveName, setMovePower, setMoveRow, setSplitMove } from "./species/species_panel.js"
 import { getHintInteractibilityClass } from "../settings.js"
-import { listMovesDynList, movesListDataUpdate, setupListMoves, toggleLayoutListMoves } from "../hydrate/list_moves.js"
-import { blockMovesDynList, setupBlockMoves } from "../hydrate/moves.js"
 
 export let matchedMoves
 let currentMoveID = 0
@@ -27,9 +25,9 @@ export function feedPanelMoves(moveID) {
     setTypes(move.types)
     $('#moves-desc').text(move.lDesc) //TODO fix the width of this
     listMoveFlags(move.flags.map((x) => gameData.flagsT[x]).concat(gameData.effT[move.eff]), $('#moves-flags'))
-    if (move.species) showSpeciesMove(move)
+
     $('#moves-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
-    $('#moves-list').children().eq(moveID).addClass("sel-active").removeClass("sel-n-active")
+    $('#moves-list').children().eq(moveID - 1).addClass("sel-active").removeClass("sel-n-active")
 }
 
 function setTypes(types) {
@@ -146,35 +144,14 @@ export function setupMoves(){
     longClickToFilter(2, $('#moves-split').parent()[0], "category", 
             ()=>{ return $('#moves-split')[0].dataset.split || ""}
         )
-    setupListMoves()
-    $('#moves-return-list-layout').on('click', function(){
-        toggleLayoutListMoves(true)
-        $('#moves-return-list-layout').hide()
-    })
-    setupBlockMoves()
-    $('#moves-species-search').on('keyup', function(){
-        const val = $(this).val()
-        const move = gameData.moves[currentMoveID]
-        if (!move.species) return
-        const len = move.species.length
-        for (let i = 0; i < len; i++){
-            const specieID =  move.species[i]
-            const specie = gameData.species[specieID]
-            if (!queryMapSpecies.name(val, specie)) {
-                $('#moves-species').children().eq(i).hide()
-            } else {
-                $('#moves-species').children().eq(i).show()
-            }
-            
-        }
-    })
+    
 }
 
 export function redirectMove(moveId) {
     search.callbackAfterFilters = () => {
-        $('#moves-list').children().eq(moveId).trigger("click")[0].scrollIntoView({ behavior: "smooth" })
+        $('#moves-list').children().eq(moveId - 1).click()[0].scrollIntoView({ behavior: "smooth" })
     }
-    $("#btn-moves").trigger("click")
+    $("#btn-moves").click()
 
 }
 
@@ -246,17 +223,6 @@ export function moveOverlay(moveId, interactive=true) {
             effectsDiv
         ]
     ])
-}
-
-function showSpeciesMove(move){
-    const frag = new DocumentFragment()
-    const len = move.species.length
-    for (let i = 0; i < len; i++){
-        const specie = move.species[i]
-        frag.append(createSpeciesBlock(specie))
-    }
-    $('#moves-species-title span').text(`Pokemons who have this move: ${len}`)
-    $('#moves-species').empty().append(frag)
 }
 
 export function clearMatchedMove(){
@@ -364,16 +330,20 @@ export function updateMoves(searchQuery) {
             searchQuery.k = hOp + searchQuery.k
         }
     }
+    const nodeList = $('#moves-list').children()
     matchedMoves = queryFilter3(searchQuery, moves, queryMapMoves, prefixTree)
     let validID;
-    if (!matchedMoves) {
-        validID = 1
-    } else if(matchedMoves.length) {
-        validID = matchedMoves[0]
+    const movesLen = moves.length
+    for (let i  = 0; i < movesLen; i++) {
+        if (i == 0) continue
+        const node = nodeList.eq(i - 1)
+        if (!matchedMoves || matchedMoves.indexOf(i) != -1) {
+            if (!validID) validID = i
+            node.show()
+        } else {
+            node.hide()
+        }
     }
     //if the current selection isn't in the list then change
     if (matchedMoves && matchedMoves.indexOf(currentMoveID) == -1 && validID) feedPanelMoves(validID)
-    listMovesDynList.hideCurrentRendered().reset()
-    blockMovesDynList.hideCurrentRendered().reset()
-    movesListDataUpdate()
 }

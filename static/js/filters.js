@@ -728,8 +728,8 @@ export function longClickToFilter(panelID, node, key, data = ()=>{return node.in
                 })
             } else {
                 filterDiv.remove()
+                decFiltersCounter()
             }
-            decFiltersCounter()
             spinOnRemoveFilter()
             color = "green";
         } else {

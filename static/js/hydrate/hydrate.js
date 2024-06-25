@@ -1,5 +1,5 @@
 
-import { changeVersion, gameData } from "../data_version.js"
+import { gameData } from "../data_version.js"
 import { restoreSave, setupOffensiveTeam } from "../panels/team_builder.js"
 
 import { load } from "../loading.js"
@@ -13,16 +13,11 @@ import { hydrateSpecies } from "./species.js"
 import { hydrateLocation } from "./locations.js"
 import { addAllOtherEveeMoves } from "./moves.js"
 import { takeMovesFromPreEvolution } from "./moves.js"
-import { hydrateSpeciesList } from "./list_species.js"
-import { hydrateListMoves } from "./list_moves.js"
-import { cleanLocalStorage } from "../settings.js"
 
 export const nodeLists = {
     species: [],
-    listLayoutSpecies: [],
     abilities: [],
     moves: [],
-    listLayoutMoves: [],
     locations: [],
     trainers: [],
 }
@@ -30,10 +25,6 @@ export const nodeLists = {
 export function hydrate(firstLoad=false) {
     if (!gameData) {
         return console.warn("couldn't find gameData")
-    }
-    if (!gameData.species){ // sometimes this happens and fuck over everything, I currently don't know why it happens
-        cleanLocalStorage()
-        return changeVersion($('#versions').val(), true)
     }
     // add some reconstitution data for ease of use here
     gameData.minMaxBaseStats = new Array(6).fill(0)
@@ -65,9 +56,7 @@ export function hydrate(firstLoad=false) {
         [setUpComSets, "Import Community sets"],
         [hydrateAbilities, "abilities data"],
         [hydrateMoves, "moves data"],
-        [hydrateListMoves, "list layout moves data"],
         [hydrateSpecies, "species data"],
-        [hydrateSpeciesList, "list layout species data"],
         [hydrateLocation, "locations data"],
         [hydrateTrainers, "trainers data"],
         [restoreSave, "save"], // also restore the save of the team builder

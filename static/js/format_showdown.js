@@ -4,8 +4,12 @@ import { setFullTeam, teamData } from "./panels/team_builder.js"
 import { gameData } from "./data_version.js"
 import { itemList } from "./hydrate/hydrate.js"
 import { settings } from "./settings.js"
-import { StatsEnum } from "./panels/species/species_panel.js"
 
+
+
+const statsN = [
+    "HP", "Atk", "Def", "SpA", "SpD", "Spe"
+]
 
 
 export function parseShowdownFormat(text){
@@ -66,7 +70,7 @@ export function parseShowdownFormat(text){
             const evsText = line.replace(/^EVS: /, '').split(' / ')
             for (const ev of evsText){
                 const t = ev.split(' ')
-                poke.evs[StatsEnum.indexOf(t[1])] = t[0]
+                poke.evs[statsN.indexOf(t[1])] = t[0]
             }
             next()
         },
@@ -77,7 +81,7 @@ export function parseShowdownFormat(text){
             const ivsText = line.replace(/^IVS: /, '').split(' / ')
             for (const iv of ivsText){
                 const t = iv.split(' ')
-                poke.ivs[StatsEnum.indexOf(t[1])] = t[0]
+                poke.ivs[statsN.indexOf(t[1])] = t[0]
             }
             next()
         },
@@ -134,8 +138,8 @@ ${spcNameList[poke.spc]}${item?` @ ${item}`:""}
 Level: 1
 ${gameData.natureT[poke.nature]} Nature
 Ability: ${getAbi(poke.spc, poke.abi)}
-${`EVS: ${poke.evs.map((x, i) => x?`${x} ${StatsEnum[i]}`:"").filter(x => x).join(' / ')}`.replace(/EVS: $/, '')}
-${`IVS: ${poke.ivs.map((x, i) => !+x?`${x} ${StatsEnum[i]}`:"").filter(x => x).join(' / ')}`.replace(/IVS: $/, '')}
+${`EVS: ${poke.evs.map((x, i) => x?`${x} ${statsN[i]}`:"").filter(x => x).join(' / ')}`.replace(/EVS: $/, '')}
+${`IVS: ${poke.ivs.map((x, i) => !+x?`${x} ${statsN[i]}`:"").filter(x => x).join(' / ')}`.replace(/IVS: $/, '')}
 ${poke.moves.map(x => moveNameList[x]).filter(x => x != "-").map(x => `- ${x}`).join('\n')}
 ${poke.notes ? `${poke.notes.split('\n').map(x =>`//${x}\n`).join('')}` : ''}
 `.replace(/\n[\n]+/g, '\n'))

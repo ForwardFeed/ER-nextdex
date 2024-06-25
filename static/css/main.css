@@ -1,7 +1,4 @@
 /* GENERAL */
-.crossed{
-    text-decoration: line-through var(--colorB);
-}
 
 .left{
     margin: auto;
@@ -205,7 +202,6 @@ span{
     display: flex;
     background-color: var(--colorB);
     text-align: center;
-    position: relative;
 }
 .moves-top-sub{
     width: 50%;
@@ -283,21 +279,7 @@ span{
     display: flex;
     flex-direction: column;
 }
-#moves-species-title{
-    background-color: var(--colorA);
-    display: flex;
-    width: 50em;
-}
-#moves-species-search{
-    width: calc(100% - 50em);
-}
-#moves-species{
-    display: flex;
-    flex-wrap: wrap;
-}
-#moves-species > *{
-    width: 7em;
-}
+
 
 @media (orientation: landscape) {
     .moves-top{
@@ -380,16 +362,11 @@ span{
     user-select: text;
     padding-right: 1em;
 }
-/*
-#species-id{
-
-}*/
 .species-mid-stats{
     display: flex;
 }
 
 .species-top{
-    position: relative;
     display: flex;
     width: 100%;
     background-color: var(--colorB);
@@ -671,8 +648,7 @@ span{
     }
     .data-list-row{
         padding: 10px;
-        min-height: 1.7em;
-        max-height: 1.7em;
+        height: fit-content;
     }
     .data-data{
         height: 100%;
@@ -698,10 +674,7 @@ span{
     }
     .data-list-row{
         padding: 0 10px;
-        min-width: 3.5em;
-        max-width: 3.5em;
-        padding-top: 0;
-        overflow: clip;
+
     }
     .data-data{
         width: 100%;
@@ -1109,196 +1082,4 @@ a:hover{
     z-index: 20;
 }
 
-#panel-list-species, #panel-list-moves{
-    flex-direction: column;
-    overflow-y: scroll;
-}
-.list-species-row, .moves-list-row{
-    display: flex;
-    border-bottom: solid var(--colorB) 0.1em;
-    border-radius: 5px;
-    min-height: 3.5em;
-    max-height: 3.5em;
-}
-.list-species-name, .moves-list-name{
-    display: flex;
-    min-width: 7em;
-    padding-right: 0.5em;
-}
 
-.list-species-sprite{
-    margin: auto;
-}
-
-.list-species-abis-block, .list-species-inns-block{
-    display: flex;
-    flex-direction: column;
-    max-width: 7.5em;
-    min-width: 7.5em;
-    padding-left: 0.2em;
-    padding-right: 0.2em;
-}
-
-.list-species-abi, .list-species-inn{
-    display: flex;
-    margin: auto;
-    background-color: var(--colorB);
-    width: 7.2em;
-    padding-left: 0.2em;
-    padding-right: 0.2em;
-    border-radius: 0.2em;
-}
-
-.list-species-types-block, .list-moves-types-block{
-    display: flex;
-    flex-direction: column;
-    min-width: 4em;
-    max-width: 4em;
-    overflow-x: hidden;
-}
-
-.list-species-type{
-    margin: auto;
-    display: flex;
-}
-
-.list-species-basestats-block{
-    display: flex;
-    width: 14em;
-}
-
-.list-species-basestats-col{
-    display: flex;
-    flex-direction: column;
-    min-width: 2em;
-    max-width: 2em;
-}
-
-.list-species-basestats-head,.list-species-basestats-val{
-    margin: auto;
-}
-.list-species-basestats-val{
-    display: flex;
-    flex-direction: column;
-    color: black;
-}
-.list-species-basestats-val>span{
-    border-radius: 0.1em;
-    width: 1.5em;
-    text-align: center;
-}
-.list-species-btn-view{
-    width: 2.5em;
-    display: flex;
-    border: solid var(--interactible) 0.1em;
-    border-radius: 1em;
-    margin: 0.25em;
-}
-.list-species-btn-view:hover, #species-return-list-layout:hover,
- #moves-return-list-layout:hover, .list-moves-btn-view:hover{
-    color: var(--colorD);
-    background-color: var(--font-color);
-}
-
-#species-return-list-layout, #moves-return-list-layout{
-    padding: 0.5em;
-    width: 3em;
-    display: flex;
-    border: solid var(--interactible) 0.1em;
-    border-radius: 1em;
-    position: absolute;
-    right: 0.1em;
-    top: 0.1em;
-}
-
-.list-species-reorder{
-    background-color: var(--colorC);
-}
-
-.list-species-reorder-block{
-    width: 100%;
-    display: flex;
-}
-
-.list-species-reorder-block > *{
-    margin: auto;
-}
-
-.reorder-arrow-block{
-    display: flex;
-}
-.reorder-arrow{
-    margin: auto;
-}
-
-.moves-list-stats0{
-    display: flex;
-    flex-direction: column;
-    position: relative;
-}
-
-.moves-list-power{
-    display: flex;
-    font-size: 2.5em;
-    height: 1em;
-}
-.moves-list-power > span{
-    height: 1em;
-}
-.moves-list-split{
-    /*display: flex;
-    height: 3.5em;
-    width: 3.5em;
-    margin: auto;
-    position: absolute;*/
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-
-}
-.moves-list-acc{
-    display: flex;
-    flex-direction: column;
-    font-size: 0.5em;
-    width: 3em;
-}
-.moves-list-acc > span{
-    height: 1em;
-}
-.moves-list-stats1, .moves-list-stats1-row{
-    display: flex;
-    width: 3.5em;
-    font-size: 0.9em;
-}
-.moves-list-stats1{
-    flex-direction: column;
-}
-
-.moves-list-stats1-row{
-    display: flex;
-}
-.moves-list-stats1-name{
-    margin-left: 0;
-    padding-left: 0;
-}
-.moves-list-stats-flags{
-    display: flex;
-    flex-wrap: wrap;
-    min-width: 26em;
-    overflow: scroll;
-}
-
-.moves-list-stats-flag{
-    display: flex;
-    background-color: var(--colorB);
-    padding-left: 0.2em;
-    padding-right: 0.2em;
-    border-radius: 0.2em;
-    margin: auto;
-}
-
-.moves-list-topbar-power{
-    width: 1.5em;
-    font-size: 1.2em;
-    margin: auto;
-}

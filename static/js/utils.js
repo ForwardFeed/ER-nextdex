@@ -1,3 +1,5 @@
+import { gameData } from "./data_version.js";
+import { nodeLists } from "./hydrate/hydrate.js";
 
 export function addTooltip(node, description) {
 	const tooltip = document.createElement("div");
@@ -73,7 +75,7 @@ export function clickOutsideToRemove(node, absorb = false, onCloseCb = ()=>{}){
  * 
  * @param {string | undefined} tag 
  * @param {string | undefined} classname 
- * @param {string | HTMLElement[] | undefined} innerText - can put an array of HTML nodes
+ * @param {string | undefined} innerText 
  * @param {Object | undefined} events 
  * @returns {HTMLDivElement}
  */
@@ -162,21 +164,33 @@ export function setLongClickSelection(node, callback, colorCb, time = 500){
         ev.stopImmediatePropagation(); 
         clearTimeout(timeout)
     }
-    // this is because if you put the mouseup outside the button it won't be registered here
-    // so if the mouse leave then just acts like if the mouse was up
-    const mouseLeave = (ev)=>{
-        extendableDiv.style.display = "none"
-        clearTimeout(timeout)
-    }
     node.addEventListener("mousedown", mouseDown)
     node.addEventListener("touchstart", mouseDown)
     node.addEventListener("mouseup", mouseUp)
     node.addEventListener("touchend", mouseUp)
-    node.addEventListener("mouseleave", mouseLeave)
 
     return extendableDiv
 }
 
+
+export function reorderNodeList(list, sortFn, direction = "<"){
+    // fastdom to do it in a single frame or it will lag a lot on some browsers
+    fastdom.mutate(()=>{ 
+        let clonedForReorder
+        if (sortFn){
+            clonedForReorder = structuredClone(gameData.species).sort(sortFn)
+        } else {
+            clonedForReorder = structuredClone(gameData.species)
+        }
+        if (direction === ">") clonedForReorder = clonedForReorder.reverse()
+        const len = clonedForReorder.length
+        for (var i=0; i < len; i++){
+            const mon = clonedForReorder[i]
+            if (mon.nodeID === undefined) continue
+            list.append(nodeLists.species[mon.nodeID])
+        }
+    })
+}
 
 /**
  * shamelessly lazy wrapper

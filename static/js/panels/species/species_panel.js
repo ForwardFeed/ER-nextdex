@@ -1,8 +1,8 @@
 import { redirectLocation } from "../locations_panel.js"
 import { matchedMoves, moveOverlay } from "../moves_panel.js"
-import { addTooltip, capitalizeFirstLetter, AisInB, e, JSHAC } from "../../utils.js"
+import { addTooltip, capitalizeFirstLetter, AisInB, e, JSHAC, reorderNodeList } from "../../utils.js"
 import { search } from "../../search.js"
-import { longClickToFilter, queryFilter3 } from "../../filters.js"
+import { queryFilter2, longClickToFilter, queryFilter3 } from "../../filters.js"
 import { gameData, compareData } from "../../data_version.js"
 import { createInformationWindow, removeInformationWindow } from "../../window.js"
 import { getDefensiveCoverage, abilitiesToAddedType} from "../../weakness.js"
@@ -10,17 +10,6 @@ import { nodeLists } from "../../hydrate/hydrate.js"
 import { cubicRadial } from "../../radial.js"
 import { getHintInteractibilityClass, settings } from "../../settings.js"
 import { feedCommunitySets } from "./community_sets.js"
-import { speciesListDataUpdate, listSpeciesDynList, setupListSpecies, toggleLayoutListSpecies, reorderListLayoutNodes } from "../../hydrate/list_species.js"
-import { blockSpeciesDynList, setupBlockSpecies } from "../../hydrate/species.js"
-
-export const StatsEnum = [
-    "HP",
-    "Atk",
-    "Def",
-    "SpA",
-    "SpD",
-    "Spe",
-]
 
 export let currentSpecieID = 1
 
@@ -259,22 +248,6 @@ export function getSpritesShinyURL(NAME) {
     return `./sprites/SHINY_${NAME}.png`
 }
 
-export function getColorOfStat(value, statID){
-    let color = "gray"
-    for (const colorMapped of [
-        [gameData.speciesStats.result.min5[statID], "#ff3300"],
-        [gameData.speciesStats.result.min20[statID], "#cc6600"],
-        [gameData.speciesStats.result.median[statID], "#cccc00"],
-        [gameData.speciesStats.result.top20[statID], "#33CC8B"],
-        [gameData.speciesStats.result.top5[statID], "#33cc33"],
-        [256, "#0033cc"],
-    ]) {
-        if (value < colorMapped[0]) break
-        color = colorMapped[1]
-    }
-    return color
-}
-
 function changeBaseStat(node, value, statID, cmp) {
 
     if (cmp && !isNaN(+cmp)){
@@ -284,8 +257,19 @@ function changeBaseStat(node, value, statID, cmp) {
         node.find('.stat-num').text(value)
         node.find('.stat-num').css('font-size', '1em').css('width', '')
     }
-    const color = getColorOfStat(value, statID)
     
+    let color = "gray"
+    for (const colorMapped of [
+        [gameData.speciesStats.result.min5[statID], "#ff3300"],
+        [gameData.speciesStats.result.min20[statID], "#cc6600"],
+        [gameData.speciesStats.result.median[statID], "#cccc00"],
+        [gameData.speciesStats.result.top20[statID], "#99cc00"],
+        [gameData.speciesStats.result.top5[statID], "#33cc33"],
+        [256, "#0033cc"],
+    ]) {
+        if (value < colorMapped[0]) break
+        color = colorMapped[1]
+    }
     const maxValue = statID < 6 ? 255 : gameData.speciesStats.result.maxBST
     const percent = ((value / maxValue) * 100).toFixed()
     node.find('.stat-num').css('background-color', color)
@@ -366,12 +350,6 @@ export function setupSpeciesPanel() {
         freedom = !freedom
         setSpecieHeightWeight()
     })
-    $('#species-return-list-layout').on('click', ()=>{
-        toggleLayoutListSpecies(true)
-        $('#species-return-list-layout').hide()
-    })
-    setupBlockSpecies()
-    setupListSpecies()
 }
 function toLowerButFirstCase(word) {
     word = word.toLowerCase()
@@ -412,7 +390,7 @@ export function setEvos(evos) {
 
 export function createSpeciesBlock(specieId) {
     //create a div, then inside an image and the species name with redirection
-    const node = $("<span/>").addClass("specie-block").trigger("click", () => {
+    const node = $("<span/>").addClass("specie-block").click(() => {
         redirectSpecie(specieId)
     })
     const specie = gameData.species[specieId]
@@ -494,23 +472,9 @@ function setLocations(locations, SEnc) {
     }
     $('#species-locations').empty().append(frag)
 }
-export function reorderNodeList(listParentNode, sortFn, direction = "<"){
-    // fastdom to do it in a single frame or it will lag a lot on some browsers
-    fastdom.mutate(()=>{ 
-        let clonedForReorder
-        if (sortFn){
-            clonedForReorder = structuredClone(gameData.species).sort(sortFn)
-        } else {
-            clonedForReorder = structuredClone(gameData.species)
-        }
-        if (direction === ">") clonedForReorder = clonedForReorder.reverse()
-        reorderListLayoutNodes(clonedForReorder)
-    })
-}
-
 
 export function setupReorderBtn() {
-    const row = e('div', 'data-list-row', [e('span', null, 'reorder')])
+    const row = e('div', 'data-list-row', 'reorder')
     function byAlpha(a, b) {
         return a.name.localeCompare(b.name)
     }
@@ -570,6 +534,7 @@ export function setupReorderBtn() {
             }],
         ], "6em", "1em"), ev, "mid", true, false)
     }
+
     return row
 }
 
@@ -598,16 +563,9 @@ export function buildSpeciesPrefixTrees(){
             const typeAsString = gameData.typeT[pokeType].toLowerCase()
             const prefix = typeAsString.charAt(0)
             if (!prefixTree.type[prefix]) prefixTree.type[prefix] = []
-            
             prefixTree.type[prefix].push({data: i, suggestions: typeAsString})
             return typeAsString
         })
-        const thirdType = x.thirdType ? gameData.typeT[x.thirdType].toLowerCase() : null
-        if (thirdType){
-            const prefix = thirdType.charAt(0)
-            if (!prefixTree.type[prefix]) prefixTree.type[prefix] = []
-            prefixTree.type[prefix].push({data: i, suggestions: thirdType})
-        }
     })
 }
 
@@ -627,6 +585,9 @@ export const queryMapSpecies = {
         
     },
     "type": (queryData, specie) => {
+        if (settings.monotype && specie.allTypesNames[0]) {
+            return AisInB(queryData, specie.allTypesNames[0]) && specie.allTypesNames[0] == specie.allTypesNames[1]
+        }
         const typesQueried = queryData.split(' ').filter(x => x)
         const thirdType = specie.thirdType ? gameData.typeT[specie.thirdType].toLowerCase() : null
         let multiSuggestions = []
@@ -700,45 +661,22 @@ export const queryMapSpecies = {
     },
 }
 
-function postTreatingSpeciesFiltering(){
-    if (!settings.monotype) return
-    if (!matchedSpecies){
-        matchedSpecies = []
-        const len = gameData.species.length
-        for (let i = 0; i < len; i++){
-            const specie = gameData.species[i]
-            if (specie.allTypesNames[0] == specie.allTypesNames[1]){
-                matchedSpecies.push(i)
-            }
-        }
-    } else {
-        let matchedLen = matchedSpecies?.length || 0
-        for (let i = 0; i < matchedLen; i++){
-            const specieID = matchedSpecies[i]
-            const specie = gameData.species[specieID]
-            if (specie.allTypesNames[0] != specie.allTypesNames[1]){
-                matchedSpecies.splice(i, 1)
-                matchedLen--
-                i--
-            }
-        }
-    }
-}
-
-export let matchedSpecies = undefined
+export let matchedSpecies = []
 export function updateSpecies(searchQuery) {
     const species = gameData.species
-    matchedSpecies = queryFilter3(searchQuery, species, queryMapSpecies, prefixTree)
-    postTreatingSpeciesFiltering()
-    listSpeciesDynList.hideCurrentRendered().reset()
-    blockSpeciesDynList.hideCurrentRendered().reset()
-    speciesListDataUpdate()
+    const matched = queryFilter3(searchQuery, species, queryMapSpecies, prefixTree)
     let validID;
-    if (!matchedSpecies) {
-        validID = 1
-    } else if(matchedSpecies.length) {
-        validID = matchedSpecies[0]
+    const specieLen = species.length
+    for (let i = 0; i < specieLen; i++) {
+        if (i == 0) continue
+        const node = $(nodeLists.species[i - 1])
+        if (!matched || matched.indexOf(i) != -1) {
+            if (!validID) validID = i
+            node.show()
+        } else {
+            node.hide()
+        }
     }
     //if the current selection isn't in the list then change
-    if (matchedSpecies && matchedSpecies.indexOf(currentSpecieID) == -1 && validID) feedPanelSpecies(validID)
+    if (matched && matched.indexOf(currentSpecieID) == -1 && validID) feedPanelSpecies(validID)
 }

@@ -1,42 +1,32 @@
 import { feedPanelMoves } from "../panels/moves_panel.js"
 import { gameData } from "../data_version.js"
-import { DynamicList, LIST_RENDER_RANGE } from "../dynamic_list.js"
-import { JSHAC, e } from "../utils.js"
-import { movesListDataUpdate } from "./list_moves.js"
-import { nodeLists } from "./hydrate.js"
 
 export let HPMoveID = 0
 export let HPsMovesID = []
-function rehydrateMove(mv, i, moves, movesLen){ // i => moveID
-    if (mv.name === "Hidden Power"){
-        mv.name = "H.P. Normal"
-        HPMoveID = i
-        for (const typeI in gameData.typeT){
-            const typeName = gameData.typeT[typeI]
-            if (typeName === "Normal") continue
-            const newHP = structuredClone(mv)
-            newHP.types[0] = typeI
-            newHP.name = "H.P. " + typeName
-            movesLen++
-            HPsMovesID.push(moves.push(newHP) - 1)
-        }
-    }
-    if (mv.pwr > 0 && mv.pwr <= 60) mv.flags.push(gameData.flagsT.indexOf('Technician'))
-    if (mv.pwr > 0 && mv.pwr < 50) mv.flags.push(gameData.flagsT.indexOf('Perfectionnist'))
-    return movesLen
-}
-
-function generateMovesNodes(onHydration = false){
-    const moves = gameData.moves
-    nodeLists.moves.length = 0 // reset
+export function hydrateMoves(moves = gameData.moves) {
     HPsMovesID = []
-    if (gameData.flagsT.indexOf('Technician') == -1) gameData.flagsT.push('Technician', 'Perfectionnist')
+    gameData.flagsT.push('Technician', 'Perfectionnist')
     const fragment = document.createDocumentFragment();
     let movesLen = moves.length
     for (let i = 0; i < movesLen; i++) {
         if (i == 0) continue
         const mv = moves[i]
-        if (onHydration) movesLen = rehydrateMove(mv, i, moves, movesLen)
+        if (mv.name === "Hidden Power"){
+            mv.name = "H.P. Normal"
+            HPMoveID = i
+            for (const typeI in gameData.typeT){
+                const typeName = gameData.typeT[typeI]
+                if (typeName === "Normal") continue
+                const newHP = structuredClone(mv)
+                newHP.types[0] = typeI
+                newHP.name = "H.P. " + typeName
+                movesLen++
+                
+                HPsMovesID.push(moves.push(newHP) - 1)
+            }
+        }
+        if (mv.pwr > 0 && mv.pwr <= 60) mv.flags.push(gameData.flagsT.indexOf('Technician'))
+        if (mv.pwr > 0 && mv.pwr < 50) mv.flags.push(gameData.flagsT.indexOf('Perfectionnist'))
         const core = document.createElement('div')
         core.className = "btn data-list-row sel-n-active"
         const name = document.createElement('span')
@@ -49,17 +39,11 @@ function generateMovesNodes(onHydration = false){
                 feedPanelMoves($(this).attr('data-id'))
             });
         });
-        if (i > LIST_RENDER_RANGE) $(core).hide()
-        nodeLists.moves.push(core)
         fragment.append(core)
+
+        
     }
-    return fragment
-}
-
-
-export function hydrateMoves() {
-    generateMovesNodes(true)
-    blockMovesDynList.replaceList(generateMovesNodes, movesListDataUpdate)
+    $("#moves-list").empty().append(fragment);
     feedPanelMoves(1)
 }
 
@@ -105,22 +89,4 @@ export function takeMovesFromPreEvolution(){
             specie.allMoves =  [... new Set(specie.allMoves.concat(...specie.preevomoves))]
         }
     }
-}
-
-function setupReorderBtn(){
-    return JSHAC([
-        e('div', 'data-list-row'), [
-            e('span', null, '')
-        ]
-    ]).firstChild
-}
-
-/** @type {DynamicList} */
-export let blockMovesDynList
-
-export function setupBlockMoves(){
-    const node = $("#moves-list")[0]
-    node.append(setupReorderBtn())
-    blockMovesDynList = new DynamicList(node, node.children[0], "moves", true)
-    blockMovesDynList.setup()
 }

@@ -1,11 +1,9 @@
 import { loadFont } from "./fonts.js"
-import { toggleLayoutListMoves } from "./hydrate/list_moves.js"
-import { toggleLayoutListSpecies } from "./hydrate/list_species.js"
 
 
 const appName = "ERdex"
 const appSettings = appName + "_settings"
-const settingsVersion = "9" //when changed it will init newly added elements from default to the current settings
+const settingsVersion = "7" //when changed it will init newly added elements from default to the current settings
 // and this automatically to prevent some undefined behavior
 const themeList =  [
     "blueish",
@@ -29,9 +27,7 @@ const defaultSettings = {
     monotype: false,
     discordFormat: true,
     font: "basis33",
-    hintSelectible: true,
-    listLayout: false,
-    scrollLock: true,
+    hintSelectible: true
 }
 
 export function initAppSettings(){
@@ -196,29 +192,6 @@ export function setupSettings(){
     })
     if (settings.hintSelectible) $('#enable-interactible').attr('checked', true)
     setHintInteractible()
-    $('#enable-list-layout').on('change', ()=>{
-        toggleLayoutListSpecies(settings.listLayout = true)
-        toggleLayoutListMoves(settings.listLayout)
-        saveSettings()
-        
-    })
-    $('#disable-list-layout').on('change', ()=>{
-        toggleLayoutListSpecies(settings.listLayout = false)
-        toggleLayoutListMoves(settings.listLayout)
-        saveSettings()
-    })
-    settings.listLayout ? $('#enable-list-layout').attr('checked', true) : $('#disable-list-layout').attr('checked', true)
-    toggleLayoutListSpecies(settings.listLayout)
-    toggleLayoutListMoves(settings.listLayout)
-    $('#disable-scroll-lock').on('change', function(){
-        settings.scrollLock = false
-        saveSettings()
-    })
-    $('#enable-scroll-lock').on('change', function(){
-        settings.scrollLock = true
-        saveSettings()
-    })
-    settings.scrollLock ? $('#enable-scroll-lock').attr('checked', true) : $('#disable-scroll-lock').attr('checked', true)
     setDynamicalRowOfSettings("font", fontList, (font)=>{
         settings.theme = font
         saveSettings()
@@ -236,7 +209,7 @@ export function setupSettings(){
 /**
  * when the localStorage is too full
  */
-export function cleanLocalStorage(){
+function cleanLocalStorage(){
     if (!localStorage) return // dunno
     console.log('cleaned the local storage of data')
     const keys = Object.keys(localStorage) 

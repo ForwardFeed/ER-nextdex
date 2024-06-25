@@ -3,7 +3,6 @@ import { gameData } from "../data_version.js"
 import { nodeLists } from "./hydrate.js";
 
 export function hydrateAbilities(abilities = gameData.abilities) {
-    nodeLists.abilities.length = 0
     $("#abis-list").empty().append(JSHAC(
         abilities.map((abi, i) => {
             if (abi.name === "-------") return undefined

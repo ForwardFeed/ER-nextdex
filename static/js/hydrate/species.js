@@ -1,11 +1,9 @@
 import { HPMoveID } from "./moves.js"
 import { HPsMovesID } from "./moves.js"
 import { e } from "../utils.js"
-import { abilitiesExtraType, buildSpeciesPrefixTrees, feedPanelSpecies, getSpritesURL, setupReorderBtn } from "../panels/species/species_panel.js"
+import { abilitiesExtraType, buildSpeciesPrefixTrees, feedPanelSpecies, getSpritesURL, matchedSpecies, setupReorderBtn } from "../panels/species/species_panel.js"
 import { gameData } from "../data_version.js"
 import { nodeLists } from "./hydrate.js"
-import { DynamicList, LIST_RENDER_RANGE } from "../dynamic_list.js"
-import { speciesListDataUpdate } from "./list_species.js"
 
 function feedBaseStatsStats(statID, value) {
     gameData.speciesStats.data[statID].push(value)
@@ -24,15 +22,8 @@ function setMeanBaseStats() {
         gameData.speciesStats.result.top20[statID] = sorted[Math.ceil(len * 0.80)]
         gameData.speciesStats.result.top5[statID] = sorted[Math.ceil(len * 0.95)]
     }
-    gameData.speciesStats.data = [
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-    ]
+    // i don't trust the garbage collector
+    delete gameData.speciesStats.data
 }
 
 
@@ -71,101 +62,94 @@ function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo) {
     if (!currentSpecie.region) currentSpecie.region = previousSpecie.region
 }
 
-// infer data on hydration for future ease of used
-function rehydratePokeData(specie, i){ // i = specieID
-    specie.stats.base[6] = 0
-    for (const statID in specie.stats.base) {
-        const value = specie.stats.base[statID]
-        feedBaseStatsStats(statID, value)
-        if (statID < 6) specie.stats.base[6] += + value
-    }
-    if (!specie.locations) specie.locations = new Map()
-    // set third types for innates
-    specie.thirdType = abilitiesExtraType(false, specie)
-    // concatenate all moves into a new variable
-    // also remove all duplicates
-    // also adding move none to it, so it's selectable
-    specie.allMoves = [...new Set(specie.eggMoves.concat(
-        specie.levelUpMoves.map(x => x.id).concat(
-            specie.TMHMMoves.concat(
-                specie.tutor
-            )
-        )
-    )), 0]
-    //if it has Hidden power, set all others non-normal typed HPs
-    if (specie.allMoves.indexOf(HPMoveID) != -1){
-        specie.allMoves.push(...HPsMovesID)
-    }
-    // add the region
-    for (const regionsMapped of [
-        [0, "Kanto"],
-        [151, "Johto"],
-        [251, "Hoenn"],
-        [386, "Sinnoh"],
-        [494, "Unova"],
-        [649, "Kalos"],
-        [721, "Alola"],
-        [809, "Galar"],
-        [898, "Hisui"],
-        [905, "Paldea"],
-        [1500, ""], //MEGAs to link up after
-        [1547, "Alola"],
-        [1568, "Galar"],
-        [1587, ""], //Misc forms to link up after
-        [1808, "Hisui"],
-        [1824, ""],//Misc forms to link up after
-        [2300, "Redux"], 
-    ]) {
 
-        if (specie.id <= regionsMapped[0]) break
-        specie.region = regionsMapped[1]
-    }
-    // track all types on all evolutions lines
-    if (!specie.typeEvosSet || specie.typeEvosSet.constructor.name === "Object"){
-        specie.typeEvosSet = new Set(specie.stats.types)
-    }
-    // share the eggmoves to the evolutions !TODO recursively
-    for (const evo of specie.evolutions) {
-        hydrateNextEvolutionWithMoves(i, evo)
-    }
-     // list all pokemon if they are given
-     for (const enc of specie.SEnc){
-        if (gameData.scriptedEncoutersHowT[enc.how] === "given"){
-            const maps = gameData.locations.maps
-            const mapLen = maps.length
-            let locaObj
-            for (let i=0; i<mapLen; i++){
-                const map = maps[i]
-                if (map.id == enc.map){
-                    enc.locaId = i
-                    locaObj = gameData.locations.maps[i]
-                    break
-                }
-            }
-            if (!locaObj) continue
-            if (!locaObj.given) locaObj.given = []
-            if (!locaObj.speciesSet || locaObj.speciesSet.constructor.name === "Object") locaObj.speciesSet = new Set()
-            locaObj.speciesSet.add(gameData.species[i])
-            locaObj.given.push(['??','??',i])
-        }
-    }
-    const allMovesLen = specie.allMoves.length
-    for (let j = 0; j < allMovesLen; j++){
-        const mvID = specie.allMoves[j]
-        const mv = gameData.moves[mvID]
-        if (!mv.species) mv.species = []
-        mv.species.push(+i)
-    }
-}
 
-function generateSpeciesNode(onHydration = false){
+export function hydrateSpecies() {
+    //matchedSpecies.splice(0, matchedSpecies.length, ...gameData.species)
     nodeLists.species = [] // reset
     const fragment = document.createDocumentFragment();
     const species = gameData.species
+    fragment.append(setupReorderBtn())
     for (const i in species) {
         if (i == 0) continue
         const specie = species[i]
-        if (onHydration) rehydratePokeData(specie, i)
+        specie.stats.base[6] = 0
+        for (const statID in specie.stats.base) {
+            const value = specie.stats.base[statID]
+            feedBaseStatsStats(statID, value)
+            if (statID < 6) specie.stats.base[6] += + value
+        }
+        // set third types for innates
+        specie.thirdType = abilitiesExtraType(false, specie)
+        // prepare to be appended a list of location where this pokemon appear
+        specie.locations = new Map();
+        // concatenate all moves into a new variable
+        // also remove all duplicates
+        // also adding move none to it, so it's selectable
+        specie.allMoves = [...new Set(specie.eggMoves.concat(
+            specie.levelUpMoves.map(x => x.id).concat(
+                specie.TMHMMoves.concat(
+                    specie.tutor
+                )
+            )
+        )), 0]
+        //if it has Hidden power, set all others non-normal typed HPs
+        if (specie.allMoves.indexOf(HPMoveID) != -1){
+            specie.allMoves.push(...HPsMovesID)
+        }
+        // add the region
+        for (const regionsMapped of [
+            [0, "Kanto"],
+            [151, "Johto"],
+            [251, "Hoenn"],
+            [386, "Sinnoh"],
+            [494, "Unova"],
+            [649, "Kalos"],
+            [721, "Alola"],
+            [809, "Galar"],
+            [898, "Hisui"],
+            [905, "Paldea"],
+            [1500, ""], //MEGAs to link up after
+            [1547, "Alola"],
+            [1568, "Galar"],
+            [1587, ""], //Misc forms to link up after
+            [1808, "Hisui"],
+            [1824, ""],//Misc forms to link up after
+            [2300, "Redux"], 
+        ]) {
+
+            if (specie.id <= regionsMapped[0]) break
+            specie.region = regionsMapped[1]
+        }
+        // track all types on all evolutions lines
+        if (!specie.typeEvosSet || specie.typeEvosSet.constructor.name === "Object"){
+            specie.typeEvosSet = new Set(specie.stats.types)
+        }
+        // share the eggmoves to the evolutions !TODO recursively
+        for (const evo of specie.evolutions) {
+            hydrateNextEvolutionWithMoves(i, evo)
+        }
+        // list all pokemon if they are given
+        for (const enc of specie.SEnc){
+            if (gameData.scriptedEncoutersHowT[enc.how] === "given"){
+                const maps = gameData.locations.maps
+                const mapLen = maps.length
+                let locaObj
+                for (let i=0; i<mapLen; i++){
+                    const map = maps[i]
+                    if (map.id == enc.map){
+                        enc.locaId = i
+                        locaObj = gameData.locations.maps[i]
+                        break
+                    }
+                }
+                if (!locaObj) continue
+                if (!locaObj.given) locaObj.given = []
+                if (!locaObj.speciesSet || locaObj.speciesSet.constructor.name === "Object") locaObj.speciesSet = new Set()
+                locaObj.speciesSet.add(gameData.species[i])
+                locaObj.given.push(['??','??',i])
+            }
+        }
         // add to the html list 
         const row = e('div', "btn data-list-row sel-n-active")
         row.setAttribute('draggable', true);
@@ -191,26 +175,10 @@ function generateSpeciesNode(onHydration = false){
                 feedPanelSpecies($(this).attr('data-id'))
             });
         });
-        if (+i + 1 > LIST_RENDER_RANGE) $(row).hide()
         fragment.append(row)
     }
     setMeanBaseStats()
-    return fragment
-}
-
-export function hydrateSpecies() {
-    generateSpeciesNode(true)
-    blockSpeciesDynList.replaceList(generateSpeciesNode, speciesListDataUpdate)
+    $("#species-list").empty().append(fragment);
     feedPanelSpecies(1)
     buildSpeciesPrefixTrees()
-}
-
-/** @type {DynamicList} */
-export let blockSpeciesDynList
-
-export function setupBlockSpecies(){
-    const node = $("#species-list")[0]
-    node.append(setupReorderBtn())
-    blockSpeciesDynList = new DynamicList(node, node.children[0], "species", true)
-    blockSpeciesDynList.setup()
 }

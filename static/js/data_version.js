@@ -1,5 +1,4 @@
 import { hydrate } from './hydrate/hydrate.js'
-import { hydrateSpeciesList } from './hydrate/list_species.js';
 import { saveToLocalstorage, fetchFromLocalstorage } from './settings.js';
 /**
  * To select which version of the game data to have
@@ -87,7 +86,6 @@ function changeCompareData(currentVersion, versionTarget){
             .then((data) => {
                 console.log("took compareData from server")
                 compareData = data
-                hydrateSpeciesList()
             })
             .catch((e)=>{
                 compareData = undefined

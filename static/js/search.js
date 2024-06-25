@@ -6,130 +6,125 @@ import { updateTrainers, queryMapTrainers } from "./panels/trainers_panel.js"
 import { activateSearch, appendFilter, spinOnAddFilter} from "./filters.js"
 import { clickOutsideToHide } from "./utils.js"
 
-export let search = {}
-
-export function initSearch(){
-    search = {
-        // memories of all search, to sync with the number of tabs
-        searchData: new Array(5).fill(""),
-        searchKeys: new Array(5).fill(""),
-        // the search guard is here to prevent that while the app is searching
-        // no more searching is going, not to overwhelm the app
-        updateGuard: false,
-        // if a request is done in the mean time, this flag will tell that once it's finished,
-        // another request should be scheduled
-        updateQueue: false,
-        searchIsActive:true,
-        // if modified sync it with "siderbar.js > setupPanels() > panelTable" variable
-        panelUpdatesTable: [
-            updateSpecies,
-            filterAbilities,
-            updateMoves,
-            updateLocations,
-            updateTrainers,
-        ],
-        // !IMPORTANT sync it with search.panelUpdatesTable
-        queryMapList: [
-            queryMapSpecies,
-            queryMapAbilities,
-            queryMapMoves,
-            queryMapLocations,
-            queryMapTrainers
-        ],
-        // if modified sync it with "siderbar.js > setupPanels() > panelTable" variable
-        panelFrozenUpdate: [
-            false,
-            false,
-            false,
-            false,
-            false,
-        ],
-        // if modified sync it with "siderbar.js > setupPanels() > defaultShow" variable
-        panelUpdatesIndex: 0,
-        // if any pannel needs a special key you need to append it here
-        queryKeys: [
-            "Name",
-            "Type",
-            "Ability",
-            "resist",
-            "Move",
-            "Move-effect",
-            "category",
-            "prio",
-            "acc",
-            "specie",
-            "map",
-            "region",
-        ],
-        operators: [
-            "AND",
-            "OR",
-            "XOR",
-        ],
-        defrosting: true,
-        callbackAfterFilters: null,
-        timeoutAutoComplete: null,
-        maxSuggestion: 5,
-        suggestions: [],
-        suggestionNode: null,
-        suggestionInput: null,
-        suggestionSaved: "",
-        suggestionData: "",
-        suggestionPreviousNode: null,
-        addSuggestion : function(suggestion){
-            if (this.suggestions.length == this.maxSuggestion) return
-            if (this.suggestions.includes(suggestion)) return
-            this.suggestions.push(suggestion)
-        },
-        clearSuggestion: function(){
-            if (this.suggestionNode){
-                $(this.suggestionNode).empty()
-            }
-            this.suggestions = []
-            if(this.suggestionNode) this.suggestionNode.dataset.suggestion = null
-        },
-        showSuggestion: function(){
-            if (!this.suggestionNode) return
-            if(!this.searchIsActive) {
-                this.searchIsActive=true
-                this.suggestionInput.blur()
-                return
-            }
-            this.suggestions = this.suggestions.filter(x => x)
-            if(this.suggestions.length == 1){
-                $(this.suggestionNode).empty()
-                this.suggestionInput.classList.add('filter-something-found')
-                this.suggestionInput.classList.remove('filter-nothing-found')
-                return
-            } else if(this.suggestions.length == 0 && this.suggestionInput.value){
-                this.suggestionInput.classList.remove('filter-something-found')
-                this.suggestionInput.classList.add('filter-nothing-found')
-            } else {
-                this.suggestionInput.classList.remove('filter-something-found')
-                this.suggestionInput.classList.remove('filter-nothing-found')
-            }
-            this.suggestionNode.innerText = "" //remove all previous suggestions
-            for (const suggestion of this.suggestions){
-                const option = document.createElement('div')
-                option.innerText = suggestion
-                option.onclick = ()=>{
-                    this.suggestionInput.value = suggestion
-                    this.searchIsActive=false
-                    activateSearch()
-                }
-                this.suggestionNode.style.display = "block"
-                this.suggestionNode.append(option)
-            }
-        },
-        defrostFuturePanel: function(){
-            //tells all panels that once they get to switch in they have to do an update
-            search.panelFrozenUpdate = search.panelFrozenUpdate.map((x, index)=>{
-                return search.panelUpdatesIndex != index
-            })
+export const search = {
+    // memories of all search, to sync with the number of tabs
+    searchData: new Array(5).fill(""),
+    searchKeys: new Array(5).fill(""),
+    // the search guard is here to prevent that while the app is searching
+    // no more searching is going, not to overwhelm the app
+    updateGuard: false,
+    // if a request is done in the mean time, this flag will tell that once it's finished,
+    // another request should be scheduled
+    updateQueue: false,
+    searchIsActive:true,
+    // if modified sync it with "siderbar.js > setupPanels() > panelTable" variable
+    panelUpdatesTable: [
+        updateSpecies,
+        filterAbilities,
+        updateMoves,
+        updateLocations,
+        updateTrainers,
+    ],
+    // !IMPORTANT sync it with search.panelUpdatesTable
+    queryMapList: [
+        queryMapSpecies,
+        queryMapAbilities,
+        queryMapMoves,
+        queryMapLocations,
+        queryMapTrainers
+    ],
+    // if modified sync it with "siderbar.js > setupPanels() > panelTable" variable
+    panelFrozenUpdate: [
+        false,
+        false,
+        false,
+        false,
+        false,
+    ],
+    // if modified sync it with "siderbar.js > setupPanels() > defaultShow" variable
+    panelUpdatesIndex: 0,
+    // if any pannel needs a special key you need to append it here
+    queryKeys: [
+        "Name",
+        "Type",
+        "Ability",
+        "resist",
+        "Move",
+        "Move-effect",
+        "category",
+        "prio",
+        "acc",
+        "specie",
+        "map",
+        "region",
+    ],
+    operators: [
+        "AND",
+        "OR",
+        "XOR",
+    ],
+    defrosting: true,
+    callbackAfterFilters: null,
+    timeoutAutoComplete: null,
+    maxSuggestion: 5,
+    suggestions: [],
+    suggestionNode: null,
+    suggestionInput: null,
+    suggestionSaved: "",
+    suggestionData: "",
+    suggestionPreviousNode: null,
+    addSuggestion : function(suggestion){
+        if (this.suggestions.length == this.maxSuggestion) return
+        if (this.suggestions.includes(suggestion)) return
+        this.suggestions.push(suggestion)
+    },
+    clearSuggestion: function(){
+        if (this.suggestionNode){
+            $(this.suggestionNode).empty()
         }
+        this.suggestions = []
+        if(this.suggestionNode) this.suggestionNode.dataset.suggestion = null
+    },
+    showSuggestion: function(){
+        if (!this.suggestionNode) return
+        if(!this.searchIsActive) {
+            this.searchIsActive=true
+            this.suggestionInput.blur()
+            return
+        }
+        this.suggestions = this.suggestions.filter(x => x)
+        if(this.suggestions.length == 1){
+            $(this.suggestionNode).empty()
+            this.suggestionInput.classList.add('filter-something-found')
+            this.suggestionInput.classList.remove('filter-nothing-found')
+            return
+        } else if(this.suggestions.length == 0 && this.suggestionInput.value){
+            this.suggestionInput.classList.remove('filter-something-found')
+            this.suggestionInput.classList.add('filter-nothing-found')
+        } else {
+            this.suggestionInput.classList.remove('filter-something-found')
+            this.suggestionInput.classList.remove('filter-nothing-found')
+        }
+        this.suggestionNode.innerText = "" //remove all previous suggestions
+        for (const suggestion of this.suggestions){
+            const option = document.createElement('div')
+            option.innerText = suggestion
+            option.onclick = ()=>{
+                this.suggestionInput.value = suggestion
+                this.searchIsActive=false
+                activateSearch()
+            }
+            this.suggestionNode.style.display = "block"
+            this.suggestionNode.append(option)
+        }
+    },
+    defrostFuturePanel: function(){
+        //tells all panels that once they get to switch in they have to do an update
+        search.panelFrozenUpdate = search.panelFrozenUpdate.map((x, index)=>{
+            return search.panelUpdatesIndex != index
+        })
     }
 }
-
 
 export function onkeySearchFilter(ev, divSuggestions, inputSearch, callback){
     search.suggestionNode = divSuggestions

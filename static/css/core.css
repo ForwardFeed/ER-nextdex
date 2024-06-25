@@ -12,7 +12,11 @@ body {
     display: flex;
     flex-direction: column;
 }
-
+main{
+    display: flex;
+    flex-grow: 1;
+    min-height: 0;
+}
 ::-webkit-scrollbar {
     -webkit-appearance: none;
     width: 0px;
@@ -273,13 +277,6 @@ span{
         height: 100%;
         min-width: 12vmax;
     }
-    main{
-        display: flex;
-        flex-grow: 1;
-        min-height: 0;
-        max-width: calc(100% - 12vmax);
-        overflow: scroll;
-    }
     #filter-icon{
         width: 5vh;
         height: 5vh;
@@ -322,10 +319,6 @@ span{
         overflow: auto;
         position: sticky;
         bottom: 0;
-    }
-    main{
-        overflow-y: scroll;
-        flex-grow: 1;
     }
     #filter-icon{
         width: 5vw;

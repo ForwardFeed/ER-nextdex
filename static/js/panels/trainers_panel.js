@@ -1,5 +1,5 @@
-import { getSpritesURL, redirectSpecie, getSpritesShinyURL, StatsEnum } from "./species/species_panel.js"
-import { queryFilter3 } from "../filters.js"
+import { getSpritesURL, redirectSpecie, getSpritesShinyURL } from "./species/species_panel.js"
+import { queryFilter2, queryFilter3 } from "../filters.js"
 import { gameData } from "../data_version.js"
 import { AisInB, e, JSHAC } from "../utils.js"
 import { setFullTeam } from "./team_builder.js"
@@ -112,6 +112,15 @@ function setPartyPanel(party) {
     $('#trainers-team').empty().append(frag).append(getNodeRedirectToEditorPokemon(party))
 }
 
+
+export const statsOrder = [
+    "HP",
+    "Atk",
+    "Def",
+    "SpA",
+    "SpD",
+    "Spe",
+]
 export function createPokemon(poke) {
     const specie = gameData.species[poke.spc]
     const ability = gameData.abilities[specie.stats.abis[poke.abi]]
@@ -169,8 +178,8 @@ export function createPokemon(poke) {
     let fontRgb = window.getComputedStyle(document.body).color.match(/\d+/g)
     if (!fontRgb || fontRgb.length != 3) fontRgb = [255, 255, 255]
 
-    for (const statIndex in StatsEnum) {
-        const stat = StatsEnum[statIndex]
+    for (const statIndex in statsOrder) {
+        const stat = statsOrder[statIndex]
         const nerfedOrbuffed = stat === statBuffed ? "buffed" : stat === statNerfed ? "nerfed" : ""
         const evVal = poke.evs[statIndex]
         const evRow = e('div', `trainers-poke-evs`, evVal)
