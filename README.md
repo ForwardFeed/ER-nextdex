@@ -10,7 +10,7 @@ First understand that there is two part in this project:
 from the source files of the game.
 
 It requires TSC or any typescript compiler (transpiler) but more critically a nodeJS environnement.
-No dependecies are used in this games
+No dependecies are used in this games.
 
 Commands:
 - build: just a shortcut to tsc
