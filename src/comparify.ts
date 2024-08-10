@@ -155,7 +155,7 @@ function compareMoves(cmpD: CompactGameData, asCmpD: CompactGameData): Array<Cmp
 }
 
 function compareSpecies(cmpD: CompactGameData, asCmpD: CompactGameData): Array<CmpSpecie | null>{
-    const abiTrans = translationTableIndexByKey(cmpD.abilities, asCmpD.abilities, "name")
+    const abiTrans = translationTableIndexByKey(cmpD.abilities, asCmpD.abilities, "name") //failure of a function
     const typeTrans = translationTableIndex(asCmpD.typeT, cmpD.typeT)
 
     const cmp = cmpD.species
@@ -174,11 +174,15 @@ function compareSpecies(cmpD: CompactGameData, asCmpD: CompactGameData): Array<C
                 types: cmpVal.stats.types.map((type, tI) => {
                     return newOrHasChanged(type, typeTrans[asCmpVal.stats.types[tI]])
                 }),
-                abis: cmpVal.stats.abis.map((statVal, aI) => {
-                    return newOrHasChanged(statVal, abiTrans[asCmpVal.stats.abis[aI]])
+                abis: cmpVal.stats.abis.map((ability, aI) => {
+                    return newOrHasChanged(cmpD.abilities[ability].name, asCmpD.abilities[asCmpVal.stats.abis[aI]].name,
+                        ()=>{return ability}
+                    )
                 }),
-                inns: cmpVal.stats.inns.map((statVal, aI) => {
-                    return newOrHasChanged(statVal, abiTrans[asCmpVal.stats.inns[aI]])
+                inns: cmpVal.stats.inns.map((innate, iI) => {
+                    return newOrHasChanged(cmpD.abilities[innate].name, asCmpD.abilities[asCmpVal.stats.abis[iI]].name,
+                        ()=>{return innate}
+                    )
                 }),
             }
         } as CmpSpecie
