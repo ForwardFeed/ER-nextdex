@@ -112,7 +112,7 @@ function newOrHasChanged<Type, OutType>(
 function compareAbilities(cmp: Ability[], asCmp: Ability[]): CmpAbi[]{
     const asCmpMap: Map<string, string> = mapArrayObjWithKey<Ability, string>(asCmp, "name", x => x.desc)
     return cmp.map((val)=>{
-        return  newOrHasChanged(val.desc, asCmpMap.get(val.name), ()=>{return asCmpMap.get(val.name)})
+        return  newOrHasChanged(val.desc, asCmpMap.get(val.name), ()=>{return true})
     })
 }
 
