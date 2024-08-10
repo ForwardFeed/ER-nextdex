@@ -105,7 +105,7 @@ const parsableArguments = [
 function printHelpStdout(){
     
     const helpText = parsableArguments.map(x => {
-        return `    -${x.short}\t--${x.long}${" ".repeat(18 - x.long.length)}: \
+        return `    -${x.short}\t--${x.long}${" ".repeat(Math.max(0, 18 - x.long.length))}: \
 ${x.help} ${x.example ? `(ex: ${x.example}` : ""} ${x.requiredValue ? "a value is REQUIRED": "NO value required"}`
     }).join('\n')
     console.log("Printing help: \n" + helpText + "\n" + "End of the help. Have a positive day.")
@@ -140,6 +140,10 @@ export function parseArguments(args: string[]): ParsedValues{
                         value = value.replace(/^\\+/, '')
                     }
                     parseOption.fn(value)
+                    //on help stop the program
+                    if(parseOption.long == "help"){
+                        process.exit(0)
+                    }
                     hasMatchedSomething = true
                     break
                 }
