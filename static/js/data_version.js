@@ -9,15 +9,16 @@ export let compareData;
 export let gameData;
 // each time the data is modified, this is updated
 // so the client checks if it have the latest version by checking lo
-const LATEST_DATA_VERSION = "40"/*%%VERSION%%*/
+const LATEST_DATA_VERSION = "42"/*%%VERSION%%*/
 
 const allVersions = [
     "1.6.1",
     "Beta2.0",
     "Beta2.1",
+    "2.1",
 ]
 
-const defaultVersion = "1.6.1"
+const defaultVersion = "2.1"
 
 function setAvailableVersion(){
     const fragment = document.createDocumentFragment()

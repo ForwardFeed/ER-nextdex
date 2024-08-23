@@ -104,8 +104,8 @@ function newOrHasChanged<Type, OutType>(
             asCmp: Type,
             transform: (x:unknown)=>OutType = (x)=>{return x as OutType}
         ): boolean | OutType{
-    if (asCmp === undefined || asCmp === null) return true //brand new
-    if (cmp === asCmp) return false // didn't changed
+    if (asCmp == undefined || asCmp == null) return true //brand new
+    if (cmp == asCmp) return false // didn't changed
     return transform(asCmp) //this was the change
 }
 
@@ -130,6 +130,7 @@ function compareMoves(cmpD: CompactGameData, asCmpD: CompactGameData): Array<Cmp
     return cmp.map((cmpVal)=>{
         const asCmpVal = asCmpMap.get(cmpVal.NAME)
         if (!asCmpVal) return true
+        try{
         return {
             prio: newOrHasChanged(cmpVal.prio, asCmpVal.prio),
             pwr: newOrHasChanged(cmpVal.pwr, asCmpVal.pwr),
@@ -144,7 +145,20 @@ function compareMoves(cmpD: CompactGameData, asCmpD: CompactGameData): Array<Cmp
                 return newOrHasChanged(flag, flagsTrans[asCmpVal.flags[fI]])
             }),
             split: newOrHasChanged(cmpVal.split, splitTrans[asCmpVal.split]),
-        } as CmpMove
+        } as CmpMove} catch{
+            return {
+                pwr: false,
+                types: [false],
+                acc: false,
+                pp: false,
+                chance: false,
+                target: false,
+                prio: false,
+                flags: [false],
+                split: false,
+
+            } as CmpMove
+        }
     }).map((x)=>{
         if (typeof x === "boolean") return x
         if (x.prio || x.pwr || x.chance || x.target || x.types.filter(x => x).length || 
@@ -175,14 +189,24 @@ function compareSpecies(cmpD: CompactGameData, asCmpD: CompactGameData): Array<C
                     return newOrHasChanged(type, typeTrans[asCmpVal.stats.types[tI]])
                 }),
                 abis: cmpVal.stats.abis.map((ability, aI) => {
-                    return newOrHasChanged(cmpD.abilities[ability].name, asCmpD.abilities[asCmpVal.stats.abis[aI]].name,
-                        ()=>{return ability}
-                    )
+                    try{
+                        return newOrHasChanged(cmpD.abilities[ability].name, asCmpD.abilities[asCmpVal.stats.abis[aI]].name,
+                            ()=>{return ability}
+                        )
+                    } catch{
+                        return ability
+                    }
+                    
                 }),
                 inns: cmpVal.stats.inns.map((innate, iI) => {
-                    return newOrHasChanged(cmpD.abilities[innate].name, asCmpD.abilities[asCmpVal.stats.abis[iI]].name,
-                        ()=>{return innate}
-                    )
+                    try{
+                        return newOrHasChanged(cmpD.abilities[innate].name, asCmpD.abilities[asCmpVal.stats.abis[iI]].name,
+                            ()=>{return innate}
+                        )
+                    }catch{
+                        return innate
+                    }
+                    
                 }),
             }
         } as CmpSpecie
