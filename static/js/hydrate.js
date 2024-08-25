@@ -283,7 +283,7 @@ function hydrateSpecies() {
             [151, "Johto"],
             [251, "Hoenn"],
             [386, "Sinnoh"],
-            [494, "Unova"],
+            [493, "Unova"],
             [649, "Kalos"],
             [721, "Alola"],
             [809, "Galar"],
