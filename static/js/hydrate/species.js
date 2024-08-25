@@ -103,7 +103,7 @@ export function hydrateSpecies() {
             [151, "Johto"],
             [251, "Hoenn"],
             [386, "Sinnoh"],
-            [494, "Unova"],
+            [493, "Unova"],
             [649, "Kalos"],
             [721, "Alola"],
             [809, "Galar"],
@@ -117,7 +117,9 @@ export function hydrateSpecies() {
             [1824, ""],//Misc forms to link up after
             [2300, "Redux"], 
         ]) {
-
+            if (specie.name == "Victini"){
+                console.log(specie)
+            }
             if (specie.id <= regionsMapped[0]) break
             specie.region = regionsMapped[1]
         }
