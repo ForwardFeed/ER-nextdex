@@ -117,9 +117,6 @@ export function hydrateSpecies() {
             [1824, ""],//Misc forms to link up after
             [2300, "Redux"], 
         ]) {
-            if (specie.name == "Victini"){
-                console.log(specie)
-            }
             if (specie.id <= regionsMapped[0]) break
             specie.region = regionsMapped[1]
         }
