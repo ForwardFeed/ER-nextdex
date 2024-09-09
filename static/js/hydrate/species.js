@@ -97,7 +97,8 @@ export function hydrateSpecies() {
         if (specie.allMoves.indexOf(HPMoveID) != -1){
             specie.allMoves.push(...HPsMovesID)
         }
-        // add the region
+        // add the region based of the id, which is not the thing that works the best
+        // If you have a better idea let me know
         for (const regionsMapped of [
             [0, "Kanto"],
             [151, "Johto"],

@@ -602,7 +602,8 @@ const statFieldInputControl = {
             if (!i) evs[6] = 0
             evs[6] += +x
         })
-        value = Math.min(Math.max(0, Math.round(value / 4) * 4), 252)
+        //value = Math.min(Math.max(0, Math.round(value / 4) * 4), 252)
+        value = Math.min(Math.max(0, value), 252)
         const valDiff = value - prevValue
         if (evs[6] + valDiff > 510){
             const maxRow = (evs[6] + valDiff) - 510
