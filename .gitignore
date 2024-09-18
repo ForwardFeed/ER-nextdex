@@ -5,6 +5,7 @@ debug.txt
 nextdex_config.json
 build
 dist/
+devDexServer/config.ts
 
 # nodejs related
 node_modules/
