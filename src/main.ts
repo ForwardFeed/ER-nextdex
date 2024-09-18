@@ -15,7 +15,7 @@ import * as InternalID from './internal_id'
 import { CompactGameData, compactify } from './compactify';
 import * as Configuration from './configuration';
 import { getTrainerOrder } from './trainers/trainer_ordering';
-import { parseArguments } from './arguments';
+import { parseArguments, ParsedValues } from './arguments';
 import { comparifyMultiple } from './comparify';
 //import { comparify } from './comparify';
 
@@ -54,9 +54,7 @@ const gameData: GameData = {
  */
 export let VERSION_STRUCTURE = 0
 
-function main(configuration: Configuration.Configuration){
-    
-    const optionsValues = parseArguments(process.argv)
+export function main(configuration: Configuration.Configuration, optionsValues: ParsedValues){
     const rootPrj = optionsValues.inputPath ? optionsValues.inputPath : configuration.project_root
     const outputDir = optionsValues.redirectData ? Path.join("./static/js/data/") : Path.join("./out/")
     const outputVersion = optionsValues.output ? "V" + optionsValues.output : ""
@@ -145,11 +143,11 @@ if (!configuration.verified){
         .then(()=>{
             configuration.verified = true
             Configuration.saveConfigFile(configuration)
-            main(configuration)
+            main(configuration, parseArguments(process.argv))
         })
         .catch(()=>{
             console.error('Please verify the configuration')
         })
 } else {
-    main(configuration)
+    main(configuration, parseArguments(process.argv))
 }

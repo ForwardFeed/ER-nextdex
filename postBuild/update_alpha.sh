@@ -2,8 +2,8 @@
 #exit on a single error
 set -e
 
-prjAlpha=$(cat nextdex_config.json | jq -r '.project_root_alpha')
-curr=$(pwd)
+prjAlpha=$(cat ../nextdex_config.json | jq -r '.project_root_alpha')
+curr="../$(pwd)"
 
 cd "${prjAlpha}"
 git checkout .

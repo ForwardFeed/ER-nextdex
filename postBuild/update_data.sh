@@ -5,9 +5,9 @@ set -e
 
 [[ ! -e nextdex_config.json ]] && echo "please run the script once before updating the data or hardcode the project path" && exit
 [[ ! $(command -v jq) ]] && echo "please install the jq command, or hardcode the project path" && exit
-prj=$(cat nextdex_config.json | jq -r '.project_root')
-curr=$(pwd)
-prjAlpha=$(cat nextdex_config.json | jq -r '.project_root_alpha')
+prj=$(cat ../nextdex_config.json | jq -r '.project_root')
+curr="../$(pwd)"
+prjAlpha=$(cat ../nextdex_config.json | jq -r '.project_root_alpha')
 echo ${prjAlpha}
 # if i don't compile i 100% forget because je suis un âne
 tsc
