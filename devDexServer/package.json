@@ -14,8 +14,8 @@
     "typescript": "^5.6.2"
   },
   "dependencies": {
+    "@octokit/types": "^13.5.0",
     "@types/express": "^4.17.21",
-    "express": "^4.21.0",
-    "simple-git": "^3.26.0"
+    "express": "^4.21.0"
   }
 }

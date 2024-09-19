@@ -1,11 +1,9 @@
-import config from "../config"
+import config from "../config.js"
 import express from 'express'
 import { Express } from "express"
 import path from "path"
-import { exec } from "child_process"
 
-export function startServer(){
-    updateData()
+export function listenWebhooks(){
     return
     console.log('Initialize express server')
     const app = express()
@@ -39,15 +37,3 @@ function addRoutes(app: Express){
     })
 }
 
-function updateData(){
-    const cmd = `npm run run -- -o 2.1 -rd -ip ${config.projectPath} -sv 1`
-    console.log(cmd)
-    return
-    exec(cmd, {cwd: '../'}, (err, stdout, stderr)=>{
-        if (err){
-            console.error(`Failed when executing ${cmd}\nerror:`, err)
-        }
-        console.log(stdout)
-        console.error(stderr)
-    })
-}

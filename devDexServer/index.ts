@@ -1,4 +1,9 @@
-import { startServer } from "./src/devDexServer";
+import { listenWebhooks } from "./src/webhooks.js";
+import { initGitRepoIfDoesNotExist } from "./src/git_control.js";
+import { updateData } from "./src/nextdex_controls.js";
 
 
-startServer()
+updateData()
+
+//initGitRepoIfDoesNotExist()
+//listenWebhooks()

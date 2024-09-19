@@ -4,5 +4,7 @@ export type Config = {
     port: string,
     hostname: string,
     protocol: Protocol,
-    projectPath: string,
+    projectName: string,
+    token: string,
+    version: string,
 }
