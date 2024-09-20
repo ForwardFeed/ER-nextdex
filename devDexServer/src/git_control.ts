@@ -52,8 +52,6 @@ function sparseCheckout(){
 }
 
 export function fetchChanges(){
-    // does this even work?
-    return sparseCheckout()
     const cmdPull = `git fetch https://${config.token}@github.com/${remote.owner}/${remote.repo}`
     console.log(`Running ${cmdPull}`)
     exec(cmdPull, {cwd: folderPath}, (err, stdout, stderr)=>{
