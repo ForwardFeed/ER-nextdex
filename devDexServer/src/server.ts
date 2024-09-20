@@ -44,16 +44,18 @@ function addRoutes(app: Express){
         if (githubEvent == "push"){
             const data = req.body
             console.log(data.head_commit)
+            let shouldUpdate = false
             for (const commit of data.commits){
                 for (const mod of commit.modified){
                     if (file_list.list.includes(mod)){
                         console.log(`file ${mod} is a file tracked by nextdex, updating`)
+                        shouldUpdate = true
                         break
                     }
                 }
+                if (shouldUpdate) break
             }
-            
-            fetchChanges()
+            if (shouldUpdate) fetchChanges()
         }
     })
 }

@@ -22,7 +22,24 @@
             </div>
         </div>
     </div>
-   
+    <div class="block-container">
+        <div> note on special chars</div>
+        <div class="block">
+            <div class="subblock">
+                <div>\n => go to next line, cannot do two \n following</div>
+                <div>\p => clear prompt and get back to the line 1</div>
+                <div>\l => scroll down to the next line, can do infinite of \l</div>
+                <div>{PLAYER} will put the player name</div>
+                <button id="showCharList">click to show character list</button>
+            </div>
+            <div class="subblock" id="charlist">
+
+            </div>
+           
+        </div>
+       
+      
+    </div>
     <script src="./vendor/jquery3.7.1.min.js"></script>
     <script type="module" src="js/textbox_utils.js"></script>
 </body>
@@ -30,7 +47,7 @@
     .block-container{
         margin: auto;
         width: 95vw;
-        height: 20vh;
+        height: 48vh;
         display: flex;
         flex-direction: column;
     }
@@ -42,6 +59,8 @@
         height: 100%;
         width: calc(50% - 1px);
         display: flex;
+        font-size: 1.3em;
+        flex-direction: column;
     }
     #inputText{
         background-color: var(--colorC);
@@ -58,5 +77,6 @@
     #error-inputing{
         color: red;
     }
+    
 </style>
 </html>

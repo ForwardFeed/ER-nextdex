@@ -215,23 +215,28 @@ function createCFontedLines(text, nLines, nPixels, smallfont = false){
         if (char == "\\"){
             const nextChar = chars[++charIndex]
             switch(nextChar){
+                case undefined:
+                    break
+                case "l":
                 case "p":
+                case "n":
                     words.push({
                         word  : word,
                         length: wordPixel,
-                        endl  : true,
+                        par   : nextChar == "p",
+                        endl  : nextChar == "n",
+                        scroll: nextChar == "l"
                     })
                     word = ""
                     wordPixel = 0
                     break
-                case "n":
-
-                    break
                 default:
                     warn(`char unknown : \\${nextChar}`)
-                    continue
             }
+            continue
         }
+        if (char == "\n") //ignore enlines
+            continue
         const charPxSize = font.widths[char]
         acc += charPxSize
         if (charPxSize === undefined){
@@ -258,14 +263,30 @@ function createCFontedLines(text, nLines, nPixels, smallfont = false){
         })
     }
     const lines = []
+    let lastPar = 0
     let line = ""
     let linePixels = 0
     const SPACE_PIXEL = font.widths[" "]
+
     for (const word of words){
-        if (linePixels + word.length > nPixels){
+        if ((linePixels + word.length > nPixels) || (word.endl)){
             lines.push(line)
             line = word.word
             linePixels = word.length
+            if (word.par){
+                lastPar = 0
+            } else if (word.scroll){
+                lastPar = 1
+            }  else {
+                lastPar++
+            }
+            if (!word.endl){
+                warn(`Missing an endline put an ${ lastPar == 2 ? "\\p" : "\\n or \\p"}`)
+            } else if (lastPar >= 2){
+                warn('2 endlines but no end of paragraph, please put a \\p')
+            }
+            
+            
         } else {
             if (line){
                 line += " " + word.word
@@ -288,16 +309,19 @@ function createCFontedLines(text, nLines, nPixels, smallfont = false){
 }
 
 function warn(text){
-    console.warn(text)
     $('#error-inputing').text(text)
 }
 
 function setupTextBox(){
     $('#inputText').on('keyup', function(ev){
+        warn('')
         const val = $(this).val()
         const lined = createCFontedLines(val, undefined, latinFont.maxLineLength, false)
-        console.log(lined)
         $('#outputText').text(lined.join('\n'))
+    })
+    $('#showCharList').on('click', function(){
+        const chars = Object.keys(latinFont.widths)
+        $('#charlist').text(chars.join(', '))
     })
 }
 
