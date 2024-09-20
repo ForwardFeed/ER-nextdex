@@ -224,7 +224,7 @@ function createCFontedLines(text, nLines, nPixels, smallfont = false){
                         word  : word,
                         length: wordPixel,
                         par   : nextChar == "p",
-                        endl  : nextChar == "n",
+                        endl  : true,
                         scroll: nextChar == "l"
                     })
                     word = ""
@@ -262,6 +262,15 @@ function createCFontedLines(text, nLines, nPixels, smallfont = false){
             length: wordPixel
         })
     }
+    function pushWordToLine(word){
+        if (line){
+            line += " " + word.word
+            linePixels += SPACE_PIXEL + word.length
+        } else {
+            line += word.word
+            linePixels += word.length
+        }
+    }
     const lines = []
     let lastPar = 0
     let line = ""
@@ -269,10 +278,11 @@ function createCFontedLines(text, nLines, nPixels, smallfont = false){
     const SPACE_PIXEL = font.widths[" "]
 
     for (const word of words){
-        if ((linePixels + word.length > nPixels) || (word.endl)){
+        if (word.endl){
+            pushWordToLine(word)
             lines.push(line)
-            line = word.word
-            linePixels = word.length
+            line = ""
+            linePixels = 0
             if (word.par){
                 lastPar = 0
             } else if (word.scroll){
@@ -280,23 +290,18 @@ function createCFontedLines(text, nLines, nPixels, smallfont = false){
             }  else {
                 lastPar++
             }
-            if (!word.endl){
-                warn(`Missing an endline put an ${ lastPar == 2 ? "\\p" : "\\n or \\p"}`)
-            } else if (lastPar >= 2){
+            if (lastPar >= 2){
                 warn('2 endlines but no end of paragraph, please put a \\p')
-            }
-            
-            
+            } 
+        }
+        else if ((linePixels + word.length > nPixels)){
+            lines.push(line)
+            line = word.word
+            linePixels = word.length
+            console.log(word)
+            warn(`Missing an endline put an ${ lastPar == 2 ? "\\p" : "\\n or \\p"}`)
         } else {
-            if (line){
-                line += " " + word.word
-                linePixels += SPACE_PIXEL + word.length
-            } else {
-                line += word.word
-                linePixels += word.length
-            }
-            
-            
+            pushWordToLine(word)
         }
     }
     if (line){
