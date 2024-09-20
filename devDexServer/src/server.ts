@@ -4,6 +4,7 @@ import { Express } from "express"
 import path from "path"
 import { fetchChanges } from "./git_control.js"
 import SmeeClient from "smee-client"
+import file_list from "./file_list.js"
 
 
 export function startServer(){
@@ -39,11 +40,19 @@ function addRoutes(app: Express){
         console.log(`POST incomming on / from ${req.ip}`)
         res.status(202).send('Accepted');
         const githubEvent = req.headers['x-github-event'];
-        console.log("githubEvent", githubEvent)
+        // this does not track the branch where it has been committed
         if (githubEvent == "push"){
             const data = req.body
-            const actions = data.actions
-            console.log(data, actions)
+            console.log(data.head_commit)
+            for (const commit of data.commits){
+                for (const mod of commit.modified){
+                    if (file_list.list.includes(mod)){
+                        console.log(`file ${mod} is a file tracked by nextdex, updating`)
+                        break
+                    }
+                }
+            }
+            
             fetchChanges()
         }
     })

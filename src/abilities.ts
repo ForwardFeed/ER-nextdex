@@ -1,5 +1,5 @@
 import { GameData } from "./main"
-import { regexGrabNum, regexGrabStr, upperCaseFirst } from "./parse_utils"
+import { regexGrabStr } from "./parse_utils"
 import { FileDataOptions, getMulFilesData, autojoinFilePath } from "./utils"
 
 export interface Result{

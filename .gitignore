@@ -6,7 +6,7 @@ nextdex_config.json
 build
 dist/
 devDexServer/config.ts
-
+devDexServer/eliteredux
 # nodejs related
 node_modules/
 package-lock.json

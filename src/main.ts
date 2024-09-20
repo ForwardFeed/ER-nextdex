@@ -1,7 +1,7 @@
 import * as FS from 'fs'
 import * as Path from 'path'
 
-import {getFileData, getMulFilesData,autojoinFilePath, FileDataOptions} from './utils';
+import {getFileData} from './utils';
 import * as Moves from './moves'
 import * as Species from './species/species'
 import * as Abilities from './abilities'
