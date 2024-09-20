@@ -3,6 +3,7 @@ import config from "../config.js";
 import path from "path"
 import { existsSync } from "fs";
 import { updateData } from "./nextdex_controls.js";
+import file_list from "./file_list.js";
 
 const remote = {
     owner: "Elite-Redux",
@@ -16,44 +17,53 @@ export function initGitRepoIfDoesNotExist(){
     if (existsSync(folderPath))
         return console.log(`Repository confirmed to be existing`)
     console.log(`Repository does not exist, initializing it`)
-    initRepository()
+    cloneRepository()
 }
 
-function initRepository(){
-    const cmdClone = `git clone https://${config.token}@github.com/${remote.owner}/${remote.repo} ${config.projectName}`
+function cloneRepository(){
+    //`mkdir ${config.projectName} && cd ${config.projectName} && git init`
+    const cmdClone = `git clone -b ${remote.branch} --depth=1 --no-checkout --filter=blob:none https://${config.token}@github.com/${remote.owner}/${remote.repo} ${config.projectName}\
+&& mkdir -p ${config.projectName}/data/maps`
     console.log(`Running ${cmdClone}`)
     exec(cmdClone, (err, stdout, stderr)=>{
-        console.log('STDOUT: ', stdout)
-        console.error('STDERR: ', stderr)
+        if (stdout) console.log('STDOUT: ', stdout)
+        if (stderr) console.error('STDERR: ', stderr)
         if (err){
-            console.error(`Failed when trying to cloning the repository ${cmdClone}\nerror:`, err)
+            console.error(`Failed when initing git in the subfolder \nerror:`, err)
+            return
+        }
+        sparseCheckout()
+    }) 
+}
+
+function sparseCheckout(){
+    //this method is rather slow because files are downloaded one by one
+    const cmdSparseCheckout = `git checkout ${remote.branch} -- ${file_list.list.join(' ')}`
+    console.log(`Running ${cmdSparseCheckout}`)
+    exec(cmdSparseCheckout,{cwd: config.projectName} ,(err, stdout, stderr)=>{
+        if (stdout) console.log('STDOUT: ', stdout)
+        if (stderr) console.error('STDERR: ', stderr)
+        if (err){
+            console.error(`Failed when sparsing checkout the repository \nerror:`, err)
             return
         }
         updateData()
     }) 
 }
 
-export function pullChanges(){
-    const cmdCheckout = `git checkout ${remote.branch}`
-    console.log(`Running ${cmdCheckout}`)
-    exec(cmdCheckout, {cwd: folderPath}, (err, stdout, stderr)=>{
-        console.log('STDOUT: ', stdout)
-        console.error('STDERR: ', stderr)
-        /*if (err){
-            console.error(`Failed when trying to change branch ${cmdCheckout}\nerror:`, err)
+export function fetchChanges(){
+    // does this even work?
+    return sparseCheckout()
+    const cmdPull = `git fetch https://${config.token}@github.com/${remote.owner}/${remote.repo}`
+    console.log(`Running ${cmdPull}`)
+    exec(cmdPull, {cwd: folderPath}, (err, stdout, stderr)=>{
+        if (stdout) console.log('STDOUT: ', stdout)
+        if (stderr) console.error('STDERR: ', stderr)
+        if (err){
+            console.error(`Failed when trying to pull git content\nerror:`, err)
             return
-        }*/
-        const cmdPull = `git pull https://${config.token}@github.com/`
-        console.log(`Running ${cmdPull}`)
-        exec(cmdPull, {cwd: folderPath}, (err, stdout, stderr)=>{
-            console.log('STDOUT: ', stdout)
-            console.error('STDERR: ', stderr)
-            if (err){
-                console.error(`Failed when trying to pull git content ${cmdPull}\nerror:`, err)
-                return
-            }
-            updateData()
-        }) 
-    }) 
+        }
+        sparseCheckout()
+    })
 }
 

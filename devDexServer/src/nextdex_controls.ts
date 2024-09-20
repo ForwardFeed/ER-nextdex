@@ -6,10 +6,10 @@ export function updateData(){
     const cmd = `npm run run -- -o ${config.version} -rd -ip devDexServer/${config.projectName} -sv 1`
     console.log(`Running ${cmd}`)
     exec(cmd, {cwd: '../'}, (err, stdout, stderr)=>{
-        console.log(stdout)
-        console.error(stderr)
+        if (stdout) console.log('STDOUT: ', stdout)
+        if (stderr) console.error('STDERR: ', stderr)
         if (err){
-            console.error(`Failed when executing ${cmd}\nerror:`, err)
+            console.error(`Failed when executing \nerror:`, err)
         }
         
     })

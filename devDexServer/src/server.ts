@@ -2,6 +2,7 @@ import config from "../config.js"
 import express from 'express'
 import { Express } from "express"
 import path from "path"
+import { fetchChanges } from "./git_control.js"
 
 export function listenWebhooks(){
     return
@@ -20,10 +21,12 @@ export function listenWebhooks(){
 }
 
 function addRoutes(app: Express){
+    //nextdex serving
     app.get('/', (req, res)=>{
         res.status(301)
         res.redirect('/index.html')
     })
+    //github webhooks
     app.post('/webhook', express.json({type: 'application/json'}), (req, res)=>{
         console.log(`POST incomming on / from ${req.ip}`)
         res.status(202).send('Accepted');
@@ -33,6 +36,7 @@ function addRoutes(app: Express){
             const data = req.body
             const actions = data.actions
             //console.log(data, actions)
+            fetchChanges()
         }
     })
 }
