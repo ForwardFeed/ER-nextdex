@@ -3,9 +3,17 @@ import express from 'express'
 import { Express } from "express"
 import path from "path"
 import { fetchChanges } from "./git_control.js"
+import SmeeClient from "smee-client"
 
-export function listenWebhooks(){
-    return
+
+export function startServer(){
+    console.log('init smee')
+    const smee = new SmeeClient({
+        source: 'https://smee.io/elitereduxtest',
+        target: `http://localhost:${config.port}/webooks`,
+        logger: console
+    })
+    smee.start()
     console.log('Initialize express server')
     const app = express()
     console.log('Adding routes')
@@ -27,7 +35,7 @@ function addRoutes(app: Express){
         res.redirect('/index.html')
     })
     //github webhooks
-    app.post('/webhook', express.json({type: 'application/json'}), (req, res)=>{
+    app.post('/webooks', express.json({type: 'application/json'}), (req, res)=>{
         console.log(`POST incomming on / from ${req.ip}`)
         res.status(202).send('Accepted');
         const githubEvent = req.headers['x-github-event'];
@@ -35,9 +43,8 @@ function addRoutes(app: Express){
         if (githubEvent == "push"){
             const data = req.body
             const actions = data.actions
-            //console.log(data, actions)
+            console.log(data, actions)
             fetchChanges()
         }
     })
 }
-
