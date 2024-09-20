@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text box util</title>
+    <link rel="stylesheet" href="./css/core.css">
+    <!--load css themes-->
+    <link rel="stylesheet" href="./css/themes/blueish.css" id="styles-blueish">
+</head>
+<body>
+    <div class="block-container">
+        <div id="error-inputing">
+
+        </div>
+        <div class="block">
+            <textarea class="subblock" id="inputText"></textarea>
+            <div class="subblock">
+                <div id="outputText">
+    
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <script src="./vendor/jquery3.7.1.min.js"></script>
+    <script type="module" src="js/textbox_utils.js"></script>
+</body>
+<style>
+    .block-container{
+        margin: auto;
+        width: 95vw;
+        height: 20vh;
+        display: flex;
+        flex-direction: column;
+    }
+    .block{
+       display: flex;
+       flex-grow: 1;
+    }
+    .subblock{
+        height: 100%;
+        width: calc(50% - 1px);
+        display: flex;
+    }
+    #inputText{
+        background-color: var(--colorC);
+    }
+    #outputText{
+        background-color: var(--colorA);
+        white-space: pre-line;
+        margin: auto;
+        padding-left: 10%;
+        padding-right: 10%;
+        padding-top: 1%;
+        padding-bottom: 1%;
+    }
+    #error-inputing{
+        color: red;
+    }
+</style>
+</html>
