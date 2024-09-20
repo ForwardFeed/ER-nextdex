@@ -10,7 +10,8 @@ export function updateData(){
         if (stderr) console.error('STDERR: ', stderr)
         if (err){
             console.error(`Failed when executing \nerror:`, err)
+        } else {
+            console.log(`success updating data`)
         }
-        
     })
 }
