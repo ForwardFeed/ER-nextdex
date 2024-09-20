@@ -72,7 +72,7 @@ function sparseCheckout(callback = ()=>{}){
 }
 
 export function fetchChanges(){
-    const cmdPull = `git fetch https://${config.token}@github.com/${remote.owner}/${remote.repo} --depth=1`
+    const cmdPull = `git fetch --depth=1`
     console.log(`Running ${cmdPull}`)
     exec(cmdPull, {cwd: folderPath}, (err, stdout, stderr)=>{
         if (stdout) console.log('STDOUT: ', stdout)
