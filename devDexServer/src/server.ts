@@ -3,18 +3,10 @@ import express from 'express'
 import { Express } from "express"
 import path from "path"
 import { fetchChanges } from "./git_control.js"
-import SmeeClient from "smee-client"
 import file_list from "./file_list.js"
 
 
 export function startServer(){
-    console.log('init smee')
-    const smee = new SmeeClient({
-        source: 'https://smee.io/elitereduxtest',
-        target: `http://localhost:${config.port}/webooks`,
-        logger: console
-    })
-    smee.start()
     console.log('Initialize express server')
     const app = express()
     console.log('Adding routes')
