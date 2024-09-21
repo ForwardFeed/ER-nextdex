@@ -5,15 +5,11 @@ import { existsSync } from "fs";
 import { updateData } from "./nextdex_controls.js";
 import file_list from "./file_list.js";
 
-const remote = {
-    owner: "Elite-Redux",
-    repo: "eliteredux-source",
-    branch: "upcoming",
-}
+
 const folderPath = path.join('./', config.projectName)
 
 export function setRemoteUrl(callback = ()=>{}){
-    const cmdSetRemote = `git remote set-url origin https://${config.token}@github.com/${remote.owner}/${remote.repo}`
+    const cmdSetRemote = `git remote set-url origin https://${config.token}@github.com/${config.remote.owner}/${config.remote.repo}`
     console.log(`Running ${cmdSetRemote}`)
     exec(cmdSetRemote, {cwd: folderPath}, (err, stdout, stderr)=>{
         if (stdout) console.log('STDOUT: ', stdout)
@@ -41,7 +37,7 @@ export function initGitRepoIfDoesNotExist(callback: ()=> void){
 
 function cloneRepository(callback: ()=> void){
     //`mkdir ${config.projectName} && cd ${config.projectName} && git init`
-    const cmdClone = `git clone -b ${remote.branch} --depth=1 --no-checkout --filter=blob:none https://${config.token}@github.com/${remote.owner}/${remote.repo} ${config.projectName}\
+    const cmdClone = `git clone -b ${config.remote.branch} --depth=1 --no-checkout --filter=blob:none https://${config.token}@github.com/${config.remote.owner}/${config.remote.repo} ${config.projectName}\
 && mkdir -p ${config.projectName}/data/maps`
     console.log(`Running ${cmdClone}`)
     exec(cmdClone, (err, stdout, stderr)=>{
@@ -57,7 +53,7 @@ function cloneRepository(callback: ()=> void){
 
 function sparseCheckout(callback = ()=>{}){
     //this method is rather slow because files are downloaded one by one
-    const cmdSparseCheckout = `git checkout origin/${remote.branch} -- ${file_list.list.join(' ')}`
+    const cmdSparseCheckout = `git checkout origin/${config.remote.branch} -- ${file_list.list.join(' ')}`
     console.log(`Running ${cmdSparseCheckout}`)
     exec(cmdSparseCheckout,{cwd: config.projectName} ,(err, stdout, stderr)=>{
         if (stdout) console.log('STDOUT: ', stdout)

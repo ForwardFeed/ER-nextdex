@@ -56,3 +56,12 @@ Output dir by default of some files.
 ### static/
 a simple vanilla js + jquery + css + HTML Web application, this is what is live and should be interacted with as a end user.
 
+
+## Docker & DevDex
+There's an experimental devDex and docker
+the dev dex is a program that will use a webhook from a github repository to get informations on new pushes
+on push, the nextdext reparse the file and output a new gameData. on a server that will be hosted only (would be great if it was password locked)
+
+Handle the github token, in order to have the program to work with private repository a github token is needed.
+the token is passed with the whole file configuration using docker secret files
+--secret id=FILENAME,src=LOCAL_FILENAME

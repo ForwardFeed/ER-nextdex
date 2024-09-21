@@ -6,7 +6,12 @@ const config: Config =  {
     protocol: "http",
     projectName: "eliteredux", //care to put well that into the .gitignore
     token: "You token",
-    version: "Latest"
+    version: "Latest",
+    remote:  {
+        owner: "Elite-Redux",
+        repo: "eliteredux-source",
+        branch: "upcoming",
+    }
 }
 
 export default config

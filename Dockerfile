@@ -1,3 +1,5 @@
+# syntax = docker/dockerfile:1.2
+
 FROM node:22-alpine
 
 WORKDIR /usr/app
@@ -7,9 +9,10 @@ COPY src/ src/
 COPY static/ static/
 COPY devDexServer/ devDexServer/
 COPY tsconfig.json tsconfig.json 
-RUN "tsc"
+RUN  "tsc"
 
 EXPOSE 32990
 WORKDIR /usr/app/devDexServer/
-CMD [ "npm", "run", "dev" ]
+RUN --mount=type=secret,id=config.ts,dst=/usr/app/devDexServer/config.ts "tsc"
+CMD [ "npm", "run", "run" ]
 
