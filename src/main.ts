@@ -138,16 +138,17 @@ let configuration = Configuration.getConfiguration()
 if (!configuration){
     configuration = Configuration.writeDefaultConfiguration()
 }
-if (!configuration.verified){
+const parsedValues = parseArguments(process.argv)
+if (!parsedValues.noConfig && !configuration.verified){
     Configuration.verifyConfiguration(configuration)
         .then(()=>{
             configuration.verified = true
             Configuration.saveConfigFile(configuration)
-            main(configuration, parseArguments(process.argv))
+            main(configuration, parsedValues)
         })
         .catch(()=>{
             console.error('Please verify the configuration')
         })
 } else {
-    main(configuration, parseArguments(process.argv))
+    main(configuration, parsedValues)
 }

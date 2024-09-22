@@ -35,6 +35,7 @@ export interface ParsedValues{
     redirectData: boolean,
     comparify: string[],
     comparifyAdditional: string[],
+    noConfig: boolean,
 }
 
 export const parsedValues: ParsedValues = {
@@ -45,6 +46,7 @@ export const parsedValues: ParsedValues = {
     redirectData: false,
     comparify: [],
     comparifyAdditional: [],
+    noConfig: false,
 }
 
 const parsableArguments = [
@@ -100,6 +102,12 @@ const parsableArguments = [
                         true,
                         "-ca \"./out/gameDataVvanilla.json\"",
                         (arg)=>parsedValues.comparifyAdditional = arg.split(' ')),
+    initArgument2Option("nc",
+                            "no-config",
+                            `prevent the program from fetching and using the configuration file\ `,
+                            false,
+                            "",
+                            ()=>parsedValues.noConfig = true),
     ]
 
 function printHelpStdout(){
