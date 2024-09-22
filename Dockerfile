@@ -1,5 +1,5 @@
-# syntax = docker/dockerfile:1.2
 # syntax = docker/dockerfile:1.4
+
 FROM alpine as alpine
 RUN apk add --no-cache git
 
