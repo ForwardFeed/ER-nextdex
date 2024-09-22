@@ -1,7 +1,7 @@
 # syntax = docker/dockerfile:1.2
+# syntax = docker/dockerfile:1.4
 FROM alpine as alpine
 RUN apk add --no-cache git
-RUN echo "libunistring.so.5"
 
 FROM node:22-alpine
 COPY --from=alpine /usr/ /usr/
