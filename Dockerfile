@@ -15,7 +15,8 @@ COPY devDexServer/ devDexServer/
 COPY tsconfig.json tsconfig.json 
 RUN  "tsc"
 
-EXPOSE 32990
+EXPOSE 8080
 WORKDIR /usr/app/devDexServer/
+RUN echo "$CACHEBUST"
 RUN --mount=type=secret,id=config.ts,dst=/usr/app/devDexServer/config.ts "tsc"
 CMD [ "npm", "run", "run" ]
