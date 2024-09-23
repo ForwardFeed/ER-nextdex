@@ -8,8 +8,9 @@ import file_list from "./file_list.js";
 
 const folderPath = path.join('./', config.projectName)
 
-export function setRemoteUrl(callback = ()=>{}){
-    const cmdSetRemote = `git remote set-url origin https://${config.token}@github.com/${config.remote.owner}/${config.remote.repo}`
+export function setRemoteUrl(callback: ()=> void){
+    const cmdSetRemote = `git remote set-url origin https://${config.token}@github.com/${config.remote.owner}/${config.remote.repo} &&\
+git config --global http.sslVerify false`
     console.log(`Running ${cmdSetRemote}`)
     exec(cmdSetRemote, {cwd: folderPath}, (err, stdout, stderr)=>{
         if (stdout) console.log('STDOUT: ', stdout)
@@ -29,7 +30,7 @@ export function initGitRepoIfDoesNotExist(callback: ()=> void){
         callback()
     } else {
         console.log(`Repository does not exist, initializing it`)
-        cloneRepository(callback)
+        cloneRepository((()=>{setRemoteUrl(callback)}))
     }
         
     
@@ -47,7 +48,7 @@ function cloneRepository(callback: ()=> void){
             console.error(`Failed when initing git in the subfolder \nerror:`, err)
             return
         }
-        setRemoteUrl(callback)
+        callback()
     }) 
 }
 

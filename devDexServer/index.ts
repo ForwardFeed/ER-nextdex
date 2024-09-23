@@ -3,6 +3,6 @@ import { fetchChanges, initGitRepoIfDoesNotExist, setRemoteUrl } from "./src/git
 import { updateData } from "./src/nextdex_controls.js";
 
 initGitRepoIfDoesNotExist(function(){
-    setRemoteUrl(fetchChanges)
+    fetchChanges()
     startServer()
 })

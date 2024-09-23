@@ -5,8 +5,8 @@ const config: Config =  {
     hostname: "localhost",
     protocol: "http",
     projectName: "eliteredux", //care to put well that into the .gitignore
-    token: "You token",
-    version: "Latest",
+    token: "",
+    version: "2.1",
     remote:  {
         owner: "Elite-Redux",
         repo: "eliteredux-source",

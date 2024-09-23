@@ -13,7 +13,7 @@ export function startServer(){
     addRoutes(app)
     const staticPath = path.join(__dirname, '../../../static')
     console.log(`Preparing static files from ${staticPath} on /`)
-    app.use("/", express.static(staticPath))
+    app.use("/", express.static(staticPath, {etag: false}))
     console.log('Initialize listening')
     app.listen(config.port, ()=>{
         console.log(`Listening on port ${config.protocol}:/${config.hostname}:${config.port}/`)
