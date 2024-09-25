@@ -76,6 +76,10 @@ const typeChart = {
     "Fairy": [["Dragon"],
         ["Fighting", "Bug", "Dark"],
         ["Poison", "Steel"]
+    ],
+    "Stellar": [[],
+        [],
+        ["Stellar"]    
     ]
 }
 export function getTypeEffectiveness(attackerT, defT){

@@ -31,7 +31,7 @@
 .dark{background-color: #754; color:rgb(37, 27, 21);}
 .steel{background-color: #aab; color:rgb(27, 27, 31);}
 .fairy{background-color: #e9e; color:rgb(32, 21, 32);}
-
+.stellar{background-color: #0996bb; color:rgb(32, 21, 32);}
 
 .normal-t{color: #aa9;}
 .fire-t{color: #f42;}
@@ -51,6 +51,7 @@
 .dark-t{color: #754;}
 .steel-t{color: #aab;}
 .fairy-t{color: #e9e;}
+.stellar-t{color: #0996bb;}
 
 .buffed{
     color: rgb(76, 219, 19);
@@ -59,7 +60,7 @@
     color: rgb(233, 64, 13);
 }
 
-.normal-t, .fire-t, .water-t, .electric-t, .grass-t, .ice-t, .fighting-t, .poison-t, .ground-t, .flying-t, .bug-t, .rock-t, .ghost-t, .dragon-t, .dark-t, .steel-t, .fairy-t{
+.normal-t, .fire-t, .water-t, .electric-t, .grass-t, .ice-t, .fighting-t, .poison-t, .ground-t, .flying-t, .bug-t, .rock-t, .ghost-t, .dragon-t, .dark-t, .steel-t, .fairy-t, .stellar-t{
     filter: var(--filter);
 }
 
