@@ -16,9 +16,10 @@ const allVersions = [
     "Beta2.0",
     "Beta2.1",
     "2.1",
+    "2.2"
 ]
 
-const defaultVersion = "2.1"
+const defaultVersion = "2.2"
 
 function setAvailableVersion(){
     const fragment = document.createDocumentFragment()
