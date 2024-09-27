@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function(){
     //downloadComparify()
-    downloadLatest()
+    downloadNewest()
 });
 let comparify, gamedata, gamedataold
 function downloadComparify(){
@@ -8,16 +8,15 @@ function downloadComparify(){
         .then((response) => response.json())
         .then((data) => {
             window.comparify = comparify = data
-            downloadLatest()
+            downloadNewest()
     })
 }
 
-function downloadLatest(){
-    const beta21   = `js/data/gameDataVBeta2.1.json`
-    const latest   = `js/data/gameDataVLastest.json` 
-    const stable21 = `js/data/gameDataV2.1.json` 
+const prevVersion = 'js/data/gameDataV2.1.json'
+const newVersion  = 'js/data/gameDataV2.2.json'
 
-    fetch(stable21)
+function downloadNewest(){
+    fetch(newVersion)
         .then((response) => response.json())
         .then((data) => {
             window.gamedata = gamedata = data
@@ -26,7 +25,7 @@ function downloadLatest(){
 }
 
 function downloadOld(){
-    fetch(`js/data/gameDataV1.6.1.json`)
+    fetch(prevVersion)
         .then((response) => response.json())
         .then((data) => {
             window.gamedataold = gamedataold = data
@@ -39,10 +38,10 @@ function downloadOld(){
 const changelog = {}
 function makeChangelog(){
     buildCommonTableMoves()
-    /*gamedata.moves.map((x, i)=>{
+    gamedata.moves.map((x, i)=>{
         if (!x) return
-        compareMove(gamedata.moves[i], x, gamedataold.moves[i] || {})
-    })*/
+        compareMove(x, gamedataold.moves[i] || {})
+    })
     gamedata.species.map((x, i)=>{
         if (!x) return
         compareSpecie(gamedata.species[i], gamedataold.species[newToOldS[i]] || {}, i)
@@ -210,45 +209,53 @@ ${gamedata.abilities[x].name}`, specie.name)
     })
 }
 
-function compareMove(move, comp, old){
-    if (comp.prio != false){
+function compareMove(move, old){
+    if (move.prio != old.prio){
         addToChangelog(`prio ${old.prio} -> ${move.prio}`, move.name)
     }
-    if (comp.pwr != false){
+    if (move.pwr != old.pwr){
         addToChangelog(`power ${old.pwr} -> ${move.pwr}`, move.name)
     }
-    if (comp.chance != false){
+    if (move.chance != old.chance){
         addToChangelog(`chance ${old.chance} -> ${move.chance}`, move.name)
     }
-    if (comp.pp != false){
+    if (move.pp != old.pp){
         addToChangelog(`pp ${old.pp} -> ${move.pp}`, move.name)
     }
-    if (comp.acc != false){
+    if (move.acc != old.acc){
         addToChangelog(`acc ${old.acc} -> ${move.acc}`, move.name)
     }
-    if (comp.split != false){
+    if (move.split != old.split){
         addToChangelog(`split ${gamedata.splitT[old.split]} -> ${gamedata.splitT[move.split]}`, move.name)
     }
-    if (comp.target != false){
+    if (move.target != old.target){
         addToChangelog(`target ${gamedata.targetT[old.target]} -> ${gamedata.targetT[move.target]}`, move.name)
     }
-    comp.flags = comp.flags.filter(x => x != false)
-    if (comp.flags.length){
-        comp.flags.forEach(x => {
-            if (x == true){
-                //addToChangelog(`Move ${move.name}had one flag removed`, move.name)
-            } else {
-                addToChangelog(`Move ${move.name}had one flag changed -> ${gamedata.flagsT[x]}`, move.name)
-            }
-            
-        });
+    if (old.flags){
+        for (const flag of move.flags){
+            if (old.flags.includes(flag))
+                continue
+            addToChangelog(`flag added -> ${gamedata.flagsT[flag]}`, move.name)
+        }
+        for (const flag of old.flags){
+            if (move.flags.includes(flag))
+                continue
+            addToChangelog(`flag removed -> ${gamedata.flagsT[flag]}`, move.name)
+        }
     }
-    comp.types = comp.types.filter(x => x != false)
-    if (comp.types.length){
-        comp.types.forEach(x => {
-            addToChangelog(`Move ${move.name}had one type changed -> ${gamedata.typeT[x]}`, move.name)
-        });
+    if (old.types){
+        for (const type of move.types){
+            if (old.types.includes(type))
+                continue
+            addToChangelog(`type added -> ${gamedata.typeT[type]}`, move.name)
+        }
+        for (const type of old.types){
+            if (move.types.includes(type))
+                continue
+            addToChangelog(`type removed -> ${gamedata.typeT[type]}`, move.name)
+        }
     }
+    
 }
 
 function displayChangelog(){
