@@ -13,22 +13,28 @@ import { feedCommunitySets } from "./community_sets.js"
 
 export let currentSpecieID = 1
 
+const spriteAlternateFunc = [
+    getSpritesURL,
+    getSpritesShinyURL,
+    getBackSpritesURL,
+    getBackSpritesShinyURL,
+]
+
 export function feedPanelSpecies(id) {
     currentSpecieID = id
     const specie = gameData.species[id]
     $('#species-name').text(`${specie.name}#${specie.dex.id || "??"}`)
     $('#species-id').text(`ID: ${specie.id}`)
     updateBaseStats(specie.stats.base)
-    $('#species-front').attr('src', getSpritesURL(specie.NAME))
+    if (specie.shinyColor === undefined)
+        specie.shinyColor = 0
+    $('#species-front').attr('src', spriteAlternateFunc[specie.shinyColor](specie.NAME))
     $('#species-front')[0].onclick = () => {
-        if ($('#species-front')[0].dataset.shiny === "off") {
-            $('#species-front')[0].dataset.shiny = "on"
-            $('#species-front').attr('src', getSpritesShinyURL(specie.NAME))
-        } else {
-            $('#species-front')[0].dataset.shiny = "off"
-            $('#species-front').attr('src', getSpritesURL(specie.NAME))
-        }
+        if (specie.shinyColor === undefined)
+            specie.shinyColor = 0
+        $('#species-front').attr('src', spriteAlternateFunc[++specie.shinyColor % spriteAlternateFunc.length](specie.NAME))
     }
+    
     $('#species-front')[0].dataset.shiny = "off"
     setAbilities(specie.stats.abis, specie)
     setInnates(specie.stats.inns)
@@ -245,9 +251,16 @@ export function getSpritesURL(NAME) {
 }
 export function getSpritesShinyURL(NAME) {
     NAME = NAME.replace(/^SPECIES_/, '')
-    return `./sprites/SHINY_${NAME}.png`
+    return `./sprites/${NAME}_SHINY.png`
 }
-
+export function getBackSpritesURL(NAME) {
+    NAME = NAME.replace(/^SPECIES_/, '')
+    return `./sprites/${NAME}_BACK.png`
+}
+export function getBackSpritesShinyURL(NAME) {
+    NAME = NAME.replace(/^SPECIES_/, '')
+    return `./sprites/${NAME}_BACK_SHINY.png`
+}
 function changeBaseStat(node, value, statID, cmp) {
 
     if (cmp && !isNaN(+cmp)){
