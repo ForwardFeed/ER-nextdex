@@ -32,7 +32,9 @@ export function feedPanelSpecies(id) {
     $('#species-front')[0].onclick = () => {
         if (specie.shinyColor === undefined)
             specie.shinyColor = 0
-        $('#species-front').attr('src', spriteAlternateFunc[++specie.shinyColor % spriteAlternateFunc.length](specie.NAME))
+        specie.shinyColor = ++specie.shinyColor % spriteAlternateFunc.length
+        console.log(specie.shinyColor )
+        $('#species-front').attr('src', spriteAlternateFunc[specie.shinyColor](specie.NAME))
     }
     
     $('#species-front')[0].dataset.shiny = "off"
