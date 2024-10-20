@@ -26,6 +26,9 @@ function initContext(): Context{
 
 const executionMap: {[key: string]: (line: string, context: Context) => void} = {
     "awaitForData": (line, context) => {
+        if (VERSION_STRUCTURE == 2){
+            context.stopRead = true
+        }
         if (line.match('gTMHMLearnsets')){
             context.execFlag = VERSION_STRUCTURE > 0 ? "main1" : "main"
         }
