@@ -33,7 +33,6 @@ export function feedPanelSpecies(id) {
         if (specie.shinyColor === undefined)
             specie.shinyColor = 0
         specie.shinyColor = ++specie.shinyColor % spriteAlternateFunc.length
-        console.log(specie.shinyColor )
         $('#species-front').attr('src', spriteAlternateFunc[specie.shinyColor](specie.NAME))
     }
     
