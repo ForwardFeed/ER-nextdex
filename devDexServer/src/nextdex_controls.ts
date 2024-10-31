@@ -3,7 +3,7 @@ import config from "../config"
 
 
 export function updateData(){
-    const cmd = `npm run run -- -o ${config.version} -rd -ip devDexServer/${config.projectName} -sv 1 -nc`
+    const cmd = `npm run run -- -o ${config.version} -rd -ip devDexServer/${config.projectName} -sv ${config.structureVersion} -nc`
     console.log(`Running ${cmd}`)
     exec(cmd, {cwd: '../'}, (err, stdout, stderr)=>{
         if (stdout) console.log('STDOUT: ', stdout)

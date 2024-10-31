@@ -7,6 +7,7 @@ const config: Config =  {
     projectName: "eliteredux", //care to put well that into the .gitignore
     token: "",
     version: "2.1",
+    structureVersion: 2,
     remote:  {
         owner: "Elite-Redux",
         repo: "eliteredux-source",

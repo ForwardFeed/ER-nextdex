@@ -7,6 +7,7 @@ export type Config = {
     projectName: string,
     token: string,
     version: string,
+    structureVersion: number,
     remote:  {
         owner: string,
         repo: string,
