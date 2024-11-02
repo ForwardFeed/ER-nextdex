@@ -63,7 +63,7 @@ export function changeVersion(version=defaultVersion, firstLoad=false){
         }
     }
     //fetch remotely
-    fetch(`js/data/gameDataV${version}.json`)
+    fetch(`js/data/gameDataV${version}.json`, {cache: "no-store"})
         .then((response) => response.json())
         .then((data) => {
             console.log("took gamedata from server")
