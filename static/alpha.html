@@ -15,9 +15,32 @@
     <link rel="stylesheet" href="./css/themes/wood.css" id="styles-wood">
     <link rel="icon" type="image/x-icon" href="./icons/favicon.webp">
     <script type="module" src="./js/settings.js"></script>
+    <script type="mode" src="./js/.js"></script>
 </head>
 
 <body>
+    <link rel="stylesheet" href="./css/albanian_lock.css">
+    <div id="clown-lock">
+        <div class="clown-stock">
+            <div class="clown-bar">
+                <span>Please enter password to access the dex</span>
+            </div>
+            <div class="clown-bar-center">
+                <div class="clown-bar-pass">
+                    <span id="clown-bad-pass" style="display: none;">😔 wrong password 😔</span>
+                    <input class="clown-input" type="password" id="clown-input">
+                    <button id="clown-enter">enter</button>
+                </div>
+            </div>
+            <div class="clown-bar">
+                <span>🇦🇱💪This is an 💪🇦🇱Albanian🇦🇱💪 lock, nobody will break it💪🇦🇱</span>
+            </div>
+        </div>
+    </div>
+    <script type="module">
+        import {activateLock} from './js/albanian_lock.js'
+        activateLock()
+    </script>
     <div id="loading-screen" style="display: none;">
         <div id="loading">
 
