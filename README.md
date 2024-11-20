@@ -57,6 +57,10 @@ Output dir by default of some files.
 a simple vanilla js + jquery + css + HTML Web application, this is what is live and should be interacted with as a end user.
 
 
+## Notes about images
+The script I have in python in postbuild don't really work, I actually use the one I made https://github.com/ForwardFeed/taillow
+there.
+
 ## Docker & DevDex
 There's an experimental devDex and docker
 the dev dex is a program that will use a webhook from a github repository to get informations on new pushes
