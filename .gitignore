@@ -1,5 +1,5 @@
 # project related
-out/
+out/*
 target/
 debug.txt
 nextdex_config.json
