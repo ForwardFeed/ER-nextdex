@@ -15,7 +15,10 @@ npm run run
 then `nextdex_config.json` should appear and you need to edit the field project_root
 `project_root` is the path of your Elite Redux folder.
 
-
+```
+# this will pull the latest into Alphatest
+npm run run -- -sv 2 -rd -o Alphatest
+```
 
 
 ## How it works more in details

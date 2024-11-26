@@ -2,8 +2,33 @@
 #exit on a single error
 set -e
 
-prjAlpha=$(cat ./nextdex_config.json | jq -r '.project_root_alpha')
+if [ jq ]
+then
+    prjAlpha=$(cat ./nextdex_config.json | jq -r '.project_root_alpha')
+    if [ "$prjAlpha" == "null" ]
+    then
+        prjAlpha=""
+    fi
+fi
 curr="$(pwd)"
+if [ -z "$prjAlpha" ]
+then
+    prjAlpha=$1
+fi
+
+if [ -z "$prjAlpha" ]
+then
+    echo "missing project file specific to alpha"
+    exit 1
+fi
+
+if [ -d "$prjAlpha" ]
+then
+    echo "Using alpha folder "$prjAlpha""
+else
+    echo "could not find alpha folder "$prjAlpha"" 
+    exit 2
+fi
 
 cd "${prjAlpha}"
 git checkout .
