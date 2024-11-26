@@ -1,5 +1,6 @@
 # project related
 out/*
+!out/.gitkeep
 target/
 debug.txt
 nextdex_config.json
