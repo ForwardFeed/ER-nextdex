@@ -203,6 +203,7 @@ const abilityThatAddsResist = {
     "Water Bubble": ["Fire"],
     "Seaweed": ["Fire"],
     "Heatproof": ["Fire"],
+    "Iron Giant": ["Fire"],
     "Thick Fat": ["Fire", "Ice"],
     "Immunity": ["Poison"],
     "Fossilized": ["Rock"],
