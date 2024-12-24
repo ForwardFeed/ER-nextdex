@@ -9,7 +9,8 @@ import * as FormsSpecies from './form_species'
 import * as PokePokedex from './pokedex'
 
 import { FileDataOptions, getMulFilesData, autojoinFilePath } from '../utils'
-import { GameData } from '../main'
+import { GameData, VERSION_STRUCTURE } from '../main'
+import { getSpecies26 } from './species_26'
 
 export interface Specie {
     NAME: string,
@@ -55,6 +56,10 @@ function parse(pokeData: string): Specie[]{
 }
 
 export function getSpecies(ROOT_PRJ: string, optionsGlobal_h: FileDataOptions, gameData: GameData): Promise<void>{
+    if (VERSION_STRUCTURE == 3){
+        return getSpecies26(ROOT_PRJ, optionsGlobal_h, gameData)
+    }
+
     return new Promise((resolve: ()=>void, reject)=>{
         getMulFilesData(autojoinFilePath(ROOT_PRJ, [
                 'src/data/pokemon/pokedex_text.h', //both goes together with entries
