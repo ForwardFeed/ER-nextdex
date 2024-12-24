@@ -558,7 +558,18 @@ function buildResist(specie){
         .filter(x => x)
         .map(x => x.toLowerCase())
 }
-
+function buildImmune(specie){
+    const weaknesses = getDefensiveCoverage(specie, 0)
+    specie.immune = [].concat.apply([], [weaknesses["0"]])
+        .filter(x => x)
+        .map(x => x.toLowerCase())
+}
+function buildWeak(specie){
+    const weaknesses = getDefensiveCoverage(specie, 0)
+    specie.weak = [].concat.apply([], [weaknesses["2"], weaknesses["4"], weaknesses["8"]])
+        .filter(x => x)
+        .map(x => x.toLowerCase())
+}
 
 const prefixTree = {
     treeId: "species"
@@ -661,6 +672,44 @@ export const queryMapSpecies = {
             let isValid = false
             if (!specie.resist) buildResist(specie)
             for (const typeR of specie.resist){
+                if (AisInB(typeQueried, typeR)) {
+                    multiSuggestions.push(typeR)
+                    isValid = true
+                    break
+                }
+            }
+            if (!isValid) {
+                return false
+            }
+        }
+        return {multiSuggestions: multiSuggestions}
+    },
+    "immune": (queryData, specie) => {
+        const typesQueried = queryData.split(' ').filter(x => x)
+        let multiSuggestions = []
+        for (const typeQueried of typesQueried){
+            let isValid = false
+            if (!specie.immune) buildImmune(specie)
+            for (const typeR of specie.immune){
+                if (AisInB(typeQueried, typeR)) {
+                    multiSuggestions.push(typeR)
+                    isValid = true
+                    break
+                }
+            }
+            if (!isValid) {
+                return false
+            }
+        }
+        return {multiSuggestions: multiSuggestions}
+    },
+    "weak": (queryData, specie) => {
+        const typesQueried = queryData.split(' ').filter(x => x)
+        let multiSuggestions = []
+        for (const typeQueried of typesQueried){
+            let isValid = false
+            if (!specie.weak) buildWeak(specie)
+            for (const typeR of specie.weak){
                 if (AisInB(typeQueried, typeR)) {
                     multiSuggestions.push(typeR)
                     isValid = true

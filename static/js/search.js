@@ -49,6 +49,8 @@ export const search = {
         "Type",
         "Ability",
         "resist",
+        "immune",
+        "weak",
         "Move",
         "Move-effect",
         "category",
