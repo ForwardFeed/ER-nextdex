@@ -23,6 +23,7 @@ export const nodeLists = {
 }
 
 export function hydrate(firstLoad=false) {
+    console.log(firstLoad)
     if (!gameData) {
         return console.warn("couldn't find gameData")
     }
