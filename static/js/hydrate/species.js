@@ -38,6 +38,7 @@ function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo) {
     const previousSpecie = gameData.species[previousSpecieID]
     const currentSpecie = gameData.species[currentEvo.in]
     
+    console.log(currentSpecie.eggMoves);
     if (!currentSpecie.eggMoves.length) currentSpecie.eggMoves = previousSpecie.eggMoves
     if (!currentSpecie.TMHMMoves.length) currentSpecie.TMHMMoves = previousSpecie.TMHMMoves
     if (!currentSpecie.tutor.length) currentSpecie.tutor = previousSpecie.tutor
