@@ -73,6 +73,8 @@ for id, moveset in moveSets.items():
 
 for pokemon in data5["species"]:
     pokemon["levelUpMoves"] = []
+    pokemon["eggMoves"] = []
+    pokemon["TMHMMoves"] = []
     pokemon["tutor"] = moveSets[pokemon["id"]]
 
 with open('gameDataV2.5.json', 'w', encoding='utf-8') as file:
