@@ -38,7 +38,7 @@ function hydrateNextEvolutionWithMoves(previousSpecieID, currentEvo) {
     const previousSpecie = gameData.species[previousSpecieID]
     const currentSpecie = gameData.species[currentEvo.in]
     
-    console.log(currentSpecie);
+    // console.log(currentSpecie);
     if (!currentSpecie.eggMoves.length) currentSpecie.eggMoves = previousSpecie.eggMoves
     if (!currentSpecie.TMHMMoves.length) currentSpecie.TMHMMoves = previousSpecie.TMHMMoves
     if (!currentSpecie.tutor.length) currentSpecie.tutor = previousSpecie.tutor
@@ -120,6 +120,7 @@ export function hydrateSpecies() {
             [2300, "Redux"], 
         ]) {
             if (specie.id <= regionsMapped[0]) break
+            console.log(specie.name, specie.id, regionsMapped[1])
             specie.region = regionsMapped[1]
         }
         // track all types on all evolutions lines
