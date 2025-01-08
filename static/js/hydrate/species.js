@@ -129,8 +129,8 @@ export function hydrateSpecies() {
         }
         // share the eggmoves to the evolutions !TODO recursively
         for (const evo of specie.evolutions) {
-            console.log(specie)
             console.log(specie.evolutions)
+            console.log(evo)
             hydrateNextEvolutionWithMoves(i, evo)
         }
         // list all pokemon if they are given
