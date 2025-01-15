@@ -74,13 +74,14 @@ for id, moveset in moveSets.items():
     moveSets[id] = alphabetizedMoveset
     
 for id, moveset in moveSets.items():
-    tempMoveset = [[""] for i in range(19)]
+    tempMoveset = [[] for i in range(19)]
     for move in list(moveset):
         tempMoveset[typeList[move]].append(move)
     
-    newMoveset = typeList[0]
-    for i in range(1,18):
-        newMoveset += typeList[i]
+    newMoveset = tempMoveset[0]
+    for i in range(1,19):
+        if (tempMoveset[i] == []): continue
+        else: newMoveset += tempMoveset[i]
     
     moveSets[id] = newMoveset
 
