@@ -31,7 +31,7 @@ export function activateLock(){
 
     function trytry(key, fromStorage){
         // hold and behold absolute secrecy.
-        if (key === "ilovetrolleychan") {
+        if (key === "6morewigglyforms") {
             if (localStorage) localStorage.setItem('ERdexPass', key)
             deActivateLock()
         } else {
