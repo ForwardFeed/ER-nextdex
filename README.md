@@ -6,7 +6,7 @@ A web application about the Elite Redux pokemon game, acts as a documentation. E
 ## tldr; How to make all work
 requires npm and nodejs
 This will initialize the project
-```
+``` 
 npm install
 npm run build
 npm run run
