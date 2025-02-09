@@ -9,7 +9,7 @@ This will initialize the project
 ``` 
 npm install
 npm run build
-npm run run
+npm run run 
 ```
 
 then `nextdex_config.json` should appear and you need to edit the field project_root
