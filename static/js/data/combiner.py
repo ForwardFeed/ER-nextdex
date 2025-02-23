@@ -2,10 +2,18 @@ import json
 
 data2 = ""
 data5 = ""
+natdexdata = dict()
 
 # Loading both 2.2 and 2.5
 with open('formatted2.2.txt', 'r', encoding='utf8') as file: data2 = json.load(file)
 with open('formatted2.5.txt', 'r', encoding='utf8') as file: data5 = json.load(file)
+
+# Getting the full list of Natdex Moves
+with open('natdexlearnsets.txt', 'r', encoding='utf8') as file:
+    for line in file:
+        splitname = line.split(':\t')
+        splitmoves = splitname[1].replace('\n','').split(', ')
+        natdexdata[splitname[0]] = splitmoves
 
 # Getting Moves and organizing them (2.5)
 moveList = [""] * len(data5["moves"])
@@ -27,6 +35,7 @@ for move in data2["moves"]:
 moveSets = dict()
 
 for pokemon in data5["species"]:
+    print (pokemon["name"])
     tempSet = set()
     for move in pokemon["levelUpMoves"]:
         if (move["lv"] <= 100): tempSet.add(move["id"])
@@ -58,7 +67,10 @@ for pokemon in data2["species"]:
     tempSet2.add("Hidden Power")
     tempSet2.add("Substitute")
     moveSets[pokemon["id"]] = tempSet2.union(moveSets[pokemon["id"]])
+    if pokemon["name"] in natdexdata.keys():
+        moveSets[pokemon["id"]] = set(natdexdata[pokemon["name"]]).union(moveSets[pokemon["id"]])
 
+print (moveList)
 for id, moveset in moveSets.items():
     namedTempMoveset = list(moveset)
     namedTempMoveset.sort()
