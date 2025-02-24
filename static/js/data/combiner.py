@@ -69,6 +69,8 @@ for pokemon in data2["species"]:
     moveSets[pokemon["id"]] = tempSet2.union(moveSets[pokemon["id"]])
     if pokemon["name"] in natdexdata.keys():
         moveSets[pokemon["id"]] = set(natdexdata[pokemon["name"]]).union(moveSets[pokemon["id"]])
+    else:
+        print(f"Cant find {pokemon["name"]}.")
 
 print (moveList)
 for id, moveset in moveSets.items():
