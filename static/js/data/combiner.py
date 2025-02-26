@@ -35,7 +35,7 @@ for move in data2["moves"]:
 moveSets = dict()
 
 for pokemon in data5["species"]:
-    print (pokemon["name"])
+    print (f"{pokemon["name"]}: {pokemon["id"]}")
     tempSet = set()
     for move in pokemon["levelUpMoves"]:
         if (move["lv"] <= 100): tempSet.add(move["id"])
@@ -71,6 +71,27 @@ for pokemon in data2["species"]:
         moveSets[pokemon["id"]] = set(natdexdata[pokemon["name"]]).union(moveSets[pokemon["id"]])
     else:
         print(f"Cant find {pokemon["name"]}.")
+        
+    # Edge Cases for Partner Pokemon
+    newSet = set()
+    match pokemon["name"]:
+        case "Pikachu Partner":
+            newSet = moveSets[25]
+            break
+        case "Eevee Partner":
+            newSet = moveSets[133]
+            break
+        case "Meowth Partner":
+            newSet = moveSets[52]
+            break
+        case "Duraludon Partner":
+            newSet = moveSets[884]
+            break
+        case "Fidough Partner":
+            newSet = moveSets[926]
+            break
+        
+    moveSets[pokemon["id"]] = moveSets[pokemon["id"]].union(newSet)
 
 print (moveList)
 for id, moveset in moveSets.items():
