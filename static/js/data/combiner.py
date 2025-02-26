@@ -46,6 +46,11 @@ for pokemon in data5["species"]:
     for id in tempSet:
         tempSet2.add(moveList[id])
     moveSets[pokemon["id"]] = tempSet2
+    
+    if pokemon["name"] in natdexdata.keys():
+        moveSets[pokemon["id"]] = set(natdexdata[pokemon["name"]]).union(moveSets[pokemon["id"]])
+    """else:
+        print(f"Cant find {pokemon["name"]}.")"""
 
 for pokemon in data2["species"]:
     tempSet = set()
@@ -67,31 +72,13 @@ for pokemon in data2["species"]:
     tempSet2.add("Hidden Power")
     tempSet2.add("Substitute")
     moveSets[pokemon["id"]] = tempSet2.union(moveSets[pokemon["id"]])
-    if pokemon["name"] in natdexdata.keys():
-        moveSets[pokemon["id"]] = set(natdexdata[pokemon["name"]]).union(moveSets[pokemon["id"]])
-    else:
-        print(f"Cant find {pokemon["name"]}.")
         
-    # Edge Cases for Partner Pokemon
-    newSet = set()
-    match pokemon["name"]:
-        case "Pikachu Partner":
-            newSet = moveSets[25]
-            break
-        case "Eevee Partner":
-            newSet = moveSets[133]
-            break
-        case "Meowth Partner":
-            newSet = moveSets[52]
-            break
-        case "Duraludon Partner":
-            newSet = moveSets[884]
-            break
-        case "Fidough Partner":
-            newSet = moveSets[926]
-            break
-        
-    moveSets[pokemon["id"]] = moveSets[pokemon["id"]].union(newSet)
+# Edge Cases for Partner Pokemon   
+moveSets[1852] = moveSets[1852].union(moveSets[25]) # Pikachu
+moveSets[1854] = moveSets[1854].union(moveSets[52]) # Meowth   
+moveSets[1853] = moveSets[1853].union(moveSets[133]) # Eevee  
+moveSets[1857] = moveSets[1857].union(moveSets[884]) # Duraludon  
+moveSets[1859] = moveSets[1859].union(moveSets[926]) # Fidough    
 
 print (moveList)
 for id, moveset in moveSets.items():
