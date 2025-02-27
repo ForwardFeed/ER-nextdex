@@ -39,6 +39,7 @@ for pokemon in data5["species"]:
     tempSet = set()
     for move in pokemon["levelUpMoves"]:
         if (move["lv"] <= 100): tempSet.add(move["id"])
+        else: print (f"{pokemon["name"]} can't learn {move["id"]}.")
     for move in pokemon["tutor"]:
         tempSet.add(move)
     
