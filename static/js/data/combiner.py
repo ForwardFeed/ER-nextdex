@@ -1,4 +1,8 @@
 import json
+from copy import deepcopy
+
+def returnSortedList(toSort,moveList,index):
+    toSort = sorted(toSort, key=lambda x: x[index])
 
 if __name__ == "__main__":
     data2 = ""
@@ -38,11 +42,11 @@ if __name__ == "__main__":
     moveSets = dict()
 
     for pokemon in data5["species"]:
-        # print (f"{pokemon["name"]}: {pokemon["id"]}")
+        # print(f"{pokemon["name"]}: {pokemon["id"]}")
         tempSet = set()
         for move in pokemon["levelUpMoves"]:
             if (move["lv"] <= 100): tempSet.add(move["id"])
-            else: print (f"{pokemon["name"]} can't learn {move["id"]}.")
+            else: print(f"{pokemon["name"]} can't learn {move["id"]}.")
         for move in pokemon["tutor"]:
             tempSet.add(move)
         
@@ -84,6 +88,7 @@ if __name__ == "__main__":
     moveSets[1857] = moveSets[1857].union(moveSets[884]) # Duraludon  
     moveSets[1859] = moveSets[1859].union(moveSets[926]) # Fidough    
 
+    # Standard Alphabetical
     for id, moveset in moveSets.items():
         namedTempMoveset = list(moveset)
         namedTempMoveset.sort()
@@ -106,4 +111,68 @@ if __name__ == "__main__":
 
     with open('gameDataV2.5.json', 'w', encoding='utf-8') as file:
         json.dump(data5, file, ensure_ascii=False, indent=2)
+        print("Finished standard sorting in gameDataV2.5.json.")
+    
+    alphabetizedMoveset = dict()
+    for id, moveset in moveSets.items():
+        tempMoveset = list()
+        for move in moveset:
+            tempMoveset.append(moveList[move])
+        alphabetizedMoveset[id] = tempMoveset
+    
+    bpMovesets = dict()
+    accMovesets = dict()
+    prioMovesets = dict()
+    
+    # Sorted by Base Power
+    for id, moveset in alphabetizedMoveset.items():
+        tempMoveset = sorted(moveset, key=lambda x: x[1])
+        newMoveset = list()
+        for move in tempMoveset:
+            newID = moveList.index(move)
+            newMoveset.append(newID)
+        moveSets[id] = newMoveset
+    
+    for pokemon in data5["species"]:
+        pokemon["levelUpMoves"] = []
+        pokemon["tutor"] = moveSets[pokemon["id"]]
+
+    with open('gameDataV2.2.json', 'w', encoding='utf-8') as file:
+        json.dump(data5, file, ensure_ascii=False, indent=2)
+        print("Finished base power sorting in gameDataV2.2.json.")
+    
+    # Sorted by Accuracy
+    for id, moveset in alphabetizedMoveset.items():
+        tempMoveset = sorted(moveset, key=lambda x: x[2])
+        newMoveset = list()
+        for move in tempMoveset:
+            newID = moveList.index(move)
+            newMoveset.append(newID)
+        moveSets[id] = newMoveset
+    
+    for pokemon in data5["species"]:
+        pokemon["levelUpMoves"] = []
+        pokemon["tutor"] = moveSets[pokemon["id"]]
+
+    with open('gameDataV2.1.json', 'w', encoding='utf-8') as file:
+        json.dump(data5, file, ensure_ascii=False, indent=2)
+        print("Finished accuracy sorting in gameDataV2.1.json.")
+    
+    
+    # Sorted by Priority
+    for id, moveset in alphabetizedMoveset.items():
+        tempMoveset = sorted(moveset, key=lambda x: x[3])
+        newMoveset = list()
+        for move in tempMoveset:
+            newID = moveList.index(move)
+            newMoveset.append(newID)
+        moveSets[id] = newMoveset
+    
+    for pokemon in data5["species"]:
+        pokemon["levelUpMoves"] = []
+        pokemon["tutor"] = moveSets[pokemon["id"]]
+
+    with open('gameDataVBeta2.1.json', 'w', encoding='utf-8') as file:
+        json.dump(data5, file, ensure_ascii=False, indent=2)
+        print("Finished priority sorting in gameDataVBeta2.1.json.")
     
