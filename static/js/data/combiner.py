@@ -23,6 +23,7 @@ if __name__ == "__main__":
     # Getting Moves and organizing them (2.5)
     moveList = [""] * len(data5["moves"])
     for move in data5["moves"]:
+        if move["prio"] == 0: move["prio"] = 101 # Guaranteed hit moves should be at the top
         moveList[move["id"]] = [move["name"], move["pwr"], move["acc"], move["prio"]]
 
     # Getting Moves and organizing them (2.2)
@@ -126,7 +127,7 @@ if __name__ == "__main__":
     
     # Sorted by Base Power
     for id, moveset in alphabetizedMoveset.items():
-        tempMoveset = sorted(moveset, key=lambda x: x[1])
+        tempMoveset = sorted(moveset, key=lambda x: x[1], reverse=True)
         newMoveset = list()
         for move in tempMoveset:
             newID = moveList.index(move)
@@ -143,7 +144,7 @@ if __name__ == "__main__":
     
     # Sorted by Accuracy
     for id, moveset in alphabetizedMoveset.items():
-        tempMoveset = sorted(moveset, key=lambda x: x[2])
+        tempMoveset = sorted(moveset, key=lambda x: x[2], reverse=True)
         newMoveset = list()
         for move in tempMoveset:
             newID = moveList.index(move)
@@ -161,7 +162,7 @@ if __name__ == "__main__":
     
     # Sorted by Priority
     for id, moveset in alphabetizedMoveset.items():
-        tempMoveset = sorted(moveset, key=lambda x: x[3])
+        tempMoveset = sorted(moveset, key=lambda x: x[3], reverse=True)
         newMoveset = list()
         for move in tempMoveset:
             newID = moveList.index(move)
