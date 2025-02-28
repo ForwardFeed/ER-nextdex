@@ -23,7 +23,6 @@ if __name__ == "__main__":
     # Getting Moves and organizing them (2.5)
     moveList = [""] * len(data5["moves"])
     for move in data5["moves"]:
-        if move["prio"] == 0: move["prio"] = 101 # Guaranteed hit moves should be at the top
         moveList[move["id"]] = [move["name"], move["pwr"], move["acc"], move["prio"]]
 
     # Getting Moves and organizing them (2.2)
