@@ -124,6 +124,8 @@ if __name__ == "__main__":
     accMovesets = dict()
     prioMovesets = dict()
     
+    
+    
     # Sorted by Base Power
     for id, moveset in alphabetizedMoveset.items():
         tempMoveset = sorted(moveset, key=lambda x: x[1], reverse=True)
@@ -141,6 +143,8 @@ if __name__ == "__main__":
         json.dump(data5, file, ensure_ascii=False, indent=2)
         print("Finished base power sorting in gameDataV2.2.json.")
     
+    
+    
     # Sorted by Accuracy
     for id, moveset in alphabetizedMoveset.items():
         tempMoveset = sorted(moveset, key=lambda x: x[2], reverse=True)
@@ -157,6 +161,7 @@ if __name__ == "__main__":
     with open('gameDataV2.1.json', 'w', encoding='utf-8') as file:
         json.dump(data5, file, ensure_ascii=False, indent=2)
         print("Finished accuracy sorting in gameDataV2.1.json.")
+    
     
     
     # Sorted by Priority
