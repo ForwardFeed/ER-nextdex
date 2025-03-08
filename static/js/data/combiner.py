@@ -23,6 +23,8 @@ if __name__ == "__main__":
     # Getting Moves and organizing them (2.5)
     moveList = [""] * len(data5["moves"])
     for move in data5["moves"]:
+        if 17 in move["flags"]: move["flags"].remove(17)
+        if move["name"] == "Freezy Frost": move["lDesc"] = "Attack with crystal made of cold frozen haze."
         moveList[move["id"]] = [move["name"], move["pwr"], move["acc"], move["prio"]]
 
     # Getting Moves and organizing them (2.2)
