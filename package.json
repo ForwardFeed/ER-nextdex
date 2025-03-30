@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
+    "build": "npx buf generate && tsc",
     "run": "node ./target/main.js",
     "sprites": "node ./target/main.js sprites",
     "webpack": "npx webpack --config webpack.config.js",
@@ -17,6 +17,8 @@
   "author": "ForwardFeed",
   "license": "MIT",
   "devDependencies": {
+    "@bufbuild/buf": "^1.48.0",
+    "@bufbuild/protoc-gen-es": "^2.2.3",
     "@types/jquery": "^3.5.29",
     "@types/node": "^20.10.5",
     "typescript": "^5.3.3",
