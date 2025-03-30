@@ -86,7 +86,7 @@ export function main(configuration: Configuration.Configuration, optionsValues: 
         } else {
             const promiseArray: Array<Promise<unknown>> = []
             promiseArray.push(Species.getSpecies(rootPrj, optionsGlobal_h, gameData))
-            promiseArray.push(Moves.getMoves(rootPrj, optionsGlobal_h, gameData))
+            promiseArray.push(Moves.getMoves(gameData))
             promiseArray.push(Abilities.getAbilities(rootPrj, optionsGlobal_h, gameData))
             promiseArray.push(Locations.getLocations(rootPrj, gameData))
             promiseArray.push(Trainers.getTrainers(rootPrj, gameData))

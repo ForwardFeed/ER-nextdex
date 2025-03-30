@@ -2,6 +2,12 @@ import { join } from "path"
 import { regexGrabNum, regexGrabStr, Xtox } from "./parse_utils"
 import { FileDataOptions, getFileData, getMulFilesData, autojoinFilePath } from "./utils"
 import { GameData } from "./main"
+import { readMoves } from "./proto_utils.js"
+import { enum_name, field_name, is_flag, MoveSchema, MoveSplit, MoveTarget, Move as ProtoMove, SplitFlag } from "./gen/MoveList_pb.js"
+import { MoveBehavior } from "./gen/MoveBehavior_pb.js"
+import { Type } from "./gen/Types_pb.js"
+import { getOption } from "@bufbuild/protobuf"
+import { MoveEnum } from "./gen/MoveEnum_pb.js"
 
 interface Description {
     ptrDesc: string,
@@ -247,7 +253,45 @@ export function parse(filedata: string): Map<string, Move> {
     return context.moves
 }
 
-export function getMoves(ROOT_PRJ: string, optionsGlobal_h: FileDataOptions, gameData: GameData): Promise<void> {
+function protoMoveToLegacyMove(move: ProtoMove): [string, Move] {
+    const legacyMove: Move = {
+        name: move.name,
+        shortName: move.shortName,
+        effect: Xtox("EFFECT_", MoveBehavior[move.effect] || "EFFECT_HIT"),
+        power: move.power,
+        types: (move.type2 ? [Type[move.type || 0] || "MYSTERY", Type[move.type2]] : [Type[move.type || 0] || "MYSTERY"]).map(it => Xtox("TYPE_", it)),
+        acc: move.accuracy,
+        pp: move.pp,
+        chance: move.effectChance,
+        target: MoveTarget[move.target || 0],
+        priority: move.priority,
+        flags: [],
+        split: move.splitModifier ? SplitFlag[move.splitModifier] : MoveSplit[move.split || 0],
+        argument: "",
+        desc: move.shortDescription,
+        longDesc: move.description,
+    }
+
+    for (const field of MoveSchema.fields) {
+        if (getOption(field, is_flag) && (move as any)[field.name]) {
+            if (field.enum) {
+                legacyMove.flags.push(getOption(field.enum.value[(move as any)[field.name]], enum_name))
+            } else {
+                legacyMove.flags.push(getOption(field, field_name))
+            }
+        }
+    }
+
+    return [MoveEnum[move.id], legacyMove]
+}
+
+export function getMoves(gameData: GameData): Promise<void> {
+    const moves = readMoves();
+    gameData.moves = new Map(moves.moves.map((it) => protoMoveToLegacyMove(it)))
+    return new Promise((resolve) => { resolve(); })
+}
+
+export function getLegacyMoves(ROOT_PRJ: string, optionsGlobal_h: FileDataOptions, gameData: GameData): Promise<void> {
     return new Promise((resolve: () => void, reject) => {
         getFileData(join(ROOT_PRJ, 'include/constants/battle_config.h'), optionsGlobal_h)
             .then((battle_config) => {
