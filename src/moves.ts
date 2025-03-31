@@ -285,10 +285,9 @@ function protoMoveToLegacyMove(move: ProtoMove): [string, Move] {
     return [MoveEnum[move.id], legacyMove]
 }
 
-export function getMoves(gameData: GameData): Promise<void> {
+export function getMoves(gameData: GameData) {
     const moves = readMoves();
     gameData.moves = new Map(moves.moves.map((it) => protoMoveToLegacyMove(it)))
-    return new Promise((resolve) => { resolve(); })
 }
 
 export function getLegacyMoves(ROOT_PRJ: string, optionsGlobal_h: FileDataOptions, gameData: GameData): Promise<void> {
