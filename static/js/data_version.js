@@ -17,7 +17,8 @@ const allVersions = [
     "Beta2.1",
     "2.1",
     "2.2",
-    "2.5"
+    "2.5",
+    "AprilFools"
 ]
 
 const defaultVersion = "2.5"
