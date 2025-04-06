@@ -1,11 +1,13 @@
 import { platform } from "os"
-import { fromBinary, Message, toBinary } from '@bufbuild/protobuf';
+import { fromBinary, Message } from '@bufbuild/protobuf';
 import { GenMessage } from '@bufbuild/protobuf/codegenv1';
 import { execSync } from "child_process";
 import { MoveList } from "./gen/MoveList_pb.js";
 import { MoveListSchema } from "./gen/MoveList_pb.js";
 import { AbilityList } from "./gen/AbilityList_pb.js";
 import { AbilityListSchema } from "./gen/AbilityList_pb.js";
+import { SpeciesList } from "./gen/SpeciesList_pb.js";
+import { SpeciesListSchema } from "./gen/SpeciesList_pb.js";
 
 function protocLocation() {
     switch (platform()) {
@@ -40,4 +42,8 @@ export function readMoves(): MoveList {
 
 export function readAbilities(): AbilityList {
     return readTextproto(AbilityListSchema)
+}
+
+export function readSpecies(): SpeciesList {
+    return readTextproto(SpeciesListSchema)
 }
