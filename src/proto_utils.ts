@@ -1,5 +1,5 @@
 import { platform } from "os"
-import { fromBinary, Message } from '@bufbuild/protobuf';
+import { create, fromBinary, Message } from '@bufbuild/protobuf';
 import { GenMessage } from '@bufbuild/protobuf/codegenv1';
 import { execSync } from "child_process";
 import { MoveList } from "./gen/MoveList_pb.js";
@@ -8,6 +8,9 @@ import { AbilityList } from "./gen/AbilityList_pb.js";
 import { AbilityListSchema } from "./gen/AbilityList_pb.js";
 import { SpeciesList } from "./gen/SpeciesList_pb.js";
 import { SpeciesListSchema } from "./gen/SpeciesList_pb.js";
+import { ItemListSchema } from "./gen/ItemList_pb.js";
+import { ItemList } from "./gen/ItemList_pb.js";
+import { readdirSync } from "fs";
 
 function protocLocation() {
     switch (platform()) {
@@ -20,15 +23,17 @@ function protocLocation() {
     }
 }
 
-export function readTextproto<T extends Message>(schema: GenMessage<T>): T {
+export function readTextproto<T extends Message>(schema: GenMessage<T>, textprotoFile?: string): T {
     const protoName = schema.name
+    
+    const textprotoName = textprotoFile || `${protoName}.textproto`
 
     const command = `${protocLocation()} \
       --encode=er.${protoName} \
       --proto_path=./er-config \
       --experimental_allow_proto3_optional \
       ./er-config/${protoName}.proto \
-      < ./er-config/${protoName}.textproto`
+      < ./er-config/${textprotoName}`
 
     console.log(command)
     const ret = execSync(command)
@@ -46,4 +51,13 @@ export function readAbilities(): AbilityList {
 
 export function readSpecies(): SpeciesList {
     return readTextproto(SpeciesListSchema)
+}
+
+export function readItems(): ItemList {
+  const items = create(ItemListSchema)
+  for (const file of readdirSync(`./er-config/items/`)) {
+    if (!file.endsWith(".textproto")) continue
+    items.item.push(...readTextproto(ItemListSchema, `items/${file}`).item)
+  }
+  return items
 }

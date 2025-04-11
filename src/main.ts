@@ -11,12 +11,13 @@ import * as Trainers from './trainers/trainers'
 import * as ScriptedData from './scripted_data'
 import * as BattleItems from './battle_items/battle_items'
 import * as Additionnal from './additional_data/additional'
-import * as InternalID from './internal_id'
 import { CompactGameData, compactify } from './compactify';
 import * as Configuration from './configuration';
 import { getTrainerOrder } from './trainers/trainer_ordering';
 import { parseArguments, ParsedValues } from './arguments';
 import { comparifyMultiple } from './comparify';
+import { MoveEnumSchema } from './gen/MoveEnum_pb.js';
+import { SpeciesEnumSchema } from './gen/SpeciesEnum_pb.js';
 //import { comparify } from './comparify';
 
 
@@ -89,9 +90,9 @@ export function main(configuration: Configuration.Configuration, optionsValues: 
                 promiseArray.push(Locations.getLocations(rootPrj, gameData))
                 promiseArray.push(Trainers.getTrainers(rootPrj, gameData))
                 promiseArray.push(ScriptedData.parse(rootPrj, gameData))
-                promiseArray.push(BattleItems.getItems(rootPrj, gameData))
-                promiseArray.push(InternalID.getSpeciesInternalID(rootPrj, gameData))
-                promiseArray.push(InternalID.getMovesInternalID(rootPrj, gameData))
+                BattleItems.getItems(gameData)
+                gameData.movesInternalID = new Map(MoveEnumSchema.values.map(it => [it.name, it.number]))
+                gameData.speciesInternalID = new Map(SpeciesEnumSchema.values.map(it => [it.name, it.number]))
                 promiseArray.push(getTrainerOrder(gameData))
                 //promiseArray.push()
                 Promise.allSettled(promiseArray)

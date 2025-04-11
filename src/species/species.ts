@@ -20,6 +20,7 @@ import { MoveEnum } from '../gen/MoveEnum_pb.js'
 import { Xtox } from '../parse_utils.js'
 import { Type } from '../gen/Types_pb.js'
 import { AbilityEnum } from '../gen/AbilityEnum_pb.js'
+import { ItemEnum } from '../gen/ItemEnum_pb.js'
 
 export interface Specie {
   NAME: string,
@@ -113,7 +114,7 @@ function createEvoMapping(speciesList: SpeciesList): Map<SpeciesEnum, [Evolution
     for (const mega of species.mega) {
       evoMap.get(mega.from)!![0].push({
         kind: mega.evoUsing.case === "move" ? "EVO_MOVE_MEGA_EVOLUTION" : "EVO_MEGA_EVOLUTION",
-        specifier: mega.evoUsing.case === "move" ? MoveEnum[mega.evoUsing.value] : mega.evoUsing.value || "",
+        specifier: mega.evoUsing.case === "move" ? MoveEnum[mega.evoUsing.value] : ItemEnum[mega.evoUsing.value || ItemEnum.ITEM_NONE],
         into: SpeciesEnum[species.id]
       })
     }
@@ -121,7 +122,7 @@ function createEvoMapping(speciesList: SpeciesList): Map<SpeciesEnum, [Evolution
     for (const primal of species.primal) {
       evoMap.get(primal.from)!![0].push({
         kind: "EVO_PRIMAL_REVERSION",
-        specifier: primal.item,
+        specifier: ItemEnum[primal.item],
         into: SpeciesEnum[species.id]
       })
     }
