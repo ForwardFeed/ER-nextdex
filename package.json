@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx buf generate && tsc",
+    "build": "tsc",
+    "protoc": "npx buf generate",
     "run": "node ./target/main.js",
     "sprites": "node ./target/main.js sprites",
     "webpack": "npx webpack --config webpack.config.js",
