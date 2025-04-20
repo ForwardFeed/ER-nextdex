@@ -80,7 +80,7 @@ function getSprite(species: Species, speciesMap: Map<SpeciesEnum, Species>): Gra
 
     if (!species.visualsOr.value) return { "front": "", "pal": "", "shiny": "" }
     if (species.visualsOr.value.front) return {
-        "front": "graphics/pokemon/" + species.visualsOr.value.front.path + ".png",
+        "front": "graphics/pokemon/" + species.visualsOr.value.front.path.replace("anim_front", "front") + ".png",
         "pal": "graphics/pokemon/" + species.visualsOr.value.palette + ".pal",
         "shiny": "graphics/pokemon/" + species.visualsOr.value.shiny + ".pal",
     }
