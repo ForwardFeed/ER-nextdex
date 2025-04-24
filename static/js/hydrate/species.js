@@ -71,8 +71,8 @@ export function hydrateSpecies() {
     const species = gameData.species
     fragment.append(setupReorderBtn())
     for (const i in species) {
-        if (i == 0) continue
         const specie = species[i]
+        if (specie.NAME === "SPECIES_NONE") continue
         specie.stats.base[6] = 0
         for (const statID in specie.stats.base) {
             const value = specie.stats.base[statID]
