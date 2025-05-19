@@ -180,7 +180,7 @@ export function getSpecies(gameData: GameData) {
 
   gameData.species = []
   for (const species of speciesList.species) {
-    if (!species.id || species.id === SpeciesEnum.SPECIES_EGG || species.randomizerBanned === Species_RandomizeBanned.SPECIES_HIDDEN) continue
+    if (species.id === SpeciesEnum.SPECIES_EGG || species.randomizerBanned === Species_RandomizeBanned.SPECIES_HIDDEN) continue
 
     const baseSpeciesInfo = getBaseSpecies(species, speciesMap)
 
