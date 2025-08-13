@@ -137,7 +137,6 @@ function readPokemonBox(start, bytes){
 
     const word7 = readNbytes(start + 16, 4, bytes)
     mon.species = readBit(word7, 0, 16)
-    console.log(gameData.species[mon.species])
     mon.moves[3] = readBit(word7, 16, 11)
     mon.hptype = readBit(word7, 27, 5)
 
@@ -159,7 +158,15 @@ function readPokemonBox(start, bytes){
     mon.spDefenseEV = readNbytes(start + 29, 1, bytes)
 
     mon.metLocation = readNbytes(start + 30, 1, bytes)
+    //mon.OTName = bytes.slice(start + 31, start + 38)
+    //mon.nick = bytes.slice(start + 39, start + 51)
+    const endBit =  readNbytes(start + 51, 1, bytes)
+    mon.pokeball = readBit(endBit, 0, 5)
+    mon.speedDown = readBit(endBit, 6, 1)
+    mon.otGender = readBit(endBit, 7, 1)
+    mon.isDisabled = readBit(endBit, 8, 1)
 
+    mon.markings = readNbytes(start + 52, 1, bytes)
     return mon
 }
 
@@ -301,31 +308,26 @@ function readMonBox(start, bytes){
 }
 //100 bytes
 function readMonParty(start, bytes){
-    var personality = readNbytes(start, 4, bytes);
-    var otId = readNbytes(start + 4, 4, bytes);
-    //var nickName = readNbytes(start + 8, 10, bytes);
-    //var lang = readNbytes(start + 18, 1, bytes);
-    //var eggName = readNbytes(start + 19, 1, bytes);
-    //var OTname = readNbytes(start + 20, 7, bytes);
-    //var markings = readNbytes(start + 27, 1, bytes);
-    //var checksum = readNbytes(start + 28, 2, bytes);
-    //var wtf = readNbytes(start + 30, 2, bytes);
-    //var data = readNbytes(start + 32, 48, bytes);
-    //var mon = readSubStructure(otId, personality, start,bytes);
     const mon = readPokemonBox(start, bytes)
-    mon.personality = personality;
-    mon.otId = otId;
-    //var status = readNbytes(start + 80, 4, bytes);
-    mon.level = readNbytes(start + 84, 1, bytes);
-    //var pkrs = readNbytes(start + 85, 1, bytes);
-    mon.liveStat = {}
-    mon.liveStat.currentHP = readNbytes(start + 86, 2, bytes);
-    mon.liveStat.totalHP = readNbytes(start + 88, 2, bytes);
-    mon.liveStat.atk = readNbytes(start + 90, 2, bytes);
-    mon.liveStat.def = readNbytes(start + 92, 2, bytes);
-    mon.liveStat.spe = readNbytes(start + 94, 2, bytes);
-    mon.liveStat.spa = readNbytes(start + 96, 2, bytes);
-    mon.liveStat.spd = readNbytes(start + 98, 2, bytes);
+    mon.pp = [
+        readNbytes(start + 53, 1, bytes),
+        readNbytes(start + 54, 1, bytes),
+        readNbytes(start + 55, 1, bytes),
+        readNbytes(start + 56, 1, bytes)
+    ]
+
+    mon.status = readNbytes(start + 57, 4, bytes);
+    mon.level = readNbytes(start + 61, 1, bytes);
+    mon.mail = readNbytes(start + 62, 1, bytes);
+    mon.liveStat = {
+        currentHP: readNbytes(start + 64, 2, bytes),
+        totalHP: readNbytes(start + 66, 2, bytes),
+        atk : readNbytes(start + 68, 2, bytes),
+        def : readNbytes(start + 70, 2, bytes),
+        spe : readNbytes(start + 72, 2, bytes),
+        spa : readNbytes(start + 74, 2, bytes),
+        spd : readNbytes(start + 76, 2, bytes)
+    }
     return mon
 }
 function slowCurve(n){
