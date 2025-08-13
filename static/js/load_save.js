@@ -401,7 +401,12 @@ function createGEN3mon(mon){
     poke.hPWR = getGEN3HP(mon)
     poke.moves = [];
     for (var i=0; i<4; i++) {
-        var move = gameData.moves[mon.moves[i]]
+        const moveID = mon.moves[i]
+        var move = gameData.moves[moveID]
+        if (!move){
+            console.warn(`unknown move id ${moveID}`)
+            continue
+        }
         if (move.id === mon.moves[i]){
             poke.moves[i] = mon.moves[i]
         } else {
@@ -503,7 +508,13 @@ function parseFile(file){
             var teamList = []
             for (var i = 0; i< teamsize; i++){
                 var mon = readMonParty(teamOffset + (i * 100), bytes)
-                mon = createGEN3mon(mon)
+                try{
+                    mon = createGEN3mon(mon)
+                } catch(e){
+                    console.warn(`Failed to created this pokemon from savefile, reason: ${e}`)
+                    continue
+                }
+                
                 const evs = mon.evs
                 teamList.push({
                     spc: mon.species,
