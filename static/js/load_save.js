@@ -44,9 +44,9 @@ function readNbytes(bof, nBytes, bytes){
     return (resBytes >>> 0)
 }
 
-function readTeamSize(teamOffset, bytes){
-    var oft = teamOffset + 564;
-    var sizeTeam = readNbytes(oft,4,bytes);
+function readTeamSize(ofsSector, bytes){
+    let oft = ofsSector + 564;
+    let sizeTeam = readNbytes(oft,4,bytes);
     return sizeTeam; 
 }
 
@@ -86,7 +86,7 @@ function getFooterData(startOffset, endOffset, bytes) {
     for (var ofs = startOffset; ofs < endOffset; ofs += SIZE_SECTOR){
         var off = ofs + 4084 //offset footer
         var sID = readNbytes(off,2,bytes)//Sector ID
-        if (sID == 1){
+        if (sID == 2){
             TI = ofs
         } else if (sID >= 5){
             PC[sID - 5] = ofs
@@ -431,6 +431,33 @@ function createGEN3mon(mon){
     return poke
 }
 
+/**
+ * THIS IS MY BRUTE FORCE TECHNIQUE TO FIND the RIGHT SECTOR OR RATHER SMALL CHANGES
+ * DO NO FORGET THE SAVE FILES NEEDS TO BE REROLLED TO HAVE IDENTICALLY SID POSITIONS
+ * TO DO THAT, YOU MUST SAVE MULTIPLE TIMES 14 OR SO
+ * if (!window.xxx){
+            window.xxx = {}
+            const len = bytes.length
+            for(let i = 0; i < len; i++){
+                const val = bytes[i]
+                if (val == 6){
+                    window.xxx[i] = 1
+                }
+            } // 49347
+        } else {
+            const len = bytes.length
+            for(let i = 0; i < len; i++){
+                const val = bytes[i]
+                if (window.xxx[i] && val == 5){
+                    console.log("aaaa", i)
+                    break
+                }
+            }
+            window.xxx = undefined
+        }
+ */
+
+
 function parseFile(file){
     if (!file) return
     if (file.target) file = file.target.files[0]
@@ -446,9 +473,11 @@ function parseFile(file){
         var DATA_FIELD = 3968;
         var COUNT_MAIN = 14; 
         var SIZE_MAIN = COUNT_MAIN * SIZE_SECTOR;
-        var GameA = getFooterData(0, 57344, bytes);
+        /*var GameA = getFooterData(0, 57344, bytes);
         var GameB = getFooterData(57344, 114688, bytes)
         var RSave = GameA.SI > GameB.SI ? GameA : GameB; //recent Save
+        */
+        const RSave = getFooterData(0, 114688, bytes)
         //GS[0] = SaveBlock2
         //var gameSets = RSave.GS[0] + 0x97
         //gameSets = readNbytes(gameSets, 2, bytes)
