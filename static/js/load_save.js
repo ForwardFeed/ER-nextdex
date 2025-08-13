@@ -105,6 +105,63 @@ function getFooterData(startOffset, endOffset, bytes) {
         GS: GS,
     }
 }
+function readBit(num, startPos, numBits) {
+    // Create a mask to extract the N bits
+    const mask = (1 << numBits) - 1;
+    
+    // Extract the N bits from the specified position
+    const extractedBits = (num >> startPos) & mask;
+
+    return extractedBits;
+}
+
+
+function readPokemonBox(start, bytes){
+    const mon = {
+        moves: [],
+        pp: [],
+    }
+    mon.personality = readNbytes(start, 4 ,bytes)
+    mon.otId = readNbytes(start + 4, 4 ,bytes)
+    
+    const word5 = readNbytes(start + 8, 4, bytes)
+    mon.moves[0] = readBit(word5, 0, 11)
+    mon.experience = readBit(word5, 11, 21)
+    
+    const word6 = readNbytes(start + 12, 4, bytes)
+    mon.moves[1] = readBit(word6, 0, 11)
+    mon.moves[2] = readBit(word6, 11, 11)
+    mon.friendship = readBit(word6, 22, 8)
+    mon.isEventMon = readBit(word6, 30, 1)
+    mon.isAlpha = readBit(word6, 31, 1)
+
+    const word7 = readNbytes(start + 16, 4, bytes)
+    mon.species = readBit(word7, 0, 16)
+    console.log(gameData.species[mon.species])
+    mon.moves[3] = readBit(word7, 16, 11)
+    mon.hptype = readBit(word7, 27, 5)
+
+    const word8 = readNbytes(start + 20, 4, bytes)
+    mon.heldItem =  readBit(word8, 0, 10)
+    mon.nature = readBit(word8, 10, 5)
+    mon.isEgg = readBit(word8, 15, 1)
+    mon.language = readBit(word8, 16, 3)
+    mon.metLevel = readBit(word8, 19, 7)
+    mon.isShiny = readBit(word8, 26, 2)
+    mon.maxShiny = readBit(word8, 28, 2)
+    mon.abi = readBit(word8, 30, 2)
+
+    mon.hpEV = readNbytes(start + 24, 1, bytes)
+    mon.attackEV = readNbytes(start + 25, 1, bytes)
+    mon.defenseEV = readNbytes(start + 26, 1, bytes)
+    mon.speedEV = readNbytes(start + 27, 1, bytes)
+    mon.spAttackEV = readNbytes(start + 28, 1, bytes)
+    mon.spDefenseEV = readNbytes(start + 29, 1, bytes)
+
+    mon.metLocation = readNbytes(start + 30, 1, bytes)
+
+    return mon
+}
 
 function readSubStructure(OTID, personV, start, bytes){
     var key = OTID ^ personV;
@@ -234,7 +291,8 @@ function readMonBox(start, bytes){
     //var checksum = readNbytes(start + 28, 2, bytes);
     //var wtf = readNbytes(start + 30, 2, bytes);
     //var data = readNbytes(start + 32, 48, bytes);
-    var mon = readSubStructure(otId, personality, start,bytes);
+    //var mon = readSubStructure(otId, personality, start,bytes);
+    const mon = readPokemonBox(start, bytes)
     mon.personality = personality;
     mon.otId = otId;
     //Box trick
@@ -253,7 +311,8 @@ function readMonParty(start, bytes){
     //var checksum = readNbytes(start + 28, 2, bytes);
     //var wtf = readNbytes(start + 30, 2, bytes);
     //var data = readNbytes(start + 32, 48, bytes);
-    var mon = readSubStructure(otId, personality, start,bytes);
+    //var mon = readSubStructure(otId, personality, start,bytes);
+    const mon = readPokemonBox(start, bytes)
     mon.personality = personality;
     mon.otId = otId;
     //var status = readNbytes(start + 80, 4, bytes);
