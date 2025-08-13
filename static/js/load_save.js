@@ -507,7 +507,7 @@ function parseFile(file){
             var teamOffset = RSave.TI + 568;
             var teamList = []
             for (var i = 0; i< teamsize; i++){
-                var mon = readMonParty(teamOffset + (i * 100), bytes)
+                var mon = readMonParty(teamOffset + (i * 76), bytes)
                 try{
                     mon = createGEN3mon(mon)
                 } catch(e){
