@@ -136,7 +136,6 @@ function setTarget(targetID) {
     }
     const colorCode = ["unset", "#f4072a", "#c74fef"]
     for (const i in targetMap) {
-        console.log(i, colorMap)
         const nodeTarget = $("#" + targetMap[i])
         const colorID = colorMap[i]
         nodeTarget.css('background-color', colorCode[colorID])
