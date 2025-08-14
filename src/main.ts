@@ -19,6 +19,7 @@ import { comparifyMultiple } from './comparify';
 import { ItemEnumSchema } from './gen/ItemEnum_pb.js';
 import { MoveEnumSchema } from './gen/MoveEnum_pb.js';
 import { SpeciesEnumSchema } from './gen/SpeciesEnum_pb.js';
+import { AbilityEnumSchema } from './gen/AbilityEnum_pb';
 //import { comparify } from './comparify';
 
 
@@ -34,6 +35,7 @@ export interface GameData {
     battleItemsInternalID: Map<string, number>,
     speciesInternalID: Map<string, number>,
     movesInternalID: Map<string, number>,
+    abilitiesInternalID: Map<string, number>,
     trainerOrder: string[]
 }
 
@@ -49,6 +51,7 @@ const gameData: GameData = {
     battleItemsInternalID: new Map(),
     speciesInternalID: new Map(),
     movesInternalID: new Map(),
+    abilitiesInternalID: new Map(),
     trainerOrder: [],
 }
 /**Because code structure can change, the way of parsing it is thus 
@@ -97,6 +100,7 @@ export function main(configuration: Configuration.Configuration, optionsValues: 
                 gameData.movesInternalID = new Map(MoveEnumSchema.values.map(it => [it.name, it.number]))
                 gameData.battleItemsInternalID = new Map(ItemEnumSchema.values.map(it => [it.name, it.number]))
                 gameData.speciesInternalID = new Map(SpeciesEnumSchema.values.map(it => [it.name, it.number]))
+                gameData.abilitiesInternalID = new Map(AbilityEnumSchema.values.map(it => [it.name, it.number]))
                 promiseArray.push(getTrainerOrder(gameData))
                 //promiseArray.push()
                 Promise.allSettled(promiseArray)
