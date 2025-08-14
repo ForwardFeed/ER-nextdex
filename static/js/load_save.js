@@ -420,7 +420,7 @@ export function getGEN3HP(mon) {
 function createGEN3mon(mon){
     var poke = {};
     poke.person = mon.personality;
-    poke.item = mon.item//0; //lazy but i could parse that eventually
+    poke.item = 0// mon.heldItem, it should have been that, but I need to grab the items ID in the gamedata before.
     const speciesLen = gameData.species.length
     for (let i =0; i < speciesLen; i++){
         const specie = gameData.species[i]
