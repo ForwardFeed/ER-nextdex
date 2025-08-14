@@ -128,9 +128,15 @@ function setTarget(targetID) {
         "ALL_BATTLERS": [1, 1, 1, 1, 1, 1],
         "OPPONENTS_FIELD": [1, 1, 1, 0, 0, 0],
         "ALLY": [0, 0, 0, 1, 0, 1],
+        "USER_OR_ALLY": [0, 0, 0, 1, 1, 1]
     }[target]
+    if (!colorMap){
+        console.warn('a new target has been added, please update this code')
+        return
+    }
     const colorCode = ["unset", "#f4072a", "#c74fef"]
     for (const i in targetMap) {
+        console.log(i, colorMap)
         const nodeTarget = $("#" + targetMap[i])
         const colorID = colorMap[i]
         nodeTarget.css('background-color', colorCode[colorID])
