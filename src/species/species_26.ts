@@ -2,19 +2,19 @@ import { GameData } from "../main";
 import { autojoinFilePath, FileDataOptions, getMulFilesData } from "../utils";
 import { Specie } from "./species";
 
-import { regexGrabNum, regexGrabStr } from "../parse_utils"
+import { regexGrabStr } from "../parse_utils"
 
-export interface Result{
+export interface Result {
     fileIterator: number,
     data: Map<string, Specie>,  //SPECIE_ as key
 }
 
 
-function initPokedata(): Specie{
+function initPokedata(): Specie {
     const _x: Specie = {
         NAME: "",
         name: "",
-        baseStats:{
+        baseStats: {
             baseHP: 0,
             baseAttack: 0,
             baseDefense: 0,
@@ -52,19 +52,19 @@ function initPokedata(): Specie{
             id: 0,
             desc: "",
             hw: [0, 0]
-        }
+        },
     }
     return _x
 }
-interface Context{
+interface Context {
     dataCollection: Map<string, Specie>
     dexID: number,
     current: Specie,
     currentKey: string,
-    execFlag: string, 
+    execFlag: string,
     stopRead: boolean,
 }
-function initContext(): Context{
+function initContext(): Context {
     return {
         dataCollection: new Map(),
         dexID: 0,
@@ -142,40 +142,40 @@ function initContext(): Context{
     u8 frontAnimId;
     u8 backAnimId;
  */
-const executionMap: {[key: string]: (line: string, context: Context) => void} = {
-    "looking" : (line, context) =>{
-        if (line.match("SPECIES_DATA_STRUCT")){
+const executionMap: { [key: string]: (line: string, context: Context) => void } = {
+    "looking": (line, context) => {
+        if (line.match("SPECIES_DATA_STRUCT")) {
             context.execFlag = "start"
-            if (context.currentKey){
+            if (context.currentKey) {
                 context.dataCollection.set(context.currentKey, context.current)
                 context.current = initPokedata()
             }
             context.currentKey = regexGrabStr(line.replace(/\s/g, ''), /(?<=SPECIES_DATA_STRUCT\()\w+/)
         }
     },
-    "start" : (line, context)=>{
+    "start": (line, context) => {
         line = line.replace(/\s/g, '')
         if (!line) return
-        if (line.match(";")){
+        if (line.match(";")) {
             context.execFlag = "looking"
             return
         }
         // grab some data
         if (line.match(".name"))
             console.log(line)
-        if (line.match(/\.name(\s=)/)){
+        if (line.match(/\.name(\s=)/)) {
             console.log(line)
             context.current.name = regexGrabStr(line, /(?<=$\(\")[^\"]+/)
         }
     },
-    
+
 }
 
 
-function parse(lines: string[], fileIterator: number): Result{
+function parse(lines: string[], fileIterator: number): Result {
     const lineLen = lines.length
     const context = initContext()
-    for (;fileIterator<lineLen; fileIterator++){
+    for (; fileIterator < lineLen; fileIterator++) {
         let line = lines[fileIterator]
         executionMap[context.execFlag](line, context)
         if (context.stopRead) break
@@ -188,30 +188,30 @@ function parse(lines: string[], fileIterator: number): Result{
 
 
 
-export function getSpecies26(ROOT_PRJ: string, optionsGlobal_h: FileDataOptions, gameData: GameData): Promise<void>{
-    return new Promise((resolve: ()=>void, reject)=>{
+export function getSpecies26(ROOT_PRJ: string, optionsGlobal_h: FileDataOptions, gameData: GameData): Promise<void> {
+    return new Promise((resolve: () => void, reject) => {
         getMulFilesData(autojoinFilePath(ROOT_PRJ, [
-                'src/data/pokemon/species_data_gen1.h',
-                'src/data/pokemon/species_data_gen2.h',
-                'src/data/pokemon/species_data_gen3.h',
-                'src/data/pokemon/species_data_gen4.h',
-                'src/data/pokemon/species_data_gen5.h',
-                'src/data/pokemon/species_data_gen6.h',
-                'src/data/pokemon/species_data_gen7.h',
-                'src/data/pokemon/species_data_gen8.h',
-                'src/data/pokemon/species_data_gen9.h',     
-            ]), optionsGlobal_h)
-        .then((pokeData)=>{
-            const data = parse(pokeData.split('\n'), 0).data
-            gameData.species = []
-            data.forEach((pdata, key)=>{
-                console.log(key, pdata.name)
+            'src/data/pokemon/species_data_gen1.h',
+            'src/data/pokemon/species_data_gen2.h',
+            'src/data/pokemon/species_data_gen3.h',
+            'src/data/pokemon/species_data_gen4.h',
+            'src/data/pokemon/species_data_gen5.h',
+            'src/data/pokemon/species_data_gen6.h',
+            'src/data/pokemon/species_data_gen7.h',
+            'src/data/pokemon/species_data_gen8.h',
+            'src/data/pokemon/species_data_gen9.h',
+        ]), optionsGlobal_h)
+            .then((pokeData) => {
+                const data = parse(pokeData.split('\n'), 0).data
+                gameData.species = []
+                data.forEach((pdata, key) => {
+                    console.log(key, pdata.name)
+                })
+                resolve()
             })
-            resolve()
-        })
-        .catch((reason)=>{
-            const err = 'Failed at gettings species reason: ' + reason
-            reject(err)
-        })
+            .catch((reason) => {
+                const err = 'Failed at gettings species reason: ' + reason
+                reject(err)
+            })
     })
 }
