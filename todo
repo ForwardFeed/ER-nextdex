@@ -62,4 +62,4 @@
 [x] if clicked on elite keep it as a elite mode
 [ ] show the date of upload of last pokedex data
 [x] implement abilityThatModifyEffectiveness
-[ ] add item index, to use it in the load_save.js
+[x] add item index, to use it in the load_save.js
