@@ -148,7 +148,7 @@ function readPokemonBox(start, bytes){
     mon.metLevel = readBit(word8, 19, 7)
     mon.isShiny = readBit(word8, 26, 2)
     mon.maxShiny = readBit(word8, 28, 2)
-    mon.abi = readBit(word8, 30, 2)
+    mon.ability = readBit(word8, 30, 2)
 
     mon.hpEV = readNbytes(start + 24, 1, bytes)
     mon.attackEV = readNbytes(start + 25, 1, bytes)
@@ -429,7 +429,6 @@ function createGEN3mon(mon){
             break
         }
     }
-    console.log()
     /*if (window.randomAbi){
         var ability = pokedex[poke.species].abilities[mon.altAbility]
         poke.ability = getRandomAbi(mon, ability)
@@ -439,11 +438,11 @@ function createGEN3mon(mon){
             getRandomAbi(mon, pokedex[poke.species].innates[2]),
         ]
     } else {*/
-        poke.ability = getGEN3Ability(mon);
+        //poke.ability = getGEN3Ability(mon);
     //}
-    
+    poke.ability = mon.ability
     poke.level = mon.level;
-    poke.nature = getGEN3Nature(mon);
+    poke.nature = mon.nature//getGEN3Nature(mon);
     poke.ivs = {
         hp: mon.hpIV,
         at: mon.attackIV,
@@ -460,7 +459,7 @@ function createGEN3mon(mon){
         sd: mon.spDefenseEV,
         sp: mon.speedEV
     };
-    poke.hPWR = getGEN3HP(mon)
+    poke.hPWR = mon.hptype//getGEN3HP(mon)
     poke.moves = [];
     for (var i=0; i<4; i++) {
         const moveID = mon.moves[i]
