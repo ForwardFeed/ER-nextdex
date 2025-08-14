@@ -424,11 +424,12 @@ function createGEN3mon(mon){
     const speciesLen = gameData.species.length
     for (let i =0; i < speciesLen; i++){
         const specie = gameData.species[i]
-        if (mon.species === specie.dex.id) {
+        if (mon.species === specie.id) {
             poke.species = i
             break
         }
     }
+    console.log()
     /*if (window.randomAbi){
         var ability = pokedex[poke.species].abilities[mon.altAbility]
         poke.ability = getRandomAbi(mon, ability)
