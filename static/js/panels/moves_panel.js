@@ -128,7 +128,12 @@ function setTarget(targetID) {
         "ALL_BATTLERS": [1, 1, 1, 1, 1, 1],
         "OPPONENTS_FIELD": [1, 1, 1, 0, 0, 0],
         "ALLY": [0, 0, 0, 1, 0, 1],
+        "USER_OR_ALLY": [0, 0, 0, 1, 1, 1]
     }[target]
+    if (!colorMap){
+        console.warn('a new target has been added, please update this code')
+        return
+    }
     const colorCode = ["unset", "#f4072a", "#c74fef"]
     for (const i in targetMap) {
         const nodeTarget = $("#" + targetMap[i])
@@ -319,6 +324,13 @@ export const queryMapMoves = {
     },
     ">=acc": (queryData, move) => {
         return  move.acc && move.acc >= queryData
+    },
+    "target": (queryData, move) => {
+        const target = gameData.targetT[move.target].toLowerCase()
+        if (AisInB(queryData, target)){
+            return target
+        }
+        return false
     },
 }
 export function updateMoves(searchQuery) {
