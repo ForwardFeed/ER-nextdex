@@ -320,6 +320,13 @@ export const queryMapMoves = {
     ">=acc": (queryData, move) => {
         return  move.acc && move.acc >= queryData
     },
+    "target": (queryData, move) => {
+        const target = gameData.targetT[move.target].toLowerCase()
+        if (AisInB(queryData, target)){
+            return target
+        }
+        return false
+    },
 }
 export function updateMoves(searchQuery) {
     const moves = gameData.moves
