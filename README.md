@@ -4,16 +4,19 @@ Live at https://forwardfeed.github.io/ER-nextdex/static/
 A web application about the Elite Redux pokemon game, acts as a documentation. ER is made thanks to pret-pokeemerald hence all other games based on this work may reuse a significan part of this project.
 
 ## tldr; How to make all work
-requires npm and nodejs
+requires git, npm and nodejs, and protoc
 This will initialize the project
 ``` 
+git submodule update --init
+
 npm install
+npm run protoc
 npm run build
-npm run run 
+# this should spawn an error and it's normal
+# nextdex_config.json should appear and you need to edit the field project_root
+npm run run
 ```
 
-then `nextdex_config.json` should appear and you need to edit the field project_root
-`project_root` is the path of your Elite Redux folder.
 
 ```
 # this will pull the latest into Alphatest
