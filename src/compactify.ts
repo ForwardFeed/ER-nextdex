@@ -134,6 +134,7 @@ export interface CompactTrainerRematch {
 export interface CompactBattleItems {
     name: string,
     NAME: string,
+    id: number,
     //could add it? desc: string,
 }
 
@@ -204,7 +205,8 @@ export function compactify(gameData: GameData): CompactGameData {
         itemT.push(key)
         compacted.items.push({
             name: val.name,
-            NAME: key
+            NAME: key,
+            id: gameData.battleItemsInternalID.get(key) || 0,
         })
     })
     const movesT: string[] = []

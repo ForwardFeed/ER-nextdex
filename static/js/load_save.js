@@ -420,7 +420,14 @@ export function getGEN3HP(mon) {
 function createGEN3mon(mon){
     var poke = {};
     poke.person = mon.personality;
-    poke.item = 0// mon.heldItem, it should have been that, but I need to grab the items ID in the gamedata before.
+    const itemsLen = gameData.items.length
+    for (let i = 0; i < itemsLen; i++){
+        const item = gameData.items[i]
+        if (mon.heldItem == item.id){
+            poke.item = i
+            break
+        }
+    }
     const speciesLen = gameData.species.length
     for (let i =0; i < speciesLen; i++){
         const specie = gameData.species[i]
@@ -582,7 +589,7 @@ function parseFile(file){
                     isShiny: false,
                     abi: mon.ability,
                     moves: mon.moves,
-                    item: undefined,
+                    item: mon.item,
                     ivs: [31, 31, 31, 31, 31, mon.zeroSpe ? 0 : 31],
                     evs: [evs.hp, evs.at, evs.df, evs.sa, evs.sd, evs.sp],
                     nature: gameData.natureT.indexOf(mon.nature)
