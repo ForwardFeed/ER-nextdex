@@ -420,7 +420,7 @@ export function getGEN3HP(mon) {
 function createGEN3mon(mon){
     var poke = {};
     poke.person = mon.personality;
-    poke.item = 0; //lazy but i could parse that eventually
+    poke.item = mon.item//0; //lazy but i could parse that eventually
     const speciesLen = gameData.species.length
     for (let i =0; i < speciesLen; i++){
         const specie = gameData.species[i]
@@ -442,7 +442,7 @@ function createGEN3mon(mon){
     //}
     poke.ability = mon.ability
     poke.level = mon.level;
-    poke.nature = mon.nature//getGEN3Nature(mon);
+    poke.nature = gameData.natureT[mon.nature]//getGEN3Nature(mon);
     poke.ivs = {
         hp: mon.hpIV,
         at: mon.attackIV,
