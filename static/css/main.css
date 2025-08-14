@@ -199,6 +199,9 @@ span{
     min-width: 9em;
     text-align: center;
 }
+.abi-id{
+    width: 1.5em;
+}
 
 /* MOVES */
 .moves-top{

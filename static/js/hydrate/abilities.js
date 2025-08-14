@@ -9,7 +9,8 @@ export function hydrateAbilities(abilities = gameData.abilities) {
             const row = JSHAC([
                 e("div", "abi-row"), [
                     e("div", "abi-name color" + (i % 2 ? "A" : "B"), abi.name),
-                    e("div", "abi-desc color" + (i % 2 ? "C" : "D"), abi.desc)
+                    e("div", "abi-desc color" + (i % 2 ? "C" : "D"), abi.desc),
+                    e("div", "abi-id color" + (i % 2 ? "A" : "B"), abi.id),
                 ]
             ])
             nodeLists.abilities.push(row)
