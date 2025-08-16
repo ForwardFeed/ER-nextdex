@@ -58,6 +58,7 @@ export const search = {
         "acc",
         "specie",
         "target",
+        "power",
         "map",
         "region",
     ],
