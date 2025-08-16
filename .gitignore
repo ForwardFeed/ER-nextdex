@@ -1,6 +1,7 @@
 # project related
 out/*
 !out/.gitkeep
+!out/gameDataVVanilla.json
 target/
 debug.txt
 nextdex_config.json

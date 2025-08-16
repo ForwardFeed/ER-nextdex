@@ -10,7 +10,8 @@
     "run": "node ./target/main.js",
     "sprites": "node ./target/main.js sprites",
     "webpack": "npx webpack --config webpack.config.js",
-    "comparify": "node ./target/comparify.js"
+    "comparify": "node ./target/comparify.js",
+    "restore-vanilla": "node ./target/restore_vanilla.js"
   },
   "keywords": [
     "pokemon"

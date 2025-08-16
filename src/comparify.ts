@@ -39,7 +39,7 @@ export interface ComparifyGameData {
     species: CmpSpecie[],
 }
 
-function getFileAsJson(filePath: string): CompactGameData | string{
+export function getFileAsJson(filePath: string): CompactGameData | string{
     if (!existsSync(filePath)) return(`Couldn't find ${filePath}`)
     try{ 
         const jsonData = JSON.parse(readFileSync(filePath, 'utf-8')) as CompactGameData
