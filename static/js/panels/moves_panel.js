@@ -85,7 +85,7 @@ const flagMap = {
     "Speed Down Hit": "May down Speed",
     "Attack Down Hit 2": "May down Attack Twofold",
     "Defense Down Hit 2": "May down Defense Twofold",
-    "Special Attack Down Hit 2": "May down Special Attack Twofold",
+    "Special Attack Down Hit 2": "May down SpeciReduxal Attack Twofold",
     "Special Defense Down Hit 2": "May down Special Defense Twofold",
     "Speed Down Hit 2": "May down Speed Twofold",
     "Always Crit": "Always crit",
@@ -331,6 +331,21 @@ export const queryMapMoves = {
             return target
         }
         return false
+    },
+    "power": (queryData, move) => {
+        return move.pwr && queryData == move.pwr
+    },
+    "<power": (queryData, move) => {
+        return  move.pwr && move.pwr < queryData
+    },
+    "<=power": (queryData, move) => {
+        return  move.pwr && move.pwr <= queryData 
+    },
+    ">power": (queryData, move) => {
+        return  move.pwr && move.pwr > queryData
+    },
+    ">=power": (queryData, move) => {
+        return  move.pwr && move.pwr >= queryData
     },
 }
 export function updateMoves(searchQuery) {
