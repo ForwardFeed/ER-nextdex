@@ -51,9 +51,23 @@ Quick tip, if you use git on your pokemon project you can get back to a previous
 By default the data is outputed to out/, you can change that with the variable OUTPUT in src/main.ts
 
 ### 2. The UI that uses this data
-It requires an HTTP server since it uses JS modules. If you code with VSC for example you may uselive-server add-on.
+It requires an HTTP server since it uses JS modules. If you code with VSC for example you may use live-server add-on.
 
 Aside this it is just a static html web app
+
+### 3. the comparify thing.
+
+to offer comparison between two game version, you must use the -c or --comparify argument.
+I have made myself an horrible bash shortcut for it: 
+```bash
+find ./static/js/data/ -name "gameDataV*.json" -print0 | xargs -0 sh -c 'npm run run -- -rd -c "\"[$@]\"" -ca out/gameDataVVanilla.json out/' _
+```
+It does not work by the way because bashhell, but if you copy paste the command being run by npm in terminal logs
+it works. The reason is probably demonic or something, I don't know I'm not a techno priest.
+
+For vanilla, you need the --ca or --comparify-additionnal AND a compactified vanilla data.
+But the file or the code that allowed me to do it is currently a lost media, so I built src/restore_vanilla.ts as a cope.
+
 
 ## Project Structure
 
