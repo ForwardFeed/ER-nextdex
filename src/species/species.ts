@@ -181,8 +181,14 @@ export function getSpecies(gameData: GameData) {
   gameData.species = []
   for (const species of speciesList.species) {
     if (species.id === SpeciesEnum.SPECIES_EGG || species.randomizerBanned === Species_RandomizeBanned.SPECIES_HIDDEN) continue
-
-    const baseSpeciesInfo = getBaseSpecies(species, speciesMap)
+    let baseSpeciesInfo
+    try{
+      baseSpeciesInfo = getBaseSpecies(species, speciesMap)
+    }catch(e){
+      console.warn(e)
+      continue
+    }
+    
 
     const learnsetSpecies = getLearnsetMon(species, speciesMap)
     const learnset = learnsetSpecies.learnsetOrRef.value as Species_Learnset || create(Species_LearnsetSchema)
