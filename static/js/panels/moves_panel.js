@@ -94,11 +94,29 @@ const NoFlagMap = {
     "Protect Affected": "Isn't affected by protect",
     "Mirror Move Affected": "Cannot be mirrored",
 }
+/* window.debugMoveFlags = ()=>{
+    const list =  {}
+    gameData.moves.forEach(x => {
+        for (const flagID of x.flags){
+            const flag = gameData.flagsT[flagID]
+            if (!flagMap[flag]){
+                if (!list[flag]){
+                    list[flag] = flag
+                }
+            }
+            
+        }
+    })
+    console.log(list)
+} */
 function listMoveFlags(flags, core, longClickCallback = ()=>{}) {
     const frag = document.createDocumentFragment()
     for (const flag of flags) {
-        const descFlag = flagMap[flag]
-        if (!descFlag) continue
+        let descFlag = flagMap[flag]
+        if (!descFlag) {
+            descFlag = flag
+            continue
+        }
         const node = e("div", getHintInteractibilityClass(), descFlag)
         longClickToFilter(2, node, "move-effect", () => {return flag}, longClickCallback)
         frag.append(node)
