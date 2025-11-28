@@ -119,6 +119,8 @@ const abilityAddingType = {
     "Turboblaze": "Fire",
     "Teravolt": "Electric",
     "Fairy Tale": "Fairy", //TODO ADD IT TO THE CALC TOO
+    "Aquatic Dweller": "Water",
+    "Metallic Jaw": "Steel",
 }
 
 export function abilitiesToAddedType(abis){
@@ -196,6 +198,16 @@ const abilityThatAddsImmunity = {
     "Mountaineer": ["Rock"],
     "Poison Absorb": ["Poison"],
     "Aerodynamics": ["Flying"],
+    "Well Baked Body": ["Fire"],
+    "Elemental Vortex": ["Fire", "Water"],
+    "Justified": ["Dark"],
+    "Ice Dew": ["Ice"],
+    "Earth Eater": ["Ground"],
+    "Hover": ["Ground"],
+    "Aerialist": ["Ground"],
+    "Imposing Wings": ["Ground"],
+    "Desolate Sun": ["Ground"],
+    "Reservoir": ["Water"],
 }
 
 const abilityThatAddsNormal = {
@@ -203,7 +215,6 @@ const abilityThatAddsNormal = {
 }
 
 const abilityThatAddsResist = {
-    "Well Baked Body": ["Fire"],
     "Water Bubble": ["Fire"],
     "Seaweed": ["Fire"],
     "Heatproof": ["Fire"],
@@ -213,11 +224,17 @@ const abilityThatAddsResist = {
     "Fossilized": ["Rock"],
     "Raw Wood": ["Grass"],
     "Water Compaction": ["Water"],
+    "Old Mariner": ["Fire"],
+    "Flame Bubble": ["Fire"],
+    "Deep Freeze": ["Fire"],
+    "Iron Giant": ["Fire"]
 }
 
 const abilityThatAddsWeakness = {
     "Fluffy": ["Fire"],
+    "Puffy": ["Fire"],
     "Liquified": ["Water"],
+    "Dry Skin": ["Fire"]
 }
 // misses things like Magma Armor or others that reduce by 35% like Filter
 // or Ice Scales or Fluffy for Physical or other damage
