@@ -3,6 +3,7 @@ import { gameData } from "./data_version.js"
 const IMMUNE = 0
 const RESIST = 1
 const WEAK = 2
+const WEAK4X = 3
 
 const typeChart = {
     "Normal": [["Ghost"],
@@ -118,7 +119,9 @@ const abilityAddingType = {
     "Aquatic": "Water",
     "Turboblaze": "Fire",
     "Teravolt": "Electric",
-    "Fairy Tale": "Fairy", //TODO ADD IT TO THE CALC TOO
+    "Fairy Tale": "Fairy",
+    "Aquatic Dweller": "Water",
+    "Metallic Jaw": "Steel", //TODO ADD IT TO THE CALC TOO
 }
 
 export function abilitiesToAddedType(abis){
@@ -144,24 +147,28 @@ export function getDefensiveCoverage(specie, abiID){
     const isPrimalArmor = abiNames.indexOf('Wonder Guard') != -1
     const modifiers = abilityModifiesTypeChart(abiNames, specie)
     const defensiveCoverage = []
-    for (const AtkT of gameData.typeT){
+    for (const atkT of gameData.typeT){
         let typeEffectiveness = 1
-        if (modifiers[0].indexOf(AtkT) != -1) {
+        if (modifiers[0].indexOf(atkT) != -1) {
             typeEffectiveness = 0
             defensiveCoverage.push(typeEffectiveness)
             continue
         }
-        if (modifiers[1].indexOf(AtkT) != -1) {
+        if (modifiers[1].indexOf(atkT) != -1) {
             typeEffectiveness = 1 
         }
-        if (modifiers[2].indexOf(AtkT) != -1) {
+        if (modifiers[2].indexOf(atkT) != -1) {
             typeEffectiveness = 0.5
         }
-        if (modifiers[3].indexOf(AtkT) != -1) {
+        if (modifiers[3].indexOf(atkT) != -1) {
             typeEffectiveness = isPrimalArmor ? 1 : 2
         }
+        if (modifiers[4].indexOf(atkT) != -1){
+            // I have no clue how primal armor handles that, so I'll ignore it for now
+            typeEffectiveness = 4
+        }
         for (const defT of defTypes){
-            typeEffectiveness *= getTypeEffectiveness(AtkT, defT)
+            typeEffectiveness *= getTypeEffectiveness(atkT, defT)
         }
         if (isWonderGuard && typeEffectiveness <= 1) typeEffectiveness = 0 
         defensiveCoverage.push(typeEffectiveness)
@@ -196,6 +203,18 @@ const abilityThatAddsImmunity = {
     "Mountaineer": ["Rock"],
     "Poison Absorb": ["Poison"],
     "Aerodynamics": ["Flying"],
+    "Well Baked Body": ["Fire"],
+    "Elemental Vortex": ["Fire", "Water"],
+    "Justified": ["Dark"],
+    "Ice Dew": ["Ice"],
+    "Earth Eater": ["Ground"],
+    "Hover": ["Ground"],
+    "Aerialist": ["Ground"],
+    "Imposing Wings": ["Ground"],
+    "Desolate Sun": ["Ground", "Water"],
+    "Reservoir": ["Water"],
+    "Desolate Land": ["Water"],
+    "Primordial Sea": ["Fire"],
 }
 
 const abilityThatAddsNormal = {
@@ -203,7 +222,6 @@ const abilityThatAddsNormal = {
 }
 
 const abilityThatAddsResist = {
-    "Well Baked Body": ["Fire"],
     "Water Bubble": ["Fire"],
     "Seaweed": ["Fire"],
     "Heatproof": ["Fire"],
@@ -213,21 +231,34 @@ const abilityThatAddsResist = {
     "Fossilized": ["Rock"],
     "Raw Wood": ["Grass"],
     "Water Compaction": ["Water"],
+    "Old Mariner": ["Fire"],
+    "Flame Bubble": ["Fire"],
+    "Deep Freeze": ["Fire"],
+    "Iron Giant": ["Fire"]
 }
 
 const abilityThatAddsWeakness = {
     "Fluffy": ["Fire"],
+    "Puffy": ["Fire"],
     "Liquified": ["Water"],
+    "Dry Skin": ["Fire"],
+    
 }
+
+const abilityThatAdds4TimesWeakness = {
+    "Fluffiest": ["Fire"],
+}
+
 // misses things like Magma Armor or others that reduce by 35% like Filter
 // or Ice Scales or Fluffy for Physical or other damage
 
 function abilityModifiesTypeChart(abis){
     const modifiers = [
-        [],
-        [],
-        [],
-        [],
+        [], // immunity
+        [], // normal
+        [], // resist
+        [], // weak
+        [] // weak 4X
     ]
     for (const abi of abis){
         const addedImunity = abilityThatAddsImmunity[abi]
@@ -238,6 +269,8 @@ function abilityModifiesTypeChart(abis){
         if (addedResist) modifiers[2].push(...addedResist)
         const addedWeak = abilityThatAddsWeakness[abi]
         if (addedWeak) modifiers[3].push(...addedWeak)
+        const added4XWeak = abilityThatAdds4TimesWeakness[abi]
+        if (added4XWeak) modifiers[4].push(...added4XWeak)
     }
     return modifiers
 }

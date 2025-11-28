@@ -255,12 +255,14 @@ function updateTeamWeaknesses(){
         if (!val.spc) return
         const specie = gameData.species[val.spc]
         const monDef = getDefensiveCoverage(specie, val.abi)
-
+        
         Object.keys(monDef).forEach((val) => {
             const types = monDef[val]
             for (const type of types) {
-                if (val === '4') val = '2'
-                if (val === '0.125') val = '0.25'
+                // This I think was a fix of a previous bug ruhroh
+                //if (val === '4') val = '2'
+                if (val > 4) val = 4
+                if (val < 0.25) val = 0.25
                 defCoverage[type][val] += 1
                 let indexEff = effectivenessToShow.indexOf(val)
                 if (indexEff == -1) continue
