@@ -118,9 +118,9 @@ const abilityAddingType = {
     "Aquatic": "Water",
     "Turboblaze": "Fire",
     "Teravolt": "Electric",
-    "Fairy Tale": "Fairy", //TODO ADD IT TO THE CALC TOO
+    "Fairy Tale": "Fairy",
     "Aquatic Dweller": "Water",
-    "Metallic Jaw": "Steel",
+    "Metallic Jaw": "Steel", //TODO ADD IT TO THE CALC TOO
 }
 
 export function abilitiesToAddedType(abis){
@@ -206,8 +206,10 @@ const abilityThatAddsImmunity = {
     "Hover": ["Ground"],
     "Aerialist": ["Ground"],
     "Imposing Wings": ["Ground"],
-    "Desolate Sun": ["Ground"],
+    "Desolate Sun": ["Ground", "Water"],
     "Reservoir": ["Water"],
+    "Desolate Land": ["Water"],
+    "Primordial Sea": ["Fire"],
 }
 
 const abilityThatAddsNormal = {
