@@ -236,7 +236,8 @@ const abilityThatAddsWeakness = {
     "Fluffy": ["Fire"],
     "Puffy": ["Fire"],
     "Liquified": ["Water"],
-    "Dry Skin": ["Fire"]
+    "Dry Skin": ["Fire"],
+    "Fluffiest": ["Fire"], // TODO: Handle 4x weakness
 }
 // misses things like Magma Armor or others that reduce by 35% like Filter
 // or Ice Scales or Fluffy for Physical or other damage
