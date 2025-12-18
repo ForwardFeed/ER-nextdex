@@ -112,7 +112,7 @@ export function getSprites(ROOT_PRJ: string, output_dir: string, output_dir_pale
         copyFile(join(ROOT_PRJ, gfx.front), outFilePath)
 
         const outPalPath = join(output_dir_palette, outFileRoot + ".pal")
-        const outShinyPalPath = join(output_dir_palette, outFileRoot + "_shiny.pal")
+        const outShinyPalPath = join(output_dir_palette, "shiny_" + outFileRoot + ".pal")
         copyFile(join(ROOT_PRJ, gfx.pal), outPalPath)
         copyFile(join(ROOT_PRJ, gfx.shiny), outShinyPalPath)
     }

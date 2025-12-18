@@ -76,8 +76,8 @@ def getShiny(paletteFolder, ImageFolder, imageName):
     return
 
 # todo fix this one
-#getShiny("./out/palettes/", "./out/sprites/", "PANGORO")
-files = listdir("./out/sprites/")
+#getShiny("./static/js/data/palettes/", "./static/js/data/sprites/", "PANGORO")
+files = listdir("./static/js/data/sprites/")
 shinyRegex = re.compile('SHINY_')
 for name in files:
     # do not shiny the shynies
@@ -85,12 +85,12 @@ for name in files:
         continue
     name = name.replace('.png', '')
     try:
-        getShiny("./out/palettes/", "./out/sprites/", name)
-        getNormal("./out/palettes/", "./out/sprites/", name)
+        getShiny("./static/js/data/palettes/", "./static/js/data/sprites/", name)
+        getNormal("./static/js/data/palettes/", "./static/js/data/sprites/", name)
     except Exception as e: 
         print("Couldn't get shiny of " + name + ", reason: " + str(e))
         pass
 
-files = listdir("./out/sprites/")
+files = listdir("./static/js/data/sprites/")
 for name in files:
-    addTransparentBackground("./out/sprites/" + name, "./static/sprites/" + name)
+    addTransparentBackground("./static/js/data/sprites/" + name, "./static/sprites/" + name)
