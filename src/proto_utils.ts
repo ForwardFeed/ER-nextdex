@@ -1,16 +1,13 @@
-import { platform } from "os"
 import { create, fromBinary, Message } from '@bufbuild/protobuf';
 import { GenMessage } from '@bufbuild/protobuf/codegenv1';
 import { execSync } from "child_process";
-import { MoveList } from "./gen/MoveList_pb.js";
-import { MoveListSchema } from "./gen/MoveList_pb.js";
-import { AbilityList } from "./gen/AbilityList_pb.js";
-import { AbilityListSchema } from "./gen/AbilityList_pb.js";
-import { SpeciesList } from "./gen/SpeciesList_pb.js";
-import { SpeciesListSchema } from "./gen/SpeciesList_pb.js";
-import { ItemListSchema } from "./gen/ItemList_pb.js";
-import { ItemList } from "./gen/ItemList_pb.js";
 import { readdirSync } from "fs";
+import { platform } from "os";
+import { AbilityList, AbilityListSchema } from "./gen/AbilityList_pb.js";
+import { ItemList, ItemListSchema } from "./gen/ItemList_pb.js";
+import { MoveList, MoveListSchema } from "./gen/MoveList_pb.js";
+import { SpeciesList, SpeciesListSchema } from "./gen/SpeciesList_pb.js";
+import { TrainerList, TrainerListSchema } from "./gen/TrainerList_pb.js";
 
 function protocLocation() {
     switch (platform()) {
@@ -42,17 +39,14 @@ export function readTextproto<T extends Message>(schema: GenMessage<T>, textprot
 }
 
 export function readMoves(): MoveList {
-    //@ts-expect-error
     return readTextproto(MoveListSchema)
 }
 
 export function readAbilities(): AbilityList {
-    //@ts-expect-error
     return readTextproto(AbilityListSchema)
 }
 
 export function readSpecies(): SpeciesList {
-    //@ts-expect-error
     return readTextproto(SpeciesListSchema)
 }
 
@@ -60,8 +54,11 @@ export function readItems(): ItemList {
   const items = create(ItemListSchema)
   for (const file of readdirSync(`./er-config/items/`)) {
     if (!file.endsWith(".textproto")) continue
-    //@ts-expect-error
     items.item.push(...readTextproto(ItemListSchema, `items/${file}`).item)
   }
   return items
+}
+
+export function readTrainers(): TrainerList {
+  return readTextproto(TrainerListSchema);
 }

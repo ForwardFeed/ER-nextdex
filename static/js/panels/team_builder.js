@@ -1,14 +1,14 @@
-import { gameData } from "../data_version.js";
-import { e, JSHAC } from "../utils.js";
-import { createPokemon, getTextNature } from "./trainers_panel.js";
-import { getSpritesURL, getSpritesShinyURL } from "./species/species_panel.js";
-import { createInformationWindow } from "../window.js";
-import { cubicRadial } from "../radial.js";
-import { saveToLocalstorage, fetchFromLocalstorage, getHintInteractibilityClass } from "../settings.js";
+import { gameData } from "../data_version.js"
+import { e, JSHAC } from "../utils.js"
+import { createPokemon, getTextNature } from "./trainers_panel.js"
+import { getSpritesURL, getSpritesShinyURL } from "./species/species_panel.js"
+import { createInformationWindow } from "../window.js"
+import { cubicRadial } from "../radial.js"
+import { saveToLocalstorage, fetchFromLocalstorage, getHintInteractibilityClass } from "../settings.js"
 import { getDefensiveCoverage, getMoveEffectiveness } from "../weakness.js"
-import { longClickToFilter } from "../filters.js";
-import { itemList } from "../hydrate/hydrate.js";
-import { movePicker, listPicker} from "../pickers.js";
+import { longClickToFilter } from "../filters.js"
+import { itemList } from "../hydrate/hydrate.js"
+import { movePicker, listPicker } from "../pickers.js"
 
 const saveKeysPokemon = [
     "spc",
@@ -19,6 +19,7 @@ const saveKeysPokemon = [
     "ivs",
     "evs",
     "nature",
+    "hpType",
 ]
 
 class Pokemon {
@@ -41,6 +42,7 @@ class Pokemon {
         this.nature = null
         this.ivs = Array(6)
         this.evs = Array(6)
+        this.hpType = 0
     }
     getSpritesURL() {
         if (this.isShiny) {
@@ -61,6 +63,14 @@ class Pokemon {
         this.inns = this.baseSpc.stats.inns
         this.innsNames = this.inns.map(x => gameData.abilities[x].name)
         this.allMoves = gameData.species[pokeID].allMoves
+        for (const move of this.allMoves) {
+            if (gameData.moves[move].usesHpType) {
+                for (const hpVariant of gameData.moves.map((it, idx) => [it, idx]).filter(it => it[0].id === move)) {
+                    if (hpVariant[0].usesHpType) continue
+                    this.allMoves.push(hpVariant[1])
+                }
+            }
+        }
         this.allMovesName = gameData.species[pokeID].allMoves.map(x => gameData.moves[x].name)
         const first4Moves = [...Array(4).keys()].map(x => this.allMoves[x] || 0)
         this.moves = first4Moves,
@@ -74,6 +84,15 @@ class Pokemon {
         saveKeysPokemon.forEach((val) => {
             this[val] = saveObj[val]
         })
+
+        if (this.hpType) {
+            for (const idx in this.moves) {
+                const move = gameData.moves[this.moves[idx]]
+                if (move.usesHpType) {
+                    this.moves[idx] = gameData.moves.findIndex(it => it.NAME === `${move.NAME}|${this.hpType}`)
+                }
+            }
+        }
     }
     save() {
         const saveObj = {}
@@ -82,7 +101,7 @@ class Pokemon {
         })
         return saveObj
     }
-    toData(){
+    toData() {
         const dataKeysPokemon = [
             "spc",
             "abi",
@@ -91,6 +110,7 @@ class Pokemon {
             "item",
             "nature",
             "moves",
+            "hpType",
         ]
         const obj = {}
         dataKeysPokemon.forEach((val) => {
@@ -127,12 +147,12 @@ export function restoreSave() {
     const savedString = fetchFromLocalstorage("team-builder")
     if (!savedString) return
     const saveObj = JSON.parse(savedString)
-    try{
+    try {
         setFullTeam(saveObj)
-    }catch(_e){
+    } catch (_e) {
         saveToLocalstorage("team-builder", null)
     }
-    
+
 }
 
 export function setFullTeam(party) {
@@ -151,9 +171,9 @@ export function setFullTeam(party) {
     updateOffensiveTypes()
 }
 
-function swapAndRefresh(a, b){
+function swapAndRefresh(a, b) {
     const data = []
-    for (let i = 0; i < 6; i++){
+    for (let i = 0; i < 6; i++) {
         const poke = teamData[i]
         if (!poke.spcName) continue
         data.push(poke.toData())
@@ -193,7 +213,7 @@ export function setupTeamBuilder() {
             addPlaceholder($(this), index)
         }
         $(this)[0].ondragover = function (ev) {
-            ev.preventDefault();
+            ev.preventDefault()
         }
         $(this)[0].ondrop = (ev) => {
             ev.preventDefault()
@@ -206,11 +226,11 @@ export function setupTeamBuilder() {
             }
             if (ev.target.className === "builder-placeholder") return
             const viewID = ev.dataTransfer.getData("v-id")
-            if (viewID !== ""){
+            if (viewID !== "") {
                 swapAndRefresh(index, +viewID)
             }
         }
-        $(this)[0].setAttribute('draggable', true);
+        $(this)[0].setAttribute('draggable', true)
         $(this)[0].ondragstart = (ev) => {
             ev.dataTransfer.setData("v-id", index)
         }
@@ -228,14 +248,14 @@ export function setupTeamBuilder() {
         ev.stopPropagation()
         document.body.append(window)
     })
-    $('#defensive-cov, #offensive-cov').on('click', function(){
+    $('#defensive-cov, #offensive-cov').on('click', function () {
         $('#defensive-cov, #offensive-cov').toggleClass('sel-active sel-n-active')
         $('#builder-off-cov, #builder-def-cov').toggle()
     })
 }
 
 let updateTeamWeaknessesLock = false
-function updateTeamWeaknesses(){
+function updateTeamWeaknesses() {
     if (updateTeamWeaknessesLock) return
     const defCoverage = {}
     const defValues = {}
@@ -255,7 +275,7 @@ function updateTeamWeaknesses(){
         if (!val.spc) return
         const specie = gameData.species[val.spc]
         const monDef = getDefensiveCoverage(specie, val.abi)
-        
+
         Object.keys(monDef).forEach((val) => {
             const types = monDef[val]
             for (const type of types) {
@@ -266,24 +286,24 @@ function updateTeamWeaknesses(){
                 defCoverage[type][val] += 1
                 let indexEff = effectivenessToShow.indexOf(val)
                 if (indexEff == -1) continue
-                if (indexEff == 0){
+                if (indexEff == 0) {
                     defValues[type] += 2
-                } else if (indexEff <= 2){
-                    defValues[type] += 2 * ( 1 / indexEff)
-                } else if (indexEff > 2){
+                } else if (indexEff <= 2) {
+                    defValues[type] += 2 * (1 / indexEff)
+                } else if (indexEff > 2) {
                     defValues[type] -= indexEff - 2
                 }
-                
+
             }
         })
     })
-    const colorNbIndex = ["_","4","4","3","1","0"]
-    function weaknessCol(data, hideRow=false) {
+    const colorNbIndex = ["_", "4", "4", "3", "1", "0"]
+    function weaknessCol(data, hideRow = false) {
         const type = data[0]
         const typeStrength = Math.max(-2, Math.min(defValues[type], 2)) + 2
         const colRow = e('div', `builder-type-col builder-type-strength-${typeStrength}`)
-        const colData = data.map((data, indexData)=>{
-            if (!indexData){
+        const colData = data.map((data, indexData) => {
+            if (!indexData) {
                 const typeNode = e('div', `builder-type ${type.toLowerCase()} ${getHintInteractibilityClass()}`, type.substring(0, 6), {
                     onclick: (ev) => {
                         ev?.stopPropagation()
@@ -291,15 +311,15 @@ function updateTeamWeaknesses(){
                     }
                 })
                 longClickToFilter(0, typeNode, 'resist')
-                return typeNode   
+                return typeNode
             }
-            if (hideRow){
+            if (hideRow) {
 
                 let toggle = true
                 return e('div', `builder-nb-weakness builder-type-strength-${colorNbIndex[indexData]}`, data, {
-                    onclick: ()=>{
+                    onclick: () => {
                         toggle = !toggle
-                        $('#builder-def-cov').find('.bnw-' + indexData).css('filter', `opacity(${toggle?100:0})`)
+                        $('#builder-def-cov').find('.bnw-' + indexData).css('filter', `opacity(${toggle ? 100 : 0})`)
                     }
                 })
             } else {
@@ -342,15 +362,15 @@ function createPokeView(jNode, viewID) {
     let isSwiping = false
     const screenSwapLength = document.body.offsetWidth / 2
     jNode[0].ontouchstart = (ev) => {
-        isSwiping = true;
-        startX = ev.touches[0].clientX;
+        isSwiping = true
+        startX = ev.touches[0].clientX
     }
     jNode[0].ontouchend = (ev) => {
         if (isSwiping) {
-            const endX = ev.changedTouches[0].clientX;
-            const deltaX = endX - startX;
+            const endX = ev.changedTouches[0].clientX
+            const deltaX = endX - startX
             if (deltaX > screenSwapLength) deletePokemon(jNode, viewID)
-            isSwiping = false;
+            isSwiping = false
         }
     }
     feedPokemonEdition(jNode, viewID)
@@ -428,6 +448,10 @@ function feedPokemonEdition(jNode, viewID) {
                             console.log(view.moves.eq(index), view.moves[index])
                             const moveType = gameData.typeT[gameData.moves[poke.moves[index]].types[0]].toLowerCase()
                             view.moves[index].className = `trainers-poke-move ${moveType}-t`
+                            const compactMove = gameData.moves[poke.moves[index]]
+                            if (compactMove.usesHpType || compactMove.NAME.split("|")[1]) {
+                                poke.hpType = +(compactMove.NAME.split("|")[1] || 0)
+                            }
                             save()
                             updateOffensiveTypes()
                         }
@@ -526,8 +550,8 @@ export function overlayEditorAbilities(pokebase, callbackOnclick) {
     ])
 }
 
-export function enterToClose(ev){
-    if (ev.key === "Enter"){
+export function enterToClose(ev) {
+    if (ev.key === "Enter") {
         $('body').trigger('click')
     }
 }
@@ -577,29 +601,29 @@ const statFieldInputControl = {
     "ivs": (value, evKey) => {
         if (value.includes('+') || evKey === "ArrowRight" || evKey === "ArrowUp") {
             value = 31
-        } else if (value.includes('-') || evKey === "ArrowLeft"  || evKey === "ArrowDown"){
+        } else if (value.includes('-') || evKey === "ArrowLeft" || evKey === "ArrowDown") {
             value = 0
         } else {
             value = +value.replace(/[^0-9-]/g, "")
         }
-        
+
         if (isNaN(value)) return 0
         return Math.min(Math.max(0, value), 31)
     },
     "evs": (value, evKey, prevValue, evs) => {
         if (value.includes('+') || evKey === "ArrowRight") {
             value = prevValue + 32
-        } else if (value.includes('-') || evKey === "ArrowLeft"){
+        } else if (value.includes('-') || evKey === "ArrowLeft") {
             value = prevValue - 32
-        } else if (evKey === "ArrowUp"){
+        } else if (evKey === "ArrowUp") {
             value = 252
-        } else if (evKey === "ArrowDown"){
+        } else if (evKey === "ArrowDown") {
             value = 0
         } else {
-            value = +value.replace(/[^0-9]/g, "");
+            value = +value.replace(/[^0-9]/g, "")
             if (isNaN(value)) return 0
         }
-        evs.forEach((x, i, evs)=>{
+        evs.forEach((x, i, evs) => {
             if (i == 6) return
             if (!i) evs[6] = 0
             evs[6] += +x
@@ -607,11 +631,11 @@ const statFieldInputControl = {
         //value = Math.min(Math.max(0, Math.round(value / 4) * 4), 252)
         value = Math.min(Math.max(0, value), 252)
         const valDiff = value - prevValue
-        if (evs[6] + valDiff > 510){
+        if (evs[6] + valDiff > 510) {
             const maxRow = (evs[6] + valDiff) - 510
             value -= Math.min(Math.max(0, Math.ceil(maxRow / 4) * 4), 252)
         }
-        return  value
+        return value
     }
 }
 export function editionStats(statField, poke, callback) {
@@ -621,12 +645,12 @@ export function editionStats(statField, poke, callback) {
         const statColumn = e("div", "overlay-stats-column")
         const statLabel = e("label", "overlay-stats-label", value)
         statLabel.setAttribute('for', `overlay-stats-edit${index}`)
-        
-        const statStat = e(`input#overlay-stats-edit${index}`, "overlay-stats-edit", poke[statField][index],{
+
+        const statStat = e(`input#overlay-stats-edit${index}`, "overlay-stats-edit", poke[statField][index], {
             onkeyup: (evKey) => {
-                statStat.value = prevValue = 
-                        statFieldInputControl[statField](statStat.value, evKey.key, +prevValue, poke[statField])
-    
+                statStat.value = prevValue =
+                    statFieldInputControl[statField](statStat.value, evKey.key, +prevValue, poke[statField])
+
                 callback(statField, index, statStat.value)
             },
         })
@@ -640,16 +664,16 @@ export function editionStats(statField, poke, callback) {
         ]))
         //these only work if you use the event listener, don't ask me why
         let plusUp = e('div', 'overlay-stats-plusminus btn', [e('span', null, '+')], {
-            onclick: (evClick)=>{
-                statStat.value = prevValue = 
-                        statFieldInputControl[statField](statStat.value + '+', 'Plus', +prevValue, poke[statField])
+            onclick: (evClick) => {
+                statStat.value = prevValue =
+                    statFieldInputControl[statField](statStat.value + '+', 'Plus', +prevValue, poke[statField])
                 callback(statField, index, statStat.value)
             }
         })
-        let minusDown = e('div', 'overlay-stats-plusminus btn', [e('span', null, '-')],{
-            onclick: (evClick)=>{
-                statStat.value = prevValue = 
-                        statFieldInputControl[statField](statStat.value + '-', 'Minus', +prevValue, poke[statField])
+        let minusDown = e('div', 'overlay-stats-plusminus btn', [e('span', null, '-')], {
+            onclick: (evClick) => {
+                statStat.value = prevValue =
+                    statFieldInputControl[statField](statStat.value + '-', 'Minus', +prevValue, poke[statField])
                 callback(statField, index, statStat.value)
             }
         })
@@ -667,29 +691,29 @@ export function editionStats(statField, poke, callback) {
     ])
 }
 
-function updateOffensiveTypes(){
+function updateOffensiveTypes() {
     $('.off-effective').removeClass('off-effective')
     teamData.forEach((poke, pokeIndex) => {
         if (!poke) return
-        poke.moves.forEach((move, moveIndex) =>{
+        poke.moves.forEach((move, moveIndex) => {
             const typesOff = gameData.moves[move].types.map(x => gameData.typeT[x])
             const typeEff = getMoveEffectiveness(activeOffensiveTypes, typesOff)
-            if (typeEff > 1){
+            if (typeEff > 1) {
                 teamView[pokeIndex].moves[moveIndex].classList.add('off-effective')
             }
         })
     })
-    
+
 }
 const activeOffensiveTypes = []
-export function setupOffensiveTeam(){
+export function setupOffensiveTeam() {
     $('#builder-off-types').append(
         gameData.typeT.map((x) => JSHAC([
-            e('div', 'off-type'),[
+            e('div', 'off-type'), [
                 e('div', `builder-off-type builder-off-type-n-active ${x.toLowerCase()}`, x.substring(0, 6), {
-                    onclick: (ev)=>{
+                    onclick: (ev) => {
                         ev.target.classList.toggle('builder-off-type-n-active')
-                        const indexT = activeOffensiveTypes.indexOf(x) 
+                        const indexT = activeOffensiveTypes.indexOf(x)
                         if (indexT == -1) {
                             activeOffensiveTypes.push(x)
                         } else {

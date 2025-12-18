@@ -5,8 +5,12 @@ import { AisInB, e, JSHAC } from "../utils.js"
 import { setFullTeam } from "./team_builder.js"
 import { getGEN3HP } from "../load_save.js"
 
+const PARTY_NORMAL = 0
+const PARTY_ELITE = 1
+const PARTY_HELL = 2
+
 const trainerParam = {
-    elite: false
+    state: PARTY_NORMAL
 }
 
 let currentTrainerID = 0
@@ -20,6 +24,7 @@ export function feedPanelTrainers(trainerID) {
     setBaseTrainer(trainer)
     setRematchesBar(trainer.rem)
     setInsane(trainer)
+    setHell(trainer)
     setPartyPanel(trainer.party)
 
 }
@@ -42,7 +47,7 @@ function setBaseTrainer(trainer) {
     nodeNormal.innerText = "Normal"
     nodeNormal.className = "trainer-match-btn sel-active"
     nodeNormal.onclick = () => {
-        trainerParam.elite = false
+        trainerParam.state = PARTY_NORMAL
         setPartyPanel(party)
         $('#trainers-infobar').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
         nodeNormal.className = "trainer-match-btn sel-active"
@@ -61,15 +66,37 @@ function setInsane(trainer) {
     nodeElite.innerText = "Elite"
     nodeElite.className = "trainer-match-btn sel-n-active"
     nodeElite.onclick = () => {
-        trainerParam.elite = true
+        trainerParam.state = PARTY_ELITE
         setPartyPanel(insaneTeam)
         $('#trainers-infobar').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
         nodeElite.className = "trainer-match-btn sel-active"
     }
     $('#trainers-elite').empty().append(nodeElite)
     setDouble(trainer.db)
-    if (trainerParam.elite) {
+    if (trainerParam.state === PARTY_ELITE) {
         nodeElite.onclick()
+    }
+}
+
+function setHell(trainer) {
+    const hellTeam = trainer.hell
+    if (!hellTeam || hellTeam.length < 1) {
+        $('#trainers-hell').empty()
+        return
+    }
+    const nodeHell = e('div')
+    nodeHell.innerText = "Hell"
+    nodeHell.className = "trainer-match-btn sel-n-active"
+    nodeHell.onclick = () => {
+        trainerParam.state = PARTY_HELL
+        setPartyPanel(hellTeam)
+        $('#trainers-infobar').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
+        nodeHell.className = "trainer-match-btn sel-active"
+    }
+    $('#trainers-hell').empty().append(nodeHell)
+    setDouble(trainer.db)
+    if (trainerParam.state === PARTY_HELL) {
+        nodeHell.onclick()
     }
 }
 
@@ -124,8 +151,12 @@ export const statsOrder = [
 export function createPokemon(poke) {
     const specie = gameData.species[poke.spc]
     const ability = gameData.abilities[specie.stats.abis[poke.abi]]
-    const moves = poke.moves.map((x) => {
-        return gameData.moves[x]
+    const moves = [0, 1, 2, 3].map((x) => {
+        const move = gameData.moves[poke.moves[x] || 0]
+        if (move.usesHpType && poke.hpType) {
+            return gameData.moves.find(it => it.NAME === `${move.NAME}|${poke.hpType}`)
+        }
+        return move
     })
     const item = gameData.items[poke.item]?.name
     const nature = gameData.natureT[poke.nature]
@@ -147,7 +178,7 @@ export function createPokemon(poke) {
         if (!move) continue
         let type1 = gameData.typeT[move.types[0]].toLowerCase()
         let moveName = move.name
-        if (move.name === "Hidden Power"){
+        if (move.name === "Hidden Power") {
             const ivsFormatted = {
                 hpIV: poke.ivs[0],
                 attackIV: poke.ivs[1],
@@ -170,7 +201,7 @@ export function createPokemon(poke) {
     const pokeItem = e('div', "trainers-poke-item", item)
     const textNature = getTextNature(nature)
     const pokeNature = e('div', "trainers-poke-nature", textNature)
-    
+
     const pokeStats = e('div', "trainers-stats-row")
     const nerfedBuffed = textNature.match(/((Def)|(SpA)|(Atk)|(SpD)|(Spe))/g)
     const statBuffed = nerfedBuffed?.[0]
@@ -263,17 +294,17 @@ const prefixTree = {
     treeId: "trainer"
 }
 
-export function buildTrainerPrefixTrees(){
+export function buildTrainerPrefixTrees() {
     prefixTree.name = {}
-    gameData.trainers.forEach((x, i, arr)=>{
+    gameData.trainers.forEach((x, i, arr) => {
         //by the way i'm building the word array so i can match more widely *l*eader *w*inonna
         x.splicedName = x.fullName.split(' ').map(x => x.toLowerCase())
-        for (const splice of x.splicedName){
+        for (const splice of x.splicedName) {
             const prefix = splice.charAt(0)
             if (!prefixTree.name[prefix]) prefixTree.name[prefix] = []
-            prefixTree.name[prefix].push({data: i, suggestions: x.name})
+            prefixTree.name[prefix].push({ data: i, suggestions: x.name })
         }
-        
+
     })
 }
 
@@ -283,15 +314,15 @@ export const queryMapTrainers = {
         if (trainer.fullName.toLowerCase() === queryData) return [true, trainer.fullName, true]
         queryData = queryData.split(' ')
         if (!queryData.length) return false
-        for (const subQueryData of queryData){
+        for (const subQueryData of queryData) {
             let hasSlicedMatched = false
-            for (const splice of trainer.splicedName){
+            for (const splice of trainer.splicedName) {
                 hasSlicedMatched = AisInB(subQueryData, splice) || hasSlicedMatched
             }
             if (!hasSlicedMatched) return false
         }
         return trainer.fullName
-        
+
     },
     "map": (queryData, trainer) => {
         const map = gameData.mapsT[trainer.map]?.toLowerCase()
@@ -303,7 +334,8 @@ export const queryMapTrainers = {
             [], [
             trainer.party,
             [].concat.apply([], trainer.rem.map(x => x.party)),
-            trainer.insane
+            trainer.insane,
+            trainer.hell,
         ]
         )
         for (const mon of trainerMons) {
@@ -317,7 +349,7 @@ export const queryMapTrainers = {
 export function updateTrainers(searchQuery) {
     const trainers = gameData.trainers
     const nodeList = $('#trainers-list > .btn')
-    let validID;
+    let validID
     const matched = queryFilter3(searchQuery, trainers, queryMapTrainers, prefixTree)
     const trainersLen = trainers.length
     for (let i = 0; i < trainersLen; i++) {
