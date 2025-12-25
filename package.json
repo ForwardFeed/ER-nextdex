@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "protoc": "npx buf generate",
-    "run": "node ./target/main.js",
+    "run": "npm run protoc; npm run build; node ./target/main.js",
     "sprites": "node ./target/main.js sprites",
     "webpack": "npx webpack --config webpack.config.js",
     "comparify": "node ./target/comparify.js",
