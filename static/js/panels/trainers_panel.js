@@ -335,7 +335,7 @@ export const queryMapTrainers = {
             trainer.party,
             [].concat.apply([], trainer.rem.map(x => x.party)),
             trainer.insane,
-            trainer.hell,
+            trainer.hell || [],
         ]
         )
         for (const mon of trainerMons) {
