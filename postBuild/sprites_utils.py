@@ -8,14 +8,14 @@ def addTransparentBackground(fullpath, newPath):
         print('couldn\'t find ' + fullpath)
         return
     img = Image.open(fullpath)
+    palette = img.getpalette()
+    trns = (palette[0], palette[1], palette[2], 255)
     #sometimes you need to do that because the front is mixed with front anim
     img = img.crop((0, 0, 64, 64)) 
     # add a transparency layer
     img = img.convert("RGBA")
     datas = img.getdata()
     newData = []
-    # the first pixel is considered the transparency color
-    trns = datas[0]
     for item in datas:
         if item == trns:
             # replace by a transparent pixel
@@ -56,22 +56,22 @@ def applyPalette(inputImagePath, inputPaletteFile, outputImagePath):
     img.save(outputImagePath, format="png")
 
 # the .png isn't accurate, sometimes the palette differs
-def getNormal(paletteFolder, ImageFolder, imageName):
+def getNormal(paletteFolder, ImageFolder, imageName, suffix):
     normalPalPath = paletteFolder + imageName + ".pal"
-    inputImagePath = ImageFolder + imageName + ".png"
+    inputImagePath = ImageFolder + imageName + suffix +".png"
     if not path.exists(inputImagePath) or not path.exists(normalPalPath):
         print('One file doesn\'t exist:', inputImagePath, normalPalPath)
         return
-    outputImagePath = ImageFolder + imageName + ".png"
+    outputImagePath = ImageFolder + imageName + suffix +".png"
     applyPalette(inputImagePath, normalPalPath, outputImagePath)
 
-def getShiny(paletteFolder, ImageFolder, imageName):
+def getShiny(paletteFolder, ImageFolder, imageName, suffix):
     shinyPalPath  =  paletteFolder + "shiny_" + imageName + ".pal"
-    inputImagePath = ImageFolder + imageName + ".png"
+    inputImagePath = ImageFolder + imageName + suffix + ".png"
     if not path.exists(inputImagePath) or not path.exists(shinyPalPath):
         print('One file doesn\'t exist:', inputImagePath, shinyPalPath)
         return
-    outputImagePath = ImageFolder + "SHINY_" + imageName + ".png"
+    outputImagePath = ImageFolder + imageName + suffix + "_SHINY.png"
     applyPalette(inputImagePath, shinyPalPath, outputImagePath)
     return
 
@@ -83,10 +83,13 @@ for name in files:
     # do not shiny the shynies
     if shinyRegex.match(name):
         continue
+    
+    suffix = '_BACK' if '_BACK.png' in name else ''
+    name = name.replace('_BACK.png', '')
     name = name.replace('.png', '')
     try:
-        getShiny("./out/palettes/", "./out/sprites/", name)
-        getNormal("./out/palettes/", "./out/sprites/", name)
+        getShiny("./out/palettes/", "./out/sprites/", name, suffix)
+        getNormal("./out/palettes/", "./out/sprites/", name, suffix)
     except Exception as e: 
         print("Couldn't get shiny of " + name + ", reason: " + str(e))
         pass
