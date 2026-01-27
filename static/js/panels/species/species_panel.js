@@ -315,7 +315,7 @@ function setAbilities(abilities, specie) {
                 $('#species-abilities .sel-active').removeClass('sel-active').addClass('sel-n-active')
                 name.classList.replace('sel-n-active', 'sel-active')
                 specie.activeAbi = i
-                setTypes([...new Set(specie.stats.types), abilitiesExtraType(specie.activeAbi, specie)], specie)
+                setTypes([...new Set(specie.stats.types, abilitiesExtraType(specie.activeAbi, specie))], specie)
             }
             name.classList.add(i ? "sel-n-active" : "sel-active")
             longClickToFilter(0, name, "ability", () => { return abi.name })
