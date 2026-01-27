@@ -80,7 +80,11 @@ export function hydrateSpecies() {
             if (statID < 6) specie.stats.base[6] += + value
         }
         // set third types for innates
-        specie.thirdType = abilitiesExtraType(false, specie)
+        const potentialThirdType = abilitiesExtraType(false, specie)
+        // do not add a third type if the mon already had it
+        if (potentialThirdType && ! specie.stats.types.find(x => x === potentialThirdType)){
+            specie.thirdType = potentialThirdType
+        }
         // prepare to be appended a list of location where this pokemon appear
         specie.locations = new Map();
         // concatenate all moves into a new variable

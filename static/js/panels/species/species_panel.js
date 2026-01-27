@@ -40,7 +40,12 @@ export function feedPanelSpecies(id) {
     setAbilities(specie.stats.abis, specie)
     setInnates(specie.stats.inns)
     specie.activeAbi = 0
-    specie.thirdType = abilitiesExtraType(specie.activeAbi, specie)
+    const potentialThirdType = abilitiesExtraType(specie.activeAbi, specie)
+    // do not add a third type if the mon already had it
+    if (potentialThirdType && ! specie.stats.types.find(x => x === potentialThirdType)){
+        console.log(specie, gameData.typeT[potentialThirdType], potentialThirdType)
+        specie.thirdType = potentialThirdType
+    }
     setTypes([...new Set(specie.stats.types), specie.thirdType], specie)
     setAllMoves(specie)
     setEvos(specie.evolutions)
@@ -310,7 +315,7 @@ function setAbilities(abilities, specie) {
                 $('#species-abilities .sel-active').removeClass('sel-active').addClass('sel-n-active')
                 name.classList.replace('sel-n-active', 'sel-active')
                 specie.activeAbi = i
-                setTypes([...new Set(specie.stats.types), abilitiesExtraType(specie.activeAbi, specie)], specie)
+                setTypes([...new Set(specie.stats.types, abilitiesExtraType(specie.activeAbi, specie))], specie)
             }
             name.classList.add(i ? "sel-n-active" : "sel-active")
             longClickToFilter(0, name, "ability", () => { return abi.name })
