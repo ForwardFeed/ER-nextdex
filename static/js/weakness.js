@@ -139,7 +139,7 @@ export function abilitiesToAddedType(abis){
 export function getDefensiveCoverage(specie, abiID){
     const abisID = [specie.stats.abis[abiID], ...specie.stats.inns].filter(x => x)
     const abiNames = abisID.map(x => gameData.abilities[x].name)
-    const defTypes = [...new Set(specie.stats.types), abilitiesToAddedType(abisID)]
+    const defTypes = [...new Set(specie.stats.types, abilitiesToAddedType(abisID))]
         .filter(x => x != undefined)
         .map(x => gameData.typeT[x])
         .filter(x => x)
