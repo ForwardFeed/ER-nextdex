@@ -9,9 +9,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
-      
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+          token: ${{ secrets.REPO_TOKEN }}
+          submodules: false
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
