@@ -5,7 +5,7 @@ A web application about the Elite Redux pokemon game, acts as a documentation. E
 
 ## tldr; How to make all work
 requires git, npm and nodejs, and protoc
-This will initialize the project
+This will initialize the project ! Will require you to get access to some git repositoties !
 ``` 
 git submodule update --init
 
