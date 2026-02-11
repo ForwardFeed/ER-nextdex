@@ -1,4 +1,4 @@
-
+import { activateInsanity } from "./insanity.js"
 /**
  * a lock for a clown problem (we live a society)
  * (it's actually extremely weak, but as long it stops at least 90% of people it's fine)
@@ -6,8 +6,7 @@
  * send a pipebomb in my mailbox.
 */
 
-export function activateLock(){
-    
+export function activateLock(is_fail){
     $('#clown-enter').on('click',function(){
         trytry(document.getElementById('clown-input').value)
     })
@@ -33,7 +32,14 @@ export function activateLock(){
         // hold and behold absolute secrecy.
         if (key === "6morewigglyforms") {
             if (localStorage) localStorage.setItem('ERdexPass', key)
-            deActivateLock()
+                if (is_fail){
+                    if (!fromStorage){
+                        activateInsanity()
+                    }
+                } else {
+                    deActivateLock()
+                }
+            
         } else {
             if (fromStorage){
                 localStorage.setItem('ERdexPass', '')
