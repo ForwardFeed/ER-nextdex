@@ -73,7 +73,7 @@ main{
     color: var(--font-color);
     user-select: none;
     cursor: pointer;
-    background-color: var(--selHover);
+    background-color: var(--btnNActive);
     outline: none;
     text-align: center;
 }
@@ -82,7 +82,6 @@ main{
     display: flex;
     position: relative;
 }
-
 #search-keys-selections {
     z-index: 2;
     padding: 0;
