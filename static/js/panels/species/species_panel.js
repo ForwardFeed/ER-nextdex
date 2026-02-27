@@ -43,7 +43,6 @@ export function feedPanelSpecies(id) {
     const potentialThirdType = abilitiesExtraType(specie.activeAbi, specie)
     // do not add a third type if the mon already had it
     if (potentialThirdType && ! specie.stats.types.find(x => x === potentialThirdType)){
-        console.log(specie, gameData.typeT[potentialThirdType], potentialThirdType)
         specie.thirdType = potentialThirdType
     }
     setTypes([...new Set(specie.stats.types), specie.thirdType], specie)
