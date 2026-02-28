@@ -51,6 +51,7 @@ export function feedPanelSpecies(id) {
     setLocations(specie.locations, specie.SEnc)
     $('#species-desc').text(specie.dex.desc)
     setSpecieHeightWeight()
+    setSpecieColor()
     $('#species-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
     nodeLists.species[id - 1].classList.replace("sel-n-active", "sel-active")
 
@@ -75,6 +76,12 @@ function setSpecieHeightWeight(){
     const weight = freedom ? `${((specie.dex?.hw?.[1] / 10) * 2.2).toFixed(2)} lb` : `${(specie.dex?.hw?.[1] / 10).toFixed(2)} kg`
     $('#species-height').text(height)
     $('#species-weight').text(weight)
+}
+
+function setSpecieColor(){
+    const specie = gameData.species[currentSpecieID]
+    const color = gameData.colT[specie.stats.col]
+    $('#specie-color').text(color)
 }
 
 function setDefensiveCoverage(coverage) {
