@@ -39,14 +39,17 @@ export function readTextproto<T extends Message>(schema: GenMessage<T>, textprot
 }
 
 export function readMoves(): MoveList {
+    //@ts-expect-error
     return readTextproto(MoveListSchema)
 }
 
 export function readAbilities(): AbilityList {
+  //@ts-expect-error
     return readTextproto(AbilityListSchema)
 }
 
 export function readSpecies(): SpeciesList {
+  //@ts-expect-error
     return readTextproto(SpeciesListSchema)
 }
 
@@ -54,11 +57,13 @@ export function readItems(): ItemList {
   const items = create(ItemListSchema)
   for (const file of readdirSync(`./er-config/items/`)) {
     if (!file.endsWith(".textproto")) continue
+    //@ts-expect-error
     items.item.push(...readTextproto(ItemListSchema, `items/${file}`).item)
   }
   return items
 }
 
 export function readTrainers(): TrainerList {
+  //@ts-expect-error
   return readTextproto(TrainerListSchema);
 }
