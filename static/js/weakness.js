@@ -85,6 +85,11 @@ const typeChart = {
     "Mystery": [[],
         [],
         ["Mystery"]    
+    ],
+    "None": [
+        [],
+        [],
+        []
     ]
 }
 export function getTypeEffectiveness(attackerT, defT){
