@@ -98,8 +98,11 @@ export function main(
           optionsValues.comparifyAdditional
         );
       } else if (optionsValues.spritesOnly) {
-        const OUTPUT_SPRITES = Path.join(outputDir, "sprites/");
-        const OUTPUT_PALETTES = Path.join(outputDir, "palettes/");
+        const outputDirSprites = optionsValues.redirectData
+          ? Path.join("./static/")
+          : Path.join("./out/");
+        const OUTPUT_SPRITES  = Path.join(outputDirSprites, "sprites")
+        const OUTPUT_PALETTES = Path.join(outputDirSprites, "palettes/");
         if (!FS.existsSync(OUTPUT_SPRITES)) FS.mkdirSync(OUTPUT_SPRITES);
         if (!FS.existsSync(OUTPUT_PALETTES)) FS.mkdirSync(OUTPUT_PALETTES);
         try {
