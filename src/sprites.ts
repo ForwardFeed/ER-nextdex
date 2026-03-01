@@ -6,6 +6,7 @@ import { Species, Species_RandomizeBanned } from "./gen/SpeciesList_pb.js";
 import { SpeciesEnum } from "./gen/SpeciesEnum_pb.js";
 import { readSpecies } from "./proto_utils.js";
 import { toSpeciesMap } from "./species/species.js";
+import { applyPals, openPalettes } from "./transform_sprite";
 
 export interface Result {
   fileIterator: number;
@@ -127,19 +128,28 @@ export function getSprites(
 
     const outFileRoot = SpeciesEnum[species.id].replace(/^SPECIES_/, "");
 
-    const outFilePath = join(output_dir, outFileRoot + ".png");
-    copyFile(join(ROOT_PRJ, gfx.front), outFilePath);
-
-    const backOutFilePath = join(output_dir, outFileRoot + "_BACK.png");
-    copyFile(join(ROOT_PRJ, gfx.back), backOutFilePath);
-
+    const inPalPath  = join(ROOT_PRJ, gfx.pal)
     const outPalPath = join(output_dir_palette, outFileRoot + ".pal");
-    const outShinyPalPath = join(
-      output_dir_palette,
-      "shiny_" + outFileRoot + ".pal"
-    );
-    copyFile(join(ROOT_PRJ, gfx.pal), outPalPath);
-    copyFile(join(ROOT_PRJ, gfx.shiny), outShinyPalPath);
+    const inShinyPalPath  = join(ROOT_PRJ, gfx.shiny)
+    const outShinyPalPath = join(output_dir_palette, "shiny_" + outFileRoot + ".pal");
+    const inFrontFilePath  = join(ROOT_PRJ, gfx.front)
+    const outFrontFilePath = join(output_dir, outFileRoot + ".png");
+    const inBackOutFilePath = join(ROOT_PRJ, gfx.back)
+    const outBackFilePath   = join(output_dir, outFileRoot + "_BACK.png");
+
+    openPalettes([inPalPath, inShinyPalPath])
+    .then((pals)=>{
+      try{
+        // applyPals(join(projectPath, sprite.front), join(outdir, sprite.specie + ".png") , pals, true)
+        applyPals(inFrontFilePath, outFrontFilePath, pals, true)
+        applyPals(inBackOutFilePath, outBackFilePath, pals, true)
+      } catch(err){
+        console.error("while exporting sprites of pokemon: " + err)
+      }
+    })
+    .catch((err)=>{
+      console.error("Failed in open palette : " + err)
+    })
   }
 }
 

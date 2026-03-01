@@ -24,8 +24,11 @@
     "@bufbuild/protoc-gen-es": "^2.2.3",
     "@types/jquery": "^3.5.29",
     "@types/node": "^20.10.5",
-    "typescript": "^5.3.3",
-    "webpack": "^5.90.3",
-    "webpack-cli": "^5.1.4"
+    "@types/pngjs": "^6.0.5",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "pngjs": "^7.0.0",
+    "readable-stream-clone": "^1.0.0"
   }
 }
