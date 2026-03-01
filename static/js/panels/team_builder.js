@@ -271,20 +271,26 @@ function updateTeamWeaknesses() {
         }
     })
     const effectivenessToShow = ["0", "0.25", "0.5", "2", "4"]
-    teamData.forEach((val) => {
-        if (!val.spc) return
-        const specie = gameData.species[val.spc]
-        const monDef = getDefensiveCoverage(specie, val.abi)
+    teamData.forEach((mon) => {
+        if (!mon.spc) return
+        const specie = gameData.species[mon.spc]
+        const monDef = getDefensiveCoverage(specie, mon.abi)
 
-        Object.keys(monDef).forEach((val) => {
-            const types = monDef[val]
+        Object.keys(monDef).forEach((eff) => {
+            const types = monDef[eff]
+            if (eff > 0){
+                if (eff > 4) {
+                    eff = 4
+                }
+                if (eff < 0.25) {
+                    eff = 0.25
+                }
+            }
             for (const type of types) {
                 // This I think was a fix of a previous bug ruhroh
                 //if (val === '4') val = '2'
-                if (val > 4) val = 4
-                if (val < 0.25) val = 0.25
-                defCoverage[type][val] += 1
-                let indexEff = effectivenessToShow.indexOf(val)
+                defCoverage[type][eff] += 1
+                let indexEff = effectivenessToShow.indexOf(eff)
                 if (indexEff == -1) continue
                 if (indexEff == 0) {
                     defValues[type] += 2
