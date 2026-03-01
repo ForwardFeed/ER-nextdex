@@ -52,7 +52,6 @@ export function hydrate(firstLoad=false) {
     const steps = [
         [getCommunitySetsFromStorage, "community sets"],
         [setupOffensiveTeam, "builder panel"],
-        [initFormatShowdown, "showdown data"],
         [setUpComSets, "Import Community sets"],
         [hydrateAbilities, "abilities data"],
         [hydrateMoves, "moves data"],
@@ -63,6 +62,7 @@ export function hydrate(firstLoad=false) {
         [setLists, "init some lists"],
         [takeMovesFromPreEvolution, "take moves from evo"],
         [addAllOtherEveeMoves, "adding ER eevees moves"],
+        [initFormatShowdown, "showdown data"],
     ]
     const stepLen = steps.length
     for (let i = 0; i < stepLen; i++){
