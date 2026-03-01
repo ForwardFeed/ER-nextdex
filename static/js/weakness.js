@@ -126,7 +126,7 @@ const abilityAddingType = {
     "Teravolt": "Electric",
     "Fairy Tale": "Fairy",
     "Aquatic Dweller": "Water",
-    "Metallic Jaw": "Steel", //TODO ADD IT TO THE CALC TOO
+    "Metallic Jaw": "Steel",
 }
 
 export function abilitiesToAddedType(abis){
@@ -178,11 +178,9 @@ export function getDefensiveCoverage(specie, abiID){
         if (isWonderGuard && typeEffectiveness <= 1) typeEffectiveness = 0 
         defensiveCoverage.push(typeEffectiveness)
     }
-    
     const defensiveCoverageSorted = {}
 
     gameData.typeT.forEach((type, index)=>{
-        //console.log(`${type} has effectiveness : ${defensiveCoverage[index]}`)
         const eff = defensiveCoverage[index]
         if (defensiveCoverageSorted[eff]){
             defensiveCoverageSorted[eff].push(type)
