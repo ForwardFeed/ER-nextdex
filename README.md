@@ -41,8 +41,8 @@ Run Arguments:
     - -o --output     : name of the output to gamedata{arg}.json
     - -ip --input-path: override the path of the root folder in nextdex_config.json
     - -sv --structure-version: indicate which version of the parsing alg to use, since the codebase evolves with the version, it may be necessary, it always be an integer so in the code you can do: if(version > 3 && version < 5) { read this way } else {read this way}
-    - -so --sprites-only: Do not parse for gamedata.json and only outputs all the sprites of pokemon found in out/sprites, i advice to use the python script sprites_utils.py after used that.
-    - -rd -redirect-data: Do not redirect gameData.json to /out/ but directly to the UI folder at /static/js/data/ 
+    - -so --sprites-only: Do not parse for gamedata.json and only outputs all the sprites of pokemon found in out/sprites or in static/sprites if option -rd is used
+    - -rd --redirect-data: Do not redirect gameData.json to /out/ but directly to the UI folder at /static/js/data/ 
 
 Quick tip, if you use git on your pokemon project you can get back to a previous version with these bash commands
 `git log  --all --grep='V0.0.1'` where `V0.0.1` is the message of a commit marking the version of the game. Copy the commit sha1 hash and then you can do
