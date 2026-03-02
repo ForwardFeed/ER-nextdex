@@ -88,28 +88,7 @@ const typeChart = {
         []
     ]
 }
-export function getTypeEffectiveness(attackerT, defT){
-    let xRange = [0,0.5,2]
-    let i = 0
-    for (const typeDef of typeChart[defT]){
-        if (typeDef.indexOf(attackerT) != -1) return xRange[i]
-        i++
-    }
-    return 1
-}
 
-function checkTypos(types){
-    const keys = Object.keys(typeChart)
-    for (const key of keys){
-        for (const weaknesses of typeChart[key]){
-            for (const type of weaknesses){
-                if (types.indexOf(type) == -1){
-                    console.warn(`Detected Typo in ${key}, as ${type}`)
-                }
-            }
-        }
-    }
-}
 const abilityAddingType = {
     "Phantom"    : "Ghost",
     "Metallic"   : "Steel",
@@ -139,46 +118,91 @@ export function abilitiesToAddedType(abis){
     }
     return undefined
 }
+
+export function getTypeEffectiveness(attackerT, defT){
+    let xRange = [0,0.5,2]
+    let i = 0
+    for (const typeDef of typeChart[defT]){
+        if (typeDef.indexOf(attackerT) != -1) return xRange[i]
+        i++
+    }
+    return 1
+}
+
+function checkTypos(types){
+    const keys = Object.keys(typeChart)
+    for (const key of keys){
+        for (const weaknesses of typeChart[key]){
+            for (const type of weaknesses){
+                if (types.indexOf(type) == -1){
+                    console.warn(`Detected Typo in ${key}, as ${type}`)
+                }
+            }
+        }
+    }
+}
+
+function hasAbility(abilities_string_array, ability_string){
+    return !!~abilities_string_array.findIndex((x)=>x === ability_string)
+}
+
+function hasType(types_string_array, type_string){
+    return !!~types_string_array.findIndex((x)=>x === type_string)
+}
+
 /**
  * 
  * @param {string[]} defTypes 
  * @param {string[]} abilities 
  */
 export function getDefensiveCoverage(specie, abiID){
-    const abisID = [specie.stats.abis[abiID], ...specie.stats.inns].filter(x => x)
-    const abiNames = abisID.map(x => gameData.abilities[x].name)
-    const defTypes = [...new Set(specie.stats.types, abilitiesToAddedType(abisID))]
-        .filter(x => x != undefined)
-        .map(x => gameData.typeT[x])
-        .filter(x => x)
-    const isWonderGuard = abiNames.indexOf('Wonder Guard') != -1
-    const isPrimalArmor = abiNames.indexOf('Wonder Guard') != -1
-    const modifiers = abilityModifiesTypeChart(abiNames, specie)
+    const abisID            = [specie.stats.abis[abiID], ...specie.stats.inns].filter(x => x)
+    const abiNames          = abisID.map(x => gameData.abilities[x].name)
+    const defTypes          = [...new Set(specie.stats.types, abilitiesToAddedType(abisID))]
+    .filter(x => x != undefined)
+    .map(x => gameData.typeT[x])
+    .filter(x => x)
+    const has_ripen_ability = hasAbility(abiNames, "Ripen")
+    const has_steelworker   = hasAbility(abiNames, "Steelworker") && hasType(defTypes, "Steel")
+    const isWonderGuard     = abiNames.indexOf('Wonder Guard') != -1
+    const isPrimalArmor     = abiNames.indexOf('Primal Armor') != -1
+    const modifiers         = abilityModifiesTypeChart(abiNames, specie)
     const defensiveCoverage = []
     for (const atkT of gameData.typeT){
         let typeEffectiveness = 1
-        if (modifiers[0].indexOf(atkT) != -1) {
+        if (modifiers[IMMUNE].indexOf(atkT) != -1) {
             typeEffectiveness = 0
             defensiveCoverage.push(typeEffectiveness)
             continue
         }
-        if (modifiers[1].indexOf(atkT) != -1) {
+        if (modifiers[NORMAL].indexOf(atkT) != -1) {
             typeEffectiveness = 1 
         }
-        if (modifiers[2].indexOf(atkT) != -1) {
+        if (modifiers[RESIST].indexOf(atkT) != -1) {
             typeEffectiveness = 0.5
         }
-        if (modifiers[3].indexOf(atkT) != -1) {
+        if (modifiers[WEAK].indexOf(atkT) != -1) {
             typeEffectiveness = isPrimalArmor ? 1 : 2
         }
-        if (modifiers[4].indexOf(atkT) != -1){
+        if (modifiers[WEAK4X].indexOf(atkT) != -1){
             // I have no clue how primal armor handles that, so I'll ignore it for now
             typeEffectiveness = 4
         }
-        for (const defT of defTypes){
-            typeEffectiveness *= getTypeEffectiveness(atkT, defT)
+        if (has_steelworker){
+            if (atkT === "Ghost" || atkT === "Dark"){
+                typeEffectiveness = 0.5
+            }
         }
-        if (isWonderGuard && typeEffectiveness <= 1) typeEffectiveness = 0 
+        for (const defT of defTypes){
+            let effectiveness  = getTypeEffectiveness(atkT, defT)
+            if (has_ripen_ability && effectiveness == 0.5){
+                typeEffectiveness = 0.25
+            }
+            typeEffectiveness *= effectiveness
+        }
+        if (isWonderGuard && typeEffectiveness <= 1) {
+            typeEffectiveness = 0 
+        }
         defensiveCoverage.push(typeEffectiveness)
     }
     const defensiveCoverageSorted = {}
