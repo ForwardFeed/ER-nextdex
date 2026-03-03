@@ -109,6 +109,79 @@ const abilityAddingType = {
     "Fey Flight" : "Fairy",
     "Dead Bark"  : "Ghost",
     "Lightsaber" : "Fire",
+    "Hover"      : "Psychic",
+}
+
+
+
+const abilityThatAddsImmunity = {
+    "Flash Fire"      : ["Fire"],
+    "Sap Sipper"      : ["Grass"],
+    "Volt Absorb"     : ["Electric"],
+    "Lightning Rod"   : ["Electric"],
+    "Motor Drive"     : ["Electric"],
+    "Water Absorb"    : ["Water"],
+    "Dry Skin"        : ["Water"],
+    "Storm Drain"     : ["Water"],
+    "Evaporate"       : ["Water"],
+    "Levitate"        : ["Ground"],
+    "Dragonfly"       : ["Ground"],
+    "Mountaineer"     : ["Rock"],
+    "Poison Absorb"   : ["Poison"],
+    "Aerodynamics"    : ["Flying"],
+    "Well Baked Body" : ["Fire"],
+    "Elemental Vortex": ["Fire", "Water"],
+    "Justified"       : ["Dark"],
+    "Ice Dew"         : ["Ice"],
+    "Earth Eater"     : ["Ground"],
+    "Hover"           : ["Ground"],
+    "Aerialist"       : ["Ground"],
+    "Imposing Wings"  : ["Ground"],
+    "Desolate Sun"    : ["Ground", "Water"],
+    "Reservoir"       : ["Water"],
+    "Desolate Land"   : ["Water"],
+    "Primordial Sea"  : ["Fire"],
+    "Fey Flight"      : ["Ground"],
+    "Cryo Architect"  : ["Water", "Ice"],
+    "Gifted Mind"     : ["Ghost", "Bug", "Dark"],
+    "Radiance"        : ["Dark"],
+    "Hover"           : ["Ground"],
+    "Heat Sink"       : ["Fire"]
+}
+
+const abilityThatAddsResist = {
+    "Water Bubble"    : ["Fire"],
+    "Seaweed"         : ["Fire"],
+    "Heatproof"       : ["Fire"],
+    "Iron Giant"      : ["Fire"],
+    "Thick Fat"       : ["Fire", "Ice"],
+    "Immunity"        : ["Poison"],
+    "Fossilized"      : ["Rock"],
+    "Raw Wood"        : ["Grass"],
+    "Water Compaction": ["Water"],
+    "Old Mariner"     : ["Fire"],
+    "Flame Bubble"    : ["Fire"],
+    "Deep Freeze"     : ["Fire"],
+    "Iron Giant"      : ["Fire"],
+    "Strong foundation": ["Water", "Ground"],
+    "Droideka"        : ["Fire"],
+    "Thermal Entropy" : ["Fire"],
+}
+
+const abilityThatAddsQuadResist = {
+    "Thick Blubber": ["Fire", "Ice"]
+}
+
+const abilityThatAddsWeakness = {
+    "Fluffy": ["Fire"],
+    "Puffy": ["Fire"],
+    "Liquified": ["Water"],
+    "Dry Skin": ["Fire"],
+    
+}
+
+const abilityThatAdds4TimesWeakness = {
+    "Fluffiest": ["Fire"],
 }
 
 export function abilitiesToAddedType(abis){
@@ -216,74 +289,6 @@ export function getDefensiveCoverage(specie, abiID){
         }
     })
     return defensiveCoverageSorted
-}
-
-const abilityThatAddsImmunity = {
-    "Flash Fire"      : ["Fire"],
-    "Sap Sipper"      : ["Grass"],
-    "Volt Absorb"     : ["Electric"],
-    "Lightning Rod"   : ["Electric"],
-    "Motor Drive"     : ["Electric"],
-    "Water Absorb"    : ["Water"],
-    "Dry Skin"        : ["Water"],
-    "Storm Drain"     : ["Water"],
-    "Evaporate"       : ["Water"],
-    "Levitate"        : ["Ground"],
-    "Dragonfly"       : ["Ground"],
-    "Mountaineer"     : ["Rock"],
-    "Poison Absorb"   : ["Poison"],
-    "Aerodynamics"    : ["Flying"],
-    "Well Baked Body" : ["Fire"],
-    "Elemental Vortex": ["Fire", "Water"],
-    "Justified"       : ["Dark"],
-    "Ice Dew"         : ["Ice"],
-    "Earth Eater"     : ["Ground"],
-    "Hover"           : ["Ground"],
-    "Aerialist"       : ["Ground"],
-    "Imposing Wings"  : ["Ground"],
-    "Desolate Sun"    : ["Ground", "Water"],
-    "Reservoir"       : ["Water"],
-    "Desolate Land"   : ["Water"],
-    "Primordial Sea"  : ["Fire"],
-    "Fey Flight"      : ["Ground"],
-    "Cryo Architect"  : ["Water", "Ice"],
-    "Gifted Mind"     : ["Ghost", "Bug", "Dark"],
-    "Radiance"        : ["Dark"]
-}
-
-const abilityThatAddsResist = {
-    "Water Bubble"    : ["Fire"],
-    "Seaweed"         : ["Fire"],
-    "Heatproof"       : ["Fire"],
-    "Iron Giant"      : ["Fire"],
-    "Thick Fat"       : ["Fire", "Ice"],
-    "Immunity"        : ["Poison"],
-    "Fossilized"      : ["Rock"],
-    "Raw Wood"        : ["Grass"],
-    "Water Compaction": ["Water"],
-    "Old Mariner"     : ["Fire"],
-    "Flame Bubble"    : ["Fire"],
-    "Deep Freeze"     : ["Fire"],
-    "Iron Giant"      : ["Fire"],
-    "Strong foundation": ["Water", "Ground"],
-    "Droideka"        : ["Fire"],
-    "Thermal Entropy" : ["Fire"],
-}
-
-const abilityThatAddsQuadResist = {
-    "Thick Blubber": ["Fire", "Ice"]
-}
-
-const abilityThatAddsWeakness = {
-    "Fluffy": ["Fire"],
-    "Puffy": ["Fire"],
-    "Liquified": ["Water"],
-    "Dry Skin": ["Fire"],
-    
-}
-
-const abilityThatAdds4TimesWeakness = {
-    "Fluffiest": ["Fire"],
 }
 
 // misses things like Magma Armor or others that reduce by 35% like Filter
