@@ -89,10 +89,23 @@ const flagMap = {
     "Special Defense Down Hit 2": "May down Special Defense Twofold",
     "Speed Down Hit 2": "May down Speed Twofold",
     "Always Crit": "Always crit",
-}
-const NoFlagMap = {
-    "Protect Affected": "Isn't affected by protect",
-    "Mirror Move Affected": "Cannot be mirrored",
+    "Protect Affected": "Affected by protect",
+    "Mirror Move Affected": "Affected by mirror move",
+    "Technician": "Technician",
+    "Perfectionnist": "Perfectionnist",
+    "High Crit Rate": "High Crit Rate",
+    "Air/Wing Based": "Air/Wing Based",
+    "Dance Move": "Dance Move",
+    "Always Crits": "Always Crits",
+    "Hammer Based": "Hammer Based",
+    "Kick Based": "Kick Based",
+    "Causes Recoil": "Causes Recoil",
+    "Drill Based": "Drill Based",
+    "Sound Based": "Sound Based",
+    "Bullet Move": "Bullet Move",
+    "Throw Based": "Throw Based",
+    "Lunar Move": "Lunar Move",
+    "Arrow Based": "Arrow Based"
 }
 /* window.debugMoveFlags = ()=>{
     const list =  {}
@@ -107,7 +120,7 @@ const NoFlagMap = {
             
         }
     })
-    console.log(list)
+    console.log(JSON.stringify(list, null, 4))
 } */
 function listMoveFlags(flags, core, longClickCallback = ()=>{}) {
     const frag = document.createDocumentFragment()
@@ -119,14 +132,6 @@ function listMoveFlags(flags, core, longClickCallback = ()=>{}) {
         }
         const node = e("div", getHintInteractibilityClass(), descFlag)
         longClickToFilter(2, node, "move-effect", () => {return flag}, longClickCallback)
-        frag.append(node)
-    }
-    const noFlagArray = Object.keys(NoFlagMap)
-    for (const noFlag of noFlagArray) {
-        if (flags.indexOf(noFlag) != -1) continue
-        const descFlag = NoFlagMap[noFlag]
-        const node = e("div", getHintInteractibilityClass(), descFlag)
-        longClickToFilter(2, node, "move-effect", () => {return descFlag}, longClickCallback)
         frag.append(node)
     }
     core.empty()
