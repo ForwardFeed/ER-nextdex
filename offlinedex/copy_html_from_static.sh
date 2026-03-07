@@ -58,3 +58,8 @@ function make_link(){
 
 make_link "index.html" "index.html"
 make_link "css/" "css"
+make_link "vendor/" "vendor"
+make_link "font/" "font"
+make_link "icons/" "icons"
+make_link "js/" "js"
+make_link "sprites/" "sprites"
