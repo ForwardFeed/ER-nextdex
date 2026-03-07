@@ -104,23 +104,17 @@ export function hydrateSpecies() {
         // add the region based of the id, which is not the thing that works the best
         // If you have a better idea let me know
         for (const regionsMapped of [
-            [0, "Kanto"],
-            [151, "Johto"],
-            [251, "Hoenn"],
-            [386, "Sinnoh"],
-            [493, "Unova"],
-            [649, "Kalos"],
-            [721, "Alola"],
-            [809, "Galar"],
-            [898, "Hisui"],
-            [905, "Paldea"],
-            [1500, ""], //MEGAs to link up after
-            [1547, "Alola"],
-            [1568, "Galar"],
-            [1587, ""], //Misc forms to link up after
-            [1808, "Hisui"],
-            [1824, ""],//Misc forms to link up after
-            [2300, "Redux"], 
+            [0,    "Kanto"],
+            [151,  "Johto"],
+            [251,  "Hoenn"],
+            [386,  "Sinnoh"],
+            [493,  "Unova"],
+            [649,  "Kalos"],
+            [721,  "Alola"],
+            [809,  "Galar"],
+            [898,  "Hisui"],
+            [905,  "Paldea"],
+            [1025, "Redux"], 
         ]) {
             if (specie.id <= regionsMapped[0]) break
             specie.region = regionsMapped[1]
