@@ -41,15 +41,20 @@ function make_link(){
     SOURCE="$(pwd)/${BASE}${1}"
     LINK="$(pwd)/${OUT}${2}"
     if [ ! -f "$SOURCE" ]; then
-        echo "could not find file source: ${SOURCE}"
-        exit 4
+        if [ ! -d "$SOURCE" ]; then
+            echo "could not find file/folder source: ${SOURCE}"
+            exit 4
+        fi
     fi
     ln -sv "$SOURCE" "$LINK"
     if [ ! -f "$LINK" ]; then
-        echo "LINK CREATION FAILED: ${LINK} from ${SOURCE}"
-        rm "$LINK" 
-        exit 5
+        if [ ! -d "$LINK" ]; then
+            echo "LINK CREATION FAILED: ${LINK} from ${SOURCE}"
+            rm "$LINK" 
+            exit 5
+        fi
     fi
 }
 
 make_link "index.html" "index.html"
+make_link "css/" "css"
