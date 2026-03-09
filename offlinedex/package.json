@@ -1,0 +1,14 @@
+{
+  "name": "offlinedex",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "tauri": "tauri",
+    "linux_build": "NO_STRIP=true npm run tauri build",
+    "linux_build_for_windows": "npm run tauri build -- --runner cargo-xwin --target x86_64-pc-windows-msvc"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2"
+  }
+}
