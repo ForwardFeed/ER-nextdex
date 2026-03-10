@@ -4,6 +4,7 @@ import { computed, reactive, ref, type Ref } from "vue"
 export const current_pokemon_id = ref(-1)
 export const current_palette: Ref<PaletteData > = computed(()=>{
     return palette_data[current_pokemon_id.value] || {
+        NAME: "",
         name: "",
         regular: undefined,
         shiny: undefined
@@ -16,10 +17,12 @@ export function get_url_pokemon(poke_name: string): string{
 
 export type Pal =  [[number, number, number, number]?]
 export type PaletteData = {
-  name    : string
+  name    : string,
+  NAME    : string
   regular : Pal | undefined;
   shiny   : Pal | undefined;
 }
+
 
 
 export const palette_data = reactive([] as PaletteData[])
@@ -49,5 +52,5 @@ export function fetch_palette_data(){
 function init_reverse_table(){
     // clean previous table
     for (const member in reverse_poke_to_data) delete reverse_poke_to_data[member]
-    palette_data.forEach((x, i) => reverse_poke_to_data[x.name] = i)
+    palette_data.forEach((x, i) => reverse_poke_to_data[x.NAME] = i)
 }

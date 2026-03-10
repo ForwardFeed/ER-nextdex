@@ -19,10 +19,10 @@ onMounted(()=>{
 async function draw(){
     const palette_data = current_palette
     if (palette_data.value === null) return
-    const {name} = palette_data.value
+    const {NAME} = palette_data.value
     if (canvas_ref.value === null) return
     const ctx = canvas_ref.value.getContext("2d")
-    const img = await load_image(get_url_pokemon(name))
+    const img = await load_image(get_url_pokemon(NAME))
     img.addEventListener('load', ()=>{
         if (ctx === null) return
         ctx.clearRect(0,0, 64, 64)

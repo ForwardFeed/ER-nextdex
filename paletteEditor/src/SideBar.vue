@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import { current_palette, current_pokemon_id, get_url_pokemon } from './data';
 import SpriteSelection from './components/SpriteSelection.vue';
-const url = computed(()=> get_url_pokemon(current_palette.value?.name))
+const url = computed(()=> get_url_pokemon(current_palette.value?.NAME))
 </script>
 <template>
 <aside>

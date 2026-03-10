@@ -1,5 +1,5 @@
 import { copyFileSync, existsSync, mkdirSync, writeFile } from "fs";
-import { regexGrabStr } from "./parse_utils";
+import { regexGrabStr, Xtox } from "./parse_utils";
 import { FileDataOptions, getMulFilesData, autojoinFilePath } from "./utils";
 import { join } from "path";
 import { Species, Species_RandomizeBanned } from "./gen/SpeciesList_pb.js";
@@ -14,7 +14,8 @@ export interface Result {
 }
 
 type PaletteData = {
-  name    : string
+  name    : string,
+  NAME    : string
   regular : Pal | undefined;
   shiny   : Pal | undefined;
 }
@@ -147,8 +148,15 @@ export function getSprites(
 
     const prom = openPalettes([inPalPath, inShinyPalPath])
     .then((pals)=>{
+      let name =
+        species.baseSpeciesInfo.case === "dex"
+          ? species.baseSpeciesInfo.value.name
+          : "";
+      name = name || species.longName;
+      if (!name) name = Xtox("SPECIES_", SpeciesEnum[species.id]);
       paletteData.push ({
-        name:     outFileRoot,
+        NAME     : outFileRoot,
+        name,
         regular : pals[0],
         shiny   : pals[1]
       })

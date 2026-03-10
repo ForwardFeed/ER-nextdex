@@ -2,7 +2,7 @@
 import { get_url_pokemon, current_palette, palette_data, reverse_poke_to_data, current_pokemon_id } from '@/data';
 import { computed, ref } from 'vue';
 
-const url       = computed(()=> get_url_pokemon(current_palette.value?.name))
+const url       = computed(()=> get_url_pokemon(current_palette.value?.NAME))
 const on_select = ref(false)
 const filter    = ref(/.*/)
 
@@ -22,7 +22,7 @@ function on_search_keyup(event: KeyboardEvent){
     try {
         filter.value = new RegExp(value)
     } catch{
-        
+
     }
     
 }
@@ -37,10 +37,11 @@ function on_search_keyup(event: KeyboardEvent){
             <input type="text" @keyup="on_search_keyup">
         </div>
         <div class="sprite-selection-list-container">
-            <img v-for="{name} in palette_data"
-            :src="get_url_pokemon(name)" :alt="name" 
-            @click="on_select_new(name)"
-            v-show="filter.test(name)">
+            <img v-for="{name, NAME} in palette_data"
+            :src="get_url_pokemon(NAME)" :alt="name" 
+            @click="on_select_new(NAME)"
+            v-show="filter.test(name.toLowerCase())"
+            loading="lazy">
         </div>
        
     </div>
