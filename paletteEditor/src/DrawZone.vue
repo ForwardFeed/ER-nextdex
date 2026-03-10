@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { onMounted, ref, useTemplateRef, watch } from 'vue'
 import { load_image } from './utils'
-import { current_pokemon, get_url_pokemon } from './data'
+import { current_palette, current_pokemon_id, get_url_pokemon, palette_data } from './data'
 
 const canvas_ref = useTemplateRef('canvas-ref')
 const zoom_data  = {
@@ -11,16 +11,18 @@ const zoom_data  = {
 }
 const zoom_value = ref(zoom_data.curr) 
 onMounted(()=>{
-    watch(current_pokemon, (new_)=>{
-        draw(new_)
+    watch(current_palette, (ne)=>{
+       draw()
     })
-    draw("ABOMASNOW_BACK")
 })
 
-async function draw(poke_name: string){
+async function draw(){
+    const palette_data = current_palette
+    if (palette_data.value === null) return
+    const {name} = palette_data.value
     if (canvas_ref.value === null) return
     const ctx = canvas_ref.value.getContext("2d")
-    const img = await load_image(get_url_pokemon(poke_name))
+    const img = await load_image(get_url_pokemon(name))
     img.addEventListener('load', ()=>{
         if (ctx === null) return
         ctx.drawImage(img, 0, 0)
