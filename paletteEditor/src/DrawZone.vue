@@ -16,7 +16,7 @@ onMounted(()=>{
 async function draw(poke_name: string){
     if (canvas_ref.value === null) return
     const ctx = canvas_ref.value.getContext("2d")
-    const img = await load_image(`/sprites/${poke_name}.png`)
+    const img = await load_image(`../sprites/${poke_name}.png`)
     img.addEventListener('load', ()=>{
         if (ctx === null) return
         ctx.drawImage(img, 0, 0)
@@ -43,7 +43,6 @@ function on_scroll(event: WheelEvent){
     }
     zoom_data.curr = newZoom;
     zoom_value.value = zoom_data.curr
-    console.log(zoom_data.curr)
 }
 
 </script>
