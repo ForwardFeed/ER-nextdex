@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { onMounted, ref, useTemplateRef } from 'vue'
+import { onMounted, ref, useTemplateRef, watch } from 'vue'
 import { load_image } from './utils'
+import { current_pokemon, get_url_pokemon } from './data'
 
 const canvas_ref = useTemplateRef('canvas-ref')
 const zoom_data  = {
@@ -10,13 +11,16 @@ const zoom_data  = {
 }
 const zoom_value = ref(zoom_data.curr) 
 onMounted(()=>{
-    draw("ABOMASNOW")
+    watch(current_pokemon, (new_)=>{
+        draw(new_)
+    })
+    draw("ABOMASNOW_BACK")
 })
 
 async function draw(poke_name: string){
     if (canvas_ref.value === null) return
     const ctx = canvas_ref.value.getContext("2d")
-    const img = await load_image(`../sprites/${poke_name}.png`)
+    const img = await load_image(get_url_pokemon(poke_name))
     img.addEventListener('load', ()=>{
         if (ctx === null) return
         ctx.drawImage(img, 0, 0)
