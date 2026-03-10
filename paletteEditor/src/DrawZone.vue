@@ -6,7 +6,7 @@ const canvas_ref = useTemplateRef('canvas-ref')
 const zoom_data  = {
     curr : 1,
     min  : 1,
-    step : 0.1,
+    step : 0.3,
 }
 const zoom_value = ref(zoom_data.curr) 
 onMounted(()=>{
@@ -20,11 +20,21 @@ async function draw(poke_name: string){
     img.addEventListener('load', ()=>{
         if (ctx === null) return
         ctx.drawImage(img, 0, 0)
+        set_default_zoom()
     })
 }
 
+function set_default_zoom(){
+    if (canvas_ref.value === null) return
+    const parent    = canvas_ref.value.parentElement as HTMLElement
+    const {width: parent_h, height: parent_w}  = parent.getBoundingClientRect()
+    const min_size = parent_h > parent_w ? parent_w : parent_h
+    const ratio_max = min_size / 64
+    zoom_data.curr = ratio_max;
+    zoom_value.value = zoom_data.curr
+}
 
-function onScroll(event: WheelEvent){
+function on_scroll(event: WheelEvent){
     let direction = event.deltaY > 0 ? -1 : 1;
     const {curr, min, step} = zoom_data
     let newZoom = curr + direction * step;
@@ -33,11 +43,12 @@ function onScroll(event: WheelEvent){
     }
     zoom_data.curr = newZoom;
     zoom_value.value = zoom_data.curr
+    console.log(zoom_data.curr)
 }
 
 </script>
 <template>
-<main @wheel="onScroll">
+<main @wheel="on_scroll">
     <canvas ref="canvas-ref" width="64px" height="64px">
 
     </canvas>
