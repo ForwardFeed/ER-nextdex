@@ -4,11 +4,27 @@ import { computed, ref } from 'vue';
 
 const url       = computed(()=> get_url_pokemon(current_palette.value?.name))
 const on_select = ref(false)
+const filter    = ref(/.*/)
 
 function on_select_new(name: string){
     const id = reverse_poke_to_data[name]
     if (id === undefined) return
     current_pokemon_id.value = id
+}
+function on_search_keyup(event: KeyboardEvent){
+    const target = event.target as HTMLInputElement
+    const value  = target.value
+
+    if (value === ""){
+        filter.value = /.*/
+        return
+    }
+    try {
+        filter.value = new RegExp(value)
+    } catch{
+        
+    }
+    
 }
 
 </script>
@@ -18,12 +34,13 @@ function on_select_new(name: string){
     <div v-show="on_select" @click="on_select = false" class="sprite-selection-list">
         <div class="sprite-selection-search" @click="(ev)=>{ev.stopImmediatePropagation()}">
             <span> Search </span>
-            <input type="text">
+            <input type="text" @keyup="on_search_keyup">
         </div>
         <div class="sprite-selection-list-container">
             <img v-for="{name} in palette_data"
-        :src="get_url_pokemon(name)" :alt="name" 
-        @click="on_select_new(name)">
+            :src="get_url_pokemon(name)" :alt="name" 
+            @click="on_select_new(name)"
+            v-show="filter.test(name)">
         </div>
        
     </div>
