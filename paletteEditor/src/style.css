@@ -1,0 +1,16 @@
+html, body, #app{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+:root{
+    --main-bg: #0b0b0c;
+}
+
+
+#app{
+    background-color: var(--main-bg);
+    display: flex;
+}
