@@ -25,6 +25,7 @@ async function draw(){
     const img = await load_image(get_url_pokemon(name))
     img.addEventListener('load', ()=>{
         if (ctx === null) return
+        ctx.clearRect(0,0, 64, 64)
         ctx.drawImage(img, 0, 0)
         set_default_zoom()
     })

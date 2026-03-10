@@ -2,8 +2,12 @@ import { computed, reactive, ref, type Ref } from "vue"
 
 
 export const current_pokemon_id = ref(-1)
-export const current_palette: Ref<PaletteData | null> = computed(()=>{
-    return palette_data[current_pokemon_id.value] || null
+export const current_palette: Ref<PaletteData > = computed(()=>{
+    return palette_data[current_pokemon_id.value] || {
+        name: "",
+        regular: undefined,
+        shiny: undefined
+    } satisfies PaletteData
 })
 
 export function get_url_pokemon(poke_name: string): string{
@@ -19,6 +23,7 @@ export type PaletteData = {
 
 
 export const palette_data = reactive([] as PaletteData[])
+export const reverse_poke_to_data: Record<string, number> = {}
 
 export function fetch_palette_data(){
     fetch("/palette_data.json")
@@ -27,8 +32,10 @@ export function fetch_palette_data(){
                 .then((json_data)=>{
                     palette_data.length = 0
                     palette_data.push(...json_data as PaletteData[])
-                    
+
                     current_pokemon_id.value = 0
+
+                    init_reverse_table()
                 })
                 .catch((err)=>{
                     console.error(`couldn't parse palette data as JSON: ${err}`)
@@ -37,4 +44,10 @@ export function fetch_palette_data(){
         .catch((err)=>{
             console.error(`couldn't fetch palette data url ${err}`)
         })
+}
+
+function init_reverse_table(){
+    // clean previous table
+    for (const member in reverse_poke_to_data) delete reverse_poke_to_data[member]
+    palette_data.forEach((x, i) => reverse_poke_to_data[x.name] = i)
 }

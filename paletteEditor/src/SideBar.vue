@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { current_palette, current_pokemon_id, get_url_pokemon } from './data';
+import SpriteSelection from './components/SpriteSelection.vue';
 const url = computed(()=> get_url_pokemon(current_palette.value?.name))
 </script>
 <template>
 <aside>
-    <img :src="url" :alt="current_pokemon_id">
+    <SpriteSelection/>
     <div class="palette-container">
 
     </div>
