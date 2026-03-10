@@ -2,7 +2,7 @@ import { PNG } from "pngjs"
 import * as FS from "fs";
 import ReadableStreamClone from "readable-stream-clone/lib/readable-stream-clone";
 
-type Pal =  [[number, number, number, number]?]
+export type Pal =  [[number, number, number, number]?]
 
 function readPalFile(palFileData: string){
     const palData: Pal = []

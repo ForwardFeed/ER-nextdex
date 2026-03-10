@@ -1,4 +1,4 @@
-import { copyFileSync, existsSync, mkdirSync } from "fs";
+import { copyFileSync, existsSync, mkdirSync, writeFile } from "fs";
 import { regexGrabStr } from "./parse_utils";
 import { FileDataOptions, getMulFilesData, autojoinFilePath } from "./utils";
 import { join } from "path";
@@ -6,11 +6,17 @@ import { Species, Species_RandomizeBanned } from "./gen/SpeciesList_pb.js";
 import { SpeciesEnum } from "./gen/SpeciesEnum_pb.js";
 import { readSpecies } from "./proto_utils.js";
 import { toSpeciesMap } from "./species/species.js";
-import { applyPals, openPalettes } from "./transform_sprite";
+import { applyPals, openPalettes, type Pal } from "./transform_sprite";
 
 export interface Result {
   fileIterator: number;
   spritesPath: Map<string, string>;
+}
+
+type PaletteData = {
+  name    : string
+  regular : Pal | undefined;
+  shiny   : Pal | undefined;
 }
 
 interface Context {
@@ -112,10 +118,13 @@ function copyFile(from: string, to: string) {
 export function getSprites(
   ROOT_PRJ: string,
   output_dir: string,
-  output_dir_palette: string
+  output_dir_palette: string,
+  output_dir_palette_data: string
 ) {
   const speciesList = readSpecies();
-  const speciesMap = toSpeciesMap(speciesList);
+  const speciesMap  = toSpeciesMap(speciesList);
+  const paletteData: PaletteData[] = []
+  const promisesToAwait: Promise<void>[] = []
   for (const species of speciesList.species) {
     if (
       !species.id ||
@@ -124,21 +133,25 @@ export function getSprites(
     )
       continue;
 
-    const gfx = getSprite(species, speciesMap);
-
+    const gfx         = getSprite(species, speciesMap);
     const outFileRoot = SpeciesEnum[species.id].replace(/^SPECIES_/, "");
 
-    const inPalPath  = join(ROOT_PRJ, gfx.pal)
-    const outPalPath = join(output_dir_palette, outFileRoot + ".pal");
-    const inShinyPalPath  = join(ROOT_PRJ, gfx.shiny)
-    const outShinyPalPath = join(output_dir_palette, "shiny_" + outFileRoot + ".pal");
-    const inFrontFilePath  = join(ROOT_PRJ, gfx.front)
-    const outFrontFilePath = join(output_dir, outFileRoot + ".png");
+    const inPalPath         = join(ROOT_PRJ, gfx.pal)
+    const outPalPath        = join(output_dir_palette, outFileRoot + ".pal");
+    const inShinyPalPath    = join(ROOT_PRJ, gfx.shiny)
+    const outShinyPalPath   = join(output_dir_palette, "shiny_" + outFileRoot + ".pal");
+    const inFrontFilePath   = join(ROOT_PRJ, gfx.front)
+    const outFrontFilePath  = join(output_dir, outFileRoot + ".png");
     const inBackOutFilePath = join(ROOT_PRJ, gfx.back)
     const outBackFilePath   = join(output_dir, outFileRoot + "_BACK.png");
 
-    openPalettes([inPalPath, inShinyPalPath])
+    const prom = openPalettes([inPalPath, inShinyPalPath])
     .then((pals)=>{
+      paletteData.push ({
+        name:     outFileRoot,
+        regular : pals[0],
+        shiny   : pals[1]
+      })
       try{
         // applyPals(join(projectPath, sprite.front), join(outdir, sprite.specie + ".png") , pals, true)
         applyPals(inFrontFilePath, outFrontFilePath, pals, true)
@@ -150,7 +163,16 @@ export function getSprites(
     .catch((err)=>{
       console.error("Failed in open palette : " + err)
     })
+    promisesToAwait.push(prom)
   }
+  Promise.all(promisesToAwait).then(()=>{
+    const paletteDataOut = join(output_dir_palette_data, "palette_data.json");
+    writeFile(paletteDataOut, JSON.stringify(paletteData), (err)=>{
+      if (err)
+        console.error(`failed to write palette data out at ${paletteDataOut}, reason: ${err}`)
+    })
+  })
+ 
 }
 
 export function getLegacySprites(
