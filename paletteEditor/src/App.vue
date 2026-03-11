@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { fetch_palette_data } from './data';
+import { fetch_palette_data } from './utils';
 import DrawZone from './DrawZone.vue';
 import SideBar from './SideBar.vue';
 

@@ -1,63 +1,51 @@
-import { computed, reactive, ref, type Ref } from "vue"
+import { computed, reactive, ref, shallowRef, watch, type Reactive, type Ref } from "vue"
+import { bad_copy } from "./utils"
 
-
-export const current_pokemon_id = ref(-1)
-export const current_palette: Ref<PaletteData > = computed(()=>{
-    return palette_data[current_pokemon_id.value] || {
-        NAME: "",
-        name: "",
-        regular: undefined,
-        shiny: undefined
-    } satisfies PaletteData
-})
-
-export function get_url_pokemon(poke_name: string): string{
-    return `../sprites/${poke_name}.png`
-}
-
-export type Pal =  [[number, number, number, number]?]
-export type PaletteData = {
+export type PalRGB             = [number, number, number, number]
+export type Pal                = [PalRGB?]
+export type PokemonPaletteData = {
   name    : string,
   NAME    : string
   regular : Pal | undefined;
   shiny   : Pal | undefined;
 }
+export type PalTarget           = "regular" | "shiny"
 
 
+export const all_pokemon_palette_data = ref([] as PokemonPaletteData[])
+export const current_pokemon_id: Ref<number> = ref(-1)
 
-export const palette_data = reactive([] as PaletteData[])
-export type PalTarget = "regular" | "shiny"
-export const all_palette: Record<PalTarget, Pal> = {
-    regular  : [],
-    shiny    : [],
+export const current_pokemon_palette_data: Ref<PokemonPaletteData > = ref(
+    {
+        NAME: "",
+        name: "",
+        regular: [],
+        shiny: []
+    } satisfies PokemonPaletteData
+)
+
+export const current_pal_data: Record<PalTarget, Ref<Pal>> = {
+    regular  : ref([]),
+    shiny    : ref([]),
 }
-export const palette_target_id: Ref<PalTarget> = ref("shiny")
-export const palette_target   : Ref<Pal> = computed(()=>all_palette[palette_target_id.value])
-export const reverse_poke_to_data: Record<string, number> = {}
+export const active_pal_data: Ref<Pal> = ref([])
 
-export function fetch_palette_data(){
-    fetch("/palette_data.json")
-        .then((blob)=>{
-            blob.json()
-                .then((json_data)=>{
-                    palette_data.length = 0
-                    palette_data.push(...json_data as PaletteData[])
+export const palette_target_id : Ref<PalTarget>  = ref("regular")
+export const reverse_table_poke_to_data: Record<string, number> = {}
 
-                    current_pokemon_id.value = 0
 
-                    init_reverse_table()
-                })
-                .catch((err)=>{
-                    console.error(`couldn't parse palette data as JSON: ${err}`)
-                })
-        })
-        .catch((err)=>{
-            console.error(`couldn't fetch palette data url ${err}`)
-        })
-}
+watch(current_pokemon_id, (id)=>{
+    const new_val = all_pokemon_palette_data.value[id]
+    if (new_val === undefined) return
+    current_pokemon_palette_data.value = bad_copy(new_val)
+    if (new_val.regular !== undefined)
+        current_pal_data.regular.value = bad_copy(new_val.regular)
+    if (new_val.shiny !== undefined)
+        current_pal_data.shiny.value = bad_copy(new_val.shiny)
+    
+    active_pal_data.value = bad_copy(current_pal_data[palette_target_id.value].value)
+})
 
-function init_reverse_table(){
-    // clean previous table
-    for (const member in reverse_poke_to_data) delete reverse_poke_to_data[member]
-    palette_data.forEach((x, i) => reverse_poke_to_data[x.NAME] = i)
-}
+watch(palette_target_id, (id)=>{
+    active_pal_data.value = bad_copy(current_pal_data[palette_target_id.value].value)
+})

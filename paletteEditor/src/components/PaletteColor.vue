@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 type Props = {
     rgba : [number, number, number, number],
@@ -10,7 +10,7 @@ const r = props.rgba[0]
 const g = props.rgba[1]
 const b = props.rgba[2]
 const a = props.rgba[3] === 255
-const color = ref(`rgb(${r},${g},${b}`) 
+const color = computed(()=>`rgb(${r},${g},${b}`) 
 </script>
 <template>
 <div>
@@ -18,9 +18,5 @@ const color = ref(`rgb(${r},${g},${b}`)
 </div>
 </template>
 <style scoped>
-div{
-    width: 16px;
-    height: 16px;
-    background-color: v-bind(color);
-}
+
 </style>
