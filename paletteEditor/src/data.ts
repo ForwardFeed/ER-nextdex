@@ -26,6 +26,13 @@ export type PaletteData = {
 
 
 export const palette_data = reactive([] as PaletteData[])
+export type PalTarget = "regular" | "shiny"
+export const all_palette: Record<PalTarget, Pal> = {
+    regular  : [],
+    shiny    : [],
+}
+export const palette_target_id: Ref<PalTarget> = ref("shiny")
+export const palette_target   : Ref<Pal> = computed(()=>all_palette[palette_target_id.value])
 export const reverse_poke_to_data: Record<string, number> = {}
 
 export function fetch_palette_data(){

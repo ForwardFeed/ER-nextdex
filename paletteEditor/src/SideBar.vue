@@ -1,14 +1,18 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { current_palette, current_pokemon_id, get_url_pokemon } from './data';
+import { current_palette, current_pokemon_id, get_url_pokemon, palette_target } from './data';
 import SpriteSelection from './components/SpriteSelection.vue';
+import PaletteColor from './components/PaletteColor.vue';
 const url = computed(()=> get_url_pokemon(current_palette.value?.NAME))
 </script>
 <template>
 <aside>
     <SpriteSelection/>
     <div class="palette-container">
-
+        <template v-for="(rgba, id) in palette_target">
+            <PaletteColor  v-if="rgba" :rgba :id/>
+        </template>
+        
     </div>
 </aside>
 </template>

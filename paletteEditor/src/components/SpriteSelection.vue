@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { get_url_pokemon, current_palette, palette_data, reverse_poke_to_data, current_pokemon_id } from '@/data';
+import { get_url_pokemon, current_palette, palette_data, reverse_poke_to_data, current_pokemon_id, palette_target_id } from '@/data';
 import { computed, ref } from 'vue';
 
 const url       = computed(()=> get_url_pokemon(current_palette.value?.NAME))
@@ -35,6 +35,9 @@ function on_search_keyup(event: KeyboardEvent){
         <div class="sprite-selection-search" @click="(ev)=>{ev.stopImmediatePropagation()}">
             <span> Search </span>
             <input type="text" @keyup="on_search_keyup">
+            <span @click="on_select = false"> 
+                Click to Return
+            </span>
         </div>
         <div class="sprite-selection-list-container">
             <img v-for="{name, NAME} in palette_data"
