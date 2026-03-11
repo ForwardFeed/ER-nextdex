@@ -3,6 +3,7 @@ import * as FS from "fs";
 import ReadableStreamClone from "readable-stream-clone/lib/readable-stream-clone";
 
 export type Pal =  [[number, number, number, number]?]
+export type PixelPalMap = number[]
 
 function readPalFile(palFileData: string){
     const palData: Pal = []
@@ -83,4 +84,37 @@ export function openPalettes(spritesFilesPaths: string[]): Promise<Pal[]>{
                 reject(err)
             })
     })
+}
+
+
+export function createPixelPalMap(inPath: string): Promise<PixelPalMap>{
+    return new Promise((resolve, reject)=>{
+        const pixelPalMap: PixelPalMap = []
+        const image = FS.createReadStream(inPath)
+        const png   = new ReadableStreamClone(image)
+        .pipe(new PNG())
+        .on("parsed", function(){
+            //@ts-expect-error
+            const imgPal = this._parser._parser._palette as Pal
+            pixelPalMap
+            const pngCut = new PNG({width: 64, height: 64})
+            png.bitblt(pngCut, 0, 0, 64, 64, 0, 0)
+            for (let y = 0; y < pngCut.height; y++){
+                for(let x = 0; x < pngCut.width; x++){
+                    const idx = (pngCut.width * y + x) << 2;
+                    const r = pngCut.data[idx]
+                    const g = pngCut.data[idx + 1];
+                    const b = pngCut.data[idx + 2];
+                    const palIndex = imgPal.findIndex(x => x && x[0] == r && x[1] == g && x[2] == b)
+                    pixelPalMap.push(palIndex)
+                }
+            }
+            resolve(pixelPalMap)
+        })
+        .on("error", function(err){
+            console.error(`failed to parse ${inPath} as PNG, reason ${err}`)
+            reject()
+        })
+    })
+    
 }

@@ -6,7 +6,7 @@ import { Species, Species_RandomizeBanned } from "./gen/SpeciesList_pb.js";
 import { SpeciesEnum } from "./gen/SpeciesEnum_pb.js";
 import { readSpecies } from "./proto_utils.js";
 import { toSpeciesMap } from "./species/species.js";
-import { applyPals, openPalettes, type Pal } from "./transform_sprite";
+import { applyPals, createPixelPalMap, openPalettes, PixelPalMap, type Pal } from "./transform_sprite";
 
 export interface Result {
   fileIterator: number;
@@ -120,11 +120,17 @@ export function getSprites(
   ROOT_PRJ: string,
   output_dir: string,
   output_dir_palette: string,
-  output_dir_palette_data: string
+  output_dir_palette_data: string,
+  output_dir_pixel_palette_data: string
 ) {
   const speciesList = readSpecies();
   const speciesMap  = toSpeciesMap(speciesList);
   const paletteData: PaletteData[] = []
+  const pixelPalMapData: {
+    front : PixelPalMap,
+    back  : PixelPalMap,
+    name  : String  
+  }[] = []
   const promisesToAwait: Promise<void>[] = []
   for (const species of speciesList.species) {
     if (
@@ -145,6 +151,8 @@ export function getSprites(
     const outFrontFilePath  = join(output_dir, outFileRoot + ".png");
     const inBackOutFilePath = join(ROOT_PRJ, gfx.back)
     const outBackFilePath   = join(output_dir, outFileRoot + "_BACK.png");
+    const pixelPalMapDataFront = join(output_dir_pixel_palette_data, outFileRoot + "_front.json")
+    const pixelPalMapDataBack  = join(output_dir_pixel_palette_data, outFileRoot + "_back.json")
 
     const prom = openPalettes([inPalPath, inShinyPalPath])
     .then((pals)=>{
@@ -171,13 +179,33 @@ export function getSprites(
     .catch((err)=>{
       console.error("Failed in open palette : " + err)
     })
-    promisesToAwait.push(prom)
+    promisesToAwait.push(
+      prom,
+      createPixelPalMap(inFrontFilePath).then((front)=>{
+        writeFile(pixelPalMapDataFront, JSON.stringify(front), (err)=>{
+          if (err)
+            console.error(`failed to write pixel palette map data out at ${pixelPalMapDataFront}, reason: ${err}`)
+        })
+      }),
+      createPixelPalMap(inFrontFilePath).then((back)=>{
+        writeFile(pixelPalMapDataBack, JSON.stringify(back), (err)=>{
+          if (err)
+            console.error(`failed to write pixel palette map data out at ${pixelPalMapDataFront}, reason: ${err}`)
+        })
+      })
+    )
+
   }
   Promise.all(promisesToAwait).then(()=>{
     const paletteDataOut = join(output_dir_palette_data, "palette_data.json");
     writeFile(paletteDataOut, JSON.stringify(paletteData), (err)=>{
       if (err)
         console.error(`failed to write palette data out at ${paletteDataOut}, reason: ${err}`)
+    })
+    const pixelPalMapDataOUt = join(output_dir_pixel_palette_data, "pixel_pal_map_data.json")
+    writeFile(pixelPalMapDataOUt, JSON.stringify(pixelPalMapData), (err)=>{
+      if (err)
+        console.error(`failed to write pixel palette map data out at ${pixelPalMapDataOUt}, reason: ${err}`)
     })
   })
  

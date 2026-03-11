@@ -106,10 +106,13 @@ export function main(
         const outputDirPaletteData = optionsValues.redirectData 
           ? Path.join("./paletteEditor/public/")
           : Path.join("./out/");
+        const outputDirPixelPaletteMapData = optionsValues.redirectData 
+          ? Path.join("./paletteEditor/public/pixels/")
+          : Path.join("./out/"); 
         if (!FS.existsSync(OUTPUT_SPRITES)) FS.mkdirSync(OUTPUT_SPRITES);
         if (!FS.existsSync(OUTPUT_PALETTES)) FS.mkdirSync(OUTPUT_PALETTES);
         try {
-          Sprites.getSprites(rootPrj, OUTPUT_SPRITES, OUTPUT_PALETTES, outputDirPaletteData);
+          Sprites.getSprites(rootPrj, OUTPUT_SPRITES, OUTPUT_PALETTES, outputDirPaletteData, outputDirPixelPaletteMapData);
         } catch (err) {
           console.error("error while trying to catch sprites " + err);
         }
