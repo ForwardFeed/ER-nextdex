@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import { onMounted, ref, useTemplateRef, watch } from 'vue'
 import { get_url_pokemon, load_image } from './utils'
-import { current_pokemon_palette_data, current_pokemon_id, all_pokemon_palette_data } from './data'
+import { current_pokemon_palette_data, current_pokemon_id, all_pokemon_palette_data, current_pal_data, palette_target_id } from './data'
+import { create_pixel_map } from './pixelmap'
 
 const canvas_ref = useTemplateRef('canvas-ref')
 const zoom_data  = {
@@ -25,10 +26,16 @@ async function draw(){
     const img = await load_image(get_url_pokemon(NAME))
     img.addEventListener('load', ()=>{
         if (ctx === null) return
-        ctx.clearRect(0,0, 64, 64)
-        ctx.drawImage(img, 0, 0)
+        apply_palette(img, ctx)
         set_default_zoom()
     })
+}
+
+function apply_palette(img: HTMLImageElement, ctx: CanvasRenderingContext2D){
+    ctx.clearRect(0,0, 64, 64)
+    ctx.drawImage(img, 0, 0)
+    const data = ctx.getImageData(0, 0, 64, 64)
+    create_pixel_map(data, current_pal_data[palette_target_id.value].value)
 }
 
 function set_default_zoom(){

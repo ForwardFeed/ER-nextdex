@@ -10,6 +10,7 @@ export type PokemonPaletteData = {
   shiny   : Pal | undefined;
 }
 export type PalTarget           = "regular" | "shiny"
+export type PixelMap            = number[]
 
 
 export const all_pokemon_palette_data = ref([] as PokemonPaletteData[])
@@ -25,6 +26,10 @@ export const current_pokemon_palette_data: Ref<PokemonPaletteData > = ref(
 )
 
 export const current_pal_data: Record<PalTarget, Ref<Pal>> = {
+    regular  : ref([]),
+    shiny    : ref([]),
+}
+export const current_pixelmap_data: Record<PalTarget, Ref<PixelMap>> = {
     regular  : ref([]),
     shiny    : ref([]),
 }
