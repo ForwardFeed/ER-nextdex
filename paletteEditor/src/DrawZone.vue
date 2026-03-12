@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { onMounted, ref, useTemplateRef, watch } from 'vue'
 import { get_url_pokemon, load_image } from './utils'
-import { active_pal_data, active_pixel_map, current_pokemon_palette_data, palette_target_id } from './data'
+import { active_pal_data, active_pixel_map, current_pokemon_palette_data, current_sprite_side, palette_target_id } from './data'
 
 const canvas_ref = useTemplateRef('canvas-ref')
 const zoom_data  = {
@@ -30,7 +30,6 @@ async function draw(){
     
     const img_data = ctx?.getImageData(0,0, 64, 64)
     const data = img_data.data
-    const len = data.length
     const pal_full = active_pal_data.value
     const pixel_pal_map = active_pixel_map.value
     pixel_pal_map.forEach((pal_index, i)=>{

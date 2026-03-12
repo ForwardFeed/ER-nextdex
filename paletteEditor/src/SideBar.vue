@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { active_pal_data, current_pal_data, current_pokemon_palette_data, palette_target_id, type PalTarget } from './data';
+import { active_pal_data, current_pal_data, current_pokemon_palette_data, current_sprite_side, palette_target_id, type PalTarget, type SpriteSide } from './data';
 import SpriteSelection from './components/SpriteSelection.vue';
 import { palette_to_text } from './export_data';
 import SideBarButton from './components/SideBarButton.vue';
@@ -7,6 +7,10 @@ import SideBarButton from './components/SideBarButton.vue';
 const target_control: PalTarget[] = [
     "regular",
     "shiny"
+]
+const side_control: SpriteSide[] = [
+    "back",
+    "front"
 ]
 
 function download_pal(){
@@ -25,6 +29,7 @@ function download_pal(){
 <template>
 <aside>
     <SpriteSelection/>
+    <SideBarButton :text="side" v-for="side in side_control" @click="current_sprite_side = side"/>
     <SideBarButton :text="target" v-for="target in target_control" @click="palette_target_id = target"/>
     <div class="palette-container"> 
         <template v-for="(rgba, id) in active_pal_data" :key="id">

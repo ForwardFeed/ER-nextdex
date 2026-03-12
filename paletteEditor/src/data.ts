@@ -57,3 +57,7 @@ watch(current_pokemon_id, (id)=>{
 watch(palette_target_id, (id)=>{
     active_pal_data.value = bad_copy(current_pal_data[palette_target_id.value].value)
 })
+
+watch(current_sprite_side, ()=>{
+    fetch_pixel_pal_map_data(current_pokemon_palette_data.value.NAME, current_sprite_side.value)
+})

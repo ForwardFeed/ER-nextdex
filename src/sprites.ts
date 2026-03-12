@@ -187,11 +187,13 @@ export function getSprites(
             console.error(`failed to write pixel palette map data out at ${pixelPalMapDataFront}, reason: ${err}`)
         })
       }),
-      createPixelPalMap(inFrontFilePath).then((back)=>{
+      createPixelPalMap(inBackOutFilePath).then((back)=>{
         writeFile(pixelPalMapDataBack, JSON.stringify(back), (err)=>{
           if (err)
             console.error(`failed to write pixel palette map data out at ${pixelPalMapDataFront}, reason: ${err}`)
         })
+      }).catch((err)=>{
+        console.error(`failed to parse image: ${err}`)
       })
     )
 

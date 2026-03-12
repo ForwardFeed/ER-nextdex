@@ -96,7 +96,6 @@ export function createPixelPalMap(inPath: string): Promise<PixelPalMap>{
         .on("parsed", function(){
             //@ts-expect-error
             const imgPal = this._parser._parser._palette as Pal
-            pixelPalMap
             const pngCut = new PNG({width: 64, height: 64})
             png.bitblt(pngCut, 0, 0, 64, 64, 0, 0)
             for (let y = 0; y < pngCut.height; y++){
@@ -113,7 +112,7 @@ export function createPixelPalMap(inPath: string): Promise<PixelPalMap>{
         })
         .on("error", function(err){
             console.error(`failed to parse ${inPath} as PNG, reason ${err}`)
-            reject()
+            reject(err)
         })
     })
     
