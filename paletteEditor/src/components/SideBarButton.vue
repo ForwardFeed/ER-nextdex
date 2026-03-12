@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 type Props = {
-    text: string
+    text: string,
+    is_selected?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {})
 </script>
 <template>
-<div>
+<div :class="is_selected ? 'sbb-selected' : ''">
     <span>
         {{ text }}
     </span>
@@ -19,7 +20,7 @@ div{
     border-color: var(--sidebar-bg);
     display: flex;
 }
-div:hover{
+div:hover, .sbb-selected{
     color: var(--sidebar-bar);
     background-color: var(--sidebar-bg);
     border-color: var(--sidebar-bar);
