@@ -2,7 +2,7 @@
 import { active_pal_data, current_sprite_side, emit_redraw, palette_target_id, type PalTarget, type SpriteSide } from './data';
 import SpriteSelection from './components/SpriteSelection.vue';
 import SideBarButton from './components/SideBarButton.vue';
-import { ref, watch, type Ref } from 'vue';
+import { computed, ref, watch, type Ref } from 'vue';
 import { ChromePicker } from 'vue-color'
 import { download_pal, hexToRgb } from './utils';
 
@@ -18,6 +18,16 @@ const palette_id_selected: Ref<number | null> = ref(null)
 const color = defineModel({
     default: '#68CCCA'
 });
+const opposite_color = computed(()=>{
+    const pal_id = palette_id_selected.value
+    if (pal_id=== null)
+        return '#000'
+    const pal = active_pal_data.value[pal_id]!
+    const r = ((pal[0] ^ 255) + 128) & 255  
+    const g = ((pal[1] ^ 255) + 128) & 255  
+    const b = ((pal[2] ^ 255) + 128) & 255
+    return `rgb(${r},${g},${b})`
+})
 watch(()=>color.value, ()=>{
     const pal_id = palette_id_selected.value
     if (pal_id=== null)
@@ -56,8 +66,10 @@ function on_palette_select(id: number){
     <div class="palette-container"> 
         <template v-for="(rgba, id) in active_pal_data" :key="id">
             <template v-if="rgba && id !== 0">
-                <div style="width: 32px;height: 32px;" @click="on_palette_select(id)"
-                 :style="`background-color: rgb(${rgba[0]}, ${rgba[1]}, ${rgba[2]})`">
+                <div @click="on_palette_select(id)"
+                :style="`background-color: rgb(${rgba[0]}, ${rgba[1]}, ${rgba[2]})`"
+                class="palette-target"
+                :class="palette_id_selected === id ? 'palette-selected': ''" >
                 </div>
             </template>
         </template>
@@ -91,11 +103,16 @@ aside::-webkit-scrollbar {
 }
 .palette-container{
     display: flex;
-    background-color: rgb(76, 104, 23);
     width: 64px;
     flex-wrap: wrap;
 }
+.palette-target{
+    width: 32px;
+    height: 32px;
+}
 .palette-selected{
-
+    border: solid 1px v-bind(opposite_color);
+    width: 30px;
+    height: 30px;
 }
 </style>
