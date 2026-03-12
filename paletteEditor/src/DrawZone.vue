@@ -88,9 +88,15 @@ function on_scroll(event: WheelEvent){
 <style scoped>
 main{
     flex-grow: 1;
-    background-color: blueviolet;
     overflow: hidden;
     display: flex;
+
+    background-color: #020101;
+    opacity: 1;
+    background-image:  linear-gradient(135deg, #383838 25%, transparent 25%), linear-gradient(225deg, #383838 25%, transparent 25%), linear-gradient(45deg, #383838 25%, transparent 25%), linear-gradient(315deg, #383838 25%, #020101 25%);
+    background-position:  27px 0, 27px 0, 0 0, 0 0;
+    background-size: 54px 54px;
+    background-repeat: repeat;
 }
 canvas{
     padding: 0;

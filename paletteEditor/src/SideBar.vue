@@ -2,6 +2,7 @@
 import { active_pal_data, current_pal_data, current_pokemon_palette_data, palette_target_id, type PalTarget } from './data';
 import SpriteSelection from './components/SpriteSelection.vue';
 import { palette_to_text } from './export_data';
+import SideBarButton from './components/SideBarButton.vue';
 
 const target_control: PalTarget[] = [
     "regular",
@@ -24,11 +25,7 @@ function download_pal(){
 <template>
 <aside>
     <SpriteSelection/>
-    <div class="palette-controls">
-        <div v-for="target in target_control" class="palette-controls-target" @click="palette_target_id = target">
-            {{ target }}
-        </div>
-    </div>
+    <SideBarButton :text="target" v-for="target in target_control" @click="palette_target_id = target"/>
     <div class="palette-container"> 
         <template v-for="(rgba, id) in active_pal_data" :key="id">
             <template v-if="rgba && id !== 0">
@@ -36,27 +33,30 @@ function download_pal(){
                  :style="`background-color: rgb(${rgba[0]}, ${rgba[1]}, ${rgba[2]})`">
                 </div>
             </template>
-            <!-- <PaletteColor  v-if="rgba && id !== 0" :rgba :id/> -->
         </template>
     </div>
-    <div class="palette-export">
-        <div @click="download_pal">
-            <span>
-                Download as .PAL
-            </span>
-        </div>
-    </div>
+    <SideBarButton text="Download as .PAL" @click="download_pal"/>
 </aside>
 </template>
 <style scoped>
 aside{
     display: flex;
     flex-direction: column;
-    background-color: rgb(123, 168, 38);
+    width: 64px;
     overflow-y: scroll;
+
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none;  /* IE 10+ */
-    width: 64px;
+
+    background-color: var(--sidebar-bg);
+    opacity: 1;
+    background-image:  linear-gradient(
+        var(--sidebar-bar) 5.4px, transparent 5.4px),
+        linear-gradient(90deg, var(--sidebar-bar) 5.4px, transparent 5.4px),
+        linear-gradient(var(--sidebar-bar) 2.7px, transparent 2.7px),
+        linear-gradient(90deg, var(--sidebar-bar) 2.7px, var(--sidebar-bg) 2.7px);
+    background-size: 135px 135px, 135px 135px, 27px 27px, 27px 27px;
+    background-position: -5.4px -5.4px, -5.4px -5.4px, -2.7px -2.7px, -2.7px -2.7px;
 }
 aside::-webkit-scrollbar {
     width: 0px;
@@ -67,21 +67,5 @@ aside::-webkit-scrollbar {
     background-color: rgb(76, 104, 23);
     width: 64px;
     flex-wrap: wrap;
-}
-.palette-controls{
-    display: flex;
-    flex-direction: column;
-}
-.palette-controls-target, .palette-export{
-    width: 100%;
-    cursor: pointer;
-    user-select: none;
-}
-.palette-export{
-    word-wrap: break-word;
-    font-size: 0.7em;
-}
-.palette-export:hover, .palette-controls-target:hover{
-    background-color: aqua;
 }
 </style>

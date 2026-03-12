@@ -7,6 +7,9 @@ html, body, #app{
 
 :root{
     --main-bg: #0b0b0c;
+
+    --sidebar-bar: #777777;
+    --sidebar-bg : #1d1425;
 }
 
 
