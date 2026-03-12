@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { onMounted, ref, useTemplateRef, watch } from 'vue'
 import { get_url_pokemon, load_image } from './utils'
-import { current_pokemon_palette_data, current_pokemon_id, all_pokemon_palette_data, current_pal_data, palette_target_id } from './data'
+import { active_pal_data, active_pixel_map, current_pokemon_palette_data, palette_target_id } from './data'
 
 const canvas_ref = useTemplateRef('canvas-ref')
 const zoom_data  = {
@@ -11,23 +11,43 @@ const zoom_data  = {
 }
 const zoom_value = ref(zoom_data.curr) 
 onMounted(()=>{
+    set_default_zoom()
     watch(current_pokemon_palette_data, (ne)=>{
        draw()
+    })
+    watch(active_pixel_map, ()=>{
+        draw()
+    })
+    watch(palette_target_id, ()=>{
+        draw()
     })
 })
 
 async function draw(){
-    const palette_data = current_pokemon_palette_data
-    if (palette_data.value === null) return
-    const {NAME} = palette_data.value
     if (canvas_ref.value === null) return
     const ctx = canvas_ref.value.getContext("2d")
-    const img = await load_image(get_url_pokemon(NAME))
-    img.addEventListener('load', ()=>{
-        if (ctx === null) return
-        apply_palette(img, ctx)
-        set_default_zoom()
+    if (ctx === null) return
+    
+    const img_data = ctx?.getImageData(0,0, 64, 64)
+    const data = img_data.data
+    const len = data.length
+    const pal_full = active_pal_data.value
+    const pixel_pal_map = active_pixel_map.value
+    pixel_pal_map.forEach((pal_index, i)=>{
+        const pal = pal_full[pal_index]!
+        let r          = pal[0]
+        let g          = pal[1]
+        let b          = pal[2]
+        let a          = pal[3]
+        if (pal_index === 0){
+            a          = 0
+        }
+        data[(i* 4)]     = r;
+        data[(i* 4) + 1] = g;
+        data[(i* 4) + 2] = b;
+        data[(i* 4) + 3] = a;
     })
+    ctx.putImageData(img_data, 0, 0)
 }
 
 function apply_palette(img: HTMLImageElement, ctx: CanvasRenderingContext2D){

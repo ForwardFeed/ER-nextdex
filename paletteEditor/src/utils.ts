@@ -1,4 +1,4 @@
-import { all_pokemon_palette_data, type PokemonPaletteData, current_pokemon_id, reverse_table_poke_to_data, type SpriteSide } from "./data";
+import { all_pokemon_palette_data, type PokemonPaletteData, current_pokemon_id, reverse_table_poke_to_data, type SpriteSide, active_pixel_map } from "./data";
 
 export function bad_copy<T = unknown>(t: T): T{
     return JSON.parse(JSON.stringify(t))
@@ -46,7 +46,7 @@ export function fetch_pixel_pal_map_data(poke_name: string, side: SpriteSide){
         .then((blob)=>{
             blob.json()
                 .then((json_data)=>{
-                    console.log(json_data)
+                    active_pixel_map.value = json_data
                 })
                 .catch((err)=>{
                     console.error(`couldn't parse palette data as JSON: ${err}`)
