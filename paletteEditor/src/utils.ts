@@ -1,4 +1,5 @@
-import { all_pokemon_palette_data, type PokemonPaletteData, current_pokemon_id, reverse_table_poke_to_data, type SpriteSide, active_pixel_map } from "./data";
+import { all_pokemon_palette_data, type PokemonPaletteData, current_pokemon_id, reverse_table_poke_to_data, type SpriteSide, active_pixel_map, active_pal_data, current_pokemon_palette_data, palette_target_id } from "./data";
+import { palette_to_text } from "./export_data";
 
 export function bad_copy<T = unknown>(t: T): T{
     return JSON.parse(JSON.stringify(t))
@@ -55,4 +56,23 @@ export function fetch_pixel_pal_map_data(poke_name: string, side: SpriteSide){
         .catch((err)=>{
             console.error(`couldn't fetch palette data url ${err}`)
         })
+}
+
+export function hexToRgb(hex: string){
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return { r, g, b };
+}
+
+export function download_pal(){
+    const text  = palette_to_text(active_pal_data.value)
+    const name  = `${current_pokemon_palette_data.value.NAME}_${palette_target_id.value.toUpperCase()}`
+    const type  =  "text/plain"
+    const blob  = new Blob([text], { type })
+    const dummy = document.createElement('a')
+    
+    dummy.download  = name
+    dummy.href      = window.URL.createObjectURL(blob);
+    dummy.click()
 }

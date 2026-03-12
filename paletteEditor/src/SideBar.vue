@@ -1,8 +1,10 @@
 <script lang="ts" setup>
-import { active_pal_data, current_pal_data, current_pokemon_palette_data, current_sprite_side, palette_target_id, type PalTarget, type SpriteSide } from './data';
+import { active_pal_data, current_sprite_side, palette_target_id, type PalTarget, type SpriteSide } from './data';
 import SpriteSelection from './components/SpriteSelection.vue';
-import { palette_to_text } from './export_data';
 import SideBarButton from './components/SideBarButton.vue';
+import { ref, watch } from 'vue';
+import { ChromePicker } from 'vue-color'
+import { download_pal, hexToRgb } from './utils';
 
 const target_control: PalTarget[] = [
     "regular",
@@ -12,18 +14,13 @@ const side_control: SpriteSide[] = [
     "front",
     "back"
 ]
+const color = defineModel({
+    default: '#68CCCA'
+});
+watch(()=>color.value, ()=>{
+    console.log(hexToRgb(color.value))
+})
 
-function download_pal(){
-    const text  = palette_to_text(active_pal_data.value)
-    const name  = `${current_pokemon_palette_data.value.NAME}_${palette_target_id.value.toUpperCase()}`
-    const type  =  "text/plain"
-    const blob  = new Blob([text], { type })
-    const dummy = document.createElement('a')
-    
-    dummy.download  = name
-    dummy.href      = window.URL.createObjectURL(blob);
-    dummy.click()
-}
 
 </script>
 <template>
@@ -35,6 +32,8 @@ function download_pal(){
     <SideBarButton v-for="target in target_control"
         @click="palette_target_id = target"
         :text="target" :is_selected="palette_target_id === target"/>
+    <ChromePicker v-model="color" :disable-alpha="true" :disable-fields="true" :formats="['rgb']"
+    style="position: absolute;"/>
     <div class="palette-container"> 
         <template v-for="(rgba, id) in active_pal_data" :key="id">
             <template v-if="rgba && id !== 0">
