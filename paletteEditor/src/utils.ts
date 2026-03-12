@@ -21,7 +21,7 @@ function init_reverse_table(){
 }
 
 export function fetch_palette_data(){
-    fetch("/palette_data.json")
+    fetch("./palette_data.json")
         .then((blob)=>{
             blob.json()
                 .then((json_data)=>{
@@ -43,7 +43,7 @@ export function get_url_pokemon(poke_name: string): string{
 }
 
 export function fetch_pixel_pal_map_data(poke_name: string, side: SpriteSide){
-    fetch(`/pixels/${poke_name}_${side}.json`)
+    fetch(`./pixels/${poke_name}_${side}.json`)
         .then((blob)=>{
             blob.json()
                 .then((json_data)=>{
