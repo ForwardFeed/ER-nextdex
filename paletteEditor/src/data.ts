@@ -41,6 +41,8 @@ export const reverse_table_poke_to_data: Record<string, number> = {}
 export const active_pixel_map: Ref<PixelMap> = ref([])
 export const current_sprite_side: Ref<SpriteSide> = ref("front")
 
+export const emit_redraw: Ref<number> = ref(0)
+
 watch(current_pokemon_id, (id)=>{
     const new_val = all_pokemon_palette_data.value[id]
     if (new_val === undefined) return

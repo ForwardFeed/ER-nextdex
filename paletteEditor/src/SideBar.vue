@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { active_pal_data, current_sprite_side, palette_target_id, type PalTarget, type SpriteSide } from './data';
+import { active_pal_data, current_sprite_side, emit_redraw, palette_target_id, type PalTarget, type SpriteSide } from './data';
 import SpriteSelection from './components/SpriteSelection.vue';
 import SideBarButton from './components/SideBarButton.vue';
-import { ref, watch } from 'vue';
+import { ref, watch, type Ref } from 'vue';
 import { ChromePicker } from 'vue-color'
 import { download_pal, hexToRgb } from './utils';
 
@@ -14,13 +14,32 @@ const side_control: SpriteSide[] = [
     "front",
     "back"
 ]
+const palette_id_selected: Ref<number | null> = ref(null)
 const color = defineModel({
     default: '#68CCCA'
 });
 watch(()=>color.value, ()=>{
-    console.log(hexToRgb(color.value))
+    const pal_id = palette_id_selected.value
+    if (pal_id=== null)
+        return
+    const {r,g,b}= hexToRgb(color.value)
+    active_pal_data.value[pal_id] = [
+        r,
+        g,
+        b,
+        255
+    ]
+    emit_redraw.value += 1
 })
 
+function on_palette_select(id: number){
+    if (palette_id_selected.value === null){
+        palette_id_selected.value = id
+    } else {
+        palette_id_selected.value = null
+    }
+    
+}
 
 </script>
 <template>
@@ -33,11 +52,11 @@ watch(()=>color.value, ()=>{
         @click="palette_target_id = target"
         :text="target" :is_selected="palette_target_id === target"/>
     <ChromePicker v-model="color" :disable-alpha="true" :disable-fields="true" :formats="['rgb']"
-    style="position: absolute;"/>
+    style="position: absolute;" v-show="palette_id_selected !== null"/>
     <div class="palette-container"> 
         <template v-for="(rgba, id) in active_pal_data" :key="id">
             <template v-if="rgba && id !== 0">
-                <div style="width: 32px;height: 32px;"
+                <div style="width: 32px;height: 32px;" @click="on_palette_select(id)"
                  :style="`background-color: rgb(${rgba[0]}, ${rgba[1]}, ${rgba[2]})`">
                 </div>
             </template>
@@ -75,5 +94,8 @@ aside::-webkit-scrollbar {
     background-color: rgb(76, 104, 23);
     width: 64px;
     flex-wrap: wrap;
+}
+.palette-selected{
+
 }
 </style>
