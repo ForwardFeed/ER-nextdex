@@ -9,8 +9,8 @@ const target_control: PalTarget[] = [
     "shiny"
 ]
 const side_control: SpriteSide[] = [
-    "back",
-    "front"
+    "front",
+    "back"
 ]
 
 function download_pal(){
@@ -34,7 +34,7 @@ function download_pal(){
         :text="side" :is_selected="current_sprite_side === side"/>
     <SideBarButton v-for="target in target_control"
         @click="palette_target_id = target"
-        :text="target" :is_selected="palette_target_id === target"/>/>
+        :text="target" :is_selected="palette_target_id === target"/>
     <div class="palette-container"> 
         <template v-for="(rgba, id) in active_pal_data" :key="id">
             <template v-if="rgba && id !== 0">

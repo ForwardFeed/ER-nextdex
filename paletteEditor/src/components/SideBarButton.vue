@@ -14,11 +14,12 @@ const props = withDefaults(defineProps<Props>(), {})
 </template>
 <style scoped>
 div{
-    border-radius: 0.1em;
+    border-radius: 8px;
     background-color: var(--sidebar-bar);
     border: solid 2px;
     border-color: var(--sidebar-bg);
     display: flex;
+    padding: 0.5em;
 }
 div:hover, .sbb-selected{
     color: var(--sidebar-bar);
