@@ -55,6 +55,8 @@ function on_search_click(){
 </template>
 <style scoped>
 .selection-bg{
+    width: 100%;
+    
     background-color: var(--sidebar-bg);
     opacity: 1;
     background-image:  linear-gradient(
@@ -89,9 +91,9 @@ function on_search_click(){
     transform: scale(1.8);
 }
 input[type="text"]{
-    height: 1em;
     border: none;
     margin: auto;
+    font-size: 32px;
 }
 input[type="text"]::-moz-focus-inner{
     border: none;

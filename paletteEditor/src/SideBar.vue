@@ -44,7 +44,7 @@ function download_pal(){
             </template>
         </template>
     </div>
-    <SideBarButton text="Download as .PAL" @click="download_pal"/>
+    <SideBarButton text="Download as .PAL" @click="download_pal" style="font-size: 0.8em;"/>
 </aside>
 </template>
 <style scoped>
