@@ -299,7 +299,11 @@ function protoMoveToLegacyMove(move: ProtoMove): [string, Move] {
   const legacyMove: Move = {
     name: move.name,
     shortName: move.shortName,
-    effect: Xtox("EFFECT_", MoveBehavior[move.effect] || "EFFECT_HIT"),
+    effect: Xtox("EFFECT_", move.moveEffect.value
+      ? move.moveEffect.case == "effect"
+        ? MoveBehavior[move.moveEffect.value]
+        : MoveBehavior[move.moveEffect.value.id]
+      : "EFFECT_HIT"),
     power: move.power,
     types: (move.type2
       ? [Type[move.type || 0] || "MYSTERY", Type[move.type2]]
@@ -317,7 +321,7 @@ function protoMoveToLegacyMove(move: ProtoMove): [string, Move] {
     argument: "",
     desc: move.shortDescription,
     longDesc: move.description,
-    usesHpType: move.effect === MoveBehavior.EFFECT_HIDDEN_POWER,
+    usesHpType: move.moveEffect.value === MoveBehavior.EFFECT_HIDDEN_POWER,
   };
 
   for (const field of MoveSchema.fields) {
