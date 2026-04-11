@@ -245,6 +245,50 @@
                 <!--button id="filter-alphabethically">Filter Alphabethically</button-->
                 <div id="abis-list">
                 </div>
+                <div id="typecalc-data" style="display: none;">
+                    <div class="typecalc-controls">
+                        <div class="typecalc-row colorA">
+                            <div class="typecalc-row-label">Types</div>
+                            <div class="typecalc-row-content">
+                                <div class="tc-dropdown-wrap">
+                                    <input type="text" class="tc-dropdown-btn" id="typecalc-type1" value="Normal" autocomplete="off">
+                                    <div class="tc-dropdown-list" style="display:none;"></div>
+                                </div>
+                                <div class="tc-dropdown-wrap">
+                                    <input type="text" class="tc-dropdown-btn" id="typecalc-type2" value="-- None --" autocomplete="off">
+                                    <div class="tc-dropdown-list" style="display:none;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="typecalc-row colorB">
+                            <div class="typecalc-row-label">Ability</div>
+                            <div class="typecalc-row-content">
+                                <div class="tc-dropdown-wrap">
+                                    <input type="text" class="tc-dropdown-btn" id="typecalc-abi0" value="-- None --" autocomplete="off">
+                                    <div class="tc-dropdown-list" style="display:none;"></div>
+                                </div>
+                                <div class="tc-dropdown-wrap">
+                                    <input type="text" class="tc-dropdown-btn" id="typecalc-abi1" value="-- None --" autocomplete="off">
+                                    <div class="tc-dropdown-list" style="display:none;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="typecalc-row colorA">
+                            <div class="typecalc-row-label">Ability</div>
+                            <div class="typecalc-row-content">
+                                <div class="tc-dropdown-wrap">
+                                    <input type="text" class="tc-dropdown-btn" id="typecalc-abi2" value="-- None --" autocomplete="off">
+                                    <div class="tc-dropdown-list" style="display:none;"></div>
+                                </div>
+                                <div class="tc-dropdown-wrap">
+                                    <input type="text" class="tc-dropdown-btn" id="typecalc-abi3" value="-- None --" autocomplete="off">
+                                    <div class="tc-dropdown-list" style="display:none;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="typecalc-result" class="typecalc-result"></div>
+                </div>
             </div>
             <div id="panel-moves" class="panel">
                 <div id="moves-list" class="data-list">
@@ -366,9 +410,8 @@
                 <span class="small-select interactible">Builder</span>
             </div>
             <div class="side-btn btn-n-active interactible" id="btn-abis">
-                <span>
-                    Abilities
-                </span>
+                <span class="big-select interactible">Abilities</span>
+                <span class="small-select interactible">Calc</span>
             </div>
             <div class="side-btn btn-n-active interactible" id="btn-moves">
                 <span>Moves</span>

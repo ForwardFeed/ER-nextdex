@@ -13,6 +13,7 @@ import { hydrateSpecies } from "./species.js"
 import { hydrateLocation } from "./locations.js"
 import { addAllOtherEveeMoves } from "./moves.js"
 import { takeMovesFromPreEvolution } from "./moves.js"
+import { populateTypeCalc } from "../panels/typecalc_panel.js"
 
 export const nodeLists = {
     species: [],
@@ -22,7 +23,7 @@ export const nodeLists = {
     trainers: [],
 }
 
-export function hydrate(firstLoad=false) {
+export function hydrate(firstLoad = false) {
     if (!gameData) {
         return console.warn("couldn't find gameData")
     }
@@ -63,22 +64,23 @@ export function hydrate(firstLoad=false) {
         [takeMovesFromPreEvolution, "take moves from evo"],
         [addAllOtherEveeMoves, "adding ER eevees moves"],
         [initFormatShowdown, "showdown data"],
+        [populateTypeCalc, "type calculator"],
     ]
     const stepLen = steps.length
-    for (let i = 0; i < stepLen; i++){
+    for (let i = 0; i < stepLen; i++) {
         const step = steps[i]
-        if (firstLoad){
+        if (firstLoad) {
             load(step[0], step[1], i == stepLen - 1)
         } else {
             step[0]()
         }
-    } 
+    }
 }
 
 export let itemList = []
-function setLists(){
+function setLists() {
     itemList = gameData.items.map(x => x.name)
-    
+
 }
 
 

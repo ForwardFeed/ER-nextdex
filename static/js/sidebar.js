@@ -1,25 +1,25 @@
-import { search, updateMainSearchKey} from "./search.js"
+import { search, updateMainSearchKey } from "./search.js"
 import { activateSearch } from "./filters.js"
 import { capitalizeFirstLetter } from "./utils.js"
 import { getHintInteractibilityClass } from "./settings.js"
 
-export function setupPanels(){
+export function setupPanels() {
     // if modified sync it with "search.js > search > panelUpdatesTable" variable
     const panelTable = [
         ["#btn-species", "#panel-species", "#species-data", "#builder-data"],
-        ["#btn-abis", "#panel-abis"],
+        ["#btn-abis", "#panel-abis", "#abis-list", "#typecalc-data"],
         ["#btn-moves", "#panel-moves"],
         ["#btn-locations", "#panel-locations"],
         ["#btn-trainers", "#panel-trainers"]
     ]
-    
-    for (const i in panelTable){
+
+    for (const i in panelTable) {
         const btnPanel = panelTable[i]
-        $(btnPanel[0]).on('click', ()=>{
+        $(btnPanel[0]).on('click', () => {
             const curBtn = $('aside .btn-active')
             const btn = $(btnPanel[0])
             const panel = $(btnPanel[1])
-            if (curBtn[0] === btn[0]){
+            if (curBtn[0] === btn[0]) {
                 if (!btnPanel[2]) return
                 // modify the button inner text
                 const small = btn.find('.small-select')
@@ -35,7 +35,7 @@ export function setupPanels(){
 
             curBtn.addClass('btn-n-active')
             curBtn.removeClass('btn-active')
-            
+
             btn.removeClass('btn-n-active')
             btn.addClass('btn-active')
 
@@ -44,11 +44,11 @@ export function setupPanels(){
             curPan.toggle()
             panel.addClass('active-panel')
             panel.toggle()
-            
+
             // tell the search only to update this
             search.panelUpdatesIndex = i
             //if an update was caused when this pannel was frozen
-            if (search.panelFrozenUpdate[i]){
+            if (search.panelFrozenUpdate[i]) {
                 search.defrosting = false
                 fastdom.mutate(() => {
                     //then refresh in the next frame
