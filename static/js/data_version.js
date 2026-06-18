@@ -1,5 +1,6 @@
 import { hydrate } from './hydrate/hydrate.js'
 import { saveToLocalstorage, fetchFromLocalstorage } from './settings.js';
+import {get_url_parameters, update_url_parameters} from "./url.js"
 /**
  * To select which version of the game data to have
  */
@@ -9,7 +10,7 @@ export let compareData;
 export let gameData;
 // each time the data is modified, this is updated
 // so the client checks if it have the latest version by checking lo
-const LATEST_DATA_VERSION = "46"/*%%VERSION%%*/
+const LATEST_DATA_VERSION = "47"/*%%VERSION%%*/
 
 const allVersions = [
     "1.6.1",
@@ -43,6 +44,7 @@ function setAvailableVersion(){
     $('#versions').append(fragment).val(version)
     $('#compare-versions').append(compareDataFrag)
 }
+
 let forceRefresh = false
 export function changeVersion(version=defaultVersion, firstLoad=false){
     if (!version){
@@ -51,15 +53,21 @@ export function changeVersion(version=defaultVersion, firstLoad=false){
     }
     const savedVersion = fetchFromLocalstorage("dataversion"+version)
     saveToLocalstorage("lastusedversion", version)
+    update_url_parameters({
+        version: version
+    })
     if (savedVersion && savedVersion == LATEST_DATA_VERSION &&
         $('#enable-storage')[0].checked && !forceRefresh){
         try{
-            gameData = JSON.parse(fetchFromLocalstorage("data"+version))
-            if (gameData) {
-                window.gameData = gameData
-                console.log("took gamedata from storage")
-                hydrate(firstLoad)
-                return
+            const local_storage_data = fetchFromLocalstorage("data"+version)
+            if (local_storage_data){
+                gameData = JSON.parse(local_storage_data)
+                if (gameData) {
+                    window.gameData = gameData
+                    console.log("took gamedata from storage")
+                    hydrate(firstLoad)
+                    return
+                }
             }
         } catch(_e){
             console.warn(_e)
@@ -83,6 +91,7 @@ export function changeVersion(version=defaultVersion, firstLoad=false){
             
     })
 }
+
 
 function changeCompareData(currentVersion, versionTarget){
     //fetch remotely
@@ -109,6 +118,11 @@ function hideCompareFieldIdentical(version){
         $('#compare-versions').val("none").trigger('change')
     }
     
+}
+
+export function is_version_valid(version){
+    if (allVersions.indexOf(version) == -1) return false
+    return true
 }
 
 export function setupDataVersionning(firstLoad = false){
