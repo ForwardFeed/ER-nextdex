@@ -11,12 +11,13 @@ import { setupMoves} from "./panels/moves_panel.js"
 import { load } from "./loading.js"
 import { setupFormatShowdown } from "./format_showdown.js"
 import { setupLoadSave } from "./load_save.js"
-
+import { setup_url_change_watcher } from "./url.js"
 
 document.addEventListener("DOMContentLoaded", function(){
     load(()=>{}, "start")
     const setupSteps = [
         [setupSettings, "settings"],
+        [setup_url_change_watcher, "url_change_watcher"],
         [setupPanels, "side bar"],
         [setupMoves, "panel moves"],
         [setupSpeciesPanel, "panel species"],
@@ -25,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function(){
         [setupFilters, "filter frame"],
         [setupFormatShowdown, "Showdown format"],
         [setupLoadSave, "save loader"],
-        [()=>{setupDataVersionning(true)}, "gamedata loader"],
+        [()=>{setupDataVersionning(true)}, "gamedata loader"]
     ]
     for (const step of setupSteps){
         load(step[0], step[1])
