@@ -503,6 +503,9 @@ export function setupReorderBtn() {
     function byAlpha(a, b) {
         return a.name.localeCompare(b.name)
     }
+    function byDexNumber(a, b) {
+        return a.dex.id - b.dex.id
+    }
     function localeByStats(statID, a, b) {
         return a.stats.base[statID] - b.stats.base[statID]
     }
@@ -529,6 +532,10 @@ export function setupReorderBtn() {
             }],
             ["A-Z", (ev) => {
                 reorderNodeList(list, byAlpha)
+                removeInformationWindow(ev)
+            }],
+            ["Dex°", (ev) => {
+                reorderNodeList(list, byDexNumber)
                 removeInformationWindow(ev)
             }],
             ["Stats", () => {
