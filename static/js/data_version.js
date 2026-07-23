@@ -56,6 +56,8 @@ export function changeVersion(version=defaultVersion, firstLoad=false){
     update_url_parameters({
         version: version
     })
+    set_warning_version(version === defaultVersion)
+
     if (savedVersion && savedVersion == LATEST_DATA_VERSION &&
         $('#enable-storage')[0].checked && !forceRefresh){
         try{
@@ -129,7 +131,13 @@ export function setupDataVersionning(firstLoad = false){
     if (firstLoad) setAvailableVersion()
     $('#versions').on('change', () => {
         hideCompareFieldIdentical($('#versions').val())
-        changeVersion($('#versions').val(), firstLoad)
+        let version = $('#versions').val()
+        let url_version = get_url_parameters()
+        if (firstLoad === true && url_version !== undefined){
+            version = url_version.version
+            $('#versions').val(version)
+        }
+        changeVersion(version, firstLoad)
         if (firstLoad) firstLoad = false
     })
     const version = $('#versions').val() || defaultVersion
@@ -150,3 +158,10 @@ export function setupDataVersionning(firstLoad = false){
     })
 }
 
+function set_warning_version(unset = false){
+    let text = `A new version is available(${defaultVersion}) *`
+    if (unset === true){
+        text = ""
+    }
+    $('#version-warn').text(text)
+}

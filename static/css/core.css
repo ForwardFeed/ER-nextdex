@@ -46,7 +46,10 @@ main{
     line-height: normal;
     font-size: 3vw;
 }
-
+#version-warn{
+    color: rgb(240, 240, 35);
+    margin: unset;
+}
 .header-gradient-ER {
     background: var(--headerBG);
     background: var(--headerBGL);
