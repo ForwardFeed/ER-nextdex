@@ -714,6 +714,7 @@ export function setupFilters(){
     }, ()=>{return "red"})
 
     setupFiltersRow()
+    hidesFiltersNotActivePanel(+search.panelUpdatesIndex)
 }
 
 export function longClickToFilter(panelID, node, key, data = ()=>{return node.innerText}, callback = false){
@@ -762,4 +763,15 @@ function setupFiltersRow(){
             ]
         ])
     }))
+}
+/**
+ * 
+ * @param {number} active_panel 
+ */
+export function hidesFiltersNotActivePanel(active_panel){
+    const filters_divs = $('.filter-row')
+    const len = filters_divs.length
+    for (let i = 0; i < len; i += 1){
+        $(filters_divs[i]).toggle(i === active_panel)
+    }
 }
