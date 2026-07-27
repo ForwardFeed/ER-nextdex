@@ -346,3 +346,10 @@ span{
     border-radius: 100px;
 }
 
+.highlight{
+    color: var(--positive)
+}
+
+.m-auto{
+    margin: auto;
+}

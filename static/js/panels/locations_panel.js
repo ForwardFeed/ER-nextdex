@@ -2,7 +2,7 @@ import { createSpeciesBlock, redirectSpecie } from "./species/species_panel.js"
 import { search } from "../search.js"
 import { queryFilter2, queryFilter3 } from "../filters.js"
 import { gameData } from "../data_version.js"
-import { AisInB } from "../utils.js"
+import { AisInB, e, JSHAC } from "../utils.js"
 import { settings } from "../settings.js"
 
 export let currentLocID = 0
@@ -18,6 +18,9 @@ const xrateTable = [
 export function feedPanelLocations(mapID){
     currentLocID = mapID
     const map = gameData.locations.maps[mapID]
+    const general_data = {
+        pkms: []
+    }
     for (const rateName of xrateTable){
         const rates = map[rateName]
         const node = $('#locations-' + rateName)
@@ -33,11 +36,68 @@ export function feedPanelLocations(mapID){
             const specieNode = createSpeciesBlock(rate[2])
             specie.empty().append(specieNode)
             node.children().find('.location-lvl').eq(i).text(rate[0] + "-" + rate[1])
-            if (rateName === "given") node.append(specieNode)
+            if (rateName === "given") 
+                node.append(specieNode)
+            if (! general_data.pkms.includes(rate[2]))
+                general_data.pkms.push(rate[2])
         }
     }
     $('#locations-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
     $('#locations-list').children().eq(mapID).addClass("sel-active").removeClass("sel-n-active")
+    feedLocationGeneralData(general_data)
+}
+
+
+function feedLocationGeneralData(general_data){
+    const types_spread = [... new Array(gameData.typeT.length)].map((_,i)=>{return{
+        id: i,
+        amount: 0
+    }}) 
+    general_data.pkms.forEach(pk_id => {
+        const types = [...new Set(gameData.species[pk_id].stats.types)]
+        types.forEach(type_id => {
+            types_spread[type_id].amount += 1
+        })
+    })
+    types_spread.sort((a, b)=>{
+        return b.amount - a.amount
+    })
+    const amount_to_filter = types_spread[1].amount
+    const types_to_show = types_spread.filter(x => x.amount >= amount_to_filter)
+    const frag = document.createDocumentFragment()
+    frag.append(e('div', '', 'Most Frequent types:'))
+    for (const type of types_to_show){
+        const type_text = gameData.typeT[type.id]
+        frag.append(
+            JSHAC([
+                e('div', `${type_text.toLowerCase()}-t`, undefined, {
+                    onmouseover: ()=>{
+                        highlight_species_per_types(type.id)
+                    },
+                    onmouseclick: ()=>{
+                        highlight_species_per_types(type.id)
+                    },
+                }), [
+                    e('span', 'm-auto', type_text)
+                ]
+            ])
+        )
+    }
+    $('#location-general-data-most-common').empty().append(frag)
+    
+}
+
+function highlight_species_per_types(type_id){
+    const nodes = $('#locations-data .specie-block')
+    for (const node of nodes){
+        const id = $(node).data('id')
+        const types = gameData.species[id].stats.types
+        if (types.includes(type_id)){
+            $(node).addClass('highlight')
+        } else {
+            $(node).removeClass('highlight')
+        }
+    }
 }
 
 export function redirectLocation(mapId)
