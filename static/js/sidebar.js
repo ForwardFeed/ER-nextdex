@@ -1,5 +1,5 @@
 import { search, updateMainSearchKey } from "./search.js"
-import { activateSearch } from "./filters.js"
+import { activateSearch, hidesFiltersNotActivePanel} from "./filters.js"
 import { capitalizeFirstLetter } from "./utils.js"
 import { getHintInteractibilityClass } from "./settings.js"
 
@@ -12,7 +12,6 @@ export function setupPanels() {
         ["#btn-locations", "#panel-locations"],
         ["#btn-trainers", "#panel-trainers"]
     ]
-
     for (const i in panelTable) {
         const btnPanel = panelTable[i]
         $(btnPanel[0]).on('click', () => {
@@ -45,6 +44,8 @@ export function setupPanels() {
             panel.addClass('active-panel')
             panel.toggle()
 
+            // hides the wrong search panel
+            hidesFiltersNotActivePanel(+i)
             // tell the search only to update this
             search.panelUpdatesIndex = i
             //if an update was caused when this pannel was frozen
