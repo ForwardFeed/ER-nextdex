@@ -417,7 +417,7 @@ export function createSpeciesBlock(specieId) {
     //create a div, then inside an image and the species name with redirection
     const node = $("<span/>").addClass("specie-block").click(() => {
         redirectSpecie(specieId)
-    })
+    }).data('id', specieId)
     const specie = gameData.species[specieId]
     const img = $("<img/>").attr('src', getSpritesURL(specie.NAME))
         .addClass("sprite")

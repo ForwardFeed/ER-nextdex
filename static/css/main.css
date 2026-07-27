@@ -1270,4 +1270,12 @@ a:hover{
     }
 }
 
-
+#location-general-data{
+    margin: auto;
+    background-color: var(--colorA);
+}
+#location-general-data-most-common > div{
+    width: 100%;
+    margin: auto;
+    display: flex;
+}
