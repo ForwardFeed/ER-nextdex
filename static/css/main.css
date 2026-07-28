@@ -883,6 +883,9 @@ span{
     margin-top: 0.2em;
     margin-bottom: 0.2em;
 }
+.settings-row:hover{
+    background-color: var(--colorB);
+}
 .settings-row > input[type='radio'] { 
     transform: scale(2); 
     margin-top: -1px;
@@ -890,6 +893,9 @@ span{
 }
 .settings-row > * {
     margin-right: 2%;
+}
+.settings-row > label:hover, .settings-row > input:hover{
+    background-color: var(--colorA);
 }
 .settings-bottom{
     margin-top: auto;
