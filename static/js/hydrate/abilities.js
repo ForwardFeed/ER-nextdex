@@ -1,14 +1,17 @@
 import { e, JSHAC } from "../utils.js";
 import { gameData } from "../data_version.js"
 import { nodeLists } from "./hydrate.js";
+import { longClickToFilter } from "../filters.js";
 
 export function hydrateAbilities(abilities = gameData.abilities) {
     $("#abis-list").empty().append(JSHAC(
         abilities.map((abi, i) => {
             if (abi.name === "-------") return undefined
+            const abi_name = e("div", "abi-name color" + (i % 2 ? "A" : "B"), abi.name)
+            longClickToFilter(0, abi_name, "ability", ()=>abi.name)
             const row = JSHAC([
                 e("div", "abi-row"), [
-                    e("div", "abi-name color" + (i % 2 ? "A" : "B"), abi.name),
+                    abi_name,
                     e("div", "abi-desc color" + (i % 2 ? "C" : "D"), abi.desc),
                     e("div", "abi-id color" + (i % 2 ? "A" : "B"), abi.id),
                 ]
