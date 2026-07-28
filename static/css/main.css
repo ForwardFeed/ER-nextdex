@@ -1283,7 +1283,7 @@ a:hover{
     }
 }
 
-#location-general-data{
+#location-general-data-most-common{
     background-color: var(--colorA);
 }
 #location-general-data-most-common > div{
