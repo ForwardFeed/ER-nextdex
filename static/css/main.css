@@ -377,6 +377,9 @@ span{
 #species-name{
     user-select: text;
 }
+.species-name{
+    font-size: 0.7em;
+}
 
 .species-mid-stats{
     display: flex;
