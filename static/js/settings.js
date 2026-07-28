@@ -1,4 +1,6 @@
+import { hidesFiltersNotActivePanel } from "./filters.js"
 import { loadFont } from "./fonts.js"
+import { search } from "./search.js"
 
 
 const appName = "ERdex"
@@ -27,7 +29,8 @@ const defaultSettings = {
     monotype: false,
     discordFormat: true,
     font: "basis33",
-    hintSelectible: true
+    hintSelectible: true,
+    filterBoundPanels: true,
 }
 
 export function initAppSettings(){
@@ -190,6 +193,19 @@ export function setupSettings(){
         setHintInteractible()
         saveSettings()
     })
+
+    $('#enable-filter-panel-bound').on('change', ()=>{
+        settings.filterBoundPanels = true
+        hidesFiltersNotActivePanel(search.panelUpdatesIndex)
+        saveSettings()
+    })
+    $('#disable-filter-panel-bound').on('change', ()=>{
+        settings.filterBoundPanels = false
+        hidesFiltersNotActivePanel(-1)
+        saveSettings()
+    })
+    
+
     if (settings.hintSelectible) $('#enable-interactible').attr('checked', true)
     setHintInteractible()
     setDynamicalRowOfSettings("font", fontList, (font)=>{

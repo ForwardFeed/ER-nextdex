@@ -1,7 +1,7 @@
 import { search, updateMainSearchKey } from "./search.js"
 import { activateSearch, hidesFiltersNotActivePanel} from "./filters.js"
 import { capitalizeFirstLetter } from "./utils.js"
-import { getHintInteractibilityClass } from "./settings.js"
+import { getHintInteractibilityClass, settings } from "./settings.js"
 
 export function setupPanels() {
     // if modified sync it with "search.js > search > panelUpdatesTable" variable
@@ -46,6 +46,7 @@ export function setupPanels() {
 
             // hides the wrong search panel
             hidesFiltersNotActivePanel(+i)
+            
             // tell the search only to update this
             search.panelUpdatesIndex = i
             //if an update was caused when this pannel was frozen

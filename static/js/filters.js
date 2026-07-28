@@ -3,6 +3,7 @@ import { e, JSHAC, clickOutsideToHide, setLongClickSelection } from "./utils.js"
 import { setAllMoves } from "./panels/species/species_panel.js"
 import { capitalizeFirstLetter } from "./utils.js"
 import { clearMatchedMove } from "./panels/moves_panel.js"
+import { settings } from "./settings.js"
 // Sync it with search.js => panelUpdatesTable
 
 let filtersCounter = 0
@@ -766,12 +767,19 @@ function setupFiltersRow(){
 }
 /**
  * 
- * @param {number} active_panel 
+ * @param {number} active_panel Shows the panel to keep. if it's -1 it disable this feature
  */
 export function hidesFiltersNotActivePanel(active_panel){
+    if (settings.filterBoundPanels === false){
+        active_panel = -1
+    }
     const filters_divs = $('.filter-row')
     const len = filters_divs.length
     for (let i = 0; i < len; i += 1){
-        $(filters_divs[i]).toggle(i === active_panel)
+        let is_toggled = i == active_panel
+        if (active_panel == -1){
+            is_toggled = true
+        }
+        $(filters_divs[i]).toggle(is_toggled)
     }
 }
