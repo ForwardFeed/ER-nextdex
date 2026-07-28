@@ -723,7 +723,7 @@ export function longClickToFilter(panelID, node, key, data = ()=>{return node.in
     let extendableDiv = setLongClickSelection(node, () => {
         if (hasFilter(key, data(), panelID)) {  
             if (!filterDiv){
-                $('.filter-search').each((index, val)=>{
+                $('.filter-search').each((_index, val)=>{
                     if (val.value === data()){
                         $(val).closest(".filter-field").remove()
                     }

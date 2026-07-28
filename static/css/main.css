@@ -1288,3 +1288,13 @@ a:hover{
     margin: auto;
     display: flex;
 }
+
+.location-types-selection, .location-more-types{
+    cursor: pointer;
+}
+.location-types-selection:hover, .location-more-types:hover{
+    background-color: var(--colorE);
+}
+.location-more-types{
+    display: flex;
+}
