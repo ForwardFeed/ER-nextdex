@@ -16,7 +16,7 @@ const xrateTable = [
     "given",
 ]
 export function feedPanelLocations(mapID){
-    currentLocID = mapID
+    currentLocID = +mapID
     const map = gameData.locations.maps[mapID]
     const general_data = {
         pkms: []
@@ -92,7 +92,6 @@ function feedLocationGeneralData(general_data){
         JSHAC([
             e('div', 'location-more-types', '+ more', {
                 onclick: ()=>{
-                    console.log('click')
                     show_more_location_types(
                         types_spread.filter(x => x.amount < amount_to_filter && x.amount > 0)
                     )
@@ -199,5 +198,7 @@ export function updateLocations(searchQuery){
         }
     }
     //if the current selection isn't in the list then change
-    if (matched && matched.indexOf(currentLocID) == -1 && validID) feedPanelLocations(validID)
+    if (matched && matched.indexOf(currentLocID) == -1 && validID !== undefined) {
+        feedPanelLocations(validID)
+    }
 }
