@@ -83,6 +83,7 @@ function feedLocationGeneralData(general_data){
     })
     const amount_to_filter = types_spread[1].amount
     const types_to_show = types_spread.filter(x => x.amount >= amount_to_filter)
+    const missing_types = types_spread.filter(x => x.amount < amount_to_filter && x.amount > 0)
     const frag = document.createDocumentFragment()
     frag.append(e('div', '', 'Most Frequent types:'))
     for (const data_type of types_to_show){
@@ -90,13 +91,15 @@ function feedLocationGeneralData(general_data){
     }
     frag.append(
         JSHAC([
-            e('div', 'location-more-types', '+ more', {
+            e('div', 'location-more-types', '', {
                 onclick: ()=>{
                     show_more_location_types(
-                        types_spread.filter(x => x.amount < amount_to_filter && x.amount > 0)
+                        missing_types
                     )
                 }
-            })
+            }), [
+                e('span', 'm-auto', `+${missing_types.length} more`)
+            ]
         ])
     )
     $('#location-general-data-most-common').empty().append(frag)
