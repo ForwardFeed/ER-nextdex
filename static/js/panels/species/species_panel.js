@@ -23,8 +23,8 @@ const spriteAlternateFunc = [
 export function feedPanelSpecies(id) {
     currentSpecieID = id
     const specie = gameData.species[id]
-    $('#species-name').text(`${specie.name}#${specie.dex.id || "??"}`)
-    $('#species-id').text(`ID: ${specie.id}`)
+    $('#species-name span').text(`${specie.name}#${specie.dex.id || "??"}`)
+    $('#species-id span').text(`ID: ${specie.id}`)
     updateBaseStats(specie.stats.base)
     if (specie.shinyColor === undefined)
         specie.shinyColor = 0
