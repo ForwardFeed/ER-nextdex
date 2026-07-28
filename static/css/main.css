@@ -135,6 +135,9 @@ input[type='radio']:checked {
     text-align: center;
     user-select: none;
 }
+.data-list-row:hover{
+    background-color: var(--btnNActive);
+}
 .data-data{
     flex-grow: 1;
     background-color: var(--colorC);
@@ -362,7 +365,7 @@ span{
 }
 
 .species-name{
-    width: min-content;
+    width: 9em;
 }
 #species-name{
     user-select: text;
@@ -370,6 +373,7 @@ span{
 }
 .species-mid-stats{
     display: flex;
+    flex-wrap: wrap;
 }
 
 .species-top{
@@ -520,6 +524,7 @@ span{
 .type{
     border-radius: 5px;
     padding: 0 10px;
+    margin: auto;
 }
 /*.species-type:last-child{}*/
 .species-switch{
@@ -529,7 +534,12 @@ span{
     user-select: none;
 }
 .species-switch > * {
-    margin-right: 0.5em;
+    margin-right: 0.1em;
+}
+.species-switch .btn{
+    padding-left: 6px;
+    padding-right: 6px;
+    border-radius: 6px;
 }
 .species-sub-pannel{
     background-color: var(--colorC);

@@ -353,3 +353,6 @@ span{
 .m-auto{
     margin: auto;
 }
+.flex{
+    display: flex;
+}
