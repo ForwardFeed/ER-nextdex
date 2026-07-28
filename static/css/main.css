@@ -364,16 +364,24 @@ span{
     height:70%;
 }
 
-.species-name{
+#species-name{
+    width: 9em;
+    max-height: 1em;
+}
+#species-id{
+    width: 4em;
+}
+#species-types{
     width: 9em;
 }
 #species-name{
     user-select: text;
-    padding-right: 1em;
 }
+
 .species-mid-stats{
     display: flex;
     flex-wrap: wrap;
+    height: ;
 }
 
 .species-top{
@@ -518,8 +526,6 @@ span{
 }
 #species-types{
     display: flex;
-    gap: 4px;
-    margin-left: 2vw;
 }
 .type{
     border-radius: 5px;
