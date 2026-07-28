@@ -85,7 +85,7 @@ function feedLocationGeneralData(general_data){
     const types_to_show = types_spread.filter(x => x.amount >= amount_to_filter)
     const missing_types = types_spread.filter(x => x.amount < amount_to_filter && x.amount > 0)
     const frag = document.createDocumentFragment()
-    frag.append(e('div', '', 'Most Frequent types:'))
+    frag.append(e('div', 'location-title', 'Most Frequent types:'))
     for (const data_type of types_to_show){
        frag.append(locationTypeSelectionGenerate(data_type))
     }
