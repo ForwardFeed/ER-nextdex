@@ -1,6 +1,6 @@
 import { createSpeciesBlock, redirectSpecie } from "./species/species_panel.js"
 import { search } from "../search.js"
-import { queryFilter2, queryFilter3 } from "../filters.js"
+import { longClickToFilter, queryFilter2, queryFilter3 } from "../filters.js"
 import { gameData } from "../data_version.js"
 import { AisInB, e, JSHAC } from "../utils.js"
 import { settings } from "../settings.js"
@@ -48,6 +48,25 @@ export function feedPanelLocations(mapID){
 }
 
 
+function locationTypeSelectionGenerate(data_type){
+    const type_text = gameData.typeT[data_type.id]
+    const clickeable_element = e('div', `location-types-selection ${type_text.toLowerCase()}-t`, undefined, {
+        onmouseover: ()=>{
+            highlight_species_per_types(data_type.id)
+        },
+        onclick: ()=>{
+            highlight_species_per_types(data_type.id)
+        },
+    })
+    longClickToFilter(3, clickeable_element, "type", ()=>type_text)
+    return JSHAC([
+            clickeable_element, [
+                e('span', 'm-auto', `${type_text} (${data_type.amount})`)
+            ],
+        ])
+        
+}
+
 function feedLocationGeneralData(general_data){
     const types_spread = [... new Array(gameData.typeT.length)].map((_,i)=>{return{
         id: i,
@@ -66,25 +85,32 @@ function feedLocationGeneralData(general_data){
     const types_to_show = types_spread.filter(x => x.amount >= amount_to_filter)
     const frag = document.createDocumentFragment()
     frag.append(e('div', '', 'Most Frequent types:'))
-    for (const type of types_to_show){
-        const type_text = gameData.typeT[type.id]
-        frag.append(
-            JSHAC([
-                e('div', `${type_text.toLowerCase()}-t`, undefined, {
-                    onmouseover: ()=>{
-                        highlight_species_per_types(type.id)
-                    },
-                    onmouseclick: ()=>{
-                        highlight_species_per_types(type.id)
-                    },
-                }), [
-                    e('span', 'm-auto', type_text)
-                ]
-            ])
-        )
+    for (const data_type of types_to_show){
+       frag.append(locationTypeSelectionGenerate(data_type))
     }
+    frag.append(
+        JSHAC([
+            e('div', 'location-more-types', '+ more', {
+                onclick: ()=>{
+                    console.log('click')
+                    show_more_location_types(
+                        types_spread.filter(x => x.amount < amount_to_filter && x.amount > 0)
+                    )
+                }
+            })
+        ])
+    )
     $('#location-general-data-most-common').empty().append(frag)
     
+}
+
+function show_more_location_types(types_to_show){
+    $('#location-general-data-most-common .location-more-types').remove()
+    const frag = document.createDocumentFragment()
+    for (const data_type of types_to_show){
+       frag.append(locationTypeSelectionGenerate(data_type))
+    }
+    $('#location-general-data-most-common').append(frag)
 }
 
 function highlight_species_per_types(type_id){

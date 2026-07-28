@@ -1288,3 +1288,10 @@ a:hover{
     margin: auto;
     display: flex;
 }
+
+.location-types-selection{
+    cursor: pointer;
+}
+.location-types-selection:hover{
+    background-color: var(--colorE);
+}
