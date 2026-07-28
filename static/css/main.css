@@ -897,6 +897,9 @@ span{
 .settings-row > label:hover, .settings-row > input:hover{
     background-color: var(--colorA);
 }
+.settings-row > button{
+    font-size: 0.55em;
+}
 .settings-bottom{
     margin-top: auto;
 }
