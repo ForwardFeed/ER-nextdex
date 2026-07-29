@@ -412,6 +412,7 @@ span{
     text-align: center;
     user-select: none;
     max-width: 5em;
+    width: 5em;
 }
 .abi-inn-info{
     box-sizing: border-box;
@@ -424,7 +425,6 @@ span{
 
 }
 #species-innates, #species-abilities{
-    font-size: 1.5vmax;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -438,7 +438,9 @@ span{
     align-items: center;
     justify-content: center;
     width: 100%;
-
+    border-radius: 0.2em;
+    margin-top: 1px;
+    margin-bottom: 1px;
 } 
 
 .tooltip{
@@ -1316,4 +1318,30 @@ a:hover{
 }
 .location-more-types{
     display: flex;
+}
+.grabbable-window-root{
+    width: fit-content;
+    position: absolute;
+    z-index: 1;
+    padding: 5px;
+    background-color: var(--btnNActive);
+}
+.grabbable-close-btn{
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    font-size: 2em;
+    border: solid var(--interactible);
+    background-color: var(--interactible);
+    border-radius: 0.2em;
+    width: 1em;
+    display: flex;
+}
+.grabbable-close-btn:hover{
+    color: var(--interactible);
+    background-color: var(--btnNActive);
+}
+.species-clone{
+    width: 82em;
 }
