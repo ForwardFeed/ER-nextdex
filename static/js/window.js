@@ -1,4 +1,4 @@
-import { clickOutsideToRemove } from "./utils.js"
+import { clickOutsideToRemove, e, JSHAC } from "./utils.js"
 
 let windowFrame, callbackDelete
 
@@ -64,4 +64,59 @@ export function removeInformationWindow(ev, forceClose=false){
     // remove previous window
     if (ev && callbackDelete) callbackDelete(ev, forceClose)
     if (windowFrame) windowFrame.remove()
+}
+
+/**
+ * 
+ * @param {HTMLElement} node 
+ */
+export function createGrabbableWindow(
+    node
+){
+    let is_being_grabbed = false
+    let pos = {
+        x: 0,
+        y: 0
+    }
+    const onmousemove = (event)=>{
+        if (is_being_grabbed === false){
+                return
+            }
+            const current_x = root_node.style.left ? +(root_node.style.left.replace("px", '')) : 0
+            const current_y = root_node.style.top ? +(root_node.style.top.replace("px", '')) : 0 
+            const delta_x = pos.x - event.x
+            const delta_y = pos.y - event.y
+            pos.x = event.x
+            pos.y = event.y
+            root_node.style.left = `${current_x - delta_x}px`
+            root_node.style.top = `${current_y - delta_y}px`
+    }
+    const root_node = e('div', 'grabbable-window-root', undefined, {
+        onmousedown: (event) =>{
+            is_being_grabbed = true
+            pos = {
+                x: event.x,
+                y: event.y
+            }
+        },
+        onmousemove,
+        onmouseup: () =>{
+            is_being_grabbed = false
+        },
+        onmouseleave: ()=>{
+            is_being_grabbed = false
+        }
+    })
+    $('body')[0].appendChild(JSHAC([
+        root_node, [
+            node,
+            e('div', 'grabbable-close-btn', undefined, {
+                onclick: ()=>{
+                    root_node.remove()
+                }
+            }), [
+                e('span', 'm-auto', 'X')
+            ]
+        ]
+    ]))
 }

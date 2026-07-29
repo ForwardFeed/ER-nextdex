@@ -1,10 +1,10 @@
 import { redirectLocation } from "../locations_panel.js"
 import { matchedMoves, moveOverlay } from "../moves_panel.js"
-import { addTooltip, capitalizeFirstLetter, AisInB, e, JSHAC, reorderNodeList } from "../../utils.js"
+import { addTooltip, capitalizeFirstLetter, AisInB, e, JSHAC, reorderNodeList, setLongClickSelection } from "../../utils.js"
 import { search } from "../../search.js"
 import { queryFilter2, longClickToFilter, queryFilter3 } from "../../filters.js"
 import { gameData, compareData } from "../../data_version.js"
-import { createInformationWindow, removeInformationWindow } from "../../window.js"
+import { createGrabbableWindow, createInformationWindow, removeInformationWindow } from "../../window.js"
 import { getDefensiveCoverage, abilitiesToAddedType} from "../../weakness.js"
 import { nodeLists } from "../../hydrate/hydrate.js"
 import { cubicRadial } from "../../radial.js"
@@ -375,6 +375,16 @@ export function setupSpeciesPanel() {
         freedom = !freedom
         setSpecieHeightWeight()
     })
+    setLongClickSelection($('#species-name')[0], ()=>{
+        const clone  = $('.species-top')[0].cloneNode(true)
+        createGrabbableWindow(
+            JSHAC([
+                e('div', 'species-clone'), [
+                    clone
+                ]
+            ])
+        )
+    }, ()=>"purple", 500) 
 }
 function toLowerButFirstCase(word) {
     word = word.toLowerCase()
