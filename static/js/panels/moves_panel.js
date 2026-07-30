@@ -31,10 +31,6 @@ export function feedPanelMoves(moveID) {
     $('#moves-list').children().eq(moveID - 1).addClass("sel-active").removeClass("sel-n-active")
 
     const species = getSpeciesWithMove(moveID)
-    $('#moves-show-species').toggle(true)
-    $('#moves-hide-species').toggle(false)
-    $('#moves-species-list').toggle(false)
-    $('#moves-toggle-display').toggle(false)
     $('#moves-show-species span').text(`Show All ${species.length} Pokémons with it.`)
     $('#moves-hide-species span').text(`Hides ${species.length}`)
     setTimeout(()=>{display_species_list(species)}, 0)
@@ -204,26 +200,24 @@ export function setupMoves(){
         ()=>{ return $('#moves-split')[0].dataset.split || ""}
     )
     $('#moves-show-species').on("click", function(){
-        $('#moves-species-list').toggle(true)
-        $('#moves-hide-species').toggle(true)
-        $('#moves-toggle-display').toggle(true)
-        $('#moves-show-species').toggle(false)
+        settings.moveSettingsDisplay = true
+        saveSettings()
+        setCorrectMoveSettingsDisplay()
     })
     $('#moves-hide-species').on("click", function(){
-        $('#moves-species-list').toggle(false)
-        $('#moves-hide-species').toggle(false)
-        $('#moves-toggle-display').toggle(false)
-        $('#moves-show-species').toggle(true)
+        settings.moveSettingsDisplay = false
+        saveSettings()
+        setCorrectMoveSettingsDisplay()
     })
     
     $('#moves-toggle-display').on("click", function(){
-        
         settings.moveSettingsSprites = !settings.moveSettingsSprites
         saveSettings()
         setCorrectMoveSettingsText()
         display_species_list(getSpeciesWithMove(currentMoveID))
     })
     setCorrectMoveSettingsText()
+    setCorrectMoveSettingsDisplay()
     
 }
 function setCorrectMoveSettingsText(){
@@ -232,6 +226,15 @@ function setCorrectMoveSettingsText(){
             "Toggle Text"     :
             "Toggle Sprites"
     )
+}
+
+function setCorrectMoveSettingsDisplay(){
+    const b  = settings.moveSettingsDisplay
+    $('#moves-species-list').toggle(b)
+    $('#moves-hide-species').toggle(b)
+    $('#moves-show-species').toggle(!b)
+    $('#moves-toggle-display').toggle(b)
+    $('#moves-toggle-display').toggle(b)
 }
 
 export function redirectMove(moveId) {
