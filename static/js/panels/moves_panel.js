@@ -28,6 +28,31 @@ export function feedPanelMoves(moveID) {
 
     $('#moves-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
     $('#moves-list').children().eq(moveID - 1).addClass("sel-active").removeClass("sel-n-active")
+    
+    const species = gameData.species.map((specie, index) => {
+        if (index == 0){
+            return -1
+        }
+        if (~specie.eggMoves.indexOf(moveID)){
+            return index
+        }
+        if (~specie.levelUpMoves.findIndex(x => x.id == moveID)){
+            return index
+        }
+        if (~specie.TMHMMoves.indexOf(moveID)){
+            return index
+        }
+        if (~specie.tutor.indexOf(moveID)){
+            return index
+        }
+        return -1
+    }).filter((index, i) => ~index)
+    $('#moves-show-species').toggle(true)
+    $('#moves-hide-species').toggle(false)
+    $('#moves-species-list').toggle(false)
+    $('#moves-show-species span').text(`Show All ${species.length} Pokémons with it.`)
+    $('#moves-hide-species span').text(`Hides ${species.length}`)
+    setTimeout(()=>{display_species_list(species)}, 0)
 }
 
 function setTypes(types) {
@@ -170,8 +195,18 @@ export function setupMoves(){
         longClickToFilter(2, node, "type", ()=>{return node.children[0].innerText})
     })
     longClickToFilter(2, $('#moves-split').parent()[0], "category", 
-            ()=>{ return $('#moves-split')[0].dataset.split || ""}
-        )
+        ()=>{ return $('#moves-split')[0].dataset.split || ""}
+    )
+    $('#moves-show-species').on("click", function(){
+        $('#moves-species-list').toggle(true)
+        $('#moves-hide-species').toggle(true)
+        $('#moves-show-species').toggle(false)
+    })
+    $('#moves-hide-species').on("click", function(){
+        $('#moves-species-list').toggle(false)
+        $('#moves-hide-species').toggle(false)
+        $('#moves-show-species').toggle(true)
+    })
     
 }
 
@@ -251,6 +286,19 @@ export function moveOverlay(moveId, interactive=true) {
             effectsDiv
         ]
     ])
+}
+
+function display_species_list(id_list){
+    const fragment = new DocumentFragment()
+    for (const id of id_list){
+        const element = JSHAC([
+            e('div', 'flex'), [
+                e('span', 'm-auto', gameData.species[id].name)
+            ]
+        ])
+        fragment.append(element)
+    }
+    $('#moves-species-list').empty().append(fragment)
 }
 
 export function clearMatchedMove(){
@@ -395,5 +443,5 @@ export function updateMoves(searchQuery) {
         }
     }
     //if the current selection isn't in the list then change
-    if (matchedMoves && matchedMoves.indexOf(currentMoveID) == -1 && validID) feedPanelMoves(validID)
+    if (matchedMoves && matchedMoves.indexOf(currentMoveID) == -1 && validID) feedPanelMoves(+validID)
 }
