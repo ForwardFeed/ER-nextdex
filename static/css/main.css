@@ -397,6 +397,11 @@ span{
     min-height: 64px;
     margin: auto;
 }
+#species-credit{
+    position: absolute;
+    user-select: text;
+    font-size: 0.5em;
+}
 .interactible:hover{
     box-sizing: border-box;
     border: 0.15em solid var(--interactible);
