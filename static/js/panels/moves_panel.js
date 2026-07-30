@@ -3,8 +3,9 @@ import { search } from "../search.js"
 import { queryFilter2, longClickToFilter, trickFilterSearch, queryFilter3} from "../filters.js"
 import { AisInB, e, JSHAC } from "../utils.js"
 import { createInformationWindow, removeInformationWindow } from "../window.js"
-import { setAllMoves, setMoveName, setMovePower, setMoveRow, setSplitMove } from "./species/species_panel.js"
-import { getHintInteractibilityClass } from "../settings.js"
+import { getSpritesURL, setAllMoves, setMoveName, setMovePower, setMoveRow, setSplitMove } from "./species/species_panel.js"
+import { getHintInteractibilityClass, saveSettings, settings } from "../settings.js"
+
 
 export let matchedMoves
 let currentMoveID = 0
@@ -28,8 +29,19 @@ export function feedPanelMoves(moveID) {
 
     $('#moves-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
     $('#moves-list').children().eq(moveID - 1).addClass("sel-active").removeClass("sel-n-active")
-    
-    const species = gameData.species.map((specie, index) => {
+
+    const species = getSpeciesWithMove(moveID)
+    $('#moves-show-species').toggle(true)
+    $('#moves-hide-species').toggle(false)
+    $('#moves-species-list').toggle(false)
+    $('#moves-toggle-display').toggle(false)
+    $('#moves-show-species span').text(`Show All ${species.length} Pokémons with it.`)
+    $('#moves-hide-species span').text(`Hides ${species.length}`)
+    setTimeout(()=>{display_species_list(species)}, 0)
+}
+
+function getSpeciesWithMove(moveID){
+    return gameData.species.map((specie, index) => {
         if (index == 0){
             return -1
         }
@@ -47,12 +59,6 @@ export function feedPanelMoves(moveID) {
         }
         return -1
     }).filter((index, i) => ~index)
-    $('#moves-show-species').toggle(true)
-    $('#moves-hide-species').toggle(false)
-    $('#moves-species-list').toggle(false)
-    $('#moves-show-species span').text(`Show All ${species.length} Pokémons with it.`)
-    $('#moves-hide-species span').text(`Hides ${species.length}`)
-    setTimeout(()=>{display_species_list(species)}, 0)
 }
 
 function setTypes(types) {
@@ -200,14 +206,32 @@ export function setupMoves(){
     $('#moves-show-species').on("click", function(){
         $('#moves-species-list').toggle(true)
         $('#moves-hide-species').toggle(true)
+        $('#moves-toggle-display').toggle(true)
         $('#moves-show-species').toggle(false)
     })
     $('#moves-hide-species').on("click", function(){
         $('#moves-species-list').toggle(false)
         $('#moves-hide-species').toggle(false)
+        $('#moves-toggle-display').toggle(false)
         $('#moves-show-species').toggle(true)
     })
     
+    $('#moves-toggle-display').on("click", function(){
+        
+        settings.moveSettingsSprites = !settings.moveSettingsSprites
+        saveSettings()
+        setCorrectMoveSettingsText()
+        display_species_list(getSpeciesWithMove(currentMoveID))
+    })
+    setCorrectMoveSettingsText()
+    
+}
+function setCorrectMoveSettingsText(){
+    $('#moves-toggle-display span').text(
+        settings.moveSettingsSprites ?
+            "Toggle Text"     :
+            "Toggle Sprites"
+    )
 }
 
 export function redirectMove(moveId) {
@@ -291,11 +315,22 @@ export function moveOverlay(moveId, interactive=true) {
 function display_species_list(id_list){
     const fragment = new DocumentFragment()
     for (const id of id_list){
-        const element = JSHAC([
-            e('div', 'flex'), [
-                e('span', 'm-auto', gameData.species[id].name)
-            ]
-        ])
+        const specie = gameData.species[id]
+        let element
+        if (settings.moveSettingsSprites === true){
+            const img = e('img')
+            img.src = getSpritesURL(specie.NAME)
+            element = JSHAC([
+                img
+            ])
+        } else {
+            element = JSHAC([
+                e('div', 'flex'), [
+                    e('span', 'm-auto', specie.name)
+                ]
+            ])
+        }
+        
         fragment.append(element)
     }
     $('#moves-species-list').empty().append(fragment)

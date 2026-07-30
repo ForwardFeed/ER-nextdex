@@ -288,13 +288,13 @@ span{
     display: flex;
     flex-direction: column;
 }
-#moves-show-species, #moves-hide-species{
+#moves-show-species, #moves-hide-species, #moves-toggle-display{
     margin: 0 auto;
     border: solid 4px;
     border-radius: 4px;
     cursor: pointer;
 }
-#moves-show-species:hover, #moves-hide-species:hover{
+#moves-show-species:hover, #moves-hide-species:hover, #moves-toggle-display:hover{
     background-color: var(--colorA);
 }
 #moves-species-list{
@@ -308,6 +308,9 @@ span{
 }
 #moves-species-list > div:hover{
     background-color: var(--colorA);
+}
+#moves-species-settings{
+    display: flex;
 }
 @media (orientation: landscape) {
     .moves-top{

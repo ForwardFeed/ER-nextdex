@@ -31,6 +31,7 @@ const defaultSettings = {
     font: "basis33",
     hintSelectible: true,
     filterBoundPanels: true,
+    moveSettingsSprites: true
 }
 
 export function initAppSettings(){
