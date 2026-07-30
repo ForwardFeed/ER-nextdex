@@ -288,8 +288,30 @@ span{
     display: flex;
     flex-direction: column;
 }
-
-
+#moves-show-species, #moves-hide-species, #moves-toggle-display{
+    margin: 0 auto;
+    border: solid 4px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+#moves-show-species:hover, #moves-hide-species:hover, #moves-toggle-display:hover{
+    background-color: var(--colorA);
+}
+#moves-species-list{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+}
+#moves-species-list > div{
+    border-radius: 4px;
+    cursor: pointer;
+}
+#moves-species-list > div:hover{
+    background-color: var(--colorA);
+}
+#moves-species-settings{
+    display: flex;
+}
 @media (orientation: landscape) {
     .moves-top{
         width: 100%;
@@ -396,6 +418,11 @@ span{
     min-width: 64px;
     min-height: 64px;
     margin: auto;
+}
+#species-credit{
+    position: absolute;
+    user-select: text;
+    font-size: 0.5em;
 }
 .interactible:hover{
     box-sizing: border-box;

@@ -38,7 +38,7 @@ export function hydrateMoves(moves = gameData.moves) {
         $(core).on('click', function () {
             fastdom.mutate(() => {
                 $("#filter-frame").hide()
-                feedPanelMoves($(this).attr('data-id'))
+                feedPanelMoves(+$(this).attr('data-id'))
             })
         })
         fragment.append(core)

@@ -3,8 +3,9 @@ import { search } from "../search.js"
 import { queryFilter2, longClickToFilter, trickFilterSearch, queryFilter3} from "../filters.js"
 import { AisInB, e, JSHAC } from "../utils.js"
 import { createInformationWindow, removeInformationWindow } from "../window.js"
-import { setAllMoves, setMoveName, setMovePower, setMoveRow, setSplitMove } from "./species/species_panel.js"
-import { getHintInteractibilityClass } from "../settings.js"
+import { getSpritesURL, setAllMoves, setMoveName, setMovePower, setMoveRow, setSplitMove } from "./species/species_panel.js"
+import { getHintInteractibilityClass, saveSettings, settings } from "../settings.js"
+
 
 export let matchedMoves
 let currentMoveID = 0
@@ -28,6 +29,32 @@ export function feedPanelMoves(moveID) {
 
     $('#moves-list').find('.sel-active').addClass("sel-n-active").removeClass("sel-active")
     $('#moves-list').children().eq(moveID - 1).addClass("sel-active").removeClass("sel-n-active")
+
+    const species = getSpeciesWithMove(moveID)
+    $('#moves-show-species span').text(`Show All ${species.length} Pokémons with it.`)
+    $('#moves-hide-species span').text(`Hides ${species.length}`)
+    setTimeout(()=>{display_species_list(species)}, 0)
+}
+
+function getSpeciesWithMove(moveID){
+    return gameData.species.map((specie, index) => {
+        if (index == 0){
+            return -1
+        }
+        if (~specie.eggMoves.indexOf(moveID)){
+            return index
+        }
+        if (~specie.levelUpMoves.findIndex(x => x.id == moveID)){
+            return index
+        }
+        if (~specie.TMHMMoves.indexOf(moveID)){
+            return index
+        }
+        if (~specie.tutor.indexOf(moveID)){
+            return index
+        }
+        return -1
+    }).filter((index, i) => ~index)
 }
 
 function setTypes(types) {
@@ -170,9 +197,44 @@ export function setupMoves(){
         longClickToFilter(2, node, "type", ()=>{return node.children[0].innerText})
     })
     longClickToFilter(2, $('#moves-split').parent()[0], "category", 
-            ()=>{ return $('#moves-split')[0].dataset.split || ""}
-        )
+        ()=>{ return $('#moves-split')[0].dataset.split || ""}
+    )
+    $('#moves-show-species').on("click", function(){
+        settings.moveSettingsDisplay = true
+        saveSettings()
+        setCorrectMoveSettingsDisplay()
+    })
+    $('#moves-hide-species').on("click", function(){
+        settings.moveSettingsDisplay = false
+        saveSettings()
+        setCorrectMoveSettingsDisplay()
+    })
     
+    $('#moves-toggle-display').on("click", function(){
+        settings.moveSettingsSprites = !settings.moveSettingsSprites
+        saveSettings()
+        setCorrectMoveSettingsText()
+        display_species_list(getSpeciesWithMove(currentMoveID))
+    })
+    setCorrectMoveSettingsText()
+    setCorrectMoveSettingsDisplay()
+    
+}
+function setCorrectMoveSettingsText(){
+    $('#moves-toggle-display span').text(
+        settings.moveSettingsSprites ?
+            "Toggle Text"     :
+            "Toggle Sprites"
+    )
+}
+
+function setCorrectMoveSettingsDisplay(){
+    const b  = settings.moveSettingsDisplay
+    $('#moves-species-list').toggle(b)
+    $('#moves-hide-species').toggle(b)
+    $('#moves-show-species').toggle(!b)
+    $('#moves-toggle-display').toggle(b)
+    $('#moves-toggle-display').toggle(b)
 }
 
 export function redirectMove(moveId) {
@@ -251,6 +313,37 @@ export function moveOverlay(moveId, interactive=true) {
             effectsDiv
         ]
     ])
+}
+
+function display_species_list(id_list){
+    const fragment = new DocumentFragment()
+    for (const id of id_list){
+        const specie = gameData.species[id]
+        let element
+        if (settings.moveSettingsSprites === true){
+            const wrapper = e('div')
+            const img = e('img')
+            img.draggable = false
+            img.src = getSpritesURL(specie.NAME)
+            longClickToFilter(0, wrapper, "name", ()=>specie.name)
+            element = JSHAC([
+                wrapper, [
+                    img
+                ]
+            ])
+        } else {
+            const div = e('div', 'flex')
+            longClickToFilter(0, div, "name", ()=>specie.name)
+            element = JSHAC([
+                div, [
+                    e('span', 'm-auto', specie.name)
+                ]
+            ])
+        }
+        
+        fragment.append(element)
+    }
+    $('#moves-species-list').empty().append(fragment)
 }
 
 export function clearMatchedMove(){
@@ -395,5 +488,5 @@ export function updateMoves(searchQuery) {
         }
     }
     //if the current selection isn't in the list then change
-    if (matchedMoves && matchedMoves.indexOf(currentMoveID) == -1 && validID) feedPanelMoves(validID)
+    if (matchedMoves && matchedMoves.indexOf(currentMoveID) == -1 && validID) feedPanelMoves(+validID)
 }
