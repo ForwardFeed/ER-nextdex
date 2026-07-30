@@ -321,14 +321,21 @@ function display_species_list(id_list){
         const specie = gameData.species[id]
         let element
         if (settings.moveSettingsSprites === true){
+            const wrapper = e('div')
             const img = e('img')
+            img.draggable = false
             img.src = getSpritesURL(specie.NAME)
+            longClickToFilter(0, wrapper, "name", ()=>specie.name)
             element = JSHAC([
-                img
+                wrapper, [
+                    img
+                ]
             ])
         } else {
+            const div = e('div', 'flex')
+            longClickToFilter(0, div, "name", ()=>specie.name)
             element = JSHAC([
-                e('div', 'flex'), [
+                div, [
                     e('span', 'm-auto', specie.name)
                 ]
             ])
