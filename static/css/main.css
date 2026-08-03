@@ -561,7 +561,7 @@ span{
 .type{
     border-radius: 5px;
     padding: 0 10px;
-    margin: auto;
+    margin: auto 0;
 }
 /*.species-type:last-child{}*/
 .species-switch{
