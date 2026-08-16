@@ -324,6 +324,7 @@ function display_species_list(id_list){
             const wrapper = e('div')
             const img = e('img')
             img.draggable = false
+            img.loading = "lazy"
             img.src = getSpritesURL(specie.NAME)
             longClickToFilter(0, wrapper, "name", ()=>specie.name)
             element = JSHAC([

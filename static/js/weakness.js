@@ -110,6 +110,7 @@ const abilityAddingType = {
     "Dead Bark"  : "Ghost",
     "Lightsaber" : "Fire",
     "Hover"      : "Psychic",
+    "Ominous Shroud": "Ghost",
 }
 
 
