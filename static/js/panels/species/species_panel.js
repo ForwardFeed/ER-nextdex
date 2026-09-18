@@ -10,6 +10,7 @@ import { nodeLists } from "../../hydrate/hydrate.js"
 import { cubicRadial } from "../../radial.js"
 import { getHintInteractibilityClass, settings } from "../../settings.js"
 import { feedCommunitySets } from "./community_sets.js"
+import { update_url_parameters } from "../../url.js"
 
 export let currentSpecieID = 1
 
@@ -56,6 +57,9 @@ export function feedPanelSpecies(id) {
     nodeLists.species[id - 1].classList.replace("sel-n-active", "sel-active")
 
     feedCommunitySets(specie.NAME)
+    update_url_parameters({
+        pokemon: "" + id // string typecast
+    })
 }
 
 export function redirectSpecie(specieId) {

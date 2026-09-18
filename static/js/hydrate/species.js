@@ -4,6 +4,7 @@ import { e } from "../utils.js"
 import { abilitiesExtraType, buildSpeciesPrefixTrees, feedPanelSpecies, getSpritesURL, matchedSpecies, setupReorderBtn } from "../panels/species/species_panel.js"
 import { gameData } from "../data_version.js"
 import { nodeLists } from "./hydrate.js"
+import { get_url_parameters } from "../url.js"
 
 function feedBaseStatsStats(statID, value) {
     gameData.speciesStats.data[statID].push(value)
@@ -177,6 +178,19 @@ export function hydrateSpecies() {
     }
     setMeanBaseStats()
     $("#species-list").empty().append(fragment);
-    feedPanelSpecies(1)
+    let specie_id = 1
+    const url_params = get_url_parameters()
+    if (url_params.pokemon !== "" && !isNaN(+url_params.pokemon)){
+        let as_number = +url_params.pokemon
+        if (gameData.species[as_number].id === as_number){
+            specie_id = as_number
+        } else {
+            const index = gameData.species.findIndex(x => x.id === as_number)
+            if (index !== -1){
+                specie_id = index
+            }
+        }
+    }
+    feedPanelSpecies(specie_id)
     buildSpeciesPrefixTrees()
 }
