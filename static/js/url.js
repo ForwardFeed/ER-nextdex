@@ -3,6 +3,7 @@ import {is_version_valid, changeVersion} from "./data_version.js"
 /**
  * @typedef {Object} URLData
  * @property {string} version
+ * @property {string} pokemon
  */
 
 /**
@@ -18,11 +19,18 @@ let default_url_data = {
  */
 export function update_url_parameters(url_data){
 
-    const version = url_data.version
+    const current_params = get_url_parameters()
 
+    const version = url_data.version || current_params.version
+    const pokemon = url_data.pokemon || current_params.pokemon
+    
     const state  = "version_change"
     const unused = ""
-    const url    = `?v=${version}`
+    let  url      = `?v=${version}`
+
+    if (pokemon !== undefined){
+        url += `&p=${pokemon}`
+    }
 
     if (url === window.location.search){
         return
@@ -42,7 +50,8 @@ export function get_url_parameters(){
     const search_param = new URLSearchParams(search_text)
     
     return {
-        version: search_param.get("v") ?? ""
+        version: search_param.get("v") ?? "",
+        pokemon: search_param.get("p") ?? ""
     }
 }
 
