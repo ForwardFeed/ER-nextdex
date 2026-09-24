@@ -392,6 +392,10 @@ span{
 }
 #species-id{
     width: 4em;
+    cursor: pointer;
+}
+#species-id:hover{
+    background-color: var(--colorB);
 }
 #species-types{
     width: 9em;
