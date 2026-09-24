@@ -25,7 +25,7 @@ export function feedPanelSpecies(id) {
     currentSpecieID = id
     const specie = gameData.species[id]
     $('#species-name span').text(`${specie.name}#${specie.dex.id || "??"}`)
-    $('#species-id span').text(`ID: ${specie.id}`)
+    display_poke_id_text()
     updateBaseStats(specie.stats.base)
     if (specie.shinyColor === undefined)
         specie.shinyColor = 0
@@ -354,6 +354,20 @@ export function abilitiesExtraType(abilityID, specie) {
     return abilitiesToAddedType([specie.stats.abis[abilityID], ...specie.stats.inns].filter(x => x))
 }
 
+let id_is_hex = false
+function display_poke_id_text(){
+    const poke = gameData.species[currentSpecieID]
+    const id = poke.id
+    const target = document.querySelector('#species-id>span')
+    let text
+    if (id_is_hex){
+        text = `0x: ${id.toString(16).padStart(4, 0)}`
+    } else {
+        text = `ID: ${id}`
+    }
+    target.innerText = text
+}
+
 export function setupSpeciesPanel() {
     const subPanelsAndBtns = [
         ["#switch-moves", "#species-moves"],
@@ -388,7 +402,11 @@ export function setupSpeciesPanel() {
                 ]
             ])
         )
-    }, ()=>"purple", 500) 
+    }, ()=>"purple", 500)
+    $('#species-id').on('click', ()=>{
+        id_is_hex = ! id_is_hex
+        display_poke_id_text()
+    })
 }
 function toLowerButFirstCase(word) {
     word = word.toLowerCase()
