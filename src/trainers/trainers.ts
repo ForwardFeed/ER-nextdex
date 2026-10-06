@@ -4,10 +4,11 @@ import { SpeciesEnum } from "../gen/SpeciesEnum_pb.js";
 import { Species_Gender } from "../gen/SpeciesList_pb.js";
 import { TrainerEnum } from "../gen/TrainerEnum_pb.js";
 import {
+  Nature,
+  NatureSchema,
   TrainerClass,
   TrainerMusic,
   TrainerParty_TrainerMon,
-  TrainerParty_TrainerMon_Nature,
   TrainerPic,
 } from "../gen/TrainerList_pb.js";
 import { Type } from "../gen/Types_pb.js";
@@ -85,7 +86,7 @@ function parse(fileData: string): Map<string, Trainer> {
       rematches: rematchs,
       ptr: value.partyPtr,
       ptrInsane: value.insanePtr,
-      gender: value.gender, // true w*man
+      gender: value.gender, // true w*man // this comment was done by my fucking old sense of humor, fuck me
       music: value.music,
       pic: value.pic,
       rematchM: rematchM,
@@ -107,7 +108,7 @@ function monToLegacyMon(
     ivs: [31, 31, 31, 31, 31, mon.ironPill ? 0 : 31],
     evs: [mon.hpEv, mon.atkEv, mon.defEv, mon.spatkEv, mon.spdefEv, mon.speEv],
     item: ItemEnum[mon.item],
-    nature: "NATURE_" + TrainerParty_TrainerMon_Nature[mon.nature],
+    nature: "NATURE_" + Nature[mon.nature],
     moves: mon.move.map((it) => MoveEnum[it]),
     hpType: mon.hiddenPowerType ? "TYPE_" + Type[mon.hiddenPowerType] : "",
   };
