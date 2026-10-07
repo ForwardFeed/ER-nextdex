@@ -31,10 +31,11 @@ export interface Trainer {
   rematches: RematchTrainer[];
   ptr: string;
   ptrInsane: string;
-  gender: boolean; // true w*man
+  gender: boolean; // true w*man // this comment was done by my fucking old sense of humor, fuck me
   music: string;
   pic: string;
   rematchM: string;
+  id: number;
 }
 
 export interface RematchTrainer {
@@ -90,6 +91,7 @@ function parse(fileData: string): Map<string, Trainer> {
       music: value.music,
       pic: value.pic,
       rematchM: rematchM,
+      id: -1
     });
   });
   return trainers;
@@ -138,6 +140,7 @@ export function getTrainers(gameData: GameData) {
       music: TrainerMusic[trainer.music],
       pic: TrainerPic[trainer.pic],
       rematchM: "",
+      id: trainer.id
     });
   }
 }

@@ -15,7 +15,7 @@ export interface BaseTrainer {
     double: boolean,
     partyPtr: string,
     insanePtr: string,
-    gender: boolean, // true w*man
+    gender: boolean, // true w*man // this comment was done by my fucking old sense of humor, fuck me
     music: string,
     pic: string,
 }
