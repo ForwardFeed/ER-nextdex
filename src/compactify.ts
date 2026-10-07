@@ -116,6 +116,7 @@ export interface CompactTrainers {
   hell: CompactTrainerPokemon[];
   rem: CompactTrainerRematch[];
   map: number;
+  id: number,
 }
 
 export interface CompactTrainerPokemon {
@@ -424,6 +425,7 @@ export function compactify(gameData: GameData): CompactGameData {
         };
       }),
       map: -1,
+      id: trainer.id
     });
     trainerT.push(key);
   });

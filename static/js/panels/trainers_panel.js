@@ -4,6 +4,7 @@ import { gameData } from "../data_version.js"
 import { AisInB, e, JSHAC } from "../utils.js"
 import { setFullTeam } from "./team_builder.js"
 import { getGEN3HP } from "../load_save.js"
+import { update_url_parameters } from "../url.js"
 
 const PARTY_NORMAL = 0
 const PARTY_ELITE = 1
@@ -20,6 +21,12 @@ export function feedPanelTrainers(trainerID) {
     $('#trainers-list > .btn').eq(trainerID).addClass("sel-active").removeClass("sel-n-active")
     const trainer = gameData.trainers[trainerID]
     $('#trainers-name').text(trainer.fullName)
+    if (trainer.id !== undefined){
+        $('#trainer-id').text(`ID: ${trainer.id}`)
+        update_url_parameters({
+            trainer: trainer.id
+        })
+    } 
     $('#trainers-map').text(gameData.mapsT[trainer.map] || "Unknown location")
     setBaseTrainer(trainer)
     setRematchesBar(trainer.rem)
