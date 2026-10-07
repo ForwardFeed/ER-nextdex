@@ -1,4 +1,5 @@
 import { buildTrainerPrefixTrees, feedPanelTrainers } from "../panels/trainers_panel.js";
+import { get_url_parameters } from "../url.js";
 
 export function hydrateTrainers() {
     // still missing in the data the alternative like for the rivals
@@ -34,6 +35,15 @@ export function hydrateTrainers() {
         frag.append(core)
     }
     $('#trainers-list').empty().append(frag)
-    feedPanelTrainers(1)
+    let trainer_id = 1
+    const url_params = get_url_parameters()
+    if (url_params.trainer !== "" && !isNaN(+url_params.trainer)){
+        let as_number = +url_params.trainer
+        const index = gameData.trainers.findIndex(x => x.id === as_number)
+        if (index !== -1){
+            trainer_id = index
+        }
+    }
+    feedPanelTrainers(trainer_id)
     buildTrainerPrefixTrees()
 }

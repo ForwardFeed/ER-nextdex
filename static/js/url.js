@@ -4,6 +4,7 @@ import {is_version_valid, changeVersion} from "./data_version.js"
  * @typedef {Object} URLData
  * @property {string} version
  * @property {string} pokemon
+ * @property {string} trainer
  */
 
 /**
@@ -23,19 +24,26 @@ export function update_url_parameters(url_data){
 
     const version = url_data.version || current_params.version
     const pokemon = url_data.pokemon || current_params.pokemon
-    
+    const trainer = url_data.trainer || current_params.trainer
+
     const state  = "version_change"
-    const unused = ""
     let  url      = `?v=${version}`
 
     if (pokemon !== undefined){
         url += `&p=${pokemon}`
     }
+    if (trainer !== undefined){
+        url += `&t=${trainer}`
+    }
 
     if (url === window.location.search){
         return
     }
-    window.history.pushState(state, unused, url);
+    window.history.pushState(
+        state, 
+        "", //unused by the browser API
+        url
+    );
 }
 
 /**
@@ -51,7 +59,8 @@ export function get_url_parameters(){
     
     return {
         version: search_param.get("v") ?? "",
-        pokemon: search_param.get("p") ?? ""
+        pokemon: search_param.get("p") ?? "",
+        trainer: search_param.get("t") ?? ""
     }
 }
 
