@@ -16,6 +16,5 @@ import ControlsVersions from './ControlsVersions.vue';
 #controls{
     display: flex;
     width: 100%;
-    font-size: 3em;
 }
 </style>
