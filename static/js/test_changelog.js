@@ -12,8 +12,8 @@ function downloadComparify(){
     })
 }
 
-const prevVersion = 'js/data/gameDataV2.1.json'
-const newVersion  = 'js/data/gameDataV2.2.json'
+const prevVersion = 'js/data/gameDataV2.65beta.json'
+const newVersion  = 'js/data/gameDataV2.65.4.json'
 
 function downloadNewest(){
     fetch(newVersion)
