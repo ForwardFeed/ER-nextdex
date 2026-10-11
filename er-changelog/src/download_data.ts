@@ -22,7 +22,7 @@ export async function download_data(source: VersionAvailable, target: VersionAva
     download_status.value = "loading"
 
     const promise_source = new Promise<void>((resolve, reject)=>{
-        fetch(`data/gameDataV${source}.json`, {cache: "no-store"})
+        fetch(`../js/data/gameDataV${source}.json`, {cache: "no-store"})
             .then((response)=>{
                 response.json()
                 .then((data: CompactGameData)=>{
@@ -45,7 +45,7 @@ export async function download_data(source: VersionAvailable, target: VersionAva
             })
     })
     const promise_target = new Promise<void>((resolve, reject)=>{
-        fetch(`data/gameDataV${target}.json`, {cache: "no-store"})
+        fetch(`../js/data/gameDataV${target}.json`, {cache: "no-store"})
             .then((response)=>{
                 response.json()
                 .then((data: CompactGameData)=>{

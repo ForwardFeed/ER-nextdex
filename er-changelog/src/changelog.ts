@@ -27,7 +27,6 @@ export const changelog_data: Record<PanelID, ChangelogTable> = {
 
 export  function start_the_changelog(){
     species_changelog()
-    console.log(changelog_species.value)
 }
 
 const STATS_ORDER = [
@@ -69,7 +68,7 @@ function species_changelog(){
             }
             changelog_species.value.push({
                 name: target.name,
-                change_type: `${STATS_ORDER[i]} changes`,
+                change_type: `${STATS_ORDER[i]}`,
                 from: `${from} ${STATS_ORDER[i]}`,
                 to: `${to} ${STATS_ORDER[i]}`
             })
