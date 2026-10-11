@@ -398,6 +398,7 @@ span{
     background-color: var(--colorB);
 }
 #species-types{
+    display: flex;
     width: 9em;
 }
 #species-name{
@@ -559,13 +560,13 @@ span{
 #specie-name{
     padding-left: 2%;
 }
-#species-types{
-    display: flex;
-}
 .type{
     border-radius: 5px;
-    padding: 0 10px;
     margin: auto 0;
+    padding: 0 1px;
+}
+.type-wrapper{
+    margin: auto;
 }
 /*.species-type:last-child{}*/
 .species-switch{
