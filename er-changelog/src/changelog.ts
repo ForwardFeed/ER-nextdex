@@ -1,16 +1,29 @@
 import { ref, type Ref } from "vue"
 import { source_data, target_data } from "./download_data"
 import type { CompactSpecie } from "./compactify_copied"
+import type { PanelID } from "./panels"
 
 
-type ChangelogRow = {
+export type ChangelogRow = {
     name: string,
     change_type: string,
     from: string,
     to: string
 }
 
-export const changelog_species: Ref<ChangelogRow[]> = ref([])
+export type ChangelogTable = Ref<ChangelogRow[]>
+
+const changelog_species: ChangelogTable = ref([])
+const changelog_abilities: ChangelogTable = ref([])
+const changelog_moves: ChangelogTable = ref([])
+const changelog_trainers: ChangelogTable = ref([])
+
+export const changelog_data: Record<PanelID, ChangelogTable> = {
+    species: changelog_species,
+    abilities: changelog_abilities,
+    moves: changelog_moves,
+    trainers: changelog_trainers
+}
 
 export  function start_the_changelog(){
     species_changelog()
