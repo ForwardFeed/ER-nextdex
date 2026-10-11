@@ -59,6 +59,8 @@ Aside this it is just a static html web app
 
 ### 3. the comparify thing.
 
+/!\ Note: This is going to be remove
+
 to offer comparison between two game version, you must use the -c or --comparify argument.
 I have made myself an horrible bash shortcut for it: 
 ```bash
@@ -69,6 +71,10 @@ it works. The reason is probably demonic or something, I don't know I'm not a te
 
 For vanilla, you need the --ca or --comparify-additionnal AND a compactified vanilla data.
 But the file or the code that allowed me to do it is currently a lost media, so I built src/restore_vanilla.ts as a cope.
+
+### The automatic changelog
+
+at er-changelog
 
 
 ## Project Structure
