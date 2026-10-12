@@ -58,7 +58,7 @@ export function feedPanelSpecies(id) {
 
     feedCommunitySets(specie.NAME)
     update_url_parameters({
-        pokemon: "" + id // string typecast
+        pokemon: "" + specie.id // string typecast
     })
 }
 
