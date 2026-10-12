@@ -1,4 +1,5 @@
 import { gameData } from "./data_version.js"
+import defensiveAbilities from "./defensiveAbilities.js";
 
 
 const typeChart = {
@@ -187,8 +188,13 @@ const abilityThatAdds4TimesWeakness = {
 
 export function abilitiesToAddedType(abis){
     for (const abi of abis){
-        const addedType = abilityAddingType[gameData.abilities[abi].name]
-        if (addedType) return gameData.typeT.indexOf(addedType)
+        const abi_name = gameData.abilities[abi].name
+        const abi_defensive_data = defensiveAbilities["effects"][abi_name]
+        if (abi_defensive_data === undefined){
+            continue
+        }
+        const added_type = abi_defensive_data["addedType"]
+        if (added_type) return gameData.typeT.indexOf(added_type)
     }
     return undefined
 }

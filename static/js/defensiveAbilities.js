@@ -1207,6 +1207,30 @@ export default {
           ]
         }
       ]
-    }
+    },
+    "Waterborne": {
+      "addedType": "Water"
+    },
+    "Dragonfruit": {
+      "addedType": "Dragon"
+    },
+    "Rock Armor": {
+      "addedType": "Rock"
+    },
+    "Bad Guy": {
+      "addedType": "Dark"
+    },
+    "Ignition": {
+      "addedType": "Fire"
+    },
+    "Smarty Pants": {
+      "addedType": "Psychic"
+    },
+    "Bird Type": {
+      "addedType": "Flying"
+    },
+    "Creepy Crawlie": {
+      "addedType": "Bug"
+    },
   }
 }
