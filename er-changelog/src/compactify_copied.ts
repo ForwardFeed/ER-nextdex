@@ -76,7 +76,7 @@ interface CompactBaseStats {
   flags: string;
 }
 
-interface compactMove {
+export interface compactMove {
   name: string;
   NAME: string; 
   sName: string;
@@ -111,7 +111,7 @@ export interface CompactSpecie {
   id: number;
 }
 
-interface CompactTrainers {
+export interface CompactTrainers {
   name: string;
   tclass: number;
   db: boolean;
@@ -146,7 +146,7 @@ interface CompactBattleItems {
   
 }
 
-interface CompactAbility {
+export interface CompactAbility {
   name: string;
   desc: string;
   id: number;

@@ -88,7 +88,8 @@ async function go_button(){
 #controls-version-go-btn{
     display: flex;
     padding: 0.4em;
-    background-color: aliceblue;
+    background-color: var(--bg-200);
+    color: var(--t-200);
     border-radius: 4px;
     border: solid 1px black;
     user-select: none;
@@ -98,5 +99,10 @@ async function go_button(){
 }
 span{
     margin: auto;
+}
+select{
+    background-color: var(--bg-200);
+    color: var(--t-200);
+    border: none;
 }
 </style>

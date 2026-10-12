@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { ChangelogRow } from '../changelog';
+import SearchBar from './SearchBar.vue';
 
 type Props = {
     changelog: ChangelogRow[]
@@ -25,9 +26,14 @@ const props = withDefaults(defineProps<Props>(), {})
 <style scoped>
 .changelog-table-row{
     display: flex;
+    border: solid 1px var(--border);
 }
 .changelog-table-col{
     width: 25%;
+    display: flex;
+}
+.changelog-table-col>*{
+    margin: auto 0;
 }
 .changelog-table-header{
     font-size: 2em;
