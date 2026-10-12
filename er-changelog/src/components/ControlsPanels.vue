@@ -22,9 +22,14 @@ function toggle_panels(panel: PanelID){
 }
 .panel-btn{
     user-select: none;
+    padding: 0.25em;
+    border-radius: 4px;
+    color: var(--t-200);
 }
 .panel-btn-active{
-    background-color: blue;
+    background-color: var(--bg-200)
 }
-
+span{
+    margin: auto;
+}
 </style>

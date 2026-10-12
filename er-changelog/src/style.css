@@ -1,9 +1,28 @@
+:root{
+    --bg-100: #ffffff;
+    --bg-200: #c9c9c9;
+    --t-100: #000;
+    --t-200: #302424;
+    --border: #acacac;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root{
+        --bg-100: #2c2a2a;
+        --bg-200: #555555;
+        --t-100: #ffffff;
+        --t-200: #d49a9a;
+        --border: #726e6e;
+    }
+
+}
 
 body, html, #app{
     margin: 0;
     padding: 0;
     height: 100%;
     width: 100%;
-    background-color: aqua;
     font-size: 16px;
+    background-color: var(--bg-100);
+    color: var(--t-100);
 }

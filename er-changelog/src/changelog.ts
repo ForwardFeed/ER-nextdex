@@ -1,6 +1,6 @@
 import { ref, type Ref } from "vue"
 import { source_data, target_data } from "./download_data"
-import type { CompactSpecie } from "./compactify_copied"
+import type { CompactAbility, compactMove, CompactSpecie, CompactTrainers } from "./compactify_copied"
 import type { PanelID } from "./panels"
 
 
@@ -27,6 +27,9 @@ export const changelog_data: Record<PanelID, ChangelogTable> = {
 
 export  function start_the_changelog(){
     species_changelog()
+    abilities_changelog()
+    moves_changelog()
+    trainers_changelog()
 }
 
 const STATS_ORDER = [
@@ -37,6 +40,11 @@ const STATS_ORDER = [
     "spe.def.",
     "speed",
 ] as const
+
+type PropertyCheck<T> = {
+    prop: keyof T,
+    change_type: string
+}[]
 
 function species_changelog(){
     if (source_data === null) throw `source data is null`
@@ -52,8 +60,8 @@ function species_changelog(){
             changelog_species.value.push({
                 name: target.name,
                 change_type: 'new specie',
-                from: '--',
-                to: '--'
+                from: '',
+                to: ''
             })
 
             continue
@@ -69,10 +77,129 @@ function species_changelog(){
             changelog_species.value.push({
                 name: target.name,
                 change_type: `${STATS_ORDER[i]}`,
-                from: `${from} ${STATS_ORDER[i]}`,
-                to: `${to} ${STATS_ORDER[i]}`
+                from: from + "",
+                to: to + ""
             })
         }
         
+    }
+}
+
+function abilities_changelog(){
+    if (source_data === null) throw `source data is null`
+    if (target_data === null) throw `target data is null`
+
+    const source_as_dictionary: Record<string, CompactAbility> = {}
+
+    for (const ability of source_data.abilities){
+        source_as_dictionary[ability.name] = ability
+    }
+
+    for (const target of target_data.abilities){
+        const source = source_as_dictionary[target.name]
+        if (source === undefined){
+            changelog_abilities.value.push({
+                name: target.name,
+                change_type: "new",
+                from: "--",
+                to: target.desc
+            })
+            continue
+        }
+        if (target.desc !== source.desc){
+            changelog_abilities.value.push({
+                name: target.name,
+                change_type: "description",
+                from: source.desc,
+                to: target.desc
+            })
+        }
+    }
+}
+
+
+function moves_changelog(){
+    if (source_data === null) throw `source data is null`
+    if (target_data === null) throw `target data is null`
+
+    const source_as_dictionary: Record<string, compactMove> = {}
+
+    for (const move of source_data.moves){
+        source_as_dictionary[move.NAME] = move
+    }
+    
+    for (const target of target_data.moves){
+        const source = source_as_dictionary[target.NAME]
+
+        if (source === undefined){
+            changelog_moves.value.push({
+                name: target.name,
+                change_type: "new",
+                from: "",
+                to: ""
+            })
+            continue
+        }
+        const property_checks: PropertyCheck<compactMove> = [
+            {
+                prop: "acc",
+                change_type: "Accuracy"
+            },
+            {
+                prop: "chance",
+                change_type: "Chance"
+            },
+            {
+                prop: "desc",
+                change_type: "Description"
+            },
+            {
+                prop: "pp",
+                change_type: "PowerPoints"
+            },
+            {
+                prop: "prio",
+                change_type: "Priority"
+            },
+            {
+                prop: "pwr",
+                change_type: "Power"
+            },
+        ]
+        for (const check of property_checks){
+            if (source[check.prop] !== target[check.prop]){
+                changelog_moves.value.push({
+                    name: target.name,
+                    change_type: check.change_type,
+                    from: source[check.prop] + "",
+                    to: target[check.prop] + ""
+                })
+            }
+        }
+    }
+}
+
+function trainers_changelog(){
+    if (source_data === null) throw `source data is null`
+    if (target_data === null) throw `target data is null`
+
+    const source_as_dictionary: Record<string, CompactTrainers> = {}
+
+    for (const trainer of source_data.trainers){
+        source_as_dictionary[trainer.name] = trainer
+    }
+
+
+    for (const target of target_data.trainers){
+        const source = source_as_dictionary[target.name]
+        if (source === undefined){
+            changelog_trainers.value.push({
+                name: target.name,
+                change_type: "new",
+                from: "",
+                to: ""
+            })
+            continue
+        }
     }
 }
