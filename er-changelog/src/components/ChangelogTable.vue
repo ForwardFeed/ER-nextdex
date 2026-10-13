@@ -28,10 +28,10 @@ const sorted_filtered_formated = computed(()=>{
             from: element.from,
             to: element.to
         }]
-        for (let j = 0; j < len; j += 1){
+        for (let j = i + 1; j < len; j += 1){
             const peeked = props.changelog[j]
             if (peeked.name !== element.name){
-                continue
+                break
             }
             i += 1
             changes.push({

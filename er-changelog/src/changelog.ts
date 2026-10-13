@@ -49,7 +49,10 @@ type PropertyCheck<T> = {
 function species_changelog(){
     if (source_data === null) throw `source data is null`
     if (target_data === null) throw `target data is null`
+
+    changelog_species.value.length = 0
     const source_as_dictionary: Record<string, CompactSpecie> = {}
+
     for (const specie of source_data.species){
         source_as_dictionary[specie.NAME] = specie
     }
@@ -119,6 +122,7 @@ function abilities_changelog(){
     if (source_data === null) throw `source data is null`
     if (target_data === null) throw `target data is null`
 
+    changelog_abilities.value.length = 0
     const source_as_dictionary: Record<string, CompactAbility> = {}
 
     for (const ability of source_data.abilities){
@@ -152,6 +156,7 @@ function moves_changelog(){
     if (source_data === null) throw `source data is null`
     if (target_data === null) throw `target data is null`
 
+    changelog_moves.value.length = 0
     const source_as_dictionary: Record<string, compactMove> = {}
 
     for (const move of source_data.moves){
@@ -213,6 +218,7 @@ function trainers_changelog(){
     if (source_data === null) throw `source data is null`
     if (target_data === null) throw `target data is null`
 
+    changelog_trainers.value.length = 0
     const source_as_dictionary: Record<string, CompactTrainers> = {}
 
     for (const trainer of source_data.trainers){
