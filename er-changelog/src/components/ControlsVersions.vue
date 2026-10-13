@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-import { computed, ref, type Ref } from 'vue';
+import { computed} from 'vue';
 import { VERSIONS_AVAILABLE, type VersionAvailable } from '../versions';
-import { download_data } from '../download_data';
+import { download_data, source_version, target_version } from '../download_data';
 import { start_the_changelog } from '../changelog';
 
-const source_version: Ref<VersionAvailable> = ref("2.65beta")
+
 const source_versions_available = computed(()=>{
     return VERSIONS_AVAILABLE.filter(x => x !== target_version.value)
 })
-const target_version: Ref<VersionAvailable> = ref("2.65.4")
+
 const target_versions = computed(()=>{
     return VERSIONS_AVAILABLE.filter(x => x !== source_version.value)
 })
@@ -46,25 +46,25 @@ async function go_button(){
 </script>
 <template>
 <div id="controls-versions">
-    <select :value="source_version" @change="change_source_version">
+    <select :value="source_version" @change="change_source_version" class="btn">
         <template v-for="version in source_versions_available">
             <option :value="version" v-if="version !== target_version">
                     {{ version }}
             </option>
         </template>
     </select>
-    <div id="controls-versions-go" :class="is_warning ? 'warning': ''">
+    <div id="controls-versions-go" :class="is_warning ? 'warning': ''"> 
         <div class="controls-versions-msg">
             <span> <= {{ is_warning ? 'This is more recent' : 'Older version' }}</span>
         </div>
-        <div @click="go_button" id="controls-version-go-btn">
+        <div @click="go_button" id="controls-version-go-btn" class="btn">
             <span> {{ is_warning ? 'Are You Sure?'  : 'Go'}} </span>
         </div>
         <div  class="controls-versions-msg">
             <span> {{ is_warning ? 'This is older' : 'Newer Version' }} =></span>
         </div>
     </div>
-    <select :value="target_version" @change="change_target_version">
+    <select :value="target_version" @change="change_target_version" class="btn">
         <template v-for="version in target_versions">
             <option :value="version"v-if="version !== source_version">
                     {{ version }}
@@ -85,15 +85,6 @@ async function go_button(){
     background-color: yellowgreen;
     color: orangered
 }
-#controls-version-go-btn{
-    display: flex;
-    padding: 0.4em;
-    background-color: var(--bg-200);
-    color: var(--t-200);
-    border-radius: 4px;
-    border: solid 1px black;
-    user-select: none;
-}
 .controls-versions-msg{
     margin: auto;
 }
@@ -101,8 +92,6 @@ span{
     margin: auto;
 }
 select{
-    background-color: var(--bg-200);
-    color: var(--t-200);
     border: none;
 }
 </style>

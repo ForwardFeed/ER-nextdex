@@ -1,6 +1,7 @@
 :root{
     --bg-100: #ffffff;
     --bg-200: #c9c9c9;
+    --bg-300: #a59f9f;
     --t-100: #000;
     --t-200: #302424;
     --border: #acacac;
@@ -10,6 +11,7 @@
     :root{
         --bg-100: #2c2a2a;
         --bg-200: #555555;
+        --bg-300: #746a6a;
         --t-100: #ffffff;
         --t-200: #d49a9a;
         --border: #726e6e;
@@ -25,4 +27,24 @@ body, html, #app{
     font-size: 16px;
     background-color: var(--bg-100);
     color: var(--t-100);
+}
+
+#app{
+    display: flex;
+    flex-direction: column;
+}
+
+
+.btn{
+    display: flex;
+    padding: 0.4em;
+    background-color: var(--bg-200);
+    color: var(--t-200);
+    border-radius: 4px;
+    border: solid 1px black;
+    user-select: none;
+}
+
+.btn:hover{
+    background-color: var(--bg-300);
 }

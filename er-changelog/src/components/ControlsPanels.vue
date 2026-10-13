@@ -8,7 +8,7 @@ function toggle_panels(panel: PanelID){
 </script>
 <template>
 <div id="controls-panels">
-    <div v-for="panel in PANELS_LIST" class="panel-btn"
+    <div v-for="panel in PANELS_LIST" class="panel-btn btn"
      :class="panels_state[panel].value === true ? 'panel-btn-active' : ''"
      @click="()=>toggle_panels(panel)">
         <span>{{ PANEL_TEXT[panel] }}</span>
@@ -23,11 +23,18 @@ function toggle_panels(panel: PanelID){
 .panel-btn{
     user-select: none;
     padding: 0.25em;
-    border-radius: 4px;
     color: var(--t-200);
+    border-right: none;
+    border-radius: 0px;
+}
+.panel-btn:first-child{
+    border-radius: 4px 0px 0px 4px;
+}
+.panel-btn:last-child{
+    border-radius: 0px 4px 4px 0px;
 }
 .panel-btn-active{
-    background-color: var(--bg-200)
+    background-color: var(--bg-300)
 }
 span{
     margin: auto;
