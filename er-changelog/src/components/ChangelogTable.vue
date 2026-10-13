@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { ChangelogRow } from '../changelog';
-import SearchBar from './SearchBar.vue';
 
 type Props = {
     changelog: ChangelogRow[]
