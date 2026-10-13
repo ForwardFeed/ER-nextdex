@@ -182,7 +182,7 @@ export function hydrateSpecies() {
     const url_params = get_url_parameters()
     if (url_params.pokemon !== "" && !isNaN(+url_params.pokemon)){
         let as_number = +url_params.pokemon
-        if (gameData.species[as_number].id === as_number){
+        if (gameData.species[as_number]?.id === as_number){
             specie_id = as_number
         } else {
             const index = gameData.species.findIndex(x => x.id === as_number)
