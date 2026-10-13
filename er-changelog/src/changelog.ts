@@ -49,7 +49,10 @@ type PropertyCheck<T> = {
 function species_changelog(){
     if (source_data === null) throw `source data is null`
     if (target_data === null) throw `target data is null`
+
+    changelog_species.value.length = 0
     const source_as_dictionary: Record<string, CompactSpecie> = {}
+
     for (const specie of source_data.species){
         source_as_dictionary[specie.NAME] = specie
     }
@@ -82,6 +85,36 @@ function species_changelog(){
             })
         }
         
+        const abilities_source = [...new Set(source.stats.abis)].map(x => source_data!.abilities[x].name)
+        const abilities_target = [...new Set(target.stats.abis)].map(x => target_data!.abilities[x].name)
+
+        for (let i = 0; i < abilities_source.length; i += 1){
+            const abi_source = abilities_source[i]
+            if (abilities_target.indexOf(abi_source) === -1){
+                changelog_species.value.push({
+                    name: target.name,
+                    change_type: `ability ${i + 1}`,
+                    from: abi_source,
+                    to: abilities_target[i]
+                })
+            }
+        }
+
+        const innates_source = [...new Set(source.stats.inns)].map(x => source_data!.abilities[x].name)
+        const innates_target = [...new Set(target.stats.inns)].map(x => target_data!.abilities[x].name)
+
+        for (let i = 0; i < innates_source.length; i += 1){
+            const inn_source = innates_source[i]
+            if (innates_target.indexOf(inn_source) === -1){
+                changelog_species.value.push({
+                    name: target.name,
+                    change_type: `innate ${i + 1}`,
+                    from: inn_source,
+                    to: innates_target[i]
+                })
+            }
+        }
+
     }
 }
 
@@ -89,6 +122,7 @@ function abilities_changelog(){
     if (source_data === null) throw `source data is null`
     if (target_data === null) throw `target data is null`
 
+    changelog_abilities.value.length = 0
     const source_as_dictionary: Record<string, CompactAbility> = {}
 
     for (const ability of source_data.abilities){
@@ -122,6 +156,7 @@ function moves_changelog(){
     if (source_data === null) throw `source data is null`
     if (target_data === null) throw `target data is null`
 
+    changelog_moves.value.length = 0
     const source_as_dictionary: Record<string, compactMove> = {}
 
     for (const move of source_data.moves){
@@ -183,6 +218,7 @@ function trainers_changelog(){
     if (source_data === null) throw `source data is null`
     if (target_data === null) throw `target data is null`
 
+    changelog_trainers.value.length = 0
     const source_as_dictionary: Record<string, CompactTrainers> = {}
 
     for (const trainer of source_data.trainers){
