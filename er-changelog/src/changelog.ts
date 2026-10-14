@@ -103,17 +103,115 @@ function species_changelog(){
         const innates_source = [...new Set(source.stats.inns)].map(x => source_data!.abilities[x].name)
         const innates_target = [...new Set(target.stats.inns)].map(x => target_data!.abilities[x].name)
 
-        for (let i = 0; i < innates_source.length; i += 1){
-            const inn_source = innates_source[i]
-            if (innates_target.indexOf(inn_source) === -1){
+        for (let i = 0; i < innates_target.length; i += 1){
+            const inn_target = innates_target[i]
+            if (innates_source.indexOf(inn_target) === -1){
                 changelog_species.value.push({
                     name: target.name,
                     change_type: `innate ${i + 1}`,
-                    from: inn_source,
-                    to: innates_target[i]
+                    from: innates_source[i] || "",
+                    to: inn_target
                 })
             }
         }
+
+        const types_sources = [...new Set(source.stats.types)].map(x => source_data!.typeT[x])
+        const types_target = [...new Set(target.stats.types)].map(x => target_data!.typeT[x])
+
+        for (let i = 0; i < types_target.length; i += 1){
+            const type_target = types_target[i]
+            if (types_sources.indexOf(type_target) === -1){
+                changelog_species.value.push({
+                    name: target.name,
+                    change_type: `type ${i + 1} added`,
+                    from: "",
+                    to: type_target
+                })
+            }
+        }
+
+        for (let i = 0; i < types_sources.length; i += 1){
+            const type_source = types_sources[i]
+            if (types_target.indexOf(type_source) === -1){
+                changelog_species.value.push({
+                    name: target.name,
+                    change_type: `type ${i + 1} removed`,
+                    from: type_source,
+                    to: ""
+                })
+            }
+        }
+
+        
+
+        for (let i = 0; i < target.levelUpMoves.length; i += 1){
+            const target_move = target.levelUpMoves[i]
+            const source_move = source.levelUpMoves.find(x => x.id == target_move.id)
+            if (source_move === undefined){
+                changelog_species.value.push({
+                    name: target.name,
+                    change_type: "new levelup move",
+                    from: "",
+                    to: `${target_data.moves[target_move.id].name} at lv. ${target_move.lv}`
+                })
+                continue
+            }
+            if (target_move.lv !== source_move.lv){
+                changelog_species.value.push({
+                    name: target.name,
+                    change_type: "move level change",
+                    from: `${target_data.moves[target_move.id].name} at lv. ${source_move.lv}`,
+                    to: target_move.lv + ""
+                })
+            }
+        }
+
+        for (let i = 0; i < source.levelUpMoves.length; i += 1){
+            const source_move = source.levelUpMoves[i]
+            const target_move = target.levelUpMoves.find(x => x.id == source_move.id)
+            
+            if (target_move === undefined){
+                changelog_species.value.push({
+                    name: target.name,
+                    change_type: "removed levelup move",
+                    from: `${target_data.moves[source_move.id].name} at lv. ${source_move.lv}`,
+                    to: ""
+                })
+                continue
+            }
+        }
+
+        for (let i = 0; i < target.tutor.length; i += 1){
+            const target_move = target.tutor[i]
+            const source_move = source.tutor.find(x => x == target_move)
+
+            if (source_move === undefined){
+                changelog_species.value.push({
+                    name: target.name,
+                    change_type: "new tutor move",
+                    from: "",
+                    to: `${target_data.moves[target_move].name}`
+                })
+                continue
+            }
+        }
+
+        for (let i = 0; i < source.tutor.length; i += 1){
+            const source_move = source.tutor[i]
+            const target_move = target.tutor.find(x => x == source_move)
+            
+
+            if (target_move === undefined){
+                changelog_species.value.push({
+                    name: target.name,
+                    change_type: "removed tutor move",
+                    from: "",
+                    to: `${target_data.moves[source_move].name}`
+                })
+                continue
+            }
+        }
+
 
     }
 }
@@ -200,6 +298,14 @@ function moves_changelog(){
                 prop: "pwr",
                 change_type: "Power"
             },
+            {
+                prop: "desc",
+                change_type: "Description"
+            },
+            {
+                prop: "lDesc",
+                change_type: "Long description"
+            }
         ]
         for (const check of property_checks){
             if (source[check.prop] !== target[check.prop]){
@@ -211,6 +317,45 @@ function moves_changelog(){
                 })
             }
         }
+
+        const split_source = source_data.splitT[source.split]
+        const split_target = target_data.splitT[source.split]
+        if (split_source !== split_target){
+            changelog_moves.value.push({
+                name: target.name,
+                change_type: "split",
+                from: split_source,
+                to: split_target
+            })
+        }
+
+        const types_source = [...new Set(source.types.map(x => source_data!.typeT[x]))]
+        const types_target = [...new Set(target.types.map(x => target_data!.typeT[x]))]
+
+        for (let i = 0; i < types_target.length; i +=1){
+            const type_target = types_target[i]
+            if (types_source.indexOf(type_target) === -1){
+                changelog_moves.value.push({
+                    name: target.name,
+                    change_type: `type ${i} added`,
+                    from: "",
+                    to: type_target
+                })
+            }
+        }
+
+        for (let i = 0; i < types_source.length; i +=1){
+            const type_source = types_source[i]
+            if (types_target.indexOf(type_source) === -1){
+                changelog_moves.value.push({
+                    name: target.name,
+                    change_type: `type ${i} removed`,
+                    from: "",
+                    to: type_source
+                })
+            }
+        }
+
     }
 }
 

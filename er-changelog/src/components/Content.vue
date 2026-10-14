@@ -37,7 +37,7 @@ async function compare_the_two_last_versions(){
         </div>
     </template>
 </div>
-<div id="tutorial">
+<div id="tutorial" v-else>
     <div>
         <span>Hello, if you want to get the automated changelog click on the go button on the top-left ↖.</span>
         <hr>
