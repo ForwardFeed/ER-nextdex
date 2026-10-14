@@ -331,6 +331,31 @@ function moves_changelog(){
 
         const types_source = [...new Set(source.types.map(x => source_data!.typeT[x]))]
         const types_target = [...new Set(target.types.map(x => target_data!.typeT[x]))]
+
+        for (let i = 0; i < types_target.length; i +=1){
+            const type_target = types_target[i]
+            if (types_source.indexOf(type_target) === -1){
+                changelog_moves.value.push({
+                    name: target.name,
+                    change_type: `type ${i} added`,
+                    from: "",
+                    to: type_target
+                })
+            }
+        }
+
+        for (let i = 0; i < types_source.length; i +=1){
+            const type_source = types_source[i]
+            if (types_target.indexOf(type_source) === -1){
+                changelog_moves.value.push({
+                    name: target.name,
+                    change_type: `type ${i} removed`,
+                    from: "",
+                    to: type_source
+                })
+            }
+        }
+
     }
 }
 
