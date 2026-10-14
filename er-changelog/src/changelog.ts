@@ -337,7 +337,7 @@ function moves_changelog(){
             if (types_source.indexOf(type_target) === -1){
                 changelog_moves.value.push({
                     name: target.name,
-                    change_type: `type ${i} added`,
+                    change_type: `type ${i + 1} added`,
                     from: "",
                     to: type_target
                 })
@@ -349,7 +349,7 @@ function moves_changelog(){
             if (types_target.indexOf(type_source) === -1){
                 changelog_moves.value.push({
                     name: target.name,
-                    change_type: `type ${i} removed`,
+                    change_type: `type ${i + 1 } removed`,
                     from: "",
                     to: type_source
                 })

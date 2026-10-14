@@ -222,7 +222,7 @@ export default {
         },
         {
           "damageSource": "Fire",
-          "multiplier": 2
+          "multiplier": 1.25
         }
       ]
     },
@@ -1231,6 +1231,150 @@ export default {
     },
     "Creepy Crawlie": {
       "addedType": "Bug"
+    },
+    "Blistering Sun": {
+      "resists": [
+        {
+          "damageSource": "Water",
+          "multiplier": 0
+        }
+      ]
+    },
+    "Fire Aspect": {
+      "resists": [
+        {
+          "damageSource": "Fire",
+          "multiplier": 0
+        }
+      ]
+    },
+    "Heavy Metal": {
+      "resists": [
+        {
+          "damageSource": "Dark",
+          "multiplier": 0.5
+        },
+        {
+          "damageSource": "Ghost",
+          "multiplier": 0.5
+        },
+      ]
+    },
+    "Hyper Cleanse": {
+      "resists": [
+        {
+          "damageSource": "Poison",
+          "multiplier": 0.5
+        }
+      ]
+    },
+    "Lightning Aspect": {
+      "resists": [
+        {
+          "damageSource": "Electric",
+          "multiplier": 0
+        }
+      ]
+    },
+    "Petroleum Jelly": {
+      "resists": [
+        {
+          "damageSource": "Poison",
+          "multiplier": 0.5
+        },
+        {
+          "damageSource": "Water",
+          "multiplier": 1.5
+        },
+      ]
+    },
+    "Massive Pelt": {
+      "resists": [
+        {
+          "damageSource": "Fire",
+          "multiplier": 1.5
+        }
+      ]
+    },
+    "Molten Core": {
+      "resists": [
+        {
+          "damageSource": "Rock",
+          "multiplier": 0
+        }
+      ]
+    },
+    "Purifying Salt": {
+      "resists": [
+        {
+          "damageSource": "Ghost",
+          "multiplier": 0.5
+        }
+      ]
+    },
+    "Stainless Steel": {
+      "resists": [
+        {
+          "damageSource": "Dark",
+          "multiplier": 0.5
+        },
+        {
+          "damageSource": "Ghost",
+          "multiplier": 0.5
+        },
+      ]
+    },
+    "Stone Cutter": {
+      "resists": [
+        {
+          "damageSource": "Rock",
+          "multiplier": 0.5
+        }
+      ]
+    },
+    "Strong Foundation": {
+      "resists": [
+        {
+          "damageSource": "Ground",
+          "multiplier": 0.5
+        },
+        {
+          "damageSource": "Water",
+          "multiplier": 0.5
+        },
+      ]
+    },
+    "Sumo Guard": {
+      "resists": [
+        {
+          "damageSource": "Fire",
+          "multiplier": 0.5
+        },
+        {
+          "damageSource": "Ice",
+          "multiplier": 0.5
+        },
+      ]
+    },
+    "Tummyache": {
+      "resists": [
+        {
+          "damageSource": "Fire",
+          "multiplier": 0.5
+        },
+        {
+          "damageSource": "Ice",
+          "multiplier": 0.5
+        },
+      ]
+    },
+    "Witch Broom": {
+      "resists": [
+        {
+          "damageSource": "Ground",
+          "multiplier": 0
+        }
+      ]
     },
   }
 }
