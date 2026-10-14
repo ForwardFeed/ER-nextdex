@@ -136,7 +136,7 @@ function species_changelog(){
             if (source_move === undefined){
                 changelog_species.value.push({
                     name: target.name,
-                    change_type: "new move",
+                    change_type: "new levelup move",
                     from: "",
                     to: `${target_data.moves[target_move.id].name} at lv. ${target_move.lv}`
                 })
@@ -149,6 +149,21 @@ function species_changelog(){
                     from: `${target_data.moves[target_move.id].name} at lv. ${source_move.lv}`,
                     to: target_move.lv + ""
                 })
+            }
+        }
+
+        for (let i = 0; i < target.tutor.length; i += 1){
+            const target_move = target.tutor[i]
+            const source_move = source.tutor.find(x => x == target_move)
+
+            if (source_move === undefined){
+                changelog_species.value.push({
+                    name: target.name,
+                    change_type: "new tutor move",
+                    from: "",
+                    to: `${target_data.moves[target_move].name}`
+                })
+                continue
             }
         }
     }
