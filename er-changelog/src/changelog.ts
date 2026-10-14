@@ -152,6 +152,21 @@ function species_changelog(){
             }
         }
 
+        for (let i = 0; i < source.levelUpMoves.length; i += 1){
+            const source_move = source.levelUpMoves[i]
+            const target_move = target.levelUpMoves.find(x => x.id == source_move.id)
+            
+            if (target_move === undefined){
+                changelog_species.value.push({
+                    name: target.name,
+                    change_type: "removed levelup move",
+                    from: `${target_data.moves[source_move.id].name} at lv. ${source_move.lv}`,
+                    to: ""
+                })
+                continue
+            }
+        }
+
         for (let i = 0; i < target.tutor.length; i += 1){
             const target_move = target.tutor[i]
             const source_move = source.tutor.find(x => x == target_move)
@@ -166,6 +181,24 @@ function species_changelog(){
                 continue
             }
         }
+
+        for (let i = 0; i < source.tutor.length; i += 1){
+            const source_move = source.tutor[i]
+            const target_move = target.tutor.find(x => x == source_move)
+            
+
+            if (target_move === undefined){
+                changelog_species.value.push({
+                    name: target.name,
+                    change_type: "removed tutor move",
+                    from: "",
+                    to: `${target_data.moves[source_move].name}`
+                })
+                continue
+            }
+        }
+
+
     }
 }
 
