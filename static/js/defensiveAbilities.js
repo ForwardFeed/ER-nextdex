@@ -185,11 +185,11 @@ export default {
       "resists": [
         {
           "damageSource": "Water",
-          "multiplier": 0.5
+          "multiplier": 0.7
         },
         {
           "damageSource": "Ice",
-          "multiplier": 0.5
+          "multiplier": 0.7
         }
       ]
     },
