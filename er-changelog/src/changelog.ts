@@ -284,6 +284,14 @@ function moves_changelog(){
                 prop: "pwr",
                 change_type: "Power"
             },
+            {
+                prop: "desc",
+                change_type: "Description"
+            },
+            {
+                prop: "lDesc",
+                change_type: "Long description"
+            }
         ]
         for (const check of property_checks){
             if (source[check.prop] !== target[check.prop]){
