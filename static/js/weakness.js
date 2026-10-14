@@ -90,102 +90,6 @@ const typeChart = {
     ]
 }
 
-const abilityAddingType = {
-    "Phantom"    : "Ghost",
-    "Metallic"   : "Steel",
-    "Dragonfly"  : "Dragon",
-    "Half Drake" : "Dragon",
-    "Ice Age"    : "Ice",
-    "Grounded"   : "Ground",
-    "Aquatic"    : "Water",
-    "Turboblaze" : "Fire",
-    "Teravolt"   : "Electric",
-    "Fairy Tale" : "Fairy",
-    "Aquatic Dweller": "Water",
-    "Metallic Jaw"   : "Steel",
-    "Bruiser"    : "Fighting",
-    "Rocky Exterior" : "Rock",
-    "Lightning Born" : "Electric",
-    "Komodo"     : "Dragon",
-    "Fey Flight" : "Fairy",
-    "Dead Bark"  : "Ghost",
-    "Lightsaber" : "Fire",
-    "Hover"      : "Psychic",
-    "Ominous Shroud": "Ghost",
-}
-
-
-
-const abilityThatAddsImmunity = {
-    "Flash Fire"      : ["Fire"],
-    "Sap Sipper"      : ["Grass"],
-    "Volt Absorb"     : ["Electric"],
-    "Lightning Rod"   : ["Electric"],
-    "Motor Drive"     : ["Electric"],
-    "Water Absorb"    : ["Water"],
-    "Dry Skin"        : ["Water"],
-    "Storm Drain"     : ["Water"],
-    "Evaporate"       : ["Water"],
-    "Levitate"        : ["Ground"],
-    "Dragonfly"       : ["Ground"],
-    "Mountaineer"     : ["Rock"],
-    "Poison Absorb"   : ["Poison"],
-    "Aerodynamics"    : ["Flying"],
-    "Well Baked Body" : ["Fire"],
-    "Elemental Vortex": ["Fire", "Water"],
-    "Justified"       : ["Dark"],
-    "Ice Dew"         : ["Ice"],
-    "Earth Eater"     : ["Ground"],
-    "Hover"           : ["Ground"],
-    "Aerialist"       : ["Ground"],
-    "Imposing Wings"  : ["Ground"],
-    "Desolate Sun"    : ["Ground", "Water"],
-    "Reservoir"       : ["Water"],
-    "Desolate Land"   : ["Water"],
-    "Primordial Sea"  : ["Fire"],
-    "Fey Flight"      : ["Ground"],
-    "Cryo Architect"  : ["Water", "Ice"],
-    "Gifted Mind"     : ["Ghost", "Bug", "Dark"],
-    "Radiance"        : ["Dark"],
-    "Hover"           : ["Ground"],
-    "Heat Sink"       : ["Fire"]
-}
-
-const abilityThatAddsResist = {
-    "Water Bubble"    : ["Fire"],
-    "Seaweed"         : ["Fire"],
-    "Heatproof"       : ["Fire"],
-    "Iron Giant"      : ["Fire"],
-    "Thick Fat"       : ["Fire", "Ice"],
-    "Immunity"        : ["Poison"],
-    "Fossilized"      : ["Rock"],
-    "Raw Wood"        : ["Grass"],
-    "Water Compaction": ["Water"],
-    "Old Mariner"     : ["Fire"],
-    "Flame Bubble"    : ["Fire"],
-    "Deep Freeze"     : ["Fire"],
-    "Iron Giant"      : ["Fire"],
-    "Strong foundation": ["Water", "Ground"],
-    "Droideka"        : ["Fire"],
-    "Thermal Entropy" : ["Fire"],
-}
-
-const abilityThatAddsQuadResist = {
-    "Thick Blubber": ["Fire", "Ice"]
-}
-
-const abilityThatAddsWeakness = {
-    "Fluffy": ["Fire"],
-    "Puffy": ["Fire"],
-    "Liquified": ["Water"],
-    "Dry Skin": ["Fire"],
-    
-}
-
-const abilityThatAdds4TimesWeakness = {
-    "Fluffiest": ["Fire"],
-}
-
 export function abilitiesToAddedType(abis){
     for (const abi of abis){
         const abi_name = gameData.abilities[abi].name
@@ -232,8 +136,9 @@ function hasType(types_string_array, type_string){
 
 /**
  * 
- * @param {string[]} defTypes 
- * @param {string[]} abilities 
+ * @param {import('../../src/compactify.js').CompactSpecie} specie 
+ * @param {number} abiID 
+ * @returns 
  */
 export function getDefensiveCoverage(specie, abiID){
     const abisID            = [specie.stats.abis[abiID], ...specie.stats.inns].filter(x => x)
@@ -249,30 +154,9 @@ export function getDefensiveCoverage(specie, abiID){
     const modifiers         = abilityModifiesTypeChart(abiNames, specie)
     const defensiveCoverage = []
     for (const atkT of gameData.typeT){
-        let typeEffectiveness = 1
-        if (modifiers[IMMUNE].indexOf(atkT) != -1) {
-            typeEffectiveness = 0
-            defensiveCoverage.push(typeEffectiveness)
-            continue
-        }
-        if (modifiers[NORMAL].indexOf(atkT) != -1) {
-            typeEffectiveness = 1 
-        }
-        if (modifiers[RESIST].indexOf(atkT) != -1) {
-            typeEffectiveness = 0.5
-        }
-        if (modifiers[WEAK].indexOf(atkT) != -1) {
-            typeEffectiveness = isPrimalArmor ? 1 : 2
-        }
-        if (modifiers[WEAK4X].indexOf(atkT) != -1){
-            // I have no clue how primal armor handles that, so I'll ignore it for now
-            typeEffectiveness = 4
-        }
-        if (has_steelworker){
-            if (atkT === "Ghost" || atkT === "Dark"){
-                typeEffectiveness = 0.5
-            }
-        }
+        let typeEffectiveness = modifiers[atkT] === undefined
+            ? 1
+            : modifiers[atkT]
         for (const defT of defTypes){
             let effectiveness  = getTypeEffectiveness(atkT, defT)
             if (has_ripen_ability && effectiveness == 0.5){
@@ -297,34 +181,48 @@ export function getDefensiveCoverage(specie, abiID){
     })
     return defensiveCoverageSorted
 }
+/**
+ * 
+ * @param {string[]} abis 
+ * @param {import('../../src/compactify.js').CompactSpecie} specie 
+ * @returns 
+ */
 
-// misses things like Magma Armor or others that reduce by 35% like Filter
-// or Ice Scales or Fluffy for Physical or other damage
-const IMMUNE = 0
-const NORMAL = 1
-const RESIST = 2
-const WEAK   = 3
-const WEAK4X = 4
+function abilityModifiesTypeChart(abis, specie){
 
-function abilityModifiesTypeChart(abis){
-    const modifiers = [
-        [], // immunity
-        [], // normal
-        [], // resist
-        [], // weak
-        [] // weak 4X
-    ]
+    const modifiers = {}
     for (const abi of abis){
-        const addedImunity = abilityThatAddsImmunity[abi]
-        if (addedImunity) modifiers[IMMUNE].push(...addedImunity)
-        const addedResist = abilityThatAddsResist[abi]
-        if (addedResist) modifiers[RESIST].push(...addedResist)
-        const addedWeak = abilityThatAddsWeakness[abi]
-        if (addedWeak) modifiers[WEAK].push(...addedWeak)
-        const added4XWeak = abilityThatAdds4TimesWeakness[abi]
-        if (added4XWeak) modifiers[WEAK4X].push(...added4XWeak)
-        const added4XResist = abilityThatAddsQuadResist[abi]
-        if (added4XResist) modifiers[RESIST].push(...added4XResist)
+        const abi_def = defensiveAbilities["effects"][abi]
+        if (abi_def === undefined){
+            continue
+        }
+        const resists = abi_def["resists"] || []
+        const conditionnal_resistances = abi_def["conditionalResistances"] || []
+        for(const cond_resis of conditionnal_resistances){
+            const cond = cond_resis["condition"]
+            if (cond === undefined){
+                continue
+            }
+            if (cond["type"] === "type"){
+                if (specie.stats.types.indexOf(gameData.typeT.indexOf(cond["value"])) !== -1 ){
+                    resists.push(...cond_resis["resistance"])
+                }
+            }
+        }
+        
+        if (resists !== undefined){
+            for (const resist of resists){
+                const poke_type = resist["damageSource"]
+                const mul = resist["multiplier"]
+                if (modifiers[poke_type] === undefined){
+                    modifiers[poke_type] = mul
+                } else {
+                    modifiers[poke_type] *= mul
+                }
+                
+            }
+        }
+       
     }
     return modifiers
 }
