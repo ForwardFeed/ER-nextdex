@@ -129,6 +129,28 @@ function species_changelog(){
                 })
             }
         }
+
+        for (let i = 0; i < target.levelUpMoves.length; i += 1){
+            const target_move = target.levelUpMoves[i]
+            const source_move = source.levelUpMoves.find(x => x.id == target_move.id)
+            if (source_move === undefined){
+                changelog_species.value.push({
+                    name: target.name,
+                    change_type: "new move",
+                    from: "",
+                    to: `${target_data.moves[target_move.id].name} at lv. ${target_move.lv}`
+                })
+                continue
+            }
+            if (target_move.lv !== source_move.lv){
+                changelog_species.value.push({
+                    name: target.name,
+                    change_type: "move level change",
+                    from: `${target_data.moves[target_move.id].name} at lv. ${source_move.lv}`,
+                    to: target_move.lv + ""
+                })
+            }
+        }
     }
 }
 
