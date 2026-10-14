@@ -103,18 +103,32 @@ function species_changelog(){
         const innates_source = [...new Set(source.stats.inns)].map(x => source_data!.abilities[x].name)
         const innates_target = [...new Set(target.stats.inns)].map(x => target_data!.abilities[x].name)
 
-        for (let i = 0; i < innates_source.length; i += 1){
-            const inn_source = innates_source[i]
-            if (innates_target.indexOf(inn_source) === -1){
+        for (let i = 0; i < innates_target.length; i += 1){
+            const inn_target = innates_target[i]
+            if (innates_source.indexOf(inn_target) === -1){
                 changelog_species.value.push({
                     name: target.name,
                     change_type: `innate ${i + 1}`,
-                    from: inn_source,
-                    to: innates_target[i]
+                    from: innates_source[i] || "",
+                    to: inn_target
                 })
             }
         }
 
+        const types_sources = [...new Set(source.stats.types)].map(x => source_data!.typeT[x])
+        const types_target = [...new Set(target.stats.types)].map(x => target_data!.typeT[x])
+
+        for (let i = 0; i < types_target.length; i += 1){
+            const type_target = types_target[i]
+            if (types_sources.indexOf(type_target) === -1){
+                changelog_species.value.push({
+                    name: target.name,
+                    change_type: `type ${i + 1}`,
+                    from: types_sources[i] || "",
+                    to: type_target
+                })
+            }
+        }
     }
 }
 
