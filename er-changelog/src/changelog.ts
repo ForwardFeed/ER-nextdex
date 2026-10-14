@@ -123,12 +123,26 @@ function species_changelog(){
             if (types_sources.indexOf(type_target) === -1){
                 changelog_species.value.push({
                     name: target.name,
-                    change_type: `type ${i + 1}`,
-                    from: types_sources[i] || "",
+                    change_type: `type ${i + 1} added`,
+                    from: "",
                     to: type_target
                 })
             }
         }
+
+        for (let i = 0; i < types_sources.length; i += 1){
+            const type_source = types_sources[i]
+            if (types_target.indexOf(type_source) === -1){
+                changelog_species.value.push({
+                    name: target.name,
+                    change_type: `type ${i + 1} removed`,
+                    from: type_source,
+                    to: ""
+                })
+            }
+        }
+
+        
 
         for (let i = 0; i < target.levelUpMoves.length; i += 1){
             const target_move = target.levelUpMoves[i]
@@ -303,6 +317,20 @@ function moves_changelog(){
                 })
             }
         }
+
+        const split_source = source_data.splitT[source.split]
+        const split_target = target_data.splitT[source.split]
+        if (split_source !== split_target){
+            changelog_moves.value.push({
+                name: target.name,
+                change_type: "split",
+                from: split_source,
+                to: split_target
+            })
+        }
+
+        const types_source = [...new Set(source.types.map(x => source_data!.typeT[x]))]
+        const types_target = [...new Set(target.types.map(x => target_data!.typeT[x]))]
     }
 }
 
