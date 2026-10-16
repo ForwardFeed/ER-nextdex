@@ -385,7 +385,12 @@ span{
 .species-list-sprite{
     height:70%;
 }
-
+.species-trainer-row{
+    cursor: pointer;
+}
+.species-trainer-row:hover{
+    background-color: var(--selHover);
+}
 #species-name{
     width: 9em;
     max-height: 1em;

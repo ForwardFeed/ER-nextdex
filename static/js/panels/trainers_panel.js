@@ -297,6 +297,29 @@ function getNodeRedirectToEditorPokemon(party) {
     ])
 }
 
+export function redirect_to_trainer(id, target, data){
+    $('#btn-trainers').click()
+    $('#trainers-list .data-list-row')[id].click()
+    const TIME_TO_WAIT_MS = 150 // it's because my code sucks
+    setTimeout(()=>{
+        switch (target){
+        case "normal":
+            $('#trainers-normal .trainer-match-btn').click()
+            break;
+        case "rem":
+            $('#trainers-rematch .trainer-match-btn').click()
+            $('#trainers-rematch').children().eq(data).click()
+            break;
+        case "insane":
+            $('#trainers-elite .trainer-match-btn').click()
+            break;
+        case "hell":
+            $('#trainers-hell .trainer-match-btn').click()
+            break;
+    }
+    }, TIME_TO_WAIT_MS)
+}
+
 const prefixTree = {
     treeId: "trainer"
 }
