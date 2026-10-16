@@ -11,6 +11,7 @@ import { cubicRadial } from "../../radial.js"
 import { getHintInteractibilityClass, settings } from "../../settings.js"
 import { feedCommunitySets } from "./community_sets.js"
 import { update_url_parameters } from "../../url.js"
+import { redirect_to_trainer } from "../trainers_panel.js"
 
 export let currentSpecieID = 1
 
@@ -60,6 +61,71 @@ export function feedPanelSpecies(id) {
     update_url_parameters({
         pokemon: "" + specie.id // string typecast
     })
+    feedUsesInTrainer(+id)
+    
+
+
+}
+
+function feedUsesInTrainer(id){
+    const trainers_index_using_specie = gameData.trainers.reduce((acc, x, i) => {
+        if (x.party.findIndex(x => x.spc === id) !== -1){
+            acc.push({
+                id: i,
+                target: 'normal'
+            })
+            return acc
+        }
+        for (let rem_id = 0; rem_id < x.rem.length; rem_id += 1){
+            const rem = x.rem[rem_id]
+            if (rem.party.findIndex(x => x.spc === id) !== -1){
+                acc.push({
+                    id: i,
+                    target: 'rem',
+                    data: rem_id
+                })
+                return acc
+            }
+        }
+        if (x.insane.findIndex(x => x.spc === id) !== -1){
+            acc.push({
+                id: i,
+                target: 'insane',
+            })
+            return acc
+        }
+        if (x.hell.findIndex(x => x.spc === id) !== -1){
+            acc.push({
+                id: i,
+                target: 'hell',
+            })
+            return acc
+        }
+        return acc
+    }, [])
+    const frag = document.createDocumentFragment()
+    if (trainers_index_using_specie.length > 0){
+        frag.append(JSHAC([
+            e('div', ''), [
+                e('span', '', 'Trainers with that pokémon')
+            ]
+        ]))
+    }
+    for (const x of trainers_index_using_specie){
+        frag.append(
+            JSHAC([
+                e('div', 'species-trainer-row', '', {
+                    onclick: ()=>{
+                        redirect_to_trainer(x.id, x.target, x.data)
+                    }
+                }), [
+                    e('span', '', gameData.trainers[x.id].name)
+                ]
+            ])
+        )
+    }
+    
+    $('#species-misc-uses').empty().append(frag)
 }
 
 export function redirectSpecie(specieId) {
