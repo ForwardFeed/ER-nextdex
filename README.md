@@ -20,6 +20,8 @@ npm run run
 ```
 # this is usually my latest goto.
 npm run build && npm run run -- -o 2.65.4 -rd
+# and this is for the sprites
+npm run build && npm run run -- -so -rd
 ```
 
 ### When adding a new version
