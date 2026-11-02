@@ -1,10 +1,10 @@
 import { ref, type Ref } from "vue";
 import type { CompactGameData } from "./compactify_copied";
-import type { VersionAvailable } from "./versions";
+import { VERSIONS_AVAILABLE, type VersionAvailable } from "./versions";
 
 
-export const source_version: Ref<VersionAvailable> = ref("2.65beta")
-export const target_version: Ref<VersionAvailable> = ref("2.65.4")
+export const source_version: Ref<VersionAvailable> = ref(VERSIONS_AVAILABLE[VERSIONS_AVAILABLE.length - 2])
+export const target_version: Ref<VersionAvailable> = ref(VERSIONS_AVAILABLE[VERSIONS_AVAILABLE.length - 1])
 
 export let source_data: CompactGameData | null = null
 export let target_data: CompactGameData | null = null
