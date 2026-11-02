@@ -1,4 +1,7 @@
-export default {
+/**
+ * @type {DefensiveAbilitiesExport}
+ */
+const defensiveAbilities = {
   "effects": {
     "Water Bubble": {
       "resists": [
@@ -1219,6 +1222,7 @@ export default {
       ]
     },
     "Waterborne": {
+      "addedType": "A",
       "addedType": "Water"
     },
     "Dragonfruit": {
@@ -1440,3 +1444,5 @@ export default {
     },
   }
 }
+
+export default defensiveAbilities
