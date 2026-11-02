@@ -1,4 +1,4 @@
-import {is_version_valid, changeVersion} from "./data_version.js"
+import {is_version_valid, changeVersion, get_default_version} from "./data_version.js"
 
 /**
  * @typedef {Object} URLData
@@ -57,11 +57,20 @@ export function get_url_parameters(){
     const search_text  = window.location.search
     const search_param = new URLSearchParams(search_text)
     
-    return {
+
+
+    const url_data = {
         version: search_param.get("v") ?? "",
         pokemon: search_param.get("p") ?? "",
         trainer: search_param.get("t") ?? ""
     }
+
+    if (is_version_valid(url_data.version) === false){
+        url_data.version = get_default_version()
+    }
+        
+    
+    return url_data
 }
 
 export function setup_url_change_watcher(){
@@ -75,8 +84,6 @@ export function setup_url_change_watcher(){
         if (params === undefined)
             return
 
-        if (is_version_valid(params.version) === false)
-            return
         changeVersion(params.version)
         $('#versions').val(params.version)
     })

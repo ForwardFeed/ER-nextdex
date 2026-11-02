@@ -167,3 +167,7 @@ function set_warning_version(unset = false){
     }
     $('#version-warn').text(text)
 }
+
+export function get_default_version() {
+    return allVersions[allVersions.length - 1]
+}
