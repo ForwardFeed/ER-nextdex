@@ -22,6 +22,9 @@ npm run run
 npm run build && npm run run -- -o 2.65.4 -rd
 ```
 
+### When adding a new version
+you need to add that version name into `static/js/data_version.js` and `er-changelog/src/version.ts` as well as rebuild the changelog with `(cd er-changelog/ && deno task build)`
+
 ## How it works more in details
 There is two part in this project:
 
