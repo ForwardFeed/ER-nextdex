@@ -1,4 +1,7 @@
-export default {
+/**
+ * @type {DefensiveAbilitiesExport}
+ */
+const defensiveAbilities = {
   "effects": {
     "Water Bubble": {
       "resists": [
@@ -1219,6 +1222,7 @@ export default {
       ]
     },
     "Waterborne": {
+      "addedType": "A",
       "addedType": "Water"
     },
     "Dragonfruit": {
@@ -1294,7 +1298,7 @@ export default {
         },
         {
           "damageSource": "Water",
-          "multiplier": 1.5
+          "multiplier": 2
         },
       ]
     },
@@ -1323,15 +1327,23 @@ export default {
       ]
     },
     "Stainless Steel": {
-      "resists": [
+      "conditionalResistances": [
         {
-          "damageSource": "Dark",
-          "multiplier": 0.5
-        },
-        {
-          "damageSource": "Ghost",
-          "multiplier": 0.5
-        },
+          "condition": {
+            "type": "type",
+            "value": "Steel"
+          },
+          "resistance": [
+            {
+              "damageSource": "Ghost",
+              "multiplier": 0.5
+            },
+            {
+              "damageSource": "Dark",
+              "multiplier": 0.5
+            }
+          ]
+        }
       ]
     },
     "Stone Cutter": {
@@ -1386,5 +1398,51 @@ export default {
         }
       ]
     },
+    "Thermal Dweller": {
+      "resists": [
+        {
+          "damageSource": "Fire",
+          "multiplier": 0
+        }
+      ]
+    },
+    "Packed Ice": {
+      "resists": [
+        {
+          "damageSource": "Ice",
+          "multiplier": 0
+        }
+      ]
+    },
+    "Sour Apple": {
+      "resists": [
+        {
+          "damageSource": "Ground",
+          "multiplier": 0
+        }
+      ]
+    },
+    "High Rise": {
+      "conditionalResistances": [
+        {
+          "condition": {
+            "type": "type",
+            "value": "Steel"
+          },
+          "resistance": [
+            {
+              "damageSource": "Ghost",
+              "multiplier": 0.5
+            },
+            {
+              "damageSource": "Dark",
+              "multiplier": 0.5
+            }
+          ]
+        }
+      ]
+    },
   }
 }
+
+export default defensiveAbilities
