@@ -17,12 +17,13 @@ npm run build
 npm run run
 ```
 
-
 ```
-# this will pull the latest into Alphatest
-npm run run -- -sv 2 -rd -o Alphatest
+# this is usually my latest goto.
+npm run build && npm run run -- -o 2.65.4 -rd
 ```
 
+### When adding a new version
+you need to add that version name into `static/js/data_version.js` and `er-changelog/src/version.ts` as well as rebuild the changelog with `(cd er-changelog/ && deno task build)`
 
 ## How it works more in details
 There is two part in this project:
@@ -43,8 +44,6 @@ Run Arguments:
     - -sv --structure-version: (Legacy) indicate which version of the parsing alg to use, since the codebase evolves with the version, it may be necessary, it always be an integer so in the code you can do: if(version > 3 && version < 5) { read this way } else {read this way}
     - -so --sprites-only: Do not parse for gamedata.json and only outputs all the sprites of pokemon found in out/sprites or in static/sprites if option -rd is used
     - -rd --redirect-data: Do not redirect gameData.json to /out/ but directly to the UI folder at /static/js/data/ 
-
-last time I used `npm run build && npm run run -- -o 2.65.4 -rd`
 
 Quick tip, if you use git on your pokemon project you can get back to a previous version with these bash commands
 `git log  --all --grep='V0.0.1'` where `V0.0.1` is the message of a commit marking the version of the game. Copy the commit sha1 hash and then you can do

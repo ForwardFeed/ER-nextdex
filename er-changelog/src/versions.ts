@@ -9,7 +9,8 @@ export const VERSIONS_AVAILABLE = [
     "2.5",
     "AprilFools",
     "2.65beta",
-    "2.65.4"
+    "2.65.4",
+    "2.65.5"
 ] as const
 
 
