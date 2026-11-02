@@ -1129,9 +1129,10 @@ export default {
     "Voltron": {
       "addedType": "Steel"
     },
-    "Waterborne": {
+    // true only in 2.65.4
+    /* "Waterborne": {
       "addedType": "Water"
-    },
+    }, */
     "Atlantic Ruler": {
       "addedType": "Water"
     },
@@ -1143,6 +1144,15 @@ export default {
     },
     "Witch Broom": {
       "addedType": "Psychic"
+    },
+    "Bioluminescent": {
+      "addedType": "Electric"
+    },
+    "Chlorophyllo": {
+      "addedType": "Grass"
+    },
+    "Charge Spores": {
+      "addedType": "Electric"
     },
     "Dune Terror": {
       "conditionalResistances": [
