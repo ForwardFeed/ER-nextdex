@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed} from 'vue';
 import { VERSIONS_AVAILABLE, type VersionAvailable } from '../versions';
-import { download_data, source_version, target_version } from '../download_data';
+import { download_data, download_status, source_version, target_version } from '../download_data';
 import { start_the_changelog } from '../changelog';
 
 
@@ -38,6 +38,11 @@ const is_warning = computed(()=>{
 })
 
 async function go_button(){
+    // prevent spamming, I hope
+    if (download_status.value === 'loading'){
+        console.log(`Stop spamming human, This application is already downloading`)
+        return
+    }
     await download_data(source_version.value, target_version.value)
     console.log("done")
     start_the_changelog()
@@ -93,5 +98,15 @@ span{
 }
 select{
     border: none;
+}
+@media (max-width: 400px){
+    .controls-versions-msg{
+        display: none;
+    }
+}
+@media (max-width: 275px){
+    .btn{
+        font-size: calc(16 * (100vw / 275));
+    }
 }
 </style>

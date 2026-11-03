@@ -39,4 +39,9 @@ function toggle_panels(panel: PanelID){
 span{
     margin: auto;
 }
+@media (max-width: 275px){
+    .panel-btn{
+        font-size: calc(16 * (100vw / 275));
+    }
+}
 </style>
