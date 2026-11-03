@@ -94,4 +94,14 @@ span{
 select{
     border: none;
 }
+@media (max-width: 400px){
+    .controls-versions-msg{
+        display: none;
+    }
+}
+@media (max-width: 275px){
+    .btn{
+        font-size: calc(16 * (100vw / 275));
+    }
+}
 </style>
