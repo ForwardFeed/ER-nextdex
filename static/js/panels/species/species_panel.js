@@ -94,7 +94,7 @@ function feedUsesInTrainer(id){
             })
             return acc
         }
-        if (x.hell.findIndex(x => x.spc === id) !== -1){
+        if (x.hell !== undefined && x.hell.findIndex(x => x.spc === id) !== -1){
             acc.push({
                 id: i,
                 target: 'hell',
