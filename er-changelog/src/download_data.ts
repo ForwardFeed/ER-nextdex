@@ -17,13 +17,10 @@ export const progress_target = ref(0)
 
 export async function download_data(source: VersionAvailable, target: VersionAvailable){
 
-    // prevent spamming, I hope
-    if (download_status.value === 'loading'){
-        return
-    }
-
     source_data = null
     target_data = null
+    progress_source.value = 0
+    progress_target.value = 0
     download_status.value = "loading"
 
     const TABLE_URLS_PROGRESS = [
@@ -80,7 +77,7 @@ async function fetch_with_progress(url: string, progress_perçent: Ref<number>){
                     }
                     chunks.push(value)
                     received_len += value.length
-                    progress_perçent.value = received_len / (+content_len)
+                    progress_perçent.value = (received_len / (+content_len)) * 100
                 }
 
                 const chunks_all = new Uint8Array(received_len);
