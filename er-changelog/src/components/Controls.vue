@@ -16,5 +16,6 @@ import ControlsVersions from './ControlsVersions.vue';
 #controls{
     display: flex;
     width: 100%;
+    flex-wrap: wrap;
 }
 </style>
